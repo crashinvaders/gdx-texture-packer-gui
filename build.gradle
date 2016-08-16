@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        jcenter()
+    }
+    dependencies {
+        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+
+    version = '1.0'
+    ext {
+        appName = "visuitest"
+        gdxVersion = '1.9.3'
+        roboVMVersion = '2.1.0'
+        box2DLightsVersion = '1.4'
+        ashleyVersion = '1.7.0'
+        aiVersion = '1.8.0'
+        lmlVersion = '1.7.1.9.3'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.github.czyzby:gdx-autumn-fcs:$lmlVersion"
+        compile "args4j:args4j:2.33"
+    }
+}
+
+project(":core") {
+    apply plugin: "java"
+
+
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.github.czyzby:gdx-lml:$lmlVersion"
+        compile "com.github.czyzby:gdx-lml-vis:$lmlVersion"
+        compile "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"
+        compile 'commons-io:commons-io:2.5'
+    }
+}
+
+tasks.eclipse.doLast {
+    delete ".project"
+}

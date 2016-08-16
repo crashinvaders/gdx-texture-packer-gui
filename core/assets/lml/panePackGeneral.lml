@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable growx="true" onecolumn="true">
+
+    <vistable align="top" growx="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
+
+        <label align="left">Input dir</label>
+        <vistextfield
+                id="edtInputDir"
+                minwidth="24"
+                growx="true"
+                onchange="onInputDirTextChanged"/>
+        <visimagebutton
+                image="custom/ic-folder-pick"
+                imagescaling="none"
+                width="22"
+                padright="0"
+                filly="true"
+                onchange="pickInputDir"/>
+
+        <:row/>
+
+        <label align="left">Output dir</label>
+        <vistextfield
+                id="edtOutputDir"
+                minwidth="24"
+                growx="true"
+                onchange="onOutputDirTextChanged"/>
+        <visimagebutton
+                image="custom/ic-folder-pick"
+                imagescaling="none"
+                width="22"
+                padright="0"
+                filly="true"
+                onchange="pickOutputDir"/>
+        <:row padbottom="0"/>
+
+        <label align="left">File name</label>
+        <vistextfield
+                id="edtFileName"
+                minwidth="24"
+                growx="true"
+                padright="0"
+                colspan="2"
+                onchange="onPackFilenameTextChanged"/>
+
+    </vistable>
+
+</vistable>

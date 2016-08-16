@@ -1,0 +1,192 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable grow="true" fill="true" onecolumn="true">
+
+    <visscrollpane style="list" disabledx="true" grow="true" fadescrollbars="false" flickscroll="false">
+
+        <vistable tablealign="top" tablepad="8" onecolumn="true">
+
+            <vistable growx="true" defaultalign="center" tablepadbottom="12">
+
+                <:macro alias="item" replace="content" title="Title">
+                    <label ellipsis="true" align="left" padright="4">{title}</label>
+                    <container growx="true" fillx="true" row="true" minwidth="0">{content}</container>
+                </:macro>
+
+                <:macro alias="separator" replace="content">
+                    <actor growx="true" height="8" colspan="2" row="true"/>
+                </:macro>
+
+                <vistable growx="true" defaultpad="2" defaultminwidth="0" debug="false">
+                    <:column column="1" prefwidth="150"/>
+
+                    <:item title="Encoding format">
+                        <visselectbox
+                                id="cboEncodingFormat"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <:item title="Output format">
+                        <visselectbox
+                                id="cboOutputFormat"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <:separator/>
+
+                    <:item title="Min page width">
+                        <intspinner
+                                id="spnMinPageWidth"
+                                onchange="onSettingsIntSpinnerChanged"
+                                value="2048"
+                                min="16"
+                                max="8192"/>
+                    </:item>
+
+                    <:item title="Min page height">
+                        <intspinner
+                                id="spnMinPageHeight"
+                                onchange="onSettingsIntSpinnerChanged"
+                                value="2048"
+                                min="16"
+                                max="8192"/>
+                    </:item>
+
+                    <:item title="Max page width">
+                        <intspinner
+                                id="spnMaxPageWidth"
+                                onchange="onSettingsIntSpinnerChanged"
+                                value="2048"
+                                min="16"
+                                max="8192"/>
+                    </:item>
+
+                    <:item title="Max page height">
+                        <intspinner
+                                id="spnMaxPageHeight"
+                                onchange="onSettingsIntSpinnerChanged"
+                                value="2048"
+                                min="16"
+                                max="8192"/>
+                    </:item>
+
+                    <:separator/>
+
+                    <:item title="Alpha threshold">
+                        <intspinner
+                                id="spnAlphaThreshold"
+                                onchange="onSettingsIntSpinnerChanged"
+                                min="0"
+                                max="255"/>
+                    </:item>
+
+                    <:item title="Min filter">
+                        <visselectbox
+                                id="cboMinFilter"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <:item title="Mag filter">
+                        <visselectbox
+                                id="cboMagFilter"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <:separator/>
+
+                    <:item title="Padding X">
+                        <intspinner
+                                id="spnPaddingX"
+                                onchange="onSettingsIntSpinnerChanged"
+                                min="0"
+                                max="64"/>
+                    </:item>
+
+                    <:item title="Padding Y">
+                        <intspinner
+                                id="spnPaddingY"
+                                onchange="onSettingsIntSpinnerChanged"
+                                min="0"
+                                max="64"/>
+                    </:item>
+
+                    <:item title="Wrap X">
+                        <visselectbox
+                                id="cboWrapX"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <:item title="Wrap Y">
+                        <visselectbox
+                                id="cboWrapY"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <!--<:item title="Slider test">-->
+                        <!--<vistable>-->
+                            <!--<vistextfield numeric="true" max="5" width="48" padright="4"/>-->
+                            <!--<visslider min="0" max="100" step="1" minwidth="0" growx="true"/>-->
+                        <!--</vistable>-->
+                    <!--</:item>-->
+
+                    <:separator/>
+
+                    <:item title="Jpeg quality">
+                        <floatspinner
+                                id="spnJpegQuality"
+                                onchange="onSettingsFloatSpinnerChanged"
+                                min="0"
+                                max="1"
+                                step="0.05"/>
+                    </:item>
+
+                </vistable>
+
+            </vistable>
+
+            <vistable growx="true" defaultalign="left" padleft="8" padright="8">
+
+                <verticalgroup align="top" groupalign="left">
+
+                    <vischeckbox id="chkUseFastAlgorithm" onchange="onSettingsChbChecked">Use fast algorithm</vischeckbox>
+
+                    <vischeckbox id="chkEdgePadding" onchange="onSettingsChbChecked">Edge padding</vischeckbox>
+
+                    <vischeckbox id="chkStripWhitespaceX" onchange="onSettingsChbChecked">Strip whitespace X</vischeckbox>
+
+                    <vischeckbox id="chkStripWhitespaceY" onchange="onSettingsChbChecked">Strip whitespace Y</vischeckbox>
+
+                    <vischeckbox id="chkAllowRotation" onchange="onSettingsChbChecked">Allow rotation</vischeckbox>
+
+                    <vischeckbox id="chkIncludeSubdirs" onchange="onSettingsChbChecked">Include subdirs</vischeckbox>
+
+                    <vischeckbox id="chkBleeding" onchange="onSettingsChbChecked">Bleeding</vischeckbox>
+
+                </verticalgroup>
+
+                <actor width="12"/>
+
+                <verticalgroup align="top" groupalign="left">
+
+                    <vischeckbox id="chkDuplicatePadding" onchange="onSettingsChbChecked">Duplicate padding</vischeckbox>
+
+                    <vischeckbox id="chkForcePot" onchange="onSettingsChbChecked">Force PoT</vischeckbox>
+
+                    <vischeckbox id="chkUseAliases" onchange="onSettingsChbChecked">Use aliases</vischeckbox>
+
+                    <vischeckbox id="chkIgnoreBlankImages" onchange="onSettingsChbChecked">Ignore blank imgs</vischeckbox>
+
+                    <vischeckbox id="chkDebug" onchange="onSettingsChbChecked">Debug</vischeckbox>
+
+                    <vischeckbox id="chkUseIndices" onchange="onSettingsChbChecked">Use indices</vischeckbox>
+
+                    <vischeckbox id="chkPremultiplyAlpha" onchange="onSettingsChbChecked">Premultiply alpha</vischeckbox>
+
+                </verticalgroup>
+
+            </vistable>
+        </vistable>
+    </visscrollpane>
+
+</vistable>

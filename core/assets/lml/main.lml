@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable fillparent="true" bgtiled="custom/background-fill">
+
+    <:import path="lml/mainMenu.lml"/>
+
+    <:row/>
+
+    <vistable grow="true">
+
+        <vistable align="topleft" onecolumn="true">
+            <container expandx="true" fillx="true">
+                <:titledPane title="Pack list" icon="custom/ic-title-packs">
+                    <:import path="lml/panePackList.lml"/>
+                </:titledPane>
+            </container>
+
+            <container expand="true" fill="true">
+                <:titledPane title="Pack general" icon="custom/ic-title-folder">
+                    <:import path="lml/panePackGeneral.lml"/>
+                </:titledPane>
+            </container>
+
+            <container expand="true" fill="true">
+                <:titledPane title="Pack settings" icon="custom/ic-title-settings">
+                    <:import path="lml/panePackSettings.lml"/>
+                </:titledPane>
+            </container>
+        </vistable>
+
+        <separator growy="true"/>
+
+        <container grow="true" fill="true">
+            <:titledPane title="Atlas preview" icon="custom/ic-title-atlas">
+                <container id="canvasContainer" grow="true" fill="true">
+                    <canvas id="canvas"/>
+                </container>
+            </:titledPane>
+        </container>
+
+    </vistable>
+
+</vistable>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE menubar SYSTEM "../../../lml.dtd">
+
+<menubar growx="true" style="main-menu">
+    <menu text="File" style="main-menu">
+        <menuitem
+                id="miFileNew"
+                text="New"
+                shortcut="Ctrl+N"
+                onchange="newProject"
+                icon="custom/ic-project-new"/>
+        <menuitem
+                id="miFileOpen"
+                text="Open"
+                shortcut="Ctrl+O"
+                onchange="openProject"
+                icon="custom/ic-folder"/>
+        <menuitem
+                id="miFileOpenRecent"
+                text="Open recent"
+                icon="custom/ic-folder-recent">
+            <submenu id="pmFileOpenRecent"/>
+        </menuitem>
+        <menuitem
+                id="miFileSave"
+                text="Save"
+                shortcut="Ctrl+S"
+                onchange="saveProject"
+                icon="custom/ic-save"/>
+        <menuitem
+                id="miFileSaveAs"
+                text="Save as"
+                shortcut="Shift+Ctrl+S"
+                onchange="saveProjectAs"
+                icon="custom/ic-save-aster"/>
+    </menu>
+    <menu text="Pack" style="main-menu">
+        <menuitem
+                id="miPackNew"
+                text="New"
+                shortcut="Shift+N"
+                icon="custom/ic-file-new"/>
+        <menuseparator/>
+        <menuitem
+                id="miPackPackSelected"
+                text="Pack selected"
+                icon="custom/ic-process"/>
+        <menuitem
+                id="miPackPackAll"
+                text="Pack all"
+                icon="custom/ic-process-all"/>
+        <menuseparator/>
+        <menuitem
+                id="miPackCopySettingsToAllPacks"
+                text="Copy settings to all packs"/>
+    </menu>
+    <menu text="Help" style="main-menu">
+        <menuitem
+                id="miHelpCheckForUpdates"
+                text="Check for updates"
+                onchange="checkForUpdates"
+                icon="custom/ic-refresh"/>
+        <menuitem
+                id="miHelpAbout"
+                text="About"
+                onchange="show:dialog_about"
+                icon="custom/ic-info-message"/>
+    </menu>
+</menubar>

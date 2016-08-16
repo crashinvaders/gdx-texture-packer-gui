@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable growx="true" onecolumn="true">
+
+    <vistable tablealign="topleft" grow="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8">
+
+        <vistable growx="true">
+            <visscrollpane style="custom" growx="true" filly="true" minwidth="64" disabledx="true" flickscroll="false" fadescrollbars="false">
+                <vislist id="listPacks" onchange="onPackListSelectionChanged" onrightclick="onPackListRightClick"/>
+            </visscrollpane>
+
+            <vistable align="top" padleft="4" defaultwidth="25" defaultheight="25" defaultpadbottom="4">
+                <:column column="0" padright="4"/>
+
+                <:macro alias="sidebutton" id icon onchange>
+                    <visimagebutton
+                            id="{id}"
+                            icon="{icon}"
+                            onchange="{onchange}"
+                            imagescaling="none"
+                            generatedisabled="true"
+                            focusborder="false"/>
+                </:macro>
+
+                <:sidebutton id="btnSpNew" icon="custom/ic-file-new" onchange="newPack"/>
+                <:sidebutton id="btnSpDelete" icon="custom/ic-file-delete" onchange="deletePack"/>
+                <:row/>
+                <:sidebutton id="btnSpRename" icon="custom/ic-file-edit" onchange="renamePack"/>
+                <:sidebutton id="btnSpCopy" icon="custom/ic-file-copy" onchange="copyPack"/>
+                <:row/>
+                <:sidebutton id="btnSpMoveUp" icon="custom/ic-move-up" onchange="movePackUp"/>
+                <:sidebutton id="btnSpMoveDown" icon="custom/ic-move-down" onchange="movePackDown"/>
+                <:row/>
+                <separator grow="true" height="2" width="0" padright="1" padleft="1" colspan="2"/>
+                <:row padbottom="0"/>
+                <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected"/>
+                <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll"/>
+
+            </vistable>
+        </vistable>
+
+    </vistable>
+
+</vistable>

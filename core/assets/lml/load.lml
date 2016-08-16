@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "../../../lml.dtd">
+
+<window title="@loadingTitle" titlealign="center">
+<progressbar id="loadingBar" animateduration="0.4" oncomplete="onLoadComplete"/>
+</window>

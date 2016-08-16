@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog title="About" closebutton="true" closeonescape="true">
+    <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
+
+        <actor height="32"/>
+
+        <vistable onecolumn="true" align="center">
+        <image drawable="custom/app-logo-2x" scaling="none"/>
+        <label style="small" align="right">version 4.0 (august '16)</label>
+        </vistable>
+
+        <actor height="16"/>
+
+        <label>Authors:</label>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://crashinvaders.com">Anton Chekulaev</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">lead developer, graphics</label>
+        </horizontalgroup>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://www.aurelienribon.com">Aurelien Ribon</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">author of original application</label>
+        </horizontalgroup>
+
+        <actor height="16"/>
+
+        <label>Links:</label>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://github.com/crashinvaders/texturepacker">Project GitHub page</linklabel>
+        </horizontalgroup>
+
+        <actor height="16"/>
+
+        <container growx="true" fill="true">
+            <vislabel style="grey" wrap="true" multiline="true">
+                LibGDX Texture Packer GUI is an open source software. Licensed under Apache 2 License.
+            </vislabel>
+        </container>
+    </vistable>
+</visdialog>

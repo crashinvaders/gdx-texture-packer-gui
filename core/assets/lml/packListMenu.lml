@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE popupmenu SYSTEM "../../../lml.dtd">
+
+<popupmenu>
+    <menuitem
+            id="miNew"
+            text="New"
+            shortcut="Shift+N"
+            onchange="newPack"
+            icon="custom/ic-file-new"/>
+    <menuitem
+            id="miDelete"
+            text="Delete"
+            shortcut="Shift+D"
+            onchange="deletePack"
+            icon="custom/ic-file-delete"/>
+    <menuitem
+            id="miRename"
+            text="Rename"
+            shortcut="Shift+R"
+            onchange="renamePack"
+            icon="custom/ic-file-edit"/>
+    <menuitem
+            id="miCopy"
+            text="Make a copy"
+            shortcut="Shift+C"
+            onchange="copyPack"
+            icon="custom/ic-file-copy"/>
+    <menuseparator/>
+    <menuitem
+            id="miMoveUp"
+            text="Move up"
+            shortcut="PageUp"
+            onchange="movePackUp"
+            icon="custom/ic-move-up"/>
+    <menuitem
+            id="miMoveDown"
+            text="Move down"
+            shortcut="PageDown"
+            onchange="movePackDown"
+            icon="custom/ic-move-down"/>
+    <menuseparator/>
+    <menuitem
+            id="miPackSelected"
+            text="Pack"
+            onchange="packSelected"
+            icon="custom/ic-process"/>
+    <menuitem
+            id="miPackAll"
+            text="Pack all"
+            onchange="packAll"
+            icon="custom/ic-process-all"/>
+    <menuseparator/>
+    <menuitem
+            id="miCopySettingsToAllPacks"
+            text="Copy settings to all packs"
+            onchange="copySettingsToAllPacks"/>
+</popupmenu>
