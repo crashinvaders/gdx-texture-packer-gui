@@ -4,7 +4,7 @@
 <visdialog title="About" closebutton="true" closeonescape="true">
     <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
 
-        <actor height="32"/>
+        <actor height="24"/>
 
         <vistable onecolumn="true" align="center">
         <image drawable="custom/app-logo-2x" scaling="none"/>
