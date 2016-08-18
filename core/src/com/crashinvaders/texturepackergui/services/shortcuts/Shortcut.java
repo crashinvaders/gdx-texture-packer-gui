@@ -2,13 +2,14 @@ package com.crashinvaders.texturepackergui.services.shortcuts;
 
 
 import com.badlogic.gdx.Input;
+import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
 @SuppressWarnings("PointlessBitwiseExpression")
 public class Shortcut {
     private static int FLAG_SHIFT = 1<<0;
     private static int FLAG_CONTROL = 1<<1;
     private static int FLAG_ALT = 1<<2;
-    private static int FLAG_SYM = 1<<23;
+    private static int FLAG_SYM = 1<<3;
 
     private final String actionName;
     private int keyCode;
@@ -64,10 +65,6 @@ public class Shortcut {
     }
 
     public int getPriority() {
-        int i = this.flags;
-        // Bit count algorithm from here http://stackoverflow.com/a/109025/3802890
-        i = i - ((i >> 1) & 0x55555555);
-        i = (i & 0x33333333) + ((i >> 2) & 0x33333333);
-        return (((i + (i >> 4)) & 0x0F0F0F0F) * 0x01010101) >> 24;
+        return CommonUtils.getSetBits(flags);
     }
 }

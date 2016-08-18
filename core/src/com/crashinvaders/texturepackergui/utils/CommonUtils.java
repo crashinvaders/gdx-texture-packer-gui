@@ -41,4 +41,14 @@ public class CommonUtils {
         }
         return lines;
     }
+
+    /**
+     * Counts number of set bits
+     */
+    public static int getSetBits(int i) {
+        // Bit count algorithm from here http://stackoverflow.com/a/109025/3802890
+        i = i - ((i >>> 1) & 0x55555555);
+        i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
+        return (((i + (i >>> 4)) & 0x0F0F0F0F) * 0x01010101) >>> 24;
+    }
 }
