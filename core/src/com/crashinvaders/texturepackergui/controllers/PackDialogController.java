@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
-import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
@@ -26,7 +25,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.util.Iterator;
 
-@Component
 @ViewDialog(id = "dialog_packing", value = "lml/dialogPacking.lml")
 public class PackDialogController {
 
