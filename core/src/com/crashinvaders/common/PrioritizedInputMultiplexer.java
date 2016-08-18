@@ -4,7 +4,7 @@ import com.badlogic.gdx.InputProcessor;
 
 import java.util.Comparator;
 
-/** Same old InputMultiplexer but ordering processors by passed priorities. */
+/** Same old InputMultiplexer but it orders processors passed their priorities. */
 public class PrioritizedInputMultiplexer implements InputProcessor {
     private final Comparator<Wrapper> comparator;
     private ValueArrayMap<InputProcessor, Wrapper> processors = new ValueArrayMap<>(4);
@@ -157,7 +157,7 @@ public class PrioritizedInputMultiplexer implements InputProcessor {
     private static class WrapperComparator implements Comparator<Wrapper> {
         @Override
         public int compare(Wrapper l, Wrapper r) {
-            return Integer.compare(l.priority, r.priority);
+            return Integer.compare(r.priority, l.priority);
         }
     }
 }

@@ -21,6 +21,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
+import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
@@ -37,11 +38,11 @@ public class GlobalActions implements ActionContainer {
     @Inject PackDialogController packDialogController;
 
     @LmlAction({"reloadView", "reloadScreen"})
-    void reloadScreen() {
+    public void reloadScreen() {
         interfaceService.reload();
     }
 
-    @LmlAction("newPack") void newPack() {
+    @LmlAction("newPack") public void newPack() {
         Dialogs.showInputDialog(getStage(), getString("newPack"), null, new InputDialogAdapter() {
             @Override
             public void finished(String input) {
@@ -53,7 +54,7 @@ public class GlobalActions implements ActionContainer {
         });
     }
 
-    @LmlAction("renamePack") void renamePack() {
+    @LmlAction("renamePack") public void renamePack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -67,7 +68,7 @@ public class GlobalActions implements ActionContainer {
         dialog.setText(pack.getName(), true);
     }
 
-    @LmlAction("copyPack") void copyPack() {
+    @LmlAction("copyPack") public void copyPack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -84,14 +85,14 @@ public class GlobalActions implements ActionContainer {
         dialog.setText(pack.getName(), true);
     }
 
-    @LmlAction("deletePack") void deletePack() {
+    @LmlAction("deletePack") public void deletePack() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         getProject().removePack(pack);
     }
 
-    @LmlAction("movePackUp") void movePackUp() {
+    @LmlAction("movePackUp") public void movePackUp() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -102,7 +103,7 @@ public class GlobalActions implements ActionContainer {
         eventDispatcher.postEvent(new PackListOrderChanged());
     }
 
-    @LmlAction("movePackDown") void movePackDown() {
+    @LmlAction("movePackDown") public void movePackDown() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -113,7 +114,7 @@ public class GlobalActions implements ActionContainer {
         eventDispatcher.postEvent(new PackListOrderChanged());
     }
 
-    @LmlAction("packAll") void packAll() {
+    @LmlAction("packAll") public void packAll() {
         Array<PackModel> packs = getProject().getPacks();
         if (packs.size == 0) return;
 
@@ -121,7 +122,7 @@ public class GlobalActions implements ActionContainer {
         packDialogController.launchPack(packs);
     }
 
-    @LmlAction("packSelected") void packSelected() {
+    @LmlAction("packSelected") public void packSelected() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -129,13 +130,22 @@ public class GlobalActions implements ActionContainer {
         packDialogController.launchPack(pack);
     }
 
-    @LmlAction("newProject") void newProject() {
+    @LmlAction("newProject") public void newProject() {
         //TODO check if there were any changes
-
-        modelService.setProject(new ProjectModel());
+        ProjectModel project = getProject();
+        if (project.getPacks().size > 0) {
+            Dialogs.showOptionDialog(getStage(), "New project", "All unsaved changes will be lost. Proceed?", Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
+                @Override
+                public void yes() {
+                    modelService.setProject(new ProjectModel());
+                }
+            });
+        } else {
+            modelService.setProject(new ProjectModel());
+        }
     }
 
-    @LmlAction("openProject") void openProject() {
+    @LmlAction("openProject") public void openProject() {
         final ProjectModel project = getProject();
         FileHandle dir = null;
         if (FileUtils.fileExists(project.getProjectFile())) {
@@ -156,7 +166,7 @@ public class GlobalActions implements ActionContainer {
         getStage().addActor(fileChooser.fadeIn());
     }
 
-    @LmlAction("saveProject") void saveProject() {
+    @LmlAction("saveProject") public void saveProject() {
         ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
 
@@ -168,7 +178,7 @@ public class GlobalActions implements ActionContainer {
         }
     }
 
-    @LmlAction("saveProjectAs") void saveProjectAs() {
+    @LmlAction("saveProjectAs") public void saveProjectAs() {
         final ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
         FileHandle dir = null;
@@ -193,7 +203,7 @@ public class GlobalActions implements ActionContainer {
         if (FileUtils.fileExists(projectFile)) { fileChooser.setSelectedFiles(projectFile); }
     }
 
-    @LmlAction("pickInputDir") void pickInputDir() {
+    @LmlAction("pickInputDir") public void pickInputDir() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -211,7 +221,7 @@ public class GlobalActions implements ActionContainer {
         getStage().addActor(fileChooser.fadeIn());
     }
 
-    @LmlAction("pickOutputDir") void pickOutputDir() {
+    @LmlAction("pickOutputDir") public void pickOutputDir() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -229,7 +239,7 @@ public class GlobalActions implements ActionContainer {
         getStage().addActor(fileChooser.fadeIn());
     }
 
-    @LmlAction("copySettingsToAllPacks") void copySettingsToAllPacks() {
+    @LmlAction("copySettingsToAllPacks") public void copySettingsToAllPacks() {
         PackModel selectedPack = getSelectedPack();
         if (selectedPack == null) return;
 
@@ -246,7 +256,7 @@ public class GlobalActions implements ActionContainer {
                 .setDuration(2f));
     }
 
-    @LmlAction("checkForUpdates") void checkForUpdates() {
+    @LmlAction("checkForUpdates") public void checkForUpdates() {
         //TODO implement it
     }
 

@@ -1,0 +1,15 @@
+newProject: CTRL+SHIFT+N
+openProject: CTRL+O
+saveProjectAs: CTRL+SHIFT+S
+saveProject: CTRL+S
+
+newPack: CTRL+N
+deletePack: CTRL+SHIFT+DEL
+copyPack: CTRL+SHIFT+C
+renamePack: CTRL+R
+
+movePackUp: ALT+UP
+movePackDown: ALT+DOWN
+
+packSelected: CTRL+P
+packAll: CTRL+SHIFT+P

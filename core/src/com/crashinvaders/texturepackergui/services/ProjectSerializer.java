@@ -15,8 +15,8 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 
+import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
 import static com.crashinvaders.texturepackergui.utils.FileUtils.loadTextFromFile;
 import static com.crashinvaders.texturepackergui.utils.FileUtils.saveTextToFile;
 
@@ -197,23 +197,5 @@ public class ProjectSerializer {
         String str = find(lines, start, null);
         if (str != null) return Float.parseFloat(str);
         return defaultValue;
-    }
-
-    /**
-     * Splits the lines of a string, and trims each line.
-     */
-    public static Array<String> splitAndTrim(String str) {
-        Array<String> lines = new Array<>(str.split("\n"));
-        // Trim each line
-		for (int i = 0; i < lines.size; i++) {
-			lines.set(i, lines.get(i).trim());
-        }
-        // Remove empty lines
-        for (Iterator<String> iter = lines.iterator(); iter.hasNext();) {
-            if (iter.next().isEmpty()) {
-                iter.remove();
-            }
-        }
-        return lines;
     }
 }
