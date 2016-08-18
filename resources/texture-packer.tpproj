@@ -27,4 +27,5 @@ stripWhitespaceX=false
 stripWhitespaceY=false
 wrapX=ClampToEdge
 wrapY=ClampToEdge
-premultiplyAlpha=falsecombineSubdirectories=false
+premultiplyAlpha=false
+combineSubdirectories=true

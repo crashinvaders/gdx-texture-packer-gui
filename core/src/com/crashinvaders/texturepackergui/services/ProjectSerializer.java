@@ -98,7 +98,7 @@ public class ProjectSerializer {
         sb.append("stripWhitespaceY=").append(settings.stripWhitespaceY).append("\n");
         sb.append("wrapX=").append(settings.wrapX).append("\n");
         sb.append("wrapY=").append(settings.wrapY).append("\n");
-        sb.append("premultiplyAlpha=").append(settings.premultiplyAlpha);
+        sb.append("premultiplyAlpha=").append(settings.premultiplyAlpha).append("\n");
         sb.append("combineSubdirectories=").append(settings.combineSubdirectories);
 
         return sb.toString();
@@ -138,7 +138,7 @@ public class ProjectSerializer {
                 pack.setOutputDir(new File(root.file(), outputDir).getCanonicalPath());
             }
         } catch (IOException ex) {
-            //TODO show erro to user somehow
+            //TODO show error to user somehow
             System.err.println(ex.getMessage());
             pack.setInputDir("");
             pack.setOutputDir("");

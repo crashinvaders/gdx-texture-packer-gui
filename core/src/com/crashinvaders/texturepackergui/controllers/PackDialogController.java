@@ -1,79 +1,66 @@
-package com.crashinvaders.texturepackergui.controllers.main;
+package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
+import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.utils.CommonUtils;
+import com.github.czyzby.autumn.annotation.Component;
+import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
+import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.lml.annotation.LmlActor;
+import com.github.czyzby.lml.annotation.LmlAfter;
 import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.widget.*;
-import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.util.Iterator;
 
-public class PackDialog extends VisWindow {
+@Component
+@ViewDialog(id = "dialog_packing", value = "lml/dialogPacking.lml")
+public class PackDialogController {
 
-    private final VisImageButton btnClose;
-    private final VisLabel textOutput;
-    private final VisScrollPane textScroller;
-    private final VisCheckBox chbAutoClose;
+    @Inject InterfaceService interfaceService;
+    @Inject EventDispatcher eventDispatcher;
 
-    private CompletionListener completionListener;
+    @ViewStage Stage stage;
 
-    public PackDialog() {
-        super("Processing...", "dialog");
+    @LmlActor("window") VisDialog window;
+    @LmlActor("scrOutput") VisScrollPane scrOutput;
+    @LmlActor("containerOutput") Container containerOutput;
+    @LmlActor("chbAutoClose") VisCheckBox chbAutoClose;
+    private VisImageButton btnClose;
+    private VisLabel lblOutput;
 
-        setModal(true);
-        setMovable(false);
-        setResizable(false);
-        setCenterOnAdd(true);
-
-        addCloseButton();
-        btnClose = (VisImageButton) getTitleTable().getChildren().peek();
+    @LmlAfter
+    public void initialize() {
+        btnClose = (VisImageButton) window.getTitleTable().getChildren().peek();
         btnClose.setColor(new Color(0xffffff44));
         btnClose.setDisabled(true);
 
-        textOutput = new VisLabel("", "small") {
+        lblOutput = new VisLabel("", "small") {
             @Override
             protected void sizeChanged() {
                 super.sizeChanged();
                 // Scroll down scroller
-                textScroller.setScrollPercentY(1f);
+                scrOutput.setScrollPercentY(1f);
             }
         };
-        textOutput.setAlignment(Align.topLeft);
-        textOutput.setWrap(true);
+        lblOutput.setAlignment(Align.topLeft);
+        lblOutput.setWrap(true);
+        containerOutput.setActor(lblOutput);
 
-        textScroller = new VisScrollPane(textOutput, "text-output");
-        textScroller.setScrollingDisabled(true, false);
-        textScroller.setFadeScrollBars(false);
-        textScroller.setOverscroll(false, false);
-        textScroller.setFlickScroll(false);
-
-        chbAutoClose = new VisCheckBox("Automatically close dialog on success");
-
-        add(textScroller).width(480).height(320).fill().top();
-        row().padTop(2f);
-        add(chbAutoClose).left();
-
-        pack();
-    }
-
-    public void setCompletionListener(CompletionListener completionListener) {
-        this.completionListener = completionListener;
-    }
-
-    @Override
-    protected void setStage(Stage stage) {
-        super.setStage(stage);
-        if (stage != null) {
-            stage.setScrollFocus(this);
-        }
+        stage.setScrollFocus(scrOutput);
     }
 
     public void launchPack(final PackModel pack) {
@@ -88,7 +75,7 @@ public class PackDialog extends VisWindow {
         final Timer.Task outputUpdateTask = new Timer.Task() {
             @Override
             public void run() {
-                textOutput.setText(textOutput.getText() + stream.toString());
+                lblOutput.setText(lblOutput.getText() + stream.toString());
                 stream.reset();
             }
         };
@@ -98,9 +85,17 @@ public class PackDialog extends VisWindow {
 
         new Thread(new Runnable() {@Override public void run() {
             for (Iterator<PackModel> iterator = packs.iterator(); iterator.hasNext();) {
-                PackModel pack = iterator.next();
+                final PackModel pack = iterator.next();
 
                 boolean valid = performPacking(pack);
+                // Notification
+                Gdx.app.postRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        eventDispatcher.postEvent(new PackAtlasUpdatedEvent(pack));
+                    }
+                });
+
                 if (!valid) break;
 
                 if (!iterator.hasNext()) {
@@ -121,17 +116,13 @@ public class PackDialog extends VisWindow {
                 public void run() {
                     btnClose.setDisabled(false);
                     btnClose.setColor(Color.WHITE);
-                    FocusManager.switchFocus(getStage(), btnClose);
 
-                    closeOnEscape();
+                    FocusManager.switchFocus(stage, btnClose);
 
-                    getTitleLabel().setText("Finished");
-                    textOutput.setText(textOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...");
+                    window.closeOnEscape();
 
-                    //TODO throw event instead
-                    if (completionListener != null) {
-                        completionListener.onComplete();
-                    }
+                    window.getTitleLabel().setText("Finished");
+                    lblOutput.setText(lblOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...");
                 }
             });
 
@@ -162,9 +153,5 @@ public class PackDialog extends VisWindow {
             System.err.println("[output-red]Exception occured:[] " + message);
             return false;
         }
-    }
-
-    public interface CompletionListener {
-        void onComplete();
     }
 }

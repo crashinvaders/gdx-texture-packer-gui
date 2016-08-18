@@ -13,16 +13,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
-import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
-import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
-import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
-import com.crashinvaders.texturepackergui.events.RecentProjectsUpdatedEvent;
+import com.crashinvaders.texturepackergui.controllers.PackDialogController;
+import com.crashinvaders.texturepackergui.events.*;
+import com.crashinvaders.texturepackergui.services.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
-import com.crashinvaders.texturepackergui.services.ProjectSerializer;
-import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -32,6 +29,7 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.SkinService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.stereotype.View;
+import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
@@ -39,11 +37,7 @@ import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.ToastManager;
-import com.kotcrab.vis.ui.util.dialog.Dialogs;
-import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.kotcrab.vis.ui.widget.spinner.FloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
@@ -60,6 +54,9 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject ProjectSerializer projectSerializer;
     @Inject SkinService skinService;
     @Inject RecentProjectsRepository recentProjects;
+    @Inject PackDialogController packDialogController;
+
+    @ViewStage Stage stage;
 
     @LmlActor("splitPane") VisSplitPane splitPane;
     @LmlActor("canvasContainer") Container canvasContainer;
@@ -147,6 +144,27 @@ public class MainController implements ActionContainer, ViewResizer {
                         updateViewsFromPack(event.getPack());
                     }
                     break;
+                case INPUT:
+                    if (event.getPack() == getSelectedPack()) {
+                        viewsPacks.edtInputDir.setProgrammaticChangeEvents(false);
+                        viewsPacks.edtInputDir.setText(event.getPack().getInputDir());
+                        viewsPacks.edtInputDir.setProgrammaticChangeEvents(true);
+                    }
+                    break;
+                case OUTPUT:
+                    if (event.getPack() == getSelectedPack()) {
+                        viewsPacks.edtOutputDir.setProgrammaticChangeEvents(false);
+                        viewsPacks.edtOutputDir.setText(event.getPack().getOutputDir());
+                        viewsPacks.edtOutputDir.setProgrammaticChangeEvents(true);
+                    }
+                    break;
+                case FILENAME:
+                    if (event.getPack() == getSelectedPack()) {
+                        viewsPacks.edtFileName.setProgrammaticChangeEvents(false);
+                        viewsPacks.edtFileName.setText(event.getPack().getFilename());
+                        viewsPacks.edtFileName.setProgrammaticChangeEvents(true);
+                    }
+                    break;
             }
         }
         return OnEvent.KEEP;
@@ -160,235 +178,37 @@ public class MainController implements ActionContainer, ViewResizer {
         return OnEvent.KEEP;
     }
 
+    @OnEvent(PackAtlasUpdatedEvent.class)
+    public boolean onEvent(PackAtlasUpdatedEvent event) {
+        if (initialized) {
+            if (event.getPack() == getSelectedPack()) {
+                canvas.reloadPack(event.getPack());
+            }
+        }
+        return OnEvent.KEEP;
+    }
+
+    @OnEvent(PackListOrderChanged.class)
+    public boolean onEvent(PackListOrderChanged event) {
+        if (initialized) {
+            Array items = viewsPacks.listPacks.getItems();
+            items.clear();
+            items.addAll(getProject().getPacks());
+        }
+        return OnEvent.KEEP;
+    }
+
+    @OnEvent(ShowUserNotificationEvent.class)
+    public boolean onEvent(ShowUserNotificationEvent event) {
+        if (initialized) {
+            toastManager.show(event.getMessage(), event.getDuration());
+        }
+        return OnEvent.KEEP;
+    }
+
     //endregion
 
     //region Actions
-    @LmlAction("reloadScreen")
-    void reloadScreen() {
-        interfaceService.reload();
-    }
-
-    @LmlAction("newPack") void newPack() {
-        Dialogs.showInputDialog(getStage(), getString("newPack"), null, new InputDialogAdapter() {
-            @Override
-            public void finished(String input) {
-                PackModel pack = new PackModel();
-                pack.setName(input);
-                getProject().addPack(pack);
-                getProject().setSelectedPack(pack);
-            }
-        });
-    }
-
-    @LmlAction("renamePack") void renamePack() {
-        final PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("renamePack"), null, true, null, new InputDialogAdapter() {
-            @Override
-            public void finished(String input) {
-                pack.setName(input);
-            }
-        });
-        getStage().addActor(dialog.fadeIn());
-        dialog.setText(pack.getName(), true);
-    }
-
-    @LmlAction("copyPack") void copyPack() {
-        final PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("copyPack"), null, true, null, new InputDialogAdapter() {
-            @Override
-            public void finished(String input) {
-                PackModel newPack = new PackModel(pack);
-                newPack.setName(input);
-                getProject().addPack(newPack);
-                getProject().setSelectedPack(newPack);
-            }
-        });
-        getStage().addActor(dialog.fadeIn());
-        dialog.setText(pack.getName(), true);
-    }
-
-    @LmlAction("deletePack") void deletePack() {
-        PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        getProject().removePack(pack);
-    }
-
-    @LmlAction("movePackUp") void movePackUp() {
-        PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        Array<PackModel> packs = getProject().getPacks();
-        int idx = packs.indexOf(pack, true);
-        packs.swap(idx, Math.max(idx-1, 0));
-        viewsPacks.listPacks.getItems().swap(idx, Math.max(idx-1, 0));
-    }
-
-    @LmlAction("movePackDown") void movePackDown() {
-        PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        Array<PackModel> packs = getProject().getPacks();
-        int idx = packs.indexOf(pack, true);
-        packs.swap(idx, Math.min(idx+1, packs.size-1));
-        viewsPacks.listPacks.getItems().swap(idx, Math.min(idx+1, packs.size-1));
-    }
-
-    @LmlAction("packAll") void packAll() {
-        Array<PackModel> packs = getProject().getPacks();
-        if (packs.size == 0) return;
-
-        PackDialog dialog = new PackDialog();
-        dialog.setCompletionListener(new PackDialog.CompletionListener() {
-            @Override
-            public void onComplete() {
-                updateCanvas();
-            }
-        });
-        getStage().addActor(dialog.fadeIn());
-        dialog.launchPack(packs);
-
-        updateCanvas();
-    }
-
-    @LmlAction("packSelected") void packSelected() {
-        PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        PackDialog dialog = new PackDialog();
-        dialog.setCompletionListener(new PackDialog.CompletionListener() {
-            @Override
-            public void onComplete() {
-                updateCanvas();
-            }
-        });
-        getStage().addActor(dialog.fadeIn());
-        dialog.launchPack(pack);
-
-        updateCanvas();
-    }
-
-    @LmlAction("newProject") void newProject() {
-        //TODO check if there were any changes
-
-        modelService.setProject(new ProjectModel());
-    }
-
-    @LmlAction("openProject") void openProject() {
-        final ProjectModel project = getProject();
-        FileHandle dir = null;
-        if (FileUtils.fileExists(project.getProjectFile())) {
-            dir = project.getProjectFile().parent();
-        }
-
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                ProjectModel loadedProject = projectSerializer.loadProject(chosenFile);
-                modelService.setProject(loadedProject);
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
-    }
-
-    @LmlAction("saveProject") void saveProject() {
-        ProjectModel project = getProject();
-        FileHandle projectFile = project.getProjectFile();
-
-        // Check if project were saved before
-        if (projectFile != null && projectFile.exists()) {
-            projectSerializer.saveProject(project, projectFile);
-        } else {
-            saveProjectAs();
-        }
-    }
-
-    @LmlAction("saveProjectAs") void saveProjectAs() {
-        final ProjectModel project = getProject();
-        FileHandle projectFile = project.getProjectFile();
-        FileHandle dir = null;
-        if (FileUtils.fileExists(projectFile)) {
-            dir = projectFile.parent();
-        }
-
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.SAVE);
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                getProject().setProjectFile(chosenFile);
-
-                projectSerializer.saveProject(project, chosenFile);
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
-
-        if (FileUtils.fileExists(projectFile)) { fileChooser.setSelectedFiles(projectFile); }
-    }
-
-    @LmlAction("pickInputDir") void pickInputDir() {
-        final PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        FileHandle dir = FileUtils.obtainIfExists(pack.getInputDir());
-
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                viewsPacks.edtInputDir.setText(chosenFile.path());
-                pack.setInputDir(chosenFile.file().getAbsolutePath());
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
-    }
-
-    @LmlAction("pickOutputDir") void pickOutputDir() {
-        final PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        FileHandle dir = FileUtils.obtainIfExists(pack.getOutputDir());
-
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                viewsPacks.edtOutputDir.setText(chosenFile.path());
-                pack.setOutputDir(chosenFile.file().getAbsolutePath());
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
-    }
-
-    @LmlAction("copySettingsToAllPacks") void copySettingsToAllPacks() {
-        PackModel selectedPack = getSelectedPack();
-        if (selectedPack == null) return;
-
-        TexturePacker.Settings generalSettings = selectedPack.getSettings();
-        Array<PackModel> packs = getProject().getPacks();
-        for (PackModel pack : packs) {
-            if (pack == selectedPack) continue;
-
-            pack.setSettings(new TexturePacker.Settings(generalSettings));
-        }
-
-        toastManager.show(getString("copyAllSettingsToast"), 2f);
-    }
-
     @LmlAction("onPackListSelectionChanged") void onPackListSelectionChanged(final VisList list) {
         final PackModel selectedPack = (PackModel) list.getSelected();
         if (getSelectedPack() == selectedPack) return;
@@ -540,10 +360,6 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cboWrapY": settings.wrapY = (Texture.TextureWrap) value; break;
         }
     }
-
-    @LmlAction("checkForUpdates") void checkForUpdates() {
-        //TODO implement it
-    }
     //endregion
 
     /** @return localized string */
@@ -556,7 +372,7 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     private Stage getStage() {
-        return interfaceService.getCurrentController().getStage();
+        return stage;
     }
 
     private PackModel getSelectedPack() {

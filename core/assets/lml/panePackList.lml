@@ -34,6 +34,7 @@
                 <:row/>
                 <separator grow="true" height="2" width="0" padright="1" padleft="1" colspan="2"/>
                 <:row padbottom="0"/>
+                <!--<:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="show:dialog_packing"/>-->
                 <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected"/>
                 <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll"/>
 

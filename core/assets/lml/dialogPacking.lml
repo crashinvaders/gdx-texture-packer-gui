@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        id="window"
+        title="Processing..."
+        closebutton="true"
+        closeonescape="false"
+        onecolumn="true"
+        modal="true"
+        movable="false"
+        resizable="false">
+
+    <visscrollpane
+            id="scrOutput"
+            style="text-output"
+            width="480"
+            height="320"
+            fill="true"
+            align="top"
+            disabledx="true"
+            fadescrollbars="false"
+            overscroll="false"
+            flickscroll="false">
+        <container id="containerOutput" fill="true"/>
+    </visscrollpane>
+
+    <actor padtop="2"/>
+
+    <vischeckbox
+            id="chbAutoClose"
+            align="left"
+            text="Automatically close dialog on success"/>
+
+</visdialog>

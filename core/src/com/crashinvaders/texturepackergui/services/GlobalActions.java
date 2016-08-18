@@ -1,0 +1,273 @@
+package com.crashinvaders.texturepackergui.services;
+
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.texturepackergui.controllers.PackDialogController;
+import com.crashinvaders.texturepackergui.events.PackListOrderChanged;
+import com.crashinvaders.texturepackergui.events.ShowUserNotificationEvent;
+import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.utils.FileUtils;
+import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
+import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.mvc.component.ui.SkinService;
+import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.lml.annotation.LmlAction;
+import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+
+@ViewActionContainer("global")
+public class GlobalActions implements ActionContainer {
+
+    @Inject InterfaceService interfaceService;
+    @Inject LocaleService localeService;
+    @Inject SkinService skinService;
+    @Inject EventDispatcher eventDispatcher;
+    @Inject ModelService modelService;
+    @Inject ProjectSerializer projectSerializer;
+    @Inject RecentProjectsRepository recentProjects;
+    @Inject PackDialogController packDialogController;
+
+    @LmlAction({"reloadView", "reloadScreen"})
+    void reloadScreen() {
+        interfaceService.reload();
+    }
+
+    @LmlAction("newPack") void newPack() {
+        Dialogs.showInputDialog(getStage(), getString("newPack"), null, new InputDialogAdapter() {
+            @Override
+            public void finished(String input) {
+                PackModel pack = new PackModel();
+                pack.setName(input);
+                getProject().addPack(pack);
+                getProject().setSelectedPack(pack);
+            }
+        });
+    }
+
+    @LmlAction("renamePack") void renamePack() {
+        final PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("renamePack"), null, true, null, new InputDialogAdapter() {
+            @Override
+            public void finished(String input) {
+                pack.setName(input);
+            }
+        });
+        getStage().addActor(dialog.fadeIn());
+        dialog.setText(pack.getName(), true);
+    }
+
+    @LmlAction("copyPack") void copyPack() {
+        final PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("copyPack"), null, true, null, new InputDialogAdapter() {
+            @Override
+            public void finished(String input) {
+                PackModel newPack = new PackModel(pack);
+                newPack.setName(input);
+                getProject().addPack(newPack);
+                getProject().setSelectedPack(newPack);
+            }
+        });
+        getStage().addActor(dialog.fadeIn());
+        dialog.setText(pack.getName(), true);
+    }
+
+    @LmlAction("deletePack") void deletePack() {
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        getProject().removePack(pack);
+    }
+
+    @LmlAction("movePackUp") void movePackUp() {
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        Array<PackModel> packs = getProject().getPacks();
+        int idx = packs.indexOf(pack, true);
+        packs.swap(idx, Math.max(idx-1, 0));
+
+        eventDispatcher.postEvent(new PackListOrderChanged());
+    }
+
+    @LmlAction("movePackDown") void movePackDown() {
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        Array<PackModel> packs = getProject().getPacks();
+        int idx = packs.indexOf(pack, true);
+        packs.swap(idx, Math.min(idx+1, packs.size-1));
+
+        eventDispatcher.postEvent(new PackListOrderChanged());
+    }
+
+    @LmlAction("packAll") void packAll() {
+        Array<PackModel> packs = getProject().getPacks();
+        if (packs.size == 0) return;
+
+        interfaceService.showDialog(packDialogController.getClass());
+        packDialogController.launchPack(packs);
+    }
+
+    @LmlAction("packSelected") void packSelected() {
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        interfaceService.showDialog(packDialogController.getClass());
+        packDialogController.launchPack(pack);
+    }
+
+    @LmlAction("newProject") void newProject() {
+        //TODO check if there were any changes
+
+        modelService.setProject(new ProjectModel());
+    }
+
+    @LmlAction("openProject") void openProject() {
+        final ProjectModel project = getProject();
+        FileHandle dir = null;
+        if (FileUtils.fileExists(project.getProjectFile())) {
+            dir = project.getProjectFile().parent();
+        }
+
+        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected (Array<FileHandle> file) {
+                FileHandle chosenFile = file.first();
+                ProjectModel loadedProject = projectSerializer.loadProject(chosenFile);
+                modelService.setProject(loadedProject);
+            }
+        });
+        getStage().addActor(fileChooser.fadeIn());
+    }
+
+    @LmlAction("saveProject") void saveProject() {
+        ProjectModel project = getProject();
+        FileHandle projectFile = project.getProjectFile();
+
+        // Check if project were saved before
+        if (projectFile != null && projectFile.exists()) {
+            projectSerializer.saveProject(project, projectFile);
+        } else {
+            saveProjectAs();
+        }
+    }
+
+    @LmlAction("saveProjectAs") void saveProjectAs() {
+        final ProjectModel project = getProject();
+        FileHandle projectFile = project.getProjectFile();
+        FileHandle dir = null;
+        if (FileUtils.fileExists(projectFile)) {
+            dir = projectFile.parent();
+        }
+
+        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.SAVE);
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected (Array<FileHandle> file) {
+                FileHandle chosenFile = file.first();
+                getProject().setProjectFile(chosenFile);
+
+                projectSerializer.saveProject(project, chosenFile);
+            }
+        });
+        getStage().addActor(fileChooser.fadeIn());
+
+        if (FileUtils.fileExists(projectFile)) { fileChooser.setSelectedFiles(projectFile); }
+    }
+
+    @LmlAction("pickInputDir") void pickInputDir() {
+        final PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        FileHandle dir = FileUtils.obtainIfExists(pack.getInputDir());
+
+        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected (Array<FileHandle> file) {
+                FileHandle chosenFile = file.first();
+                pack.setInputDir(chosenFile.file().getAbsolutePath());
+            }
+        });
+        getStage().addActor(fileChooser.fadeIn());
+    }
+
+    @LmlAction("pickOutputDir") void pickOutputDir() {
+        final PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        FileHandle dir = FileUtils.obtainIfExists(pack.getOutputDir());
+
+        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected (Array<FileHandle> file) {
+                FileHandle chosenFile = file.first();
+                pack.setOutputDir(chosenFile.file().getAbsolutePath());
+            }
+        });
+        getStage().addActor(fileChooser.fadeIn());
+    }
+
+    @LmlAction("copySettingsToAllPacks") void copySettingsToAllPacks() {
+        PackModel selectedPack = getSelectedPack();
+        if (selectedPack == null) return;
+
+        TexturePacker.Settings generalSettings = selectedPack.getSettings();
+        Array<PackModel> packs = getProject().getPacks();
+        for (PackModel pack : packs) {
+            if (pack == selectedPack) continue;
+
+            pack.setSettings(new TexturePacker.Settings(generalSettings));
+        }
+
+        eventDispatcher.postEvent(new ShowUserNotificationEvent()
+                .setMessage(getString("toastCopyAllSettings"))
+                .setDuration(2f));
+    }
+
+    @LmlAction("checkForUpdates") void checkForUpdates() {
+        //TODO implement it
+    }
+
+    /** @return localized string */
+    private String getString(String key) {
+        return localeService.getI18nBundle().get(key);
+    }
+    /** @return localized string */
+    private String getString(String key, Object... args) {
+        return localeService.getI18nBundle().format(key, args);
+    }
+
+    private PackModel getSelectedPack() {
+        return getProject().getSelectedPack();
+    }
+
+    private ProjectModel getProject() {
+        return modelService.getProject();
+    }
+
+    private Stage getStage() {
+        return interfaceService.getCurrentController().getStage();
+    }
+}
