@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.PrioritizedInputMultiplexer;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.context.ContextDestroyer;
@@ -34,6 +35,7 @@ public class App implements ApplicationListener {
     private static App instance;
     private final ClassScanner componentScanner;
     private final AppParams params;
+    private final PrioritizedInputMultiplexer inputMultiplexer;
 
     private Array<Pair<Class<?>, ClassScanner>> componentScanners;
     private ContextDestroyer contextDestroyer;
@@ -55,6 +57,9 @@ public class App implements ApplicationListener {
         componentScanners = GdxArrays.newArray();
         registerComponents(componentScanner, App.class);
 
+        inputMultiplexer = new PrioritizedInputMultiplexer();
+        inputMultiplexer.setMaxPointers(1);
+
         instance = this;
     }
 
@@ -68,6 +73,8 @@ public class App implements ApplicationListener {
 
     @Override
     public void create() {
+        Gdx.input.setInputProcessor(inputMultiplexer);
+
         initiateContext();
         clearComponentScanners();
 
@@ -138,13 +145,20 @@ public class App implements ApplicationListener {
     }
 
     @Override
-    public void pause() {
-        interfaceService.pause();
+    public void resume() {
+        interfaceService.resume();
+        Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
-    public void resume() {
-        interfaceService.resume();
+    public void pause() {
+        interfaceService.pause();
+        Gdx.input.setInputProcessor(null);
+    }
+
+    @Override
+    public void dispose() {
+        Disposables.disposeOf(contextDestroyer);
     }
 
     //region Accessors
@@ -153,12 +167,8 @@ public class App implements ApplicationListener {
     public EventDispatcher getEventDispatcher() { return componentExtractorService.eventDispatcher; }
     public MessageDispatcher getMessageDispatcher() { return componentExtractorService.messageDispatcher; }
     public AppParams getParams() { return params; }
+    public PrioritizedInputMultiplexer getInput() { return inputMultiplexer; }
     //endregion
-
-    @Override
-    public void dispose() {
-        Disposables.disposeOf(contextDestroyer);
-    }
 
     /** This is utility component class that helps to get access to some system components for App class */
     @SuppressWarnings("WeakerAccess")

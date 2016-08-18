@@ -4,14 +4,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Colors;
+import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.AppParams;
+import com.crashinvaders.texturepackergui.services.ProjectSerializer;
+import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.SkinService;
+import com.github.czyzby.autumn.mvc.component.ui.action.ActionProvider;
+import com.github.czyzby.autumn.mvc.component.ui.controller.ViewController;
 import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.autumn.mvc.stereotype.preference.*;
 import com.github.czyzby.kiwi.util.gdx.asset.lazy.provider.ObjectProvider;
@@ -19,11 +28,6 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.LmlSyntax;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileUtils;
-import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.AppParams;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
-import com.crashinvaders.texturepackergui.services.ProjectSerializer;
 
 @SuppressWarnings("unused")
 @Component
@@ -68,6 +72,35 @@ public class Configuration {
 
         LmlParser parser = interfaceService.getParser();
         parser.parseTemplate(Gdx.files.internal("lml/titledPane.lml"));
+
+        interfaceService.setShowingActionProvider(new ActionProvider() {
+            @Override
+            public Action provideAction(final ViewController forController, final ViewController connectedView) {
+                return Actions.sequence(
+                        Actions.alpha(0f),
+                        Actions.fadeIn(InterfaceService.DEFAULT_FADING_TIME),
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                App.inst().getInput().addProcessor(forController.getStage(), 0);
+                            }
+                        }));
+            }
+        });
+
+        interfaceService.setHidingActionProvider(new ActionProvider() {
+            @Override
+            public Action provideAction(final ViewController forController, final ViewController connectedView) {
+                return Actions.sequence(
+                        Actions.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                App.inst().getInput().removeProcessor(forController.getStage());
+                            }
+                        }),
+                        Actions.fadeOut(InterfaceService.DEFAULT_FADING_TIME));
+            }
+        });
     }
 
     // Try load initial project
