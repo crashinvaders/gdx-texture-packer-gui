@@ -114,6 +114,40 @@ public class GlobalActions implements ActionContainer {
         eventDispatcher.postEvent(new PackListOrderChanged());
     }
 
+    @LmlAction("selectNextPack") public void selectNextPack() {
+        ProjectModel project = getProject();
+        Array<PackModel> packs = project.getPacks();
+        PackModel pack = project.getSelectedPack();
+
+        if (pack == null) {
+            if (packs.size > 0) {
+                project.setSelectedPack(packs.first());
+            }
+            return;
+        }
+
+        int idx = packs.indexOf(pack, true) + 1;
+        PackModel nextPack = packs.get(Math.min(idx, packs.size - 1));
+        project.setSelectedPack(nextPack);
+    }
+
+    @LmlAction("selectPreviousPack") public void selectPreviousPack() {
+        ProjectModel project = getProject();
+        Array<PackModel> packs = project.getPacks();
+        PackModel pack = project.getSelectedPack();
+
+        if (pack == null) {
+            if (packs.size > 0) {
+                project.setSelectedPack(packs.peek());
+            }
+            return;
+        }
+
+        int idx = packs.indexOf(pack, true) - 1;
+        PackModel prevPack = packs.get(Math.max(idx, 0));
+        project.setSelectedPack(prevPack);
+    }
+
     @LmlAction("packAll") public void packAll() {
         Array<PackModel> packs = getProject().getPacks();
         if (packs.size == 0) return;

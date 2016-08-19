@@ -65,7 +65,7 @@ public class ShortcutParser {
         Array<String> keys = splitAndTrim(shortcutExpr, "\\+");
 
         if (keys.size == 0) {
-            Gdx.app.error(TAG, "Wrong shortcut expression: " + shortcutExpr);
+            Gdx.app.error(TAG, "Wrong shortcut expression: " + actionName + ": " + shortcutExpr);
             return null;
         }
 
@@ -90,6 +90,8 @@ public class ShortcutParser {
                 }
                 case "CMD":
                 case "COMMAND":
+                case "SUPER":
+                case "META":
                 case "WIN":
                 case "WINDOWS": {
                     shortcut.setKey(Input.Keys.SYM);
@@ -99,10 +101,15 @@ public class ShortcutParser {
 
             Integer code = keyCodes.get(upCaseKey);
             if (code == null) {
-                Gdx.app.error(TAG, "Unknown key \"" + key + "\" in line: " + shortcutExpr);
+                Gdx.app.error(TAG, "Unknown key \"" + key + "\" in line: " + actionName + ": " + shortcutExpr);
                 continue;
             }
             shortcut.setKey(code);
+        }
+
+        if (shortcut.getKeyCode() == Shortcut.EMPTY_KEY) {
+            Gdx.app.error(TAG, "Shortcut should have at some key in addition to modifiers: " + actionName + ": " + shortcutExpr);
+            return null;
         }
 
         return shortcut;

@@ -6,13 +6,11 @@
         <menuitem
                 id="miFileNew"
                 text="New"
-                shortcut="Ctrl+N"
                 onchange="newProject"
                 icon="custom/ic-project-new"/>
         <menuitem
                 id="miFileOpen"
                 text="Open"
-                shortcut="Ctrl+O"
                 onchange="openProject"
                 icon="custom/ic-folder"/>
         <menuitem
@@ -24,13 +22,11 @@
         <menuitem
                 id="miFileSave"
                 text="Save"
-                shortcut="Ctrl+S"
                 onchange="saveProject"
                 icon="custom/ic-save"/>
         <menuitem
                 id="miFileSaveAs"
                 text="Save as"
-                shortcut="Shift+Ctrl+S"
                 onchange="saveProjectAs"
                 icon="custom/ic-save-aster"/>
     </menu>
@@ -38,20 +34,23 @@
         <menuitem
                 id="miPackNew"
                 text="New"
-                shortcut="Shift+N"
+                onchange="newPack"
                 icon="custom/ic-file-new"/>
         <menuseparator/>
         <menuitem
                 id="miPackPackSelected"
                 text="Pack selected"
+                onchange="packSelected"
                 icon="custom/ic-process"/>
         <menuitem
                 id="miPackPackAll"
                 text="Pack all"
+                onchange="packAll"
                 icon="custom/ic-process-all"/>
         <menuseparator/>
         <menuitem
                 id="miPackCopySettingsToAllPacks"
+                onchange="copySettingsToAllPacks"
                 text="Copy settings to all packs"/>
     </menu>
     <menu text="Help" style="main-menu">

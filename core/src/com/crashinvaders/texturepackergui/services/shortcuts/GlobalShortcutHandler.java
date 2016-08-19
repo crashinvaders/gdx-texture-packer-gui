@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.github.czyzby.autumn.annotation.Component;
@@ -20,25 +21,37 @@ public class GlobalShortcutHandler extends InputAdapter {
     @Inject GlobalActions globalActions;
     @Inject InterfaceService interfaceService;
 
-    private Array<Shortcut> shortcuts;
-
-    public GlobalShortcutHandler() {
-    }
+    private ArrayMap<String, Shortcut> shortcuts;
 
     @Initiate void initialize() {
         App.inst().getInput().addProcessor(this, -1000);
 
         ShortcutParser shortcutParser = new ShortcutParser();
-        shortcuts = shortcutParser.parse(Gdx.files.internal("hotkeys.txt"));
+        Array<Shortcut> shortcutArray = shortcutParser.parse(Gdx.files.internal("hotkeys.txt"));
+
+        shortcuts = new ArrayMap<>(shortcutArray.size);
+        for (Shortcut shortcut : shortcutArray) {
+            shortcuts.put(shortcut.getActionName(), shortcut);
+        }
     }
 
     @Destroy void dispose() {
         App.inst().getInput().removeProcessor(this);
     }
 
+    public String resolveShortcutString(String actionName) {
+        Shortcut shortcut = shortcuts.get(actionName);
+        if (shortcut == null) {
+            return null;
+        }
+        return shortcut.toShortcutExpression();
+    }
+
     @Override
     public boolean keyDown(int keycode) {
-        for (Shortcut shortcut : shortcuts) {
+        for (int i = 0; i < shortcuts.size; i++) {
+            Shortcut shortcut = shortcuts.getValueAt(i);
+
             if (shortcut.getKeyCode() == keycode) {
                 if (shortcut.isShift() && !shift()) continue;
                 if (shortcut.isControl() && !ctrl()) continue;

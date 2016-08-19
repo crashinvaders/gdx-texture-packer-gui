@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
+import com.crashinvaders.texturepackergui.services.shortcuts.GlobalShortcutHandler;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.context.ContextDestroyer;
@@ -42,6 +43,7 @@ public class App implements ApplicationListener {
 
     private InterfaceService interfaceService;
     private ModelService modelService;
+    private GlobalShortcutHandler shortcutHandler;
     private ComponentExtractorService componentExtractorService;
 
     /** Singleton accessor */
@@ -125,6 +127,7 @@ public class App implements ApplicationListener {
                 new SkinService(),
                 // Custom
                 modelService = new ModelService(),
+                shortcutHandler = new GlobalShortcutHandler(),
                 componentExtractorService = new ComponentExtractorService());
     }
 
@@ -168,6 +171,7 @@ public class App implements ApplicationListener {
     public MessageDispatcher getMessageDispatcher() { return componentExtractorService.messageDispatcher; }
     public AppParams getParams() { return params; }
     public PrioritizedInputMultiplexer getInput() { return inputMultiplexer; }
+    public GlobalShortcutHandler getShortcuts() { return shortcutHandler; }
     //endregion
 
     /** This is utility component class that helps to get access to some system components for App class */

@@ -41,4 +41,11 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new ContainerPadTopLmlAttribute(), "padTop");
         addAttributeProcessor(new ContainerPadBottomLmlAttribute(), "padBottom");
     }
+
+    @Override
+    protected void registerMenuAttributes() {
+        super.registerMenuAttributes();
+
+        addAttributeProcessor(new ShortcutOnChangeLmlAttribute(), "onchange", "change");
+    }
 }
