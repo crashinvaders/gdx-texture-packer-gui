@@ -5,38 +5,32 @@
     <menuitem
             id="miNew"
             text="New"
-            shortcut="Shift+N"
             onchange="newPack"
             icon="custom/ic-file-new"/>
     <menuitem
             id="miDelete"
             text="Delete"
-            shortcut="Shift+D"
             onchange="deletePack"
             icon="custom/ic-file-delete"/>
     <menuitem
             id="miRename"
             text="Rename"
-            shortcut="Shift+R"
             onchange="renamePack"
             icon="custom/ic-file-edit"/>
     <menuitem
             id="miCopy"
             text="Make a copy"
-            shortcut="Shift+C"
             onchange="copyPack"
             icon="custom/ic-file-copy"/>
     <menuseparator/>
     <menuitem
             id="miMoveUp"
             text="Move up"
-            shortcut="PageUp"
             onchange="movePackUp"
             icon="custom/ic-move-up"/>
     <menuitem
             id="miMoveDown"
             text="Move down"
-            shortcut="PageDown"
             onchange="movePackDown"
             icon="custom/ic-move-down"/>
     <menuseparator/>
