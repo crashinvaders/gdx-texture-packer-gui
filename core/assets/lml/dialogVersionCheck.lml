@@ -44,6 +44,9 @@
                     id="groupChecking"
                     onecolumn="true"
                     visible="false">
+                <animatedimage
+                        delay="0.1"
+                        frames="custom/ic-sandglass0;custom/ic-sandglass1;custom/ic-sandglass2;custom/ic-sandglass3;custom/ic-sandglass4;custom/ic-sandglass5;custom/ic-sandglass6;custom/ic-sandglass7"/>
                 <vislabel
                         text="Checking for updates..."/>
             </vistable>
