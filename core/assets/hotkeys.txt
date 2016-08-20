@@ -15,3 +15,7 @@ selectPreviousPack: ALT+UP
 
 packSelected: CTRL+P
 packAll: CTRL+SHIFT+P
+
+// Debug
+checkForUpdates: F1
+reloadView: F2

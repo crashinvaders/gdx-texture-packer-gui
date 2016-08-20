@@ -57,7 +57,7 @@
         <menuitem
                 id="miHelpCheckForUpdates"
                 text="Check for updates"
-                onchange="checkForUpdates"
+                onchange="show:dialog_version_check"
                 icon="custom/ic-refresh"/>
         <menuitem
                 id="miHelpAbout"

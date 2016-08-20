@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        id="dialog"
+        title="Version check"
+        closebutton="true"
+        closeonescape="true"
+        resizable="false">
+    <vistable
+        onecolumn="true"
+        padleft="16"
+        padright="16"
+        width="320"
+        height="160">
+
+        <stack grow="true">
+
+            <vistable
+                    id="groupError"
+                    onecolumn="true"
+                    visible="false">
+
+                <vislabel
+                        id="lblErrorDetails"
+                        wrap="true"
+                        growx="true"
+                        text="Error details will be here"
+                        textalign="center"/>
+
+                <actor height="4"/>
+
+                <visimagetextbutton
+                        id="btnRetry"
+                        text="Retry"
+                        padleft="24"
+                        padright="24"
+                        image="custom/ic-refresh"
+                        imagescaling="none"
+                        onchange="launchVersionCheck"/>
+            </vistable>
+
+            <vistable
+                    id="groupChecking"
+                    onecolumn="true"
+                    visible="false">
+                <vislabel
+                        text="Checking for updates..."/>
+            </vistable>
+
+            <vistable
+                    id="groupUpdateDetails"
+                    onecolumn="true"
+                    visible="false">
+
+                <vistable>
+                    <vislabel
+                            text="New version is available: "
+                            padright="2"/>
+                    <vislabel
+                            id="lblVersionName"
+                            text="4.0.1"/>
+                </vistable>
+
+                <actor height="2"/>
+
+                <vislabel
+                        id="lblVersionDescription"
+                        style="grey"
+                        growx="true"
+                        wrap="true"
+                        textalign="center"
+                        text="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."/>
+
+                <actor height="12"/>
+
+                <vistextbutton
+                        text="Visit update page"
+                        tablepadleft="12"
+                        tablepadright="12"
+                        onchange="navigateToUpdatePage"/>
+            </vistable>
+
+            <vistable
+                    id="groupUpToDate"
+                    onecolumn="true"
+                    visible="true">
+
+                    <vislabel
+                            text="You already have latest application version"
+                            padright="2"/>
+            </vistable>
+
+        </stack>
+
+        <vistable>
+            <vislabel
+                    style="grey"
+                    text="You can find all available versions" padright="4"/>
+            <linklabel
+                    style="orange"
+                    text="here"
+                    href="@urlReleasesPage"/>
+        </vistable>
+    </vistable>
+</visdialog>
