@@ -1,11 +1,23 @@
 package com.crashinvaders.texturepackergui.events;
 
+import com.crashinvaders.texturepackergui.services.versioncheck.VersionData;
+
 public class VersionUpdateCheckEvent {
 
     private final Action action;
+    private VersionData latestVersion;
 
     public VersionUpdateCheckEvent(Action action) {
         this.action = action;
+    }
+
+    public VersionUpdateCheckEvent latestVersion(VersionData latestVersion) {
+        this.latestVersion = latestVersion;
+        return this;
+    }
+
+    public VersionData getLatestVersion() {
+        return latestVersion;
     }
 
     public Action getAction() {

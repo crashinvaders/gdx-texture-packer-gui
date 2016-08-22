@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.PackDialogController;
 import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
 import com.crashinvaders.texturepackergui.events.PackListOrderChanged;
@@ -293,6 +294,10 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("checkForUpdates") public void checkForUpdates() {
         interfaceService.showDialog(VersionCheckDialogController.class);
+    }
+
+    @LmlAction("getCurrentVersion") public String getCurrentAction() {
+        return AppConstants.version.toString();
     }
 
     /** @return localized string */

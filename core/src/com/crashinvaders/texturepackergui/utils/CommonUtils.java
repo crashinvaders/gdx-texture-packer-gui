@@ -2,6 +2,9 @@ package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.utils.Array;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 public class CommonUtils {
@@ -50,5 +53,17 @@ public class CommonUtils {
         i = i - ((i >>> 1) & 0x55555555);
         i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
         return (((i + (i >>> 4)) & 0x0F0F0F0F) * 0x01010101) >>> 24;
+    }
+
+    /**
+     * @param dateString in dd.MM.yyyy format
+     */
+    public static Date dateFromString(String dateString) {
+        try {
+            return new SimpleDateFormat("dd.MM.yyyy").parse(dateString);
+        } catch (ParseException e) {
+            // Should never happen
+            throw new RuntimeException(e);
+        }
     }
 }

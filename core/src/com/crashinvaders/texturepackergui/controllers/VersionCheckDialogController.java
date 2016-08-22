@@ -2,72 +2,72 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.events.VersionUpdateCheckEvent;
 import com.crashinvaders.texturepackergui.services.versioncheck.VersionCheckService;
 import com.crashinvaders.texturepackergui.services.versioncheck.VersionData;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
-import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 
 @ViewDialog(id = "dialog_version_check", value = "lml/dialogVersionCheck.lml")
 public class VersionCheckDialogController implements ActionContainer {
 
     @Inject VersionCheckService versionCheckService;
 
-    @ViewStage Stage stage;
-
     @LmlActor("dialog") VisDialog dialog;
     @LmlActor("groupError") Group groupError;
     @LmlActor("groupChecking") Group groupChecking;
     @LmlActor("groupUpdateDetails") Group groupUpdateDetails;
     @LmlActor("groupUpToDate") Group groupUpToDate;
-    @LmlActor("lblVersionName") VisLabel lblVersionName;
-    @LmlActor("lblVersionDescription") VisLabel lblVersionDescription;
+    @LmlActor("btnVisitUpdatePage") VisTextButton btnVisitUpdatePage;
+    @LmlActor("lblVersionNew") VisLabel lblVersionNew;
+    @LmlActor("lblVersionCurrent") VisLabel lblVersionCurrent;
 
     private VersionData latestVersion;
 
     @LmlAfter
     public void initialize() {
+        lblVersionCurrent.setText(AppConstants.version.toString());
+
         launchVersionCheck();
     }
 
-    @LmlAction("launchVersionCheck") void launchVersionCheck() {
-        showGroup(groupChecking);
-
-//        stage.addAction(Actions.delay(1f, Actions.run(new Runnable() {
-//            @Override
-//            public void run() {
-//                showGroup(groupUpToDate);
-//            }
-//        })));
-
-        versionCheckService.obtainLatestVersionInfo(new VersionCheckService.VersionCheckListener() {
-            @Override
-            public void onResult(VersionData data) {
-                latestVersion = data;
-                if (versionCheckService.isVersionNever(data)) {
-                    showGroup(groupUpdateDetails);
-                    fillUpdateDetailsGroup(latestVersion);
-                } else {
-                    showGroup(groupUpToDate);
-                }
-            }
-            @Override
-            public void onError(Throwable throwable) {
+    @OnEvent(VersionUpdateCheckEvent.class) void onEvent(VersionUpdateCheckEvent event) {
+        switch (event.getAction()) {
+            case CHECK_STARTED:
+                showGroup(groupChecking);
+                break;
+            case CHECK_FINISHED:
+                break;
+            case FINISHED_ERROR:
                 showGroup(groupError);
-                latestVersion = null;
-            }
-        });
+                break;
+            case FINISHED_UP_TO_DATE:
+                showGroup(groupUpToDate);
+                break;
+            case FINISHED_UPDATE_AVAILABLE:
+                showGroup(groupUpdateDetails);
+                latestVersion = event.getLatestVersion();
+                fillUpdateDetailsGroup(latestVersion);
+                break;
+        }
+    }
+
+    @LmlAction("launchVersionCheck") void launchVersionCheck() {
+        versionCheckService.requestVersionCheck();
     }
 
     @LmlAction("navigateToUpdatePage") void navigateToUpdatePage() {
-        if (versionCheckService != null) {
+        if (latestVersion != null) {
             Gdx.net.openURI(latestVersion.getUrl());
         }
     }
@@ -82,7 +82,7 @@ public class VersionCheckDialogController implements ActionContainer {
     }
 
     private void fillUpdateDetailsGroup(VersionData versionData) {
-        lblVersionName.setText(versionData.getName());
-        lblVersionDescription.setText(versionData.getDescription());
+        lblVersionNew.setText(versionData.getVersion().toString());
+        FocusManager.switchFocus(btnVisitUpdatePage.getStage(), btnVisitUpdatePage);
     }
 }

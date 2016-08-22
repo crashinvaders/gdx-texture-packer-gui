@@ -4,13 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.utils.Json;
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.events.VersionUpdateCheckEvent;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
+import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 @Component
 public class VersionCheckService {
     private static final String GITHUB_OWNER = "libgdx";
     private static final String GITHUB_REPO = "libgdx";
+
+    @Inject EventDispatcher eventDispatcher;
 
     private Json json;
     private boolean checkingInProgress;
@@ -22,8 +27,14 @@ public class VersionCheckService {
         json.setSerializer(VersionData.class, new VersionData.Serializer());
     }
 
-    public void obtainLatestVersionInfo(final VersionCheckListener listener) {
+    /**
+     * Runs version update checking process. Listen for {@link VersionUpdateCheckEvent} to get result.
+     */
+    public void requestVersionCheck() {
+        if (checkingInProgress) return;
+
         checkingInProgress = true;
+        eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.CHECK_STARTED));
 
         Net.HttpRequest httpRequest = new Net.HttpRequest();
         httpRequest.setMethod(Net.HttpMethods.GET);
@@ -35,35 +46,40 @@ public class VersionCheckService {
                 String result = httpResponse.getResultAsString();
                 try {
                     VersionData latestVersionData = json.fromJson(VersionData.class, result);
-                    listener.onResult(latestVersionData);
-                } catch (Exception e) {
-                    listener.onError(e);
-                } finally {
+                    lastVersion = latestVersionData;
+
                     checkingInProgress = false;
+                    eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.CHECK_FINISHED));
+                    if (isVersionNewer(latestVersionData)) {
+                        eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.FINISHED_UPDATE_AVAILABLE)
+                                .latestVersion(latestVersionData));
+                    } else {
+                        eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.FINISHED_UP_TO_DATE));
+                    }
+                } catch (Exception e) {
+                    checkingInProgress = false;
+                    eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.CHECK_FINISHED));
+                    eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.FINISHED_ERROR));
                 }
             }
 
             @Override
             public void failed(Throwable t) {
-                listener.onError(t);
                 checkingInProgress = false;
+                eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.CHECK_FINISHED));
+                eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.FINISHED_ERROR));
             }
 
             @Override
             public void cancelled() {
-                listener.onError(new RuntimeException("Canceled"));
                 checkingInProgress = false;
+                eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.CHECK_FINISHED));
+                eventDispatcher.postEvent(new VersionUpdateCheckEvent(VersionUpdateCheckEvent.Action.FINISHED_ERROR));
             }
         });
     }
 
-    public boolean isVersionNever(VersionData versionData) {
+    public boolean isVersionNewer(VersionData versionData) {
         return AppConstants.version.isLower(versionData.getVersion());
     }
-
-    public interface VersionCheckListener {
-        void onResult(VersionData data);
-        void onError(Throwable throwable);
-    }
-
 }

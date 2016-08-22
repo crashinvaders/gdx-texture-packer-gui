@@ -12,7 +12,7 @@
         padleft="16"
         padright="16"
         width="320"
-        height="160">
+        height="120">
 
         <stack grow="true">
 
@@ -61,23 +61,23 @@
                             text="New version is available: "
                             padright="2"/>
                     <vislabel
-                            id="lblVersionName"
-                            text="4.0.1"/>
+                            id="lblVersionNew"/>
                 </vistable>
 
-                <actor height="2"/>
+                <vistable padtop="-4">
+                    <vislabel
+                            text="Current version: "
+                            style="grey"
+                            padright="2"/>
+                    <vislabel
+                            id="lblVersionCurrent"
+                            style="grey"/>
+                </vistable>
 
-                <vislabel
-                        id="lblVersionDescription"
-                        style="grey"
-                        growx="true"
-                        wrap="true"
-                        textalign="center"
-                        text="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old."/>
-
-                <actor height="12"/>
+                <actor height="8"/>
 
                 <vistextbutton
+                        id="btnVisitUpdatePage"
                         text="Visit update page"
                         tablepadleft="12"
                         tablepadright="12"
@@ -88,10 +88,13 @@
                     id="groupUpToDate"
                     onecolumn="true"
                     visible="true">
-
-                    <vislabel
-                            text="You already have latest application version"
-                            padright="2"/>
+                <visimage
+                        style="custom/img-version-up-to-date"
+                        scaling="none"/>
+                <actor height="4"/>
+                <vislabel
+                        text="You already have latest application version"
+                        padright="2"/>
             </vistable>
 
         </stack>

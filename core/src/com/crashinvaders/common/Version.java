@@ -5,10 +5,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 public class Version {
     /** the current major version */
     private final int major;
-
     /** the current minor version */
     private final int minor;
-
     /** the current revision version */
     private final int revision;
 
@@ -30,6 +28,7 @@ public class Version {
             throw new GdxRuntimeException("Invalid version " + version, t);
         }
     }
+
 
     public int getMajor() {
         return major;
@@ -61,7 +60,9 @@ public class Version {
 
     @Override
     public String toString() {
-        return major + "." + minor + "." + revision;
+        StringBuilder sb = new StringBuilder();
+        sb.append(major).append(".").append(minor).append(".").append(revision);
+        return sb.toString();
     }
 
     //TODO override equals and hashcode

@@ -8,7 +8,7 @@
 
         <vistable onecolumn="true" align="center">
         <image drawable="custom/app-logo-2x" scaling="none"/>
-        <label style="small" align="right">version 4.0 (august '16)</label>
+        <label style="small" align="right">version {currentVersionCode}</label>
         </vistable>
 
         <actor height="16"/>

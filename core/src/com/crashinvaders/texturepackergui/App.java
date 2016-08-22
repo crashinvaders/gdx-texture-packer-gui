@@ -80,7 +80,7 @@ public class App implements ApplicationListener {
         initiateContext();
         clearComponentScanners();
 
-        FileChooser.setDefaultPrefsName("com.metaphore.texturepackergui.filechooser");
+        FileChooser.setDefaultPrefsName("com.crashinvaders.texturepackergui.filechooser");
     }
 
     private void initiateContext() {
@@ -91,6 +91,8 @@ public class App implements ApplicationListener {
             initializer.scan(componentScanner.getFirst(), componentScanner.getSecond());
         }
         contextDestroyer = initializer.initiate();
+
+        interfaceService.getParser().getData().addArgument("currentVersionCode", AppConstants.version.toString());
     }
 
     /** Invoked before context initiation.

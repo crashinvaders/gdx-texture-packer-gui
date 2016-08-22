@@ -206,6 +206,23 @@ public class MainController implements ActionContainer, ViewResizer {
         return OnEvent.KEEP;
     }
 
+    @OnEvent(VersionUpdateCheckEvent.class) boolean onEvent(VersionUpdateCheckEvent event) {
+        switch (event.getAction()) {
+            case CHECK_STARTED:
+            case CHECK_FINISHED:
+                return OnEvent.KEEP;
+            case FINISHED_ERROR:
+            case FINISHED_UP_TO_DATE:
+                return OnEvent.REMOVE;
+            case FINISHED_UPDATE_AVAILABLE:
+//                toastManager.show
+                return OnEvent.REMOVE;
+            default:
+                // Should never happen
+                throw new IllegalStateException("Unexpected version check event: " + event.getAction());
+        }
+    }
+
     //endregion
 
     //region Actions
