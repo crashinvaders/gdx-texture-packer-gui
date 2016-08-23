@@ -126,6 +126,10 @@ public class ProjectSerializer {
             if (line.startsWith("filename=")) pack.setFilename(PathUtils.trim(line.substring("filename=".length())).trim());
             if (line.startsWith("inputDir=")) pack.setInputDir(PathUtils.trim(line.substring("inputDir=".length())).trim());
             if (line.startsWith("outputDir=")) pack.setOutputDir(PathUtils.trim(line.substring("outputDir=".length())).trim());
+
+            // Legacy save structure support
+            if (line.startsWith("input=")) pack.setInputDir(PathUtils.trim(line.substring("input=".length())).trim());
+            if (line.startsWith("output=")) pack.setOutputDir(PathUtils.trim(line.substring("output=".length())).trim());
         }
 
         try {
