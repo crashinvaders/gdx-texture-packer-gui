@@ -68,8 +68,8 @@ public class ProjectSerializer {
 
         sb.append("name=").append(pack.getName()).append("\n");
         sb.append("filename=").append(filename).append("\n");
-        sb.append("inputDir=").append(PathUtils.relativize(pack.getInputDir(), root.file().getPath())).append("\n");
-        sb.append("outputDir=").append(PathUtils.relativize(pack.getOutputDir(), root.file().getPath())).append("\n");
+        sb.append("input=").append(PathUtils.relativize(pack.getInputDir(), root.file().getPath())).append("\n");
+        sb.append("output=").append(PathUtils.relativize(pack.getOutputDir(), root.file().getPath())).append("\n");
 
         sb.append("\n");
 
@@ -124,10 +124,6 @@ public class ProjectSerializer {
         for (String line : lines) {
             if (line.startsWith("name=")) pack.setName(PathUtils.trim(line.substring("name=".length())).trim());
             if (line.startsWith("filename=")) pack.setFilename(PathUtils.trim(line.substring("filename=".length())).trim());
-            if (line.startsWith("inputDir=")) pack.setInputDir(PathUtils.trim(line.substring("inputDir=".length())).trim());
-            if (line.startsWith("outputDir=")) pack.setOutputDir(PathUtils.trim(line.substring("outputDir=".length())).trim());
-
-            // Legacy save structure support
             if (line.startsWith("input=")) pack.setInputDir(PathUtils.trim(line.substring("input=".length())).trim());
             if (line.startsWith("output=")) pack.setOutputDir(PathUtils.trim(line.substring("output=".length())).trim());
         }
