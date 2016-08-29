@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
@@ -8,16 +9,20 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
+import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.widget.*;
 import org.apache.commons.io.IOUtils;
@@ -26,12 +31,14 @@ import java.io.*;
 import java.util.Iterator;
 
 @ViewDialog(id = "dialog_packing", value = "lml/dialogPacking.lml")
-public class PackDialogController {
+public class PackDialogController implements ActionContainer {
+    private static final String PREF_KEY_AUTO_CLOSE = "auto_close_pack_dialog";
 
     @Inject InterfaceService interfaceService;
     @Inject EventDispatcher eventDispatcher;
 
     @ViewStage Stage stage;
+    private Preferences prefs;
 
     @LmlActor("window") VisDialog window;
     @LmlActor("scrOutput") VisScrollPane scrOutput;
@@ -40,8 +47,13 @@ public class PackDialogController {
     private VisImageButton btnClose;
     private VisLabel lblOutput;
 
-    @LmlAfter
+    @Initiate
     public void initialize() {
+        prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME);
+    }
+
+    @LmlAfter
+    public void initView() {
         btnClose = (VisImageButton) window.getTitleTable().getChildren().peek();
         btnClose.setColor(new Color(0xffffff44));
         btnClose.setDisabled(true);
@@ -59,6 +71,13 @@ public class PackDialogController {
         containerOutput.setActor(lblOutput);
 
         stage.setScrollFocus(scrOutput);
+
+        chbAutoClose.setChecked(prefs.getBoolean(PREF_KEY_AUTO_CLOSE, false));
+    }
+
+    @LmlAction("onAutoCloseChecked") void onAutoCloseChecked(VisCheckBox chbAutoClose) {
+        prefs.putBoolean(PREF_KEY_AUTO_CLOSE, chbAutoClose.isChecked());
+        prefs.flush();
     }
 
     public void launchPack(final PackModel pack) {
@@ -121,6 +140,10 @@ public class PackDialogController {
 
                     window.getTitleLabel().setText("Finished");
                     lblOutput.setText(lblOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...");
+
+                    if (chbAutoClose.isChecked()) {
+                        window.hide();
+                    }
                 }
             });
 

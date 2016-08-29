@@ -30,6 +30,7 @@
     <vischeckbox
             id="chbAutoClose"
             align="left"
-            text="Automatically close dialog on success"/>
+            text="Automatically close dialog on success"
+            change="onAutoCloseChecked"/>
 
 </visdialog>
