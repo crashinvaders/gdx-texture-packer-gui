@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE vistable SYSTEM "../../../lml.dtd">
 
-<vistable grow="true" fill="true" onecolumn="true">
+<vistable growx="true" onecolumn="true">
 
     <visscrollpane style="list" disabledx="true" grow="true" fadescrollbars="false" flickscroll="false">
 

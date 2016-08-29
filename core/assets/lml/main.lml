@@ -10,33 +10,33 @@
     <vistable grow="true">
 
         <vistable align="topleft" onecolumn="true">
-            <container expandx="true" fillx="true">
-                <:titledPane title="Pack list" icon="custom/ic-title-packs">
+            <container growy="false" fill="true">
+                <:titledpane title="Pack list" icon="custom/ic-title-packs">
                     <:import path="lml/panePackList.lml"/>
-                </:titledPane>
+                </:titledpane>
             </container>
 
-            <container expand="true" fill="true">
-                <:titledPane title="Pack general" icon="custom/ic-title-folder">
+            <container growy="false" fill="true">
+                <:titledpane title="Pack general" icon="custom/ic-title-folder">
                     <:import path="lml/panePackGeneral.lml"/>
-                </:titledPane>
+                </:titledpane>
             </container>
 
-            <container expand="true" fill="true">
-                <:titledPane title="Pack settings" icon="custom/ic-title-settings">
+            <container growy="true" fill="true">
+                <:titledpane title="Pack settings" icon="custom/ic-title-settings">
                     <:import path="lml/panePackSettings.lml"/>
-                </:titledPane>
+                </:titledpane>
             </container>
         </vistable>
 
         <separator growy="true"/>
 
         <container grow="true" fill="true">
-            <:titledPane title="Atlas preview" icon="custom/ic-title-atlas">
+            <:titledpane title="Atlas preview" icon="custom/ic-title-atlas">
                 <container id="canvasContainer" grow="true" fill="true">
                     <canvas id="canvas"/>
                 </container>
-            </:titledPane>
+            </:titledpane>
         </container>
 
     </vistable>

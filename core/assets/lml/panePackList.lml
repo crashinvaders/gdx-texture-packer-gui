@@ -6,7 +6,8 @@
     <vistable tablealign="topleft" grow="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8">
 
         <vistable growx="true">
-            <visscrollpane style="custom" growx="true" filly="true" minwidth="64" disabledx="true" flickscroll="false" fadescrollbars="false">
+            <!--FIXME ScrollPane sometimes grows a way too much in height (hard to control), so we just restrict it with 200 points by height for now -->
+            <visscrollpane style="custom" growx="true" filly="true" minwidth="64" maxheight="200" disabledx="true" flickscroll="false" fadescrollbars="false">
                 <vislist id="listPacks" onchange="onPackListSelectionChanged" onrightclick="onPackListRightClick"/>
             </visscrollpane>
 

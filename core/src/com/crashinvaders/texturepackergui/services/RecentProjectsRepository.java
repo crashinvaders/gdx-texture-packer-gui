@@ -36,7 +36,6 @@ public class RecentProjectsRepository {
         FileHandle file = event.getFile();
 
         recentProjects.removeValue(file, true);
-
         recentProjects.insert(0, file);
         saveData();
 

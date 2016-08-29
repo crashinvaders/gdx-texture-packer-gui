@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE :macro SYSTEM "../../../lml.dtd">
 
-<:macro alias="titledPane" replace="content" title icon>
+<:macro alias="titledpane" replace="content" title icon>
     <vistable onecolumn="true" align="topleft">
         <container background="custom/tp-title-bg" fillx="true">
             <vistable padleft="6" padright="6" padbottom="2" padtop="1" align="left">
