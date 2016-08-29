@@ -80,7 +80,7 @@ public class App implements ApplicationListener {
         initiateContext();
         clearComponentScanners();
 
-        FileChooser.setDefaultPrefsName("com.crashinvaders.texturepackergui.filechooser");
+        FileChooser.setDefaultPrefsName(".gdxtexturepackergui/file_chooser.xml");
     }
 
     private void initiateContext() {

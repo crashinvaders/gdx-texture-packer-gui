@@ -49,7 +49,7 @@ public class PackDialogController implements ActionContainer {
 
     @Initiate
     public void initialize() {
-        prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME);
+        prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
     }
 
     @LmlAfter

@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.services;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -14,6 +15,7 @@ import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
@@ -39,6 +41,16 @@ public class GlobalActions implements ActionContainer {
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject PackDialogController packDialogController;
+
+    /** Common preferences */
+    private Preferences prefs;
+    private FileChooserHistory fileChooserHistory;
+
+    @Initiate
+    public void initialize() {
+        prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+        fileChooserHistory = new FileChooserHistory(prefs);
+    }
 
     @LmlAction({"reloadView", "reloadScreen"})
     public void reloadScreen() {
@@ -184,20 +196,21 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("openProject") public void openProject() {
         final ProjectModel project = getProject();
-        FileHandle dir = null;
+        FileHandle dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.PROJECT);
         if (FileUtils.fileExists(project.getProjectFile())) {
             dir = project.getProjectFile().parent();
         }
 
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        final FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
-                ProjectModel loadedProject = projectSerializer.loadProject(chosenFile);
+                fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, chosenFile.parent());
 
+                ProjectModel loadedProject = projectSerializer.loadProject(chosenFile);
                 if (loadedProject != null) {
                     modelService.setProject(loadedProject);
                 }
@@ -221,7 +234,7 @@ public class GlobalActions implements ActionContainer {
     @LmlAction("saveProjectAs") public void saveProjectAs() {
         final ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
-        FileHandle dir = null;
+        FileHandle dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.PROJECT);
         if (FileUtils.fileExists(projectFile)) {
             dir = projectFile.parent();
         }
@@ -233,12 +246,13 @@ public class GlobalActions implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
+                fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, chosenFile.parent());
+
                 if (chosenFile.extension().length() == 0) {
                     chosenFile = Gdx.files.getFileHandle(chosenFile.path()+".tpproj", chosenFile.type());
                 }
 
                 getProject().setProjectFile(chosenFile);
-
                 projectSerializer.saveProject(project, chosenFile);
             }
         });
@@ -252,6 +266,9 @@ public class GlobalActions implements ActionContainer {
         if (pack == null) return;
 
         FileHandle dir = FileUtils.obtainIfExists(pack.getInputDir());
+        if (dir == null) {
+            dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.INPUT_DIR);
+        }
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
@@ -259,6 +276,7 @@ public class GlobalActions implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
+                fileChooserHistory.putLastDir(FileChooserHistory.Type.INPUT_DIR, chosenFile);
                 pack.setInputDir(chosenFile.file().getAbsolutePath());
             }
         });
@@ -270,6 +288,9 @@ public class GlobalActions implements ActionContainer {
         if (pack == null) return;
 
         FileHandle dir = FileUtils.obtainIfExists(pack.getOutputDir());
+        if (dir == null) {
+            dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.OUTPUT_DIR);
+        }
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
@@ -277,6 +298,7 @@ public class GlobalActions implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
+                fileChooserHistory.putLastDir(FileChooserHistory.Type.OUTPUT_DIR, chosenFile);
                 pack.setOutputDir(chosenFile.file().getAbsolutePath());
             }
         });
@@ -327,5 +349,46 @@ public class GlobalActions implements ActionContainer {
 
     private Stage getStage() {
         return interfaceService.getCurrentController().getStage();
+    }
+
+    /** Stores last used dir for specific actions */
+    private static class FileChooserHistory {
+
+        private final Preferences prefs;
+
+        public FileChooserHistory(Preferences prefs) {
+            this.prefs = prefs;
+        }
+
+        public FileHandle getLastDir(Type type) {
+            String path = prefs.getString(type.prefKey, null);
+            if (path == null || path.trim().length() == 0) return null;
+
+            FileHandle fileHandle = Gdx.files.absolute(path);
+            if (fileHandle.exists() && fileHandle.isDirectory()) {
+                return fileHandle;
+            } else {
+                return null;
+            }
+        }
+
+        public void putLastDir(Type type, FileHandle fileHandle) {
+            String path = fileHandle.file().getAbsolutePath();
+            prefs.putString(type.prefKey, path);
+            prefs.flush();
+        }
+
+
+        public enum Type {
+            PROJECT ("last_proj_dir"),
+            INPUT_DIR ("last_input_dir"),
+            OUTPUT_DIR ("last_output_dir");
+
+            final String prefKey;
+
+            Type(String prefKey) {
+                this.prefKey = prefKey;
+            }
+        }
     }
 }
