@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.services;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -196,7 +197,10 @@ public class GlobalActions implements ActionContainer {
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
                 ProjectModel loadedProject = projectSerializer.loadProject(chosenFile);
-                modelService.setProject(loadedProject);
+
+                if (loadedProject != null) {
+                    modelService.setProject(loadedProject);
+                }
             }
         });
         getStage().addActor(fileChooser.fadeIn());
@@ -229,6 +233,10 @@ public class GlobalActions implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
+                if (chosenFile.extension().length() == 0) {
+                    chosenFile = Gdx.files.getFileHandle(chosenFile.path()+".tpproj", chosenFile.type());
+                }
+
                 getProject().setProjectFile(chosenFile);
 
                 projectSerializer.saveProject(project, chosenFile);

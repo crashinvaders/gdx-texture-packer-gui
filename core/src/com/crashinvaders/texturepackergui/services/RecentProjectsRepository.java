@@ -35,7 +35,7 @@ public class RecentProjectsRepository {
     @OnEvent(value = ProjectSerializerEvent.class) void onProjectSerializerEvent(ProjectSerializerEvent event) {
         FileHandle file = event.getFile();
 
-        recentProjects.removeValue(file, true);
+        recentProjects.removeValue(file, false);
         recentProjects.insert(0, file);
         saveData();
 
