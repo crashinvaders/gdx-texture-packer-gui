@@ -487,8 +487,13 @@ public class MainController implements ActionContainer, ViewResizer {
             menuItem.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    ProjectModel project = projectSerializer.loadProject(file);
-                    modelService.setProject(project);
+                    Gdx.app.postRunnable(new Runnable() {
+                        @Override
+                        public void run() {
+                            ProjectModel project = projectSerializer.loadProject(file);
+                            modelService.setProject(project);
+                        }
+                    });
                 }
             });
             fileMenu.pmOpenRecent.addItem(menuItem);

@@ -32,17 +32,15 @@ public class RecentProjectsRepository {
         loadData();
     }
 
-    @OnEvent(value = ProjectSerializerEvent.class) boolean onProjectSerializerEvent(ProjectSerializerEvent event) {
+    @OnEvent(value = ProjectSerializerEvent.class) void onProjectSerializerEvent(ProjectSerializerEvent event) {
         FileHandle file = event.getFile();
 
-        //TODO handle event correct
-        if (!recentProjects.contains(file, false)) {
-            recentProjects.add(file);
-            saveData();
+        recentProjects.removeValue(file, true);
 
-            eventDispatcher.postEvent(new RecentProjectsUpdatedEvent(recentProjects));
-        }
-        return OnEvent.KEEP;
+        recentProjects.insert(0, file);
+        saveData();
+
+        eventDispatcher.postEvent(new RecentProjectsUpdatedEvent(recentProjects));
     }
 
     public Array<FileHandle> getRecentProjects() {
