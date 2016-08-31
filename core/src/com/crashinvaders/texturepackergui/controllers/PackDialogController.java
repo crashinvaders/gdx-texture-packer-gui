@@ -101,10 +101,11 @@ public class PackDialogController implements ActionContainer {
         timer.start();
 
         new Thread(new Runnable() {@Override public void run() {
+            boolean valid = true;
             for (Iterator<PackModel> iterator = packs.iterator(); iterator.hasNext();) {
                 final PackModel pack = iterator.next();
 
-                boolean valid = performPacking(pack);
+                valid = performPacking(pack);
                 // Notification
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
@@ -128,6 +129,7 @@ public class PackDialogController implements ActionContainer {
             System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
             System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
 
+            final boolean noErrors = valid;
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
@@ -141,7 +143,7 @@ public class PackDialogController implements ActionContainer {
                     window.getTitleLabel().setText("Finished");
                     lblOutput.setText(lblOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...");
 
-                    if (chbAutoClose.isChecked()) {
+                    if (noErrors && chbAutoClose.isChecked()) {
                         window.hide();
                     }
                 }
