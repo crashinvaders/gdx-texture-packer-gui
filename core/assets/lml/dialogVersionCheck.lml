@@ -33,8 +33,9 @@
                 <visimagetextbutton
                         id="btnRetry"
                         text="Retry"
-                        padleft="24"
-                        padright="24"
+                        tablepadleft="24"
+                        tablepadright="32"
+                        tablepadbottom="4"
                         image="custom/ic-refresh"
                         imagescaling="none"
                         onchange="launchVersionCheck"/>

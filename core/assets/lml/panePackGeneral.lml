@@ -17,7 +17,8 @@
                 width="22"
                 padright="0"
                 filly="true"
-                onchange="pickInputDir"/>
+                onchange="pickInputDir"
+                focusborderenabled="false"/>
 
         <:row/>
 
@@ -33,7 +34,8 @@
                 width="22"
                 padright="0"
                 filly="true"
-                onchange="pickOutputDir"/>
+                onchange="pickOutputDir"
+                focusborderenabled="false"/>
         <:row padbottom="0"/>
 
         <label align="left">File name</label>
