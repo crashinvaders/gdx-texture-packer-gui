@@ -435,7 +435,11 @@ public class MainController implements ActionContainer, ViewResizer {
     private void updatePackList() {
         Array<PackModel> packs = getProject().getPacks();
         viewsPacks.listPacks.setItems(packs);
-        viewsPacks.listPacks.setSelected(getProject());
+
+        PackModel selectedPack = getSelectedPack();
+        if (viewsPacks.listPacks.getSelected() != selectedPack) {
+            viewsPacks.listPacks.setSelected(selectedPack);
+        }
     }
 
     private void updateRecentProjects() {
