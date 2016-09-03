@@ -491,7 +491,9 @@ public class MainController implements ActionContainer, ViewResizer {
                         @Override
                         public void run() {
                             ProjectModel project = projectSerializer.loadProject(file);
-                            modelService.setProject(project);
+                            if (project != null) {
+                                modelService.setProject(project);
+                            }
                         }
                     });
                 }

@@ -318,8 +318,8 @@ public class GlobalActions implements ActionContainer {
         }
 
         eventDispatcher.postEvent(new ShowUserNotificationEvent()
-                .setMessage(getString("toastCopyAllSettings"))
-                .setDuration(2f));
+                .message(getString("toastCopyAllSettings"))
+                .duration(ShowUserNotificationEvent.DURATION_SHORT));
     }
 
     @LmlAction("checkForUpdates") public void checkForUpdates() {

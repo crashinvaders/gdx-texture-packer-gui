@@ -20,6 +20,7 @@ public class ModelService {
     }
 
     public void setProject(ProjectModel projectModel) {
+        if (projectModel == null) throw new NullPointerException("projectModel cannot be null");
         if (this.projectModel == projectModel) return;
 
         projectModel.setEventDispatcher(eventDispatcher);

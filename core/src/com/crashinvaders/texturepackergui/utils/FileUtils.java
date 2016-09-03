@@ -38,17 +38,23 @@ public class FileUtils {
         }
     }
 
-    public static void saveTextToFile(String text, FileHandle file) {
+    public static void saveTextToFile(String text, FileHandle file) throws IOException {
+        org.apache.commons.io.FileUtils.write(file.file(), text, "UTF-8");
+    }
+    public static void saveTextToFileSilent(String text, FileHandle file) {
         try {
-            org.apache.commons.io.FileUtils.write(file.file(), text, "UTF-8");
+            saveTextToFile(text, file);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static String loadTextFromFile(FileHandle file) {
+    public static String loadTextFromFile(FileHandle file) throws IOException {
+        return org.apache.commons.io.FileUtils.readFileToString(file.file(), "UTF-8");
+    }
+    public static String loadTextFromFileSilent(FileHandle file) {
         try {
-            return org.apache.commons.io.FileUtils.readFileToString(file.file(), "UTF-8");
+            return loadTextFromFile(file);
         } catch (IOException e) {
             e.printStackTrace();
         }

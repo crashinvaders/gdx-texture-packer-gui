@@ -6,11 +6,13 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
+import com.crashinvaders.texturepackergui.events.ShowUserNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 import java.io.File;
@@ -24,12 +26,19 @@ import static com.crashinvaders.texturepackergui.utils.FileUtils.saveTextToFile;
 public class ProjectSerializer {
 
     @Inject EventDispatcher eventDispatcher;
+    @Inject LocaleService localeService;
 
     public void saveProject(ProjectModel project, FileHandle file) {
         //TODO handle errors and notify with event
 
         String serialized = serializeProject(project, file.parent());
-        saveTextToFile(serialized, file);
+        try {
+            saveTextToFile(serialized, file);
+        } catch (IOException e) {
+            eventDispatcher.postEvent(new ShowUserNotificationEvent().message(localeService.getI18nBundle()
+                    .format("toastProjectSaveError", project.getProjectFile().path())));
+            return;
+        }
 
         eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.SAVED, file));
     }
@@ -37,12 +46,19 @@ public class ProjectSerializer {
     public ProjectModel loadProject(FileHandle file) {
         //TODO handle errors and notify with event
 
-        String serialized = loadTextFromFile(file);
+        String serialized;
+        try {
+            serialized = loadTextFromFile(file);
+        } catch (IOException e) {
+            eventDispatcher.postEvent(new ShowUserNotificationEvent().message(localeService.getI18nBundle()
+                    .format("toastProjectLoadError", file.path())));
+            return null;
+        }
+
         ProjectModel project = deserializeProject(serialized, file.parent());
         project.setProjectFile(file);
 
         eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.LOADED, file));
-
         return project;
     }
 

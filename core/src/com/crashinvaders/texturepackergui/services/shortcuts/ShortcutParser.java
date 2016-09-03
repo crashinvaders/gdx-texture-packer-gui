@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
-import static com.crashinvaders.texturepackergui.utils.FileUtils.loadTextFromFile;
+import static com.crashinvaders.texturepackergui.utils.FileUtils.loadTextFromFileSilent;
 
 public class ShortcutParser {
     private static final String TAG = ShortcutParser.class.getSimpleName();
@@ -25,7 +25,7 @@ public class ShortcutParser {
     }
 
     public Array<Shortcut> parse(FileHandle fileHandle) {
-        String hotkeyMarkup = loadTextFromFile(fileHandle);
+        String hotkeyMarkup = loadTextFromFileSilent(fileHandle);
         return parse(hotkeyMarkup);
     }
 
