@@ -63,7 +63,7 @@ public class MainController implements ActionContainer, ViewResizer {
 
     private ToastManager toastManager;
 
-    /** Indicates that view is ready */
+    /** Indicates that view is shown and ready to be used in code */
     private boolean initialized;
 
     @SuppressWarnings("unchecked")
@@ -101,6 +101,7 @@ public class MainController implements ActionContainer, ViewResizer {
         if (initialized) {
             updatePackList();
             updateViewsFromPack(event.getProject().getSelectedPack());
+            updateRecentProjects();
         }
     }
 
@@ -196,6 +197,9 @@ public class MainController implements ActionContainer, ViewResizer {
 
     //region Actions
     @LmlAction("onPackListSelectionChanged") void onPackListSelectionChanged(final VisList list) {
+        // Scroll down to selection
+        Gdx.app.postRunnable(normalizePackListScrollRunnable);
+
         final PackModel selectedPack = (PackModel) list.getSelected();
         if (getSelectedPack() == selectedPack) return;
 
@@ -206,8 +210,6 @@ public class MainController implements ActionContainer, ViewResizer {
                 project.setSelectedPack(selectedPack);
             }
         });
-
-        //TODO check if selection within scrollbar and scroll to it if not
     }
 
     @LmlAction("onPackListRightClick") void onPackListRightClick(final OnRightClickLmlAttribute.Params params) {
@@ -447,6 +449,8 @@ public class MainController implements ActionContainer, ViewResizer {
         fileMenu.miOpenRecent.setDisabled(recentProjects.size == 0);
         fileMenu.pmOpenRecent.clear();
         for (final FileHandle file : recentProjects) {
+            if (file.equals(getProject().getProjectFile())) continue;
+
             MenuItem menuItem = new MenuItem(file.nameWithoutExtension());
             menuItem.setShortcut(file.path()); // Will use shortcut label to display full project path
             menuItem.getShortcutCell().left().expandX();
@@ -470,4 +474,11 @@ public class MainController implements ActionContainer, ViewResizer {
             fileMenu.pmOpenRecent.addItem(menuItem);
         }
     }
+
+    private Runnable normalizePackListScrollRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Scene2dUtils.scrollDownToSelectedListItem(viewsPacks.scrPacks, viewsPacks.listPacks);
+        }
+    };
 }

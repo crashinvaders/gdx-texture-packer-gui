@@ -3,6 +3,8 @@ package com.crashinvaders.texturepackergui.utils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 
 @SuppressWarnings("WeakerAccess")
 public class Scene2dUtils {
@@ -30,5 +32,18 @@ public class Scene2dUtils {
         event.setType(InputEvent.Type.touchUp);
         actor.fire(event);
         event.reset();
+    }
+
+    /**
+     * @param scrollPane widget will be scrolled
+     * @param list must be child of scrollPane
+     */
+    public static void scrollDownToSelectedListItem(ScrollPane scrollPane, List list) {
+        if (list.getSelectedIndex() == -1) return;
+
+        float y = list.getHeight() - (list.getSelectedIndex() * list.getItemHeight()) - list.getItemHeight();
+        float height = list.getItemHeight();
+
+        scrollPane.scrollTo(0, y, 0, height);
     }
 }

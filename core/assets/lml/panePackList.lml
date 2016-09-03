@@ -7,7 +7,7 @@
 
         <vistable growx="true">
             <!--FIXME ScrollPane sometimes grows a way too much in height (hard to control), so we just restrict it with 200 points by height for now -->
-            <visscrollpane style="custom" growx="true" filly="true" minwidth="64" maxheight="200" disabledx="true" flickscroll="false" fadescrollbars="false">
+            <visscrollpane id="scrPacks" style="custom" growx="true" filly="true" minwidth="64" maxheight="200" disabledx="true" flickscroll="false" fadescrollbars="false">
                 <vislist id="listPacks" onchange="onPackListSelectionChanged" onrightclick="onPackListRightClick"/>
             </visscrollpane>
 
