@@ -1,7 +1,7 @@
 name=uiskin
 filename=
-inputDir=uiskin\images
-outputDir=..\core\assets\skin
+input=uiskin\images
+output=..\core\assets\skin
 
 alias=true
 alphaThreshold=0

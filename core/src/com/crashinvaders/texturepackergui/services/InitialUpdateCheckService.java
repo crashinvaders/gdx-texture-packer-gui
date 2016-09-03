@@ -13,7 +13,6 @@ import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
-import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -21,17 +20,14 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.toast.ToastTable;
 
-/**
- * Checks for a new version on application launch
- */
+/** Checks if new version is available (on application launch) */
 @Component
-public class InitialVersionUpdateCheck {
-    private static final String TAG = InitialVersionUpdateCheck.class.getSimpleName();
+public class InitialUpdateCheckService {
+    private static final String TAG = InitialUpdateCheckService.class.getSimpleName();
     private static final String PREF_KEY_IGNORE_NOTIFICATION = "ignore_version_update_notification";
 
     @Inject InterfaceService interfaceService;
     @Inject EventDispatcher eventDispatcher;
-    @Inject LocaleService localeService;
     @Inject VersionCheckService versionCheckService;
 
     private Preferences prefs;

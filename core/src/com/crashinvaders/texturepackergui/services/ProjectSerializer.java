@@ -38,7 +38,7 @@ public class ProjectSerializer {
             return;
         }
 
-        eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.SAVED, file));
+        eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.SAVED, project, file));
     }
 
     public ProjectModel loadProject(FileHandle file) {
@@ -54,7 +54,7 @@ public class ProjectSerializer {
         ProjectModel project = deserializeProject(serialized, file.parent());
         project.setProjectFile(file);
 
-        eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.LOADED, file));
+        eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.LOADED, project, file));
         return project;
     }
 

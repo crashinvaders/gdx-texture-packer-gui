@@ -3,10 +3,12 @@ package com.crashinvaders.texturepackergui.config;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.App;
@@ -61,9 +63,10 @@ public class Configuration {
         skin.getFont("default-font").getData().markupEnabled = true;
         skin.getFont("small-font").getData().markupEnabled = true;
 
-        Colors.put("output-green", skinService.getSkin().getColor("output-green"));
-        Colors.put("output-red", skinService.getSkin().getColor("output-red"));
-        Colors.put("output-yellow", skinService.getSkin().getColor("output-yellow"));
+        // Extracting all colors from the skin and importing them into global color collection
+        for (ObjectMap.Entry<String, Color> entry : skinService.getSkin().getAll(Color.class)) {
+            Colors.put(entry.key, entry.value);
+        }
     }
 
     @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)

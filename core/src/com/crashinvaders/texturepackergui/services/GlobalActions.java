@@ -99,14 +99,15 @@ public class GlobalActions implements ActionContainer {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-		Dialogs.showOptionDialog(getStage(), getString("deletePack"), getString("dialogTextDeletePack", pack.getName()),
-			Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
-				@Override
-				public void yes () {
-					getProject().removePack(pack);
-				}
-			});
-	}
+        Dialogs.OptionDialog optionDialog = Dialogs.showOptionDialog(getStage(), getString("deletePack"), getString("dialogTextDeletePack", pack.getName()),
+                Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
+                    @Override
+                    public void yes() {
+                        getProject().removePack(pack);
+                    }
+                });
+        optionDialog.closeOnEscape();
+    }
 
     @LmlAction("movePackUp") public void movePackUp() {
         PackModel pack = getSelectedPack();

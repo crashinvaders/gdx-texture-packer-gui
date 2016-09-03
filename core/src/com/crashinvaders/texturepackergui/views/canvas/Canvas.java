@@ -2,15 +2,15 @@ package com.crashinvaders.texturepackergui.views.canvas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -34,6 +34,8 @@ public class Canvas extends WidgetGroup {
 
 	private PreviewHolder previewHolder;
 	private InfoPanel infoPanel;
+	private final VisImageTextButton btnNextPage;
+	private final VisImageTextButton btnPrevPage;
 
 	private AtlasModel atlas;
 	private int pageIndex = 0;
@@ -63,39 +65,45 @@ public class Canvas extends WidgetGroup {
 
 			// Page buttons
 			{
-				VisImageTextButton btnNextPage = new VisImageTextButton("Next page", "default");
+				btnNextPage = new VisImageTextButton("Next page", "default");
 				{
-					btnNextPage.align(Align.left);
-					btnNextPage.addListener(new ClickListener() {
+					btnNextPage.addListener(new ChangeListener() {
                         @Override
-                        public void clicked(InputEvent event, float x, float y) {
+                        public void changed(ChangeEvent event, Actor actor) {
                             showNextPage();
                         }
                     });
 					btnNextPage.setFocusBorderEnabled(false);
 
 					VisImageTextButton.VisImageTextButtonStyle style = btnNextPage.getStyle();
-					style.imageUp = skin.getDrawable("icon-arrow-right");
+					style.imageUp = skin.getDrawable("custom/page-button-next");
 					btnNextPage.setStyle(style);
+					btnNextPage.getImage().setColor(new Color(0xffffffa0));
+					btnNextPage.align(Align.left);
+					btnNextPage.padBottom(2f).padRight(8f);
+					btnNextPage.getImageCell().padLeft(6f).padRight(4f);
+					btnNextPage.getLabelCell().padBottom(2f);
 				}
 
-				VisImageTextButton btnPrevPage = new VisImageTextButton("Previous page", "default");
+				btnPrevPage = new VisImageTextButton("Previous page", "default");
 				{
-					btnPrevPage.align(Align.left);
-					btnPrevPage.addListener(new ClickListener() {
-                        @Override
-                        public void clicked(InputEvent event, float x, float y) {
-                            showPrevPage();
+					btnPrevPage.addListener(new ChangeListener() {
+						@Override
+						public void changed(ChangeEvent event, Actor actor) {
+							showPrevPage();
                         }
                     });
 					btnPrevPage.setFocusBorderEnabled(false);
 
 					VisImageTextButton.VisImageTextButtonStyle style = btnPrevPage.getStyle();
-					style.imageUp = skin.getDrawable("icon-arrow-left");
+					style.imageUp = skin.getDrawable("custom/page-button-prev");
 					btnPrevPage.setStyle(style);
+					btnPrevPage.getImage().setColor(new Color(0xffffff80));
+					btnPrevPage.align(Align.left);
+					btnPrevPage.padBottom(2f).padRight(8f);
+					btnPrevPage.getImageCell().padLeft(6f).padRight(4f);
+					btnPrevPage.getLabelCell().padBottom(2f);
 				}
-
-
 
 				VisTable table = new VisTable();
 				table.defaults().right().fillX();
@@ -170,6 +178,7 @@ public class Canvas extends WidgetGroup {
 				}
 			}
 		}
+		updatePageButtonsVisibility();
 	}
 
 	public void setCallback(Callback callback) {
@@ -183,6 +192,7 @@ public class Canvas extends WidgetGroup {
 
 		previewHolder.setPage(atlas, pageIndex);
 		infoPanel.setCurrentPage(pageIndex +1);
+		updatePageButtonsVisibility();
 	}
 
 	private void showPrevPage() {
@@ -192,6 +202,23 @@ public class Canvas extends WidgetGroup {
 
 		previewHolder.setPage(atlas, pageIndex);
 		infoPanel.setCurrentPage(pageIndex +1);
+		updatePageButtonsVisibility();
+	}
+
+	private void updatePageButtonsVisibility() {
+		if (atlas == null) {
+			btnNextPage.setVisible(false);
+			btnPrevPage.setVisible(false);
+			return;
+		}
+
+		int pageIndex = this.pageIndex;
+		int pagesAmount = atlas.getPages().size;
+
+		btnNextPage.setVisible(pagesAmount > 1);
+		btnPrevPage.setVisible(pagesAmount > 1);
+//		btnNextPage.setDisabled(!(pageIndex < pagesAmount-1));
+//		btnPrevPage.setDisabled(!(pageIndex > 0));
 	}
 
 	public interface Callback {

@@ -27,6 +27,7 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
@@ -48,6 +49,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
     @Inject LocaleService localeService;
+    @Inject EventDispatcher eventDispatcher;
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
