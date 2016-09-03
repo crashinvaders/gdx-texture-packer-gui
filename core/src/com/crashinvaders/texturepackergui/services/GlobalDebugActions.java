@@ -3,14 +3,12 @@ package com.crashinvaders.texturepackergui.services;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.I18NBundle;
-import com.crashinvaders.texturepackergui.controllers.PackDialogController;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
-import com.github.czyzby.autumn.mvc.component.ui.SkinService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -23,15 +21,10 @@ public class GlobalDebugActions implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
-    @Inject SkinService skinService;
     @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
-    @Inject ProjectSerializer projectSerializer;
-    @Inject RecentProjectsRepository recentProjects;
-    @Inject PackDialogController packDialogController;
 
-    @LmlAction({"reloadView", "reloadScreen"})
-    public void reloadScreen() {
+    @LmlAction({"reloadView", "reloadScreen"}) public void reloadScreen() {
         interfaceService.reload();
     }
 

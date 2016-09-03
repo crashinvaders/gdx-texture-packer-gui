@@ -25,7 +25,7 @@
                         id="lblErrorDetails"
                         wrap="true"
                         growx="true"
-                        text="Error details will be here"
+                        text="Some error occurred. Please try later."
                         textalign="center"/>
 
                 <actor height="4"/>

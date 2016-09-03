@@ -110,17 +110,14 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     //region Events
-    @OnEvent(ProjectInitializedEvent.class)
-    public boolean onEvent(ProjectInitializedEvent event) {
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
         if (initialized) {
             updatePackList();
             updateViewsFromPack(event.getProjectModel().getSelectedPack());
         }
-        return OnEvent.KEEP;
     }
 
-    @OnEvent(ProjectPropertyChangedEvent.class)
-    public boolean onEvent(ProjectPropertyChangedEvent event) {
+    @OnEvent(ProjectPropertyChangedEvent.class) void onEvent(ProjectPropertyChangedEvent event) {
         if (initialized) {
             switch (event.getProperty()) {
                 case SELECTED_PACK:
@@ -132,11 +129,9 @@ public class MainController implements ActionContainer, ViewResizer {
                     break;
             }
         }
-        return OnEvent.KEEP;
     }
 
-    @OnEvent(PackPropertyChangedEvent.class)
-    public boolean onEvent(PackPropertyChangedEvent event) {
+    @OnEvent(PackPropertyChangedEvent.class) void onEvent(PackPropertyChangedEvent event) {
         if (initialized) {
             switch (event.getProperty()) {
                 case NAME:
@@ -167,43 +162,39 @@ public class MainController implements ActionContainer, ViewResizer {
                     break;
             }
         }
-        return OnEvent.KEEP;
     }
 
-    @OnEvent(RecentProjectsUpdatedEvent.class)
-    public boolean onEvent(RecentProjectsUpdatedEvent event) {
+    @OnEvent(RecentProjectsUpdatedEvent.class) void onEvent(RecentProjectsUpdatedEvent event) {
         if (initialized) {
             updateRecentProjects();
         }
-        return OnEvent.KEEP;
     }
 
-    @OnEvent(PackAtlasUpdatedEvent.class)
-    public boolean onEvent(PackAtlasUpdatedEvent event) {
+    @OnEvent(PackAtlasUpdatedEvent.class) void onEvent(PackAtlasUpdatedEvent event) {
         if (initialized) {
             if (event.getPack() == getSelectedPack()) {
                 canvas.reloadPack(event.getPack());
             }
         }
-        return OnEvent.KEEP;
     }
 
-    @OnEvent(PackListOrderChanged.class)
-    public boolean onEvent(PackListOrderChanged event) {
+    @OnEvent(PackListOrderChanged.class) void onEvent(PackListOrderChanged event) {
         if (initialized) {
             Array items = viewsPacks.listPacks.getItems();
             items.clear();
             items.addAll(getProject().getPacks());
         }
-        return OnEvent.KEEP;
     }
 
-    @OnEvent(ShowUserNotificationEvent.class)
-    public boolean onEvent(ShowUserNotificationEvent event) {
+    @OnEvent(ToastNotificationEvent.class) void onEvent(ToastNotificationEvent event) {
         if (initialized) {
-            toastManager.show(event.getMessage(), event.getDuration());
+
+            if (event.getContent() != null) {
+                toastManager.show(event.getContent(), event.getDuration());
+            } else {
+                toastManager.show(event.getMessage(), event.getDuration());
+            }
         }
-        return OnEvent.KEEP;
     }
 
     @OnEvent(VersionUpdateCheckEvent.class) boolean onEvent(VersionUpdateCheckEvent event) {

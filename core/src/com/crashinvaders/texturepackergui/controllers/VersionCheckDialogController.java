@@ -42,6 +42,8 @@ public class VersionCheckDialogController implements ActionContainer {
     }
 
     @OnEvent(VersionUpdateCheckEvent.class) void onEvent(VersionUpdateCheckEvent event) {
+        if (dialog == null) return;
+
         switch (event.getAction()) {
             case CHECK_STARTED:
                 showGroup(groupChecking);

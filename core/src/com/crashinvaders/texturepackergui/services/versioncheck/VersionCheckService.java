@@ -12,8 +12,8 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 @Component
 public class VersionCheckService {
-    private static final String GITHUB_OWNER = "libgdx";
-    private static final String GITHUB_REPO = "libgdx";
+    private static final String GITHUB_OWNER = "crashinvaders";
+    private static final String GITHUB_REPO = "gdx-texture-packer-gui";
 
     @Inject EventDispatcher eventDispatcher;
 

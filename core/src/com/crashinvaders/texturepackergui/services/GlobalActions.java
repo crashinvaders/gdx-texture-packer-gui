@@ -10,7 +10,7 @@ import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.PackDialogController;
 import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
 import com.crashinvaders.texturepackergui.events.PackListOrderChanged;
-import com.crashinvaders.texturepackergui.events.ShowUserNotificationEvent;
+import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -318,9 +318,9 @@ public class GlobalActions implements ActionContainer {
             pack.setSettings(new TexturePacker.Settings(generalSettings));
         }
 
-        eventDispatcher.postEvent(new ShowUserNotificationEvent()
+        eventDispatcher.postEvent(new ToastNotificationEvent()
                 .message(getString("toastCopyAllSettings"))
-                .duration(ShowUserNotificationEvent.DURATION_SHORT));
+                .duration(ToastNotificationEvent.DURATION_SHORT));
     }
 
     @LmlAction("checkForUpdates") public void checkForUpdates() {

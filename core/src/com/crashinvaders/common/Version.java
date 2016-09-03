@@ -1,6 +1,6 @@
 package com.crashinvaders.common;
 
-import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.NumberUtils;
 
 public class Version {
     /** the current major version */
@@ -25,7 +25,7 @@ public class Version {
             revision = v.length < 3 ? 0 : Integer.valueOf(v[2]);
         } catch (Throwable t) {
             // Should never happen
-            throw new GdxRuntimeException("Invalid version " + version, t);
+            throw new IllegalArgumentException("Invalid version " + version, t);
         }
     }
 
@@ -65,5 +65,19 @@ public class Version {
         return sb.toString();
     }
 
-    //TODO override equals and hashcode
+    @Override
+    public boolean equals (Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Version version = (Version)o;
+		return major == version.major && minor == version.minor && revision == version.revision;
+    }
+
+    @Override
+    public int hashCode () {
+        int result = (major != +0.0f ? NumberUtils.floatToIntBits(major) : 0);
+        result = 31 * result + (minor != +0.0f ? NumberUtils.floatToIntBits(minor) : 0);
+        result = 31 * result + (revision != +0.0f ? NumberUtils.floatToIntBits(revision) : 0);
+        return result;
+    }
 }

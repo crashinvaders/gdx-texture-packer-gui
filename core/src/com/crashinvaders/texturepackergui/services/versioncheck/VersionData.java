@@ -8,13 +8,13 @@ import com.crashinvaders.common.Version;
 public class VersionData {
     public static final int NO_AVAILABLE_VERSION = -1;
 
-    private int id = NO_AVAILABLE_VERSION;
-    private String url;
-    private String name;
-    private String tag;
-    private Version version;
-    private String description;
-    private String plainJson;
+    public int id = NO_AVAILABLE_VERSION;
+    public String url;
+    public String name;
+    public String tag;
+    public Version version;
+    public String description;
+    public String plainJson;
 
     public int getId() {
         return id;

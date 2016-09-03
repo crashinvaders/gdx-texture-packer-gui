@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable onecolumn="true" defaultalign="left" padleft="8">
+    <horizontalgroup>
+        @toastNewVersionAvailable
+        <actor width="4"/>
+        {newVersionCode}
+    </horizontalgroup>
+    <:row padtop="-4"/>
+    <linklabel style="orange" text="@visitDownloadPage" href="{newVersionUrl}" click="dismissToast"/>
+    <:row padtop="4" padbottom="4"/>
+    <linklabel style="grey" text="@muteVersionUpdateNotifications" href="#" click="muteNotifications"/>
+</vistable>
