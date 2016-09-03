@@ -122,6 +122,8 @@ public class ProjectSerializer {
         String[] serializedPacks = serializedProject.split("---");
 
         for (String serializedPack : serializedPacks) {
+            if (serializedPack.trim().length() == 0) continue;
+
             PackModel pack = deserializePack(serializedPack, root);
             project.addPack(pack);
         }

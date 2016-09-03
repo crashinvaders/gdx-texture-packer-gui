@@ -100,7 +100,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
         if (initialized) {
             updatePackList();
-            updateViewsFromPack(event.getProjectModel().getSelectedPack());
+            updateViewsFromPack(event.getProject().getSelectedPack());
         }
     }
 

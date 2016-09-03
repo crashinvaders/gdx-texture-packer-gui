@@ -17,7 +17,7 @@ public class ProjectInitializedEvent {
         return model;
     }
 
-    public ProjectModel getProjectModel() {
+    public ProjectModel getProject() {
         return projectModel;
     }
 }

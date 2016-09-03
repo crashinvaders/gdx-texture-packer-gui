@@ -2,6 +2,7 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
+import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -37,6 +38,13 @@ public class CanvasController {
         });
 
         currentPack = getSelectedPack();
+        canvas.reloadPack(currentPack);
+    }
+
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        if (canvas == null) return;
+
+        currentPack = event.getProject().getSelectedPack();
         canvas.reloadPack(currentPack);
     }
 
