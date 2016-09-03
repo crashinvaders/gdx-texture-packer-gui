@@ -87,25 +87,31 @@ public class GlobalActions implements ActionContainer {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("copyPack"), null, true, null, new InputDialogAdapter() {
-            @Override
-            public void finished(String input) {
-                PackModel newPack = new PackModel(pack);
-                newPack.setName(input);
-                getProject().addPack(newPack);
-                getProject().setSelectedPack(newPack);
-            }
-        });
+		Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("copyPack"), null, true, null, new InputDialogAdapter() {
+			@Override
+			public void finished (String input) {
+				PackModel newPack = new PackModel(pack);
+				newPack.setName(input);
+				getProject().addPack(newPack);
+				getProject().setSelectedPack(newPack);
+			}
+		});
         getStage().addActor(dialog.fadeIn());
         dialog.setText(pack.getName(), true);
     }
 
     @LmlAction("deletePack") public void deletePack() {
-        PackModel pack = getSelectedPack();
+        final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        getProject().removePack(pack);
-    }
+		Dialogs.showOptionDialog(getStage(), getString("deletePack"), getString("dialogTextDeletePack", pack.getName()),
+			Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
+				@Override
+				public void yes () {
+					getProject().removePack(pack);
+				}
+			});
+	}
 
     @LmlAction("movePackUp") public void movePackUp() {
         PackModel pack = getSelectedPack();
