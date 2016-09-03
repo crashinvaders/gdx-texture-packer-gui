@@ -6,14 +6,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
-import com.crashinvaders.texturepackergui.controllers.PackDialogController;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
@@ -26,7 +24,6 @@ import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
-import com.github.czyzby.autumn.mvc.component.ui.SkinService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
@@ -52,14 +49,11 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject ModelService modelService;
     @Inject LocaleService localeService;
     @Inject ProjectSerializer projectSerializer;
-    @Inject SkinService skinService;
     @Inject RecentProjectsRepository recentProjects;
-    @Inject PackDialogController packDialogController;
+    @Inject CanvasController canvasController;
 
     @ViewStage Stage stage;
 
-    @LmlActor("splitPane") VisSplitPane splitPane;
-    @LmlActor("canvasContainer") Container canvasContainer;
     @LmlActor("canvas") Canvas canvas;
     @LmlInject() ProjectConfigController viewsPacks;
     @LmlInject() PackSettingsController viewsSettings;
@@ -87,17 +81,10 @@ public class MainController implements ActionContainer, ViewResizer {
         toastManager = new ToastManager(getStage());
         toastManager.setAlignment(Align.bottomRight);
 
-        canvas.setCallback(new Canvas.Callback() {
-            @Override
-            public void atlasError(PackModel pack) {
-                //TODO supply with details
-                toastManager.show("Error loading atlas for pack \"" + pack.getName() + "\"", 2f);
-            }
-        });
+        canvasController.initialize(canvas);
 
         updatePackList();
         updateViewsFromPack(getSelectedPack());
-        updateCanvas();
         updateRecentProjects();
     }
 
@@ -122,7 +109,6 @@ public class MainController implements ActionContainer, ViewResizer {
             switch (event.getProperty()) {
                 case SELECTED_PACK:
                     updateViewsFromPack(event.getProject().getSelectedPack());
-                    updateCanvas();
                     break;
                 case PACKS:
                     updatePackList();
@@ -167,14 +153,6 @@ public class MainController implements ActionContainer, ViewResizer {
     @OnEvent(RecentProjectsUpdatedEvent.class) void onEvent(RecentProjectsUpdatedEvent event) {
         if (initialized) {
             updateRecentProjects();
-        }
-    }
-
-    @OnEvent(PackAtlasUpdatedEvent.class) void onEvent(PackAtlasUpdatedEvent event) {
-        if (initialized) {
-            if (event.getPack() == getSelectedPack()) {
-                canvas.reloadPack(event.getPack());
-            }
         }
     }
 
@@ -374,6 +352,7 @@ public class MainController implements ActionContainer, ViewResizer {
     private String getString(String key) {
         return localeService.getI18nBundle().get(key);
     }
+
     /** @return localized string */
     private String getString(String key, Object... args) {
         return localeService.getI18nBundle().format(key, args);
@@ -457,11 +436,6 @@ public class MainController implements ActionContainer, ViewResizer {
         Array<PackModel> packs = getProject().getPacks();
         viewsPacks.listPacks.setItems(packs);
         viewsPacks.listPacks.setSelected(getProject());
-    }
-
-    private void updateCanvas() {
-        PackModel pack = getSelectedPack();
-        canvas.reloadPack(pack);
     }
 
     private void updateRecentProjects() {

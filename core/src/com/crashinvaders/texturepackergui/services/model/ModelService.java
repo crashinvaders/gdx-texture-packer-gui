@@ -10,7 +10,7 @@ public class ModelService {
 
     @Inject EventDispatcher eventDispatcher;
 
-    @Initiate(priority = -64)
+    @Initiate(priority = 128)
     public void init() {
         setProject(new ProjectModel());
     }

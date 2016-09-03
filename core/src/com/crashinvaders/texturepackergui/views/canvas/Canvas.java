@@ -166,7 +166,7 @@ public class Canvas extends WidgetGroup {
 						atlas.dispose();
 						atlas = null;
 					}
-					callback.atlasError(pack);
+					callback.atlasLoadError(pack);
 				}
 			}
 		}
@@ -195,7 +195,7 @@ public class Canvas extends WidgetGroup {
 	}
 
 	public interface Callback {
-		void atlasError(PackModel pack);
+		void atlasLoadError(PackModel pack);
 	}
 
 	public static class CanvasLmlTagProvider implements LmlTagProvider {

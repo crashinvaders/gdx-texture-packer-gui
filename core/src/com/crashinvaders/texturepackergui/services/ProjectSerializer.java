@@ -29,8 +29,6 @@ public class ProjectSerializer {
     @Inject LocaleService localeService;
 
     public void saveProject(ProjectModel project, FileHandle file) {
-        //TODO handle errors and notify with event
-
         String serialized = serializeProject(project, file.parent());
         try {
             saveTextToFile(serialized, file);
@@ -44,8 +42,6 @@ public class ProjectSerializer {
     }
 
     public ProjectModel loadProject(FileHandle file) {
-        //TODO handle errors and notify with event
-
         String serialized;
         try {
             serialized = loadTextFromFile(file);
