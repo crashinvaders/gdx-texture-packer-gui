@@ -52,11 +52,6 @@ public class GlobalActions implements ActionContainer {
         fileChooserHistory = new FileChooserHistory(prefs);
     }
 
-    @LmlAction({"reloadView", "reloadScreen"})
-    public void reloadScreen() {
-        interfaceService.reload();
-    }
-
     @LmlAction("newPack") public void newPack() {
         Dialogs.showInputDialog(getStage(), getString("newPack"), null, new InputDialogAdapter() {
             @Override
@@ -332,7 +327,7 @@ public class GlobalActions implements ActionContainer {
         interfaceService.showDialog(VersionCheckDialogController.class);
     }
 
-    @LmlAction("getCurrentVersion") public String getCurrentAction() {
+    @LmlAction("getCurrentVersion") public String getCurrentVersion() {
         return AppConstants.version.toString();
     }
 
