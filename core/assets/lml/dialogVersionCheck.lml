@@ -107,7 +107,7 @@
             <linklabel
                     style="orange"
                     text="@dVersionHere"
-                    href="@urlReleasesPage"/>
+                    href="$getReleasesPageUrl"/>
         </vistable>
     </vistable>
 </visdialog>

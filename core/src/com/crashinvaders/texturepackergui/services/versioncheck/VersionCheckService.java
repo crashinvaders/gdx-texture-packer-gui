@@ -8,10 +8,14 @@ import com.crashinvaders.texturepackergui.events.VersionUpdateCheckEvent;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.lml.annotation.LmlAction;
+import com.github.czyzby.lml.parser.action.ActionContainer;
 
 @Component
-public class VersionCheckService {
+@ViewActionContainer("versionCheckService")
+public class VersionCheckService implements ActionContainer {
     private static final String GITHUB_OWNER = "crashinvaders";
     private static final String GITHUB_REPO = "gdx-texture-packer-gui";
 
@@ -81,5 +85,9 @@ public class VersionCheckService {
 
     public boolean isVersionNewer(VersionData versionData) {
         return AppConstants.version.isLower(versionData.getVersion());
+    }
+
+    @LmlAction("getReleasesPageUrl") public String getReleasesPageUrl() {
+        return "https://github.com/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/releases";
     }
 }

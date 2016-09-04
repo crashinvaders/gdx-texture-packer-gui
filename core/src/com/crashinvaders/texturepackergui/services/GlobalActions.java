@@ -205,7 +205,8 @@ public class GlobalActions implements ActionContainer {
 
         final FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
+		fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
+			.rule(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT).get());
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> file) {
@@ -243,7 +244,8 @@ public class GlobalActions implements ActionContainer {
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.SAVE);
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true).rule(getString("projectFileDescription"), "tpproj").get());
+		fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
+			.rule(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT).get());
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> file) {
@@ -251,7 +253,7 @@ public class GlobalActions implements ActionContainer {
                 fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, chosenFile.parent());
 
                 if (chosenFile.extension().length() == 0) {
-                    chosenFile = Gdx.files.getFileHandle(chosenFile.path()+".tpproj", chosenFile.type());
+                    chosenFile = Gdx.files.getFileHandle(chosenFile.path()+"."+AppConstants.PROJECT_FILE_EXT, chosenFile.type());
                 }
 
                 getProject().setProjectFile(chosenFile);

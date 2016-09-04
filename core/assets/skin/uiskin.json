@@ -104,7 +104,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
 	default: {minus: tree-minus, plus: tree-plus, selection: tree-selection, over: tree-over }
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextTooltip$TextTooltipStyle: {
-	default: {background: default-pane, label: {font: default-font, fontColor: white} }
+	default: {background: tooltip-pane, label: {font: default-font, fontColor: white} }
 },
 com.kotcrab.vis.ui.Sizes: {
 	default: {scaleFactor: 1, spacingBottom: 8, spacingRight: 6, buttonBarSpacing: 10, menuItemIconSize: 22, borderSize: 1, spinnerButtonSize: 12, spinnerButtonsWidth: 12, spinnerFieldSize: 40, spinnerFieldRightPadding: 1, fileChooserViewModeBigIconsSize: 200, fileChooserViewModeMediumIconsSize: 128, fileChooserViewModeSmallIconsSize: 64, fileChooserViewModeListWidthSize: 155 },

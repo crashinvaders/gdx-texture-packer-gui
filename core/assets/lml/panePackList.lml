@@ -14,30 +14,31 @@
             <vistable align="top" padleft="4" defaultwidth="25" defaultheight="25" defaultpadbottom="4">
                 <:column column="0" padright="4"/>
 
-                <:macro alias="sidebutton" id icon onchange>
+                <:macro alias="sidebutton" id icon onchange tooltip>
                     <visimagebutton
                             id="{id}"
                             icon="{icon}"
                             onchange="{onchange}"
                             imagescaling="none"
                             generatedisabled="true"
-                            focusborder="false"/>
+                            focusborder="false"
+                            tooltip="{tooltip}"/>
                 </:macro>
 
-                <:sidebutton id="btnSpNew" icon="custom/ic-file-new" onchange="newPack"/>
-                <:sidebutton id="btnSpDelete" icon="custom/ic-file-delete" onchange="deletePack"/>
+                <:sidebutton id="btnSpNew" icon="custom/ic-file-new" onchange="newPack" tooltip="@newPack"/>
+                <:sidebutton id="btnSpDelete" icon="custom/ic-file-delete" onchange="deletePack" tooltip="@deletePack"/>
                 <:row/>
-                <:sidebutton id="btnSpRename" icon="custom/ic-file-edit" onchange="renamePack"/>
-                <:sidebutton id="btnSpCopy" icon="custom/ic-file-copy" onchange="copyPack"/>
+                <:sidebutton id="btnSpRename" icon="custom/ic-file-edit" onchange="renamePack" tooltip="@renamePack"/>
+                <:sidebutton id="btnSpCopy" icon="custom/ic-file-copy" onchange="copyPack" tooltip="@copyPack"/>
                 <:row/>
-                <:sidebutton id="btnSpMoveUp" icon="custom/ic-move-up" onchange="movePackUp"/>
-                <:sidebutton id="btnSpMoveDown" icon="custom/ic-move-down" onchange="movePackDown"/>
+                <:sidebutton id="btnSpMoveUp" icon="custom/ic-move-up" onchange="movePackUp" tooltip="@movePackUp"/>
+                <:sidebutton id="btnSpMoveDown" icon="custom/ic-move-down" onchange="movePackDown" tooltip="@movePackDown"/>
                 <:row/>
                 <separator grow="true" height="2" width="0" padright="1" padleft="1" colspan="2"/>
                 <:row padbottom="0"/>
                 <!--<:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="show:dialog_packing"/>-->
-                <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected"/>
-                <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll"/>
+                <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected" tooltip="@packSelected"/>
+                <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll" tooltip="@packAll"/>
 
             </vistable>
         </vistable>
