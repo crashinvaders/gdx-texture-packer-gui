@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -72,6 +73,10 @@ public class Configuration {
     @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
     public void initializeInterface(InterfaceService interfaceService) {
         InterfaceService.DEFAULT_FADING_TIME = 0.15f;
+
+        TooltipManager tooltipManager = interfaceService.getParser().getData().getDefaultTooltipManager();
+        tooltipManager.initialTime = 0.75f;
+        tooltipManager.hideAll();
 
         LmlParser parser = interfaceService.getParser();
         parser.parseTemplate(Gdx.files.internal("lml/titledPane.lml"));

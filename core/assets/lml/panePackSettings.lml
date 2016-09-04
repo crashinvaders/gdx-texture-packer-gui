@@ -9,7 +9,7 @@
 
             <vistable growx="true" defaultalign="center" tablepadbottom="12">
 
-                <:macro alias="item" replace="content" title="Title">
+                <:macro alias="item" replace="content" title>
                     <label ellipsis="true" align="left" padright="4">{title}</label>
                     <container growx="true" fillx="true" row="true" minwidth="0">{content}</container>
                 </:macro>
@@ -21,13 +21,13 @@
                 <vistable growx="true" defaultpad="2" defaultminwidth="0" debug="false">
                     <:column column="1" prefwidth="150"/>
 
-                    <:item title="Encoding format">
+                    <:item title="@psEncodingFormat">
                         <visselectbox
                                 id="cboEncodingFormat"
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
-                    <:item title="Output format">
+                    <:item title="@psOutputFormat">
                         <visselectbox
                                 id="cboOutputFormat"
                                 onchange="onSettingsCboChanged"/>
@@ -35,7 +35,7 @@
 
                     <:separator/>
 
-                    <:item title="Min page width">
+                    <:item title="@psMinPageWidth">
                         <intspinner
                                 id="spnMinPageWidth"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -44,7 +44,7 @@
                                 max="8192"/>
                     </:item>
 
-                    <:item title="Min page height">
+                    <:item title="@psMinPageHeight">
                         <intspinner
                                 id="spnMinPageHeight"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -53,7 +53,7 @@
                                 max="8192"/>
                     </:item>
 
-                    <:item title="Max page width">
+                    <:item title="@psMaxPageWidth">
                         <intspinner
                                 id="spnMaxPageWidth"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -62,7 +62,7 @@
                                 max="8192"/>
                     </:item>
 
-                    <:item title="Max page height">
+                    <:item title="@psMaxPageHeight">
                         <intspinner
                                 id="spnMaxPageHeight"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -73,7 +73,7 @@
 
                     <:separator/>
 
-                    <:item title="Alpha threshold">
+                    <:item title="@psAlphaThreshold">
                         <intspinner
                                 id="spnAlphaThreshold"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -81,13 +81,13 @@
                                 max="255"/>
                     </:item>
 
-                    <:item title="Min filter">
+                    <:item title="@psMinFilter">
                         <visselectbox
                                 id="cboMinFilter"
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
-                    <:item title="Mag filter">
+                    <:item title="@psMagFilter">
                         <visselectbox
                                 id="cboMagFilter"
                                 onchange="onSettingsCboChanged"/>
@@ -95,7 +95,7 @@
 
                     <:separator/>
 
-                    <:item title="Padding X">
+                    <:item title="@psPaddingX">
                         <intspinner
                                 id="spnPaddingX"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -103,7 +103,7 @@
                                 max="64"/>
                     </:item>
 
-                    <:item title="Padding Y">
+                    <:item title="@psPaddingY">
                         <intspinner
                                 id="spnPaddingY"
                                 onchange="onSettingsIntSpinnerChanged"
@@ -111,28 +111,21 @@
                                 max="64"/>
                     </:item>
 
-                    <:item title="Wrap X">
+                    <:item title="@psWrapX">
                         <visselectbox
                                 id="cboWrapX"
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
-                    <:item title="Wrap Y">
+                    <:item title="@psWrapY">
                         <visselectbox
                                 id="cboWrapY"
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
-                    <!--<:item title="Slider test">-->
-                        <!--<vistable>-->
-                            <!--<vistextfield numeric="true" max="5" width="48" padright="4"/>-->
-                            <!--<visslider min="0" max="100" step="1" minwidth="0" growx="true"/>-->
-                        <!--</vistable>-->
-                    <!--</:item>-->
-
                     <:separator/>
 
-                    <:item title="Jpeg quality">
+                    <:item title="@psJpegQuality">
                         <floatspinner
                                 id="spnJpegQuality"
                                 onchange="onSettingsFloatSpinnerChanged"
@@ -149,19 +142,19 @@
 
                 <verticalgroup align="top" groupalign="left">
 
-                    <vischeckbox id="chkUseFastAlgorithm" onchange="onSettingsChbChecked">Use fast algorithm</vischeckbox>
+                    <vischeckbox id="chkUseFastAlgorithm" onchange="onSettingsChbChecked">@psUseFastAlgorithm</vischeckbox>
 
-                    <vischeckbox id="chkEdgePadding" onchange="onSettingsChbChecked">Edge padding</vischeckbox>
+                    <vischeckbox id="chkEdgePadding" onchange="onSettingsChbChecked">@psEdgePadding</vischeckbox>
 
-                    <vischeckbox id="chkStripWhitespaceX" onchange="onSettingsChbChecked">Strip whitespace X</vischeckbox>
+                    <vischeckbox id="chkStripWhitespaceX" onchange="onSettingsChbChecked">@psStripWhitespaceX</vischeckbox>
 
-                    <vischeckbox id="chkStripWhitespaceY" onchange="onSettingsChbChecked">Strip whitespace Y</vischeckbox>
+                    <vischeckbox id="chkStripWhitespaceY" onchange="onSettingsChbChecked">@psStripWhitespaceY</vischeckbox>
 
-                    <vischeckbox id="chkAllowRotation" onchange="onSettingsChbChecked">Allow rotation</vischeckbox>
+                    <vischeckbox id="chkAllowRotation" onchange="onSettingsChbChecked">@psAllowRotation</vischeckbox>
 
-                    <vischeckbox id="chkIncludeSubdirs" onchange="onSettingsChbChecked">Include subdirs</vischeckbox>
+                    <vischeckbox id="chkIncludeSubdirs" onchange="onSettingsChbChecked">@psIncludeSubdirs</vischeckbox>
 
-                    <vischeckbox id="chkBleeding" onchange="onSettingsChbChecked">Bleeding</vischeckbox>
+                    <vischeckbox id="chkBleeding" onchange="onSettingsChbChecked">@psBleeding</vischeckbox>
 
                 </verticalgroup>
 
@@ -169,19 +162,19 @@
 
                 <verticalgroup align="top" groupalign="left">
 
-                    <vischeckbox id="chkDuplicatePadding" onchange="onSettingsChbChecked">Duplicate padding</vischeckbox>
+                    <vischeckbox id="chkDuplicatePadding" onchange="onSettingsChbChecked">@psDuplicatePadding</vischeckbox>
 
-                    <vischeckbox id="chkForcePot" onchange="onSettingsChbChecked">Force PoT</vischeckbox>
+                    <vischeckbox id="chkForcePot" onchange="onSettingsChbChecked">@psForcePoT</vischeckbox>
 
-                    <vischeckbox id="chkUseAliases" onchange="onSettingsChbChecked">Use aliases</vischeckbox>
+                    <vischeckbox id="chkUseAliases" onchange="onSettingsChbChecked">@psUseAliases</vischeckbox>
 
-                    <vischeckbox id="chkIgnoreBlankImages" onchange="onSettingsChbChecked">Ignore blank imgs</vischeckbox>
+                    <vischeckbox id="chkIgnoreBlankImages" onchange="onSettingsChbChecked">@psIgnoreBlankImgs</vischeckbox>
 
-                    <vischeckbox id="chkDebug" onchange="onSettingsChbChecked">Debug</vischeckbox>
+                    <vischeckbox id="chkDebug" onchange="onSettingsChbChecked">@psDebug</vischeckbox>
 
-                    <vischeckbox id="chkUseIndices" onchange="onSettingsChbChecked">Use indices</vischeckbox>
+                    <vischeckbox id="chkUseIndices" onchange="onSettingsChbChecked">@psUseIndices</vischeckbox>
 
-                    <vischeckbox id="chkPremultiplyAlpha" onchange="onSettingsChbChecked">Premultiply alpha</vischeckbox>
+                    <vischeckbox id="chkPremultiplyAlpha" onchange="onSettingsChbChecked">@psPremultiplyAlpha</vischeckbox>
 
                 </verticalgroup>
 

@@ -5,63 +5,63 @@
     <menu text="File" style="main-menu">
         <menuitem
                 id="miFileNew"
-                text="New"
+                text="@new"
                 onchange="newProject"
                 icon="custom/ic-project-new"/>
         <menuitem
                 id="miFileOpen"
-                text="Open"
+                text="@open"
                 onchange="openProject"
                 icon="custom/ic-folder"/>
         <menuitem
                 id="miFileOpenRecent"
-                text="Open recent"
+                text="@openRecent"
                 icon="custom/ic-folder-recent">
             <submenu id="pmFileOpenRecent"/>
         </menuitem>
         <menuitem
                 id="miFileSave"
-                text="Save"
+                text="@save"
                 onchange="saveProject"
                 icon="custom/ic-save"/>
         <menuitem
                 id="miFileSaveAs"
-                text="Save as"
+                text="@saveAs"
                 onchange="saveProjectAs"
                 icon="custom/ic-save-aster"/>
     </menu>
     <menu text="Pack" style="main-menu">
         <menuitem
                 id="miPackNew"
-                text="New"
+                text="@new"
                 onchange="newPack"
                 icon="custom/ic-file-new"/>
         <menuseparator/>
         <menuitem
                 id="miPackPackSelected"
-                text="Pack selected"
+                text="@packSelected"
                 onchange="packSelected"
                 icon="custom/ic-process"/>
         <menuitem
                 id="miPackPackAll"
-                text="Pack all"
+                text="@packAll"
                 onchange="packAll"
                 icon="custom/ic-process-all"/>
         <menuseparator/>
         <menuitem
                 id="miPackCopySettingsToAllPacks"
                 onchange="copySettingsToAllPacks"
-                text="Copy settings to all packs"/>
+                text="@copySettingsToAllPacks"/>
     </menu>
     <menu text="Help" style="main-menu">
         <menuitem
                 id="miHelpCheckForUpdates"
-                text="Check for updates"
+                text="@checkForUpdates"
                 onchange="show:dialog_version_check"
                 icon="custom/ic-refresh"/>
         <menuitem
                 id="miHelpAbout"
-                text="About"
+                text="@about"
                 onchange="show:dialog_about"
                 icon="custom/ic-info-message"/>
     </menu>

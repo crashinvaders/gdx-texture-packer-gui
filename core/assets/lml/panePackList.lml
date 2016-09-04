@@ -29,7 +29,7 @@
                 <:sidebutton id="btnSpDelete" icon="custom/ic-file-delete" onchange="deletePack" tooltip="@deletePack"/>
                 <:row/>
                 <:sidebutton id="btnSpRename" icon="custom/ic-file-edit" onchange="renamePack" tooltip="@renamePack"/>
-                <:sidebutton id="btnSpCopy" icon="custom/ic-file-copy" onchange="copyPack" tooltip="@copyPack"/>
+                <:sidebutton id="btnSpCopy" icon="custom/ic-file-copy" onchange="copyPack" tooltip="@makeCopy"/>
                 <:row/>
                 <:sidebutton id="btnSpMoveUp" icon="custom/ic-move-up" onchange="movePackUp" tooltip="@movePackUp"/>
                 <:sidebutton id="btnSpMoveDown" icon="custom/ic-move-down" onchange="movePackDown" tooltip="@movePackDown"/>

@@ -78,11 +78,11 @@ public class GlobalActions implements ActionContainer {
         dialog.setText(pack.getName(), true);
     }
 
-    @LmlAction("copyPack") public void copyPack() {
+    @LmlAction("makeCopy") public void copyPack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-		Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("copyPack"), null, true, null, new InputDialogAdapter() {
+		Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("makeCopy"), null, true, null, new InputDialogAdapter() {
 			@Override
 			public void finished (String input) {
 				PackModel newPack = new PackModel(pack);
@@ -185,7 +185,7 @@ public class GlobalActions implements ActionContainer {
         //TODO check if there were any changes
         ProjectModel project = getProject();
         if (project.getPacks().size > 0) {
-            Dialogs.showOptionDialog(getStage(), "New project", "All unsaved changes will be lost. Proceed?", Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
+            Dialogs.showOptionDialog(getStage(), getString("dialogTitleNewProject"), getString("dialogTextNewProject"), Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
                 @Override
                 public void yes() {
                     modelService.setProject(new ProjectModel());

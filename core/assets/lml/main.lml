@@ -11,19 +11,19 @@
 
         <vistable align="topleft" onecolumn="true">
             <container growy="false" fill="true">
-                <:titledpane title="Pack list" icon="custom/ic-title-packs">
+                <:titledpane title="@panelTitlePackList" icon="custom/ic-title-packs">
                     <:import path="lml/panePackList.lml"/>
                 </:titledpane>
             </container>
 
             <container growy="false" fill="true">
-                <:titledpane title="Pack general" icon="custom/ic-title-folder">
+                <:titledpane title="@panelTitlePackGeneral" icon="custom/ic-title-folder">
                     <:import path="lml/panePackGeneral.lml"/>
                 </:titledpane>
             </container>
 
             <container growy="true" fill="true">
-                <:titledpane title="Pack settings" icon="custom/ic-title-settings">
+                <:titledpane title="@panelTitlePackSettings" icon="custom/ic-title-settings">
                     <:import path="lml/panePackSettings.lml"/>
                 </:titledpane>
             </container>
@@ -32,7 +32,7 @@
         <separator growy="true"/>
 
         <container grow="true" fill="true">
-            <:titledpane title="Atlas preview" icon="custom/ic-title-atlas">
+            <:titledpane title="@panelTitleAtlasPreview" icon="custom/ic-title-atlas">
                 <container id="canvasContainer" grow="true" fill="true">
                     <canvas id="canvas"/>
                 </container>

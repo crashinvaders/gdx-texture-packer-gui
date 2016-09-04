@@ -4,49 +4,49 @@
 <popupmenu>
     <menuitem
             id="miNew"
-            text="New"
+            text="@new"
             onchange="newPack"
             icon="custom/ic-file-new"/>
     <menuitem
             id="miDelete"
-            text="Delete"
+            text="@delete"
             onchange="deletePack"
             icon="custom/ic-file-delete"/>
     <menuitem
             id="miRename"
-            text="Rename"
+            text="@rename"
             onchange="renamePack"
             icon="custom/ic-file-edit"/>
     <menuitem
             id="miCopy"
-            text="Make a copy"
+            text="@makeCopy"
             onchange="copyPack"
             icon="custom/ic-file-copy"/>
     <menuseparator/>
     <menuitem
             id="miMoveUp"
-            text="Move up"
+            text="@movePackUp"
             onchange="movePackUp"
             icon="custom/ic-move-up"/>
     <menuitem
             id="miMoveDown"
-            text="Move down"
+            text="@movePackDown"
             onchange="movePackDown"
             icon="custom/ic-move-down"/>
     <menuseparator/>
     <menuitem
             id="miPackSelected"
-            text="Pack"
+            text="@packSelected"
             onchange="packSelected"
             icon="custom/ic-process"/>
     <menuitem
             id="miPackAll"
-            text="Pack all"
+            text="@packAll"
             onchange="packAll"
             icon="custom/ic-process-all"/>
     <menuseparator/>
     <menuitem
             id="miCopySettingsToAllPacks"
-            text="Copy settings to all packs"
+            text="@copySettingsToAllPacks"
             onchange="copySettingsToAllPacks"/>
 </popupmenu>

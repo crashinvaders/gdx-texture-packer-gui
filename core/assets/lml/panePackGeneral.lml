@@ -5,7 +5,7 @@
 
     <vistable align="top" growx="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
 
-        <label align="left">Input dir</label>
+        <label align="left">@inputDir</label>
         <vistextfield
                 id="edtInputDir"
                 minwidth="24"
@@ -22,7 +22,7 @@
 
         <:row/>
 
-        <label align="left">Output dir</label>
+        <label align="left">@outputDir</label>
         <vistextfield
                 id="edtOutputDir"
                 minwidth="24"
