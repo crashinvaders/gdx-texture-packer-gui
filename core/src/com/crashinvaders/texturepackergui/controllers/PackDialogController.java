@@ -15,6 +15,7 @@ import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
@@ -36,6 +37,7 @@ public class PackDialogController implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject EventDispatcher eventDispatcher;
+    @Inject LocaleService localeService;
 
     @ViewStage Stage stage;
     private Preferences prefs;
@@ -140,8 +142,8 @@ public class PackDialogController implements ActionContainer {
 
                     window.closeOnEscape();
 
-                    window.getTitleLabel().setText("Finished");
-                    lblOutput.setText(lblOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...");
+                    window.getTitleLabel().setText(getString("dPackTitleFinished"));
+                    lblOutput.setText(lblOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...[]");
 
                     if (noErrors && chbAutoClose.isChecked()) {
                         window.hide();
@@ -157,9 +159,9 @@ public class PackDialogController implements ActionContainer {
      */
     private boolean performPacking(PackModel pack) {
 
-        System.out.println("-----------------------------------------------------------");
-        System.out.println("-- Starting TexturePacker for pack '" + pack.getName() + "'");
-        System.out.println("-----------------------------------------------------------");
+        System.out.println("----------------------------------------------------------");
+        System.out.println("-- Starting packing '" + pack.getName() + "'");
+        System.out.println("----------------------------------------------------------");
 
         if (!new File(pack.getInputDir()).isDirectory()) {
             System.err.println("[output-red]Input directory is not valid:[] "+pack.getInputDir());
@@ -176,5 +178,15 @@ public class PackDialogController implements ActionContainer {
             System.err.println("[output-red]Exception occured:[] " + message);
             return false;
         }
+    }
+
+    /** @return localized string */
+    private String getString(String key) {
+        return localeService.getI18nBundle().get(key);
+    }
+
+    /** @return localized string */
+    private String getString(String key, Object... args) {
+        return localeService.getI18nBundle().format(key, args);
     }
 }

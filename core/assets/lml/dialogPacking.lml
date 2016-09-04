@@ -3,7 +3,7 @@
 
 <visdialog
         id="window"
-        title="Processing..."
+        title="@dPackTitleInit"
         closebutton="true"
         closeonescape="false"
         onecolumn="true"
@@ -30,7 +30,7 @@
     <vischeckbox
             id="chbAutoClose"
             align="left"
-            text="Automatically close dialog on success"
+            text="@dPackAutoCloseChb"
             change="onAutoCloseChecked"/>
 
 </visdialog>

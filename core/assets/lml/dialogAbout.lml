@@ -1,43 +1,44 @@
 <?xml version="1.0"?>
 <!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
 
-<visdialog title="About" closebutton="true" closeonescape="true">
+<visdialog title="@dAboutTitle" closebutton="true" closeonescape="true">
     <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
 
         <actor height="24"/>
 
         <vistable onecolumn="true" align="center">
-        <image drawable="custom/app-logo-2x" scaling="none"/>
-        <label style="small" align="right">version {currentVersionCode}</label>
+            <image drawable="custom/app-logo-2x" scaling="none"/>
+            <horizontalgroup align="right" spacing="4">
+                <label style="small" text="@dAboutVersion"/>
+                <label style="small" text="{currentVersionCode}"/>
+            </horizontalgroup>
         </vistable>
 
         <actor height="16"/>
 
-        <label>Authors:</label>
+        <label>@dAboutAuthors</label>
         <horizontalgroup groupspace="4">
-            <linklabel style="orange" href="http://crashinvaders.com">Anton Chekulaev</linklabel>
+            <linklabel style="orange" href="http://crashinvaders.com">@dAboutAChekulaev</linklabel>
             <label style="grey">-</label>
-            <label style="grey">lead developer, graphics</label>
+            <label style="grey">@dAboutAChekulaevDesc</label>
         </horizontalgroup>
         <horizontalgroup groupspace="4">
-            <linklabel style="orange" href="http://www.aurelienribon.com">Aurelien Ribon</linklabel>
+            <linklabel style="orange" href="http://www.aurelienribon.com">@dAboutARibon</linklabel>
             <label style="grey">-</label>
-            <label style="grey">author of original application</label>
+            <label style="grey">@dAboutARibonDesc</label>
         </horizontalgroup>
 
         <actor height="16"/>
 
-        <label>Links:</label>
+        <label>@dAboutLinks</label>
         <horizontalgroup groupspace="4">
-            <linklabel style="orange" href="http://github.com/crashinvaders/texturepacker">Project GitHub page</linklabel>
+            <linklabel style="orange" href="http://github.com/crashinvaders/texturepacker">@dAboutGitHubProject</linklabel>
         </horizontalgroup>
 
         <actor height="16"/>
 
         <container growx="true" fill="true">
-            <vislabel style="grey" wrap="true" multiline="true">
-                LibGDX Texture Packer GUI is an open source software. Licensed under Apache 2 License.
-            </vislabel>
+            <vislabel style="grey" wrap="true" multiline="true">@dAboutLicenseInfo</vislabel>
         </container>
     </vistable>
 </visdialog>

@@ -3,7 +3,7 @@
 
 <visdialog
         id="dialog"
-        title="Version check"
+        title="@dVersionTitle"
         closebutton="true"
         closeonescape="true"
         resizable="false">
@@ -25,14 +25,14 @@
                         id="lblErrorDetails"
                         wrap="true"
                         growx="true"
-                        text="Some error occurred. Please try later."
+                        text="@dVersion"
                         textalign="center"/>
 
                 <actor height="4"/>
 
                 <visimagetextbutton
                         id="btnRetry"
-                        text="Retry"
+                        text="@dVersionRetry"
                         tablepadleft="24"
                         tablepadright="32"
                         tablepadbottom="4"
@@ -49,7 +49,7 @@
                         delay="0.1"
                         frames="custom/ic-sandglass0;custom/ic-sandglass1;custom/ic-sandglass2;custom/ic-sandglass3;custom/ic-sandglass4;custom/ic-sandglass5;custom/ic-sandglass6;custom/ic-sandglass7"/>
                 <vislabel
-                        text="Checking for updates..."/>
+                        text="@dVersionChecking"/>
             </vistable>
 
             <vistable
@@ -59,17 +59,17 @@
 
                 <vistable>
                     <vislabel
-                            text="New version is available: "
-                            padright="2"/>
+                            text="@dVersionUpdateAvailable"
+                            padright="6"/>
                     <vislabel
                             id="lblVersionNew"/>
                 </vistable>
 
                 <vistable padtop="-4">
                     <vislabel
-                            text="Current version: "
+                            text="@dVersionCurrent"
                             style="grey"
-                            padright="2"/>
+                            padright="6"/>
                     <vislabel
                             id="lblVersionCurrent"
                             style="grey"/>
@@ -79,7 +79,7 @@
 
                 <vistextbutton
                         id="btnVisitUpdatePage"
-                        text="Visit update page"
+                        text="@dVersionVisitDownloadPage"
                         tablepadleft="12"
                         tablepadright="12"
                         onchange="navigateToUpdatePage"/>
@@ -94,7 +94,7 @@
                         scaling="none"/>
                 <actor height="4"/>
                 <vislabel
-                        text="You already have latest application version"
+                        text="@dVersionUpToDate"
                         padright="2"/>
             </vistable>
 
@@ -103,10 +103,10 @@
         <vistable>
             <vislabel
                     style="grey"
-                    text="You can find all available versions" padright="4"/>
+                    text="@dVersionAllVersions" padright="4"/>
             <linklabel
                     style="orange"
-                    text="here"
+                    text="@dVersionHere"
                     href="@urlReleasesPage"/>
         </vistable>
     </vistable>
