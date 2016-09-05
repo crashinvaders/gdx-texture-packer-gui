@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -11,22 +12,21 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
-import static com.crashinvaders.texturepackergui.utils.FileUtils.loadTextFromFileSilent;
 
 public class ShortcutParser {
     private static final String TAG = ShortcutParser.class.getSimpleName();
     private static final String COMMENT_PREFIX = "//";
     private static final ShortcutComparator shortcutComparator = new ShortcutComparator();
-
-    private final HashMap<String, Integer> keyCodes;
-
-    public ShortcutParser() {
-        keyCodes= prepareKeyCodes();
-    }
+    private static final HashMap<String, Integer> keyCodes = prepareKeyCodes();
 
     public Array<Shortcut> parse(FileHandle fileHandle) {
-        String hotkeyMarkup = loadTextFromFileSilent(fileHandle);
-        return parse(hotkeyMarkup);
+        try {
+            String hotkeyMarkup = fileHandle.readString();
+            return parse(hotkeyMarkup);
+        } catch (GdxRuntimeException e) {
+            Gdx.app.error(TAG, "Error reading shortcut file", e);
+            return new Array<>();
+        }
     }
 
     public Array<Shortcut> parse(String hotkeyMarkup) {

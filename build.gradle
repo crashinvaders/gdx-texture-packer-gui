@@ -5,23 +5,17 @@ buildscript {
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
     }
-    dependencies {
-        classpath 'de.richsource.gradle.plugins:gwt-gradle-plugin:0.6'
-    }
 }
 
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '4.0.0'
     ext {
-        appName = "visuitest"
+        appName = "gdx-texturepacker"
+        version = '4.0.0'
+
         gdxVersion = '1.9.3'
-        roboVMVersion = '2.1.0'
-        box2DLightsVersion = '1.4'
-        ashleyVersion = '1.7.0'
-        aiVersion = '1.8.0'
         lmlVersion = '1.7.1.9.3'
     }
 
@@ -48,7 +42,6 @@ project(":desktop") {
 
 project(":core") {
     apply plugin: "java"
-
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"

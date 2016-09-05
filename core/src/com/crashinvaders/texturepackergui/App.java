@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
+import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.shortcuts.GlobalShortcutHandler;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -30,7 +31,6 @@ import com.github.czyzby.kiwi.util.gdx.asset.Disposables;
 import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
 import com.github.czyzby.kiwi.util.tuple.immutable.Pair;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
 
 public class App implements ApplicationListener {
     private static App instance;

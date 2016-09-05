@@ -24,8 +24,29 @@ task dist(type: Jar) {
         attributes 'Main-Class': project.mainClassName
     }
 }
-
 dist.dependsOn classes
+
+task distRelease(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.resourcesDir)
+    from {configurations.compile.collect {zipTree(it)}}
+    from files(project.assetsDir);
+
+    archiveName = "$project.ext.appName.$extension"
+    destinationDir = project.distsDir;
+
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+distRelease.dependsOn classes
+
+task zipRelease(type: Zip) {
+    from distRelease
+    from file("../distribution")
+    archiveName = "$project.ext.appName-$project.ext.version.$extension"
+}
+zipRelease.dependsOn distRelease
 
 eclipse {
     project {
