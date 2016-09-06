@@ -28,9 +28,9 @@
     <actor padtop="2"/>
 
     <vischeckbox
-            id="chbAutoClose"
+            id="cbAutoClose"
             align="left"
-            text="@dPackAutoCloseChb"
+            text="@dPackAutoCloseCb"
             change="onAutoCloseChecked"/>
 
 </visdialog>

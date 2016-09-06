@@ -32,7 +32,7 @@
 
         <label>@dAboutLinks</label>
         <horizontalgroup groupspace="4">
-            <linklabel style="orange" href="http://github.com/crashinvaders/texturepacker">@dAboutGitHubProject</linklabel>
+            <linklabel style="orange" href="http://github.com/crashinvaders/gdx-texture-packer-gui">@dAboutGitHubProject</linklabel>
         </horizontalgroup>
 
         <actor height="16"/>

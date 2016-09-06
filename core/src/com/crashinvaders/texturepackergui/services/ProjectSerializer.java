@@ -111,7 +111,9 @@ public class ProjectSerializer {
         sb.append("wrapX=").append(settings.wrapX).append("\n");
         sb.append("wrapY=").append(settings.wrapY).append("\n");
         sb.append("premultiplyAlpha=").append(settings.premultiplyAlpha).append("\n");
-        sb.append("combineSubdirectories=").append(settings.combineSubdirectories);
+        sb.append("combineSubdirectories=").append(settings.combineSubdirectories).append("\n");
+        sb.append("grid=").append(settings.grid).append("\n");
+        sb.append("square=").append(settings.square);
 
         return sb.toString();
     }
@@ -187,6 +189,8 @@ public class ProjectSerializer {
         settings.wrapY = Texture.TextureWrap.valueOf(find(lines, "wrapY=", defaultSettings.wrapY.toString()));
         settings.premultiplyAlpha = find(lines, "premultiplyAlpha=", defaultSettings.premultiplyAlpha);
         settings.combineSubdirectories = find(lines, "combineSubdirectories=", defaultSettings.combineSubdirectories);
+        settings.grid = find(lines, "grid=", defaultSettings.grid);
+        settings.square = find(lines, "square=", defaultSettings.square);
 
         return pack;
     }

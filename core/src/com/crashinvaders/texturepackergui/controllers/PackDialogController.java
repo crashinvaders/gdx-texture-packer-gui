@@ -45,7 +45,7 @@ public class PackDialogController implements ActionContainer {
     @LmlActor("window") VisDialog window;
     @LmlActor("scrOutput") VisScrollPane scrOutput;
     @LmlActor("containerOutput") Container containerOutput;
-    @LmlActor("chbAutoClose") VisCheckBox chbAutoClose;
+    @LmlActor("cbAutoClose") VisCheckBox cbAutoClose;
     private VisImageButton btnClose;
     private VisLabel lblOutput;
 
@@ -74,11 +74,11 @@ public class PackDialogController implements ActionContainer {
 
         stage.setScrollFocus(scrOutput);
 
-        chbAutoClose.setChecked(prefs.getBoolean(PREF_KEY_AUTO_CLOSE, false));
+        cbAutoClose.setChecked(prefs.getBoolean(PREF_KEY_AUTO_CLOSE, false));
     }
 
-    @LmlAction("onAutoCloseChecked") void onAutoCloseChecked(VisCheckBox chbAutoClose) {
-        prefs.putBoolean(PREF_KEY_AUTO_CLOSE, chbAutoClose.isChecked());
+    @LmlAction("onAutoCloseChecked") void onAutoCloseChecked(VisCheckBox cbAutoClose) {
+        prefs.putBoolean(PREF_KEY_AUTO_CLOSE, cbAutoClose.isChecked());
         prefs.flush();
     }
 
@@ -145,7 +145,7 @@ public class PackDialogController implements ActionContainer {
                     window.getTitleLabel().setText(getString("dPackTitleFinished"));
                     lblOutput.setText(lblOutput.getText() + "[output-yellow]Finished. Press [ESC] to close dialog...[]");
 
-                    if (noErrors && chbAutoClose.isChecked()) {
+                    if (noErrors && cbAutoClose.isChecked()) {
                         window.hide();
                     }
                 }

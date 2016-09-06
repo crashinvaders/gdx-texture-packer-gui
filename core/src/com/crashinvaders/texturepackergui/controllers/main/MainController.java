@@ -284,26 +284,28 @@ public class MainController implements ActionContainer, ViewResizer {
         });
     }
 
-    @LmlAction("onSettingsChbChecked") void onSettingsChbChecked(VisCheckBox checkBox) {
+    @LmlAction("onSettingsCbChecked") void onSettingsCbChecked(VisCheckBox checkBox) {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         TexturePacker.Settings settings = pack.getSettings();
         switch (checkBox.getName()) {
-            case "chkUseFastAlgorithm": settings.fast = checkBox.isChecked(); break;
-            case "chkEdgePadding": settings.edgePadding = checkBox.isChecked(); break;
-            case "chkStripWhitespaceX": settings.stripWhitespaceX = checkBox.isChecked(); break;
-            case "chkStripWhitespaceY": settings.stripWhitespaceY = checkBox.isChecked(); break;
-            case "chkAllowRotation": settings.rotation = checkBox.isChecked(); break;
-            case "chkIncludeSubdirs": settings.combineSubdirectories = checkBox.isChecked(); break;
-            case "chkBleeding": settings.bleed = checkBox.isChecked(); break;
-            case "chkDuplicatePadding": settings.duplicatePadding = checkBox.isChecked(); break;
-            case "chkForcePot": settings.pot = checkBox.isChecked(); break;
-            case "chkUseAliases": settings.alias = checkBox.isChecked(); break;
-            case "chkIgnoreBlankImages": settings.ignoreBlankImages = checkBox.isChecked(); break;
-            case "chkDebug": settings.debug = checkBox.isChecked(); break;
-            case "chkUseIndices": settings.useIndexes = checkBox.isChecked(); break;
-            case "chkPremultiplyAlpha": settings.premultiplyAlpha = checkBox.isChecked(); break;
+            case "cbUseFastAlgorithm": settings.fast = checkBox.isChecked(); break;
+            case "cbEdgePadding": settings.edgePadding = checkBox.isChecked(); break;
+            case "cbStripWhitespaceX": settings.stripWhitespaceX = checkBox.isChecked(); break;
+            case "cbStripWhitespaceY": settings.stripWhitespaceY = checkBox.isChecked(); break;
+            case "cbAllowRotation": settings.rotation = checkBox.isChecked(); break;
+            case "cbIncludeSubdirs": settings.combineSubdirectories = checkBox.isChecked(); break;
+            case "cbBleeding": settings.bleed = checkBox.isChecked(); break;
+            case "cbDuplicatePadding": settings.duplicatePadding = checkBox.isChecked(); break;
+            case "cbForcePot": settings.pot = checkBox.isChecked(); break;
+            case "cbUseAliases": settings.alias = checkBox.isChecked(); break;
+            case "cbIgnoreBlankImages": settings.ignoreBlankImages = checkBox.isChecked(); break;
+            case "cbDebug": settings.debug = checkBox.isChecked(); break;
+            case "cbUseIndices": settings.useIndexes = checkBox.isChecked(); break;
+            case "cbPremultiplyAlpha": settings.premultiplyAlpha = checkBox.isChecked(); break;
+            case "cbGrid": settings.grid = checkBox.isChecked(); break;
+            case "cbSquare": settings.square = checkBox.isChecked(); break;
         }
     }
 
@@ -402,20 +404,22 @@ public class MainController implements ActionContainer, ViewResizer {
         if (pack != null) {
             TexturePacker.Settings settings = pack.getSettings();
 
-            viewsSettings.chkUseFastAlgorithm.setChecked(settings.fast);
-            viewsSettings.chkEdgePadding.setChecked(settings.edgePadding);
-            viewsSettings.chkStripWhitespaceX.setChecked(settings.stripWhitespaceX);
-            viewsSettings.chkStripWhitespaceY.setChecked(settings.stripWhitespaceY);
-            viewsSettings.chkAllowRotation.setChecked(settings.rotation);
-            viewsSettings.chkIncludeSubdirs.setChecked(settings.combineSubdirectories);
-            viewsSettings.chkBleeding.setChecked(settings.bleed);
-            viewsSettings.chkDuplicatePadding.setChecked(settings.duplicatePadding);
-            viewsSettings.chkForcePot.setChecked(settings.pot);
-            viewsSettings.chkUseAliases.setChecked(settings.alias);
-            viewsSettings.chkIgnoreBlankImages.setChecked(settings.ignoreBlankImages);
-            viewsSettings.chkDebug.setChecked(settings.debug);
-            viewsSettings.chkUseIndices.setChecked(settings.useIndexes);
-            viewsSettings.chkPremultiplyAlpha.setChecked(settings.premultiplyAlpha);
+            viewsSettings.cbUseFastAlgorithm.setChecked(settings.fast);
+            viewsSettings.cbEdgePadding.setChecked(settings.edgePadding);
+            viewsSettings.cbStripWhitespaceX.setChecked(settings.stripWhitespaceX);
+            viewsSettings.cbStripWhitespaceY.setChecked(settings.stripWhitespaceY);
+            viewsSettings.cbAllowRotation.setChecked(settings.rotation);
+            viewsSettings.cbIncludeSubdirs.setChecked(settings.combineSubdirectories);
+            viewsSettings.cbBleeding.setChecked(settings.bleed);
+            viewsSettings.cbDuplicatePadding.setChecked(settings.duplicatePadding);
+            viewsSettings.cbForcePot.setChecked(settings.pot);
+            viewsSettings.cbUseAliases.setChecked(settings.alias);
+            viewsSettings.cbIgnoreBlankImages.setChecked(settings.ignoreBlankImages);
+            viewsSettings.cbDebug.setChecked(settings.debug);
+            viewsSettings.cbUseIndices.setChecked(settings.useIndexes);
+            viewsSettings.cbPremultiplyAlpha.setChecked(settings.premultiplyAlpha);
+            viewsSettings.cbGrid.setChecked(settings.grid);
+            viewsSettings.cbSquare.setChecked(settings.square);
 
             ((IntSpinnerModel)viewsSettings.spnMinPageWidth.getModel()).setValue(settings.minWidth, false);
             ((IntSpinnerModel)viewsSettings.spnMinPageHeight.getModel()).setValue(settings.minHeight, false);

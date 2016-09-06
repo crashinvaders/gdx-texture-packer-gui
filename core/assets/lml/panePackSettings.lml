@@ -142,19 +142,21 @@
 
                 <verticalgroup align="top" groupalign="left">
 
-                    <vischeckbox id="chkUseFastAlgorithm" onchange="onSettingsChbChecked">@psUseFastAlgorithm</vischeckbox>
+                    <vischeckbox id="cbUseFastAlgorithm" onchange="onSettingsCbChecked">@psUseFastAlgorithm</vischeckbox>
 
-                    <vischeckbox id="chkEdgePadding" onchange="onSettingsChbChecked">@psEdgePadding</vischeckbox>
+                    <vischeckbox id="cbEdgePadding" onchange="onSettingsCbChecked">@psEdgePadding</vischeckbox>
 
-                    <vischeckbox id="chkStripWhitespaceX" onchange="onSettingsChbChecked">@psStripWhitespaceX</vischeckbox>
+                    <vischeckbox id="cbStripWhitespaceX" onchange="onSettingsCbChecked">@psStripWhitespaceX</vischeckbox>
 
-                    <vischeckbox id="chkStripWhitespaceY" onchange="onSettingsChbChecked">@psStripWhitespaceY</vischeckbox>
+                    <vischeckbox id="cbStripWhitespaceY" onchange="onSettingsCbChecked">@psStripWhitespaceY</vischeckbox>
 
-                    <vischeckbox id="chkAllowRotation" onchange="onSettingsChbChecked">@psAllowRotation</vischeckbox>
+                    <vischeckbox id="cbAllowRotation" onchange="onSettingsCbChecked">@psAllowRotation</vischeckbox>
 
-                    <vischeckbox id="chkIncludeSubdirs" onchange="onSettingsChbChecked">@psIncludeSubdirs</vischeckbox>
+                    <vischeckbox id="cbIncludeSubdirs" onchange="onSettingsCbChecked">@psIncludeSubdirs</vischeckbox>
 
-                    <vischeckbox id="chkBleeding" onchange="onSettingsChbChecked">@psBleeding</vischeckbox>
+                    <vischeckbox id="cbBleeding" onchange="onSettingsCbChecked">@psBleeding</vischeckbox>
+
+                    <vischeckbox id="cbSquare" onchange="onSettingsCbChecked">@psSquare</vischeckbox>
 
                 </verticalgroup>
 
@@ -162,19 +164,21 @@
 
                 <verticalgroup align="top" groupalign="left">
 
-                    <vischeckbox id="chkDuplicatePadding" onchange="onSettingsChbChecked">@psDuplicatePadding</vischeckbox>
+                    <vischeckbox id="cbDuplicatePadding" onchange="onSettingsCbChecked">@psDuplicatePadding</vischeckbox>
 
-                    <vischeckbox id="chkForcePot" onchange="onSettingsChbChecked">@psForcePoT</vischeckbox>
+                    <vischeckbox id="cbForcePot" onchange="onSettingsCbChecked">@psForcePoT</vischeckbox>
 
-                    <vischeckbox id="chkUseAliases" onchange="onSettingsChbChecked">@psUseAliases</vischeckbox>
+                    <vischeckbox id="cbUseAliases" onchange="onSettingsCbChecked">@psUseAliases</vischeckbox>
 
-                    <vischeckbox id="chkIgnoreBlankImages" onchange="onSettingsChbChecked">@psIgnoreBlankImgs</vischeckbox>
+                    <vischeckbox id="cbIgnoreBlankImages" onchange="onSettingsCbChecked">@psIgnoreBlankImgs</vischeckbox>
 
-                    <vischeckbox id="chkDebug" onchange="onSettingsChbChecked">@psDebug</vischeckbox>
+                    <vischeckbox id="cbDebug" onchange="onSettingsCbChecked">@psDebug</vischeckbox>
 
-                    <vischeckbox id="chkUseIndices" onchange="onSettingsChbChecked">@psUseIndices</vischeckbox>
+                    <vischeckbox id="cbUseIndices" onchange="onSettingsCbChecked">@psUseIndices</vischeckbox>
 
-                    <vischeckbox id="chkPremultiplyAlpha" onchange="onSettingsChbChecked">@psPremultiplyAlpha</vischeckbox>
+                    <vischeckbox id="cbPremultiplyAlpha" onchange="onSettingsCbChecked">@psPremultiplyAlpha</vischeckbox>
+
+                    <vischeckbox id="cbGrid" onchange="onSettingsCbChecked">@psGrid</vischeckbox>
 
                 </verticalgroup>
 
