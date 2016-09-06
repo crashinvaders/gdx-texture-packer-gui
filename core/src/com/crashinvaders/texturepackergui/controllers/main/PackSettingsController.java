@@ -38,4 +38,5 @@ public class PackSettingsController {
     @LmlActor("chkDebug") VisCheckBox chkDebug;
     @LmlActor("chkUseIndices") VisCheckBox chkUseIndices;
     @LmlActor("chkPremultiplyAlpha") VisCheckBox chkPremultiplyAlpha;
+    @LmlActor("chkSquared") VisCheckBox chkSquared;
 }

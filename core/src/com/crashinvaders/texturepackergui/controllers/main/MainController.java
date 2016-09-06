@@ -297,6 +297,7 @@ public class MainController implements ActionContainer, ViewResizer {
             case "chkAllowRotation": settings.rotation = checkBox.isChecked(); break;
             case "chkIncludeSubdirs": settings.combineSubdirectories = checkBox.isChecked(); break;
             case "chkBleeding": settings.bleed = checkBox.isChecked(); break;
+            case "chkSquared": settings.square = checkBox.isChecked(); break;
             case "chkDuplicatePadding": settings.duplicatePadding = checkBox.isChecked(); break;
             case "chkForcePot": settings.pot = checkBox.isChecked(); break;
             case "chkUseAliases": settings.alias = checkBox.isChecked(); break;
@@ -409,6 +410,7 @@ public class MainController implements ActionContainer, ViewResizer {
             viewsSettings.chkAllowRotation.setChecked(settings.rotation);
             viewsSettings.chkIncludeSubdirs.setChecked(settings.combineSubdirectories);
             viewsSettings.chkBleeding.setChecked(settings.bleed);
+            viewsSettings.chkSquared.setChecked(settings.square);
             viewsSettings.chkDuplicatePadding.setChecked(settings.duplicatePadding);
             viewsSettings.chkForcePot.setChecked(settings.pot);
             viewsSettings.chkUseAliases.setChecked(settings.alias);

@@ -156,6 +156,8 @@
 
                     <vischeckbox id="chkBleeding" onchange="onSettingsChbChecked">@psBleeding</vischeckbox>
 
+                    <vischeckbox id="chkSquared" onchange="onSettingsChbChecked">@psSquared</vischeckbox>
+
                 </verticalgroup>
 
                 <actor width="12"/>
