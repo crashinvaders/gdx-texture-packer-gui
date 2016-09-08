@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.shortcuts.GlobalShortcutHandler;
@@ -43,6 +44,7 @@ public class App implements ApplicationListener {
 
     private InterfaceService interfaceService;
     private ModelService modelService;
+    private LocaleService localeService;
     private GlobalShortcutHandler shortcutHandler;
     private ComponentExtractorService componentExtractorService;
 
@@ -113,7 +115,7 @@ public class App implements ApplicationListener {
                 // Assets:
                 new AssetService(), new SkinAssetAnnotationProcessor(),
                 // Locale:
-                new LocaleService(),
+                localeService = new LocaleService(),
                 // Settings:
                 new I18nBundleAnnotationProcessor(), new PreferenceAnnotationProcessor(), new SkinAnnotationProcessor(),
                 new StageViewportAnnotationProcessor(), new PreferencesService(),
@@ -174,6 +176,7 @@ public class App implements ApplicationListener {
     public AppParams getParams() { return params; }
     public PrioritizedInputMultiplexer getInput() { return inputMultiplexer; }
     public GlobalShortcutHandler getShortcuts() { return shortcutHandler; }
+    public I18NBundle getI18n() { return localeService.getI18nBundle(); }
     //endregion
 
     /** This is utility component class that helps to get access to some system components for App class */

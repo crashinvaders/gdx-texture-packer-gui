@@ -3,27 +3,24 @@
 
 <visdialog
         id="window"
-        title="@dPackTitleInit"
+        title="@dialogTitlePackProcessing"
         closebutton="true"
         closeonescape="false"
         onecolumn="true"
         modal="true"
-        movable="false"
+        movable="true"
         resizable="false">
 
-    <visscrollpane
-            id="scrOutput"
-            style="text-output"
-            width="480"
-            height="320"
-            fill="true"
+    <listview
+            id="listItems"
+            adapter="$obtainListAdapter"
+            grow="true"
+            minheight="240"
             align="top"
             disabledx="true"
             fadescrollbars="false"
             overscroll="false"
-            flickscroll="false">
-        <container id="containerOutput" fill="true"/>
-    </visscrollpane>
+            flickscroll="false"/>
 
     <actor padtop="2"/>
 
@@ -32,5 +29,12 @@
             align="left"
             text="@dPackAutoCloseCb"
             change="onAutoCloseChecked"/>
+
+    <actor padtop="2"/>
+
+    <progressbar
+            id="progressBar"
+            style="narrow-horizontal-grey"
+            growx="true"/>
 
 </visdialog>

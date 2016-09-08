@@ -73,7 +73,9 @@ com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
 },
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: {background: progressbar, knob: progressbar-filled, knobBefore: progressbar-filled },
-	default-vertical: {background: progressbar-vertical, knob: progressbar-filled-vertical, knobBefore: progressbar-filled-vertical }
+	default-vertical: {background: progressbar-vertical, knob: progressbar-filled-vertical, knobBefore: progressbar-filled-vertical },
+	narrow-horizontal: {background: progressbar-narrow, knob: progressbar-narrow-filled, knobBefore: progressbar-narrow-filled },
+	narrow-horizontal-grey: {background: progressbar-narrow, knob: progressbar-narrow-filled-grey, knobBefore: progressbar-narrow-filled-grey }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-horizontal: {background: slider, knob: slider-knob, knobOver: slider-knob-over, knobDown: slider-knob-down, disabledKnob: slider-knob-disabled },
@@ -128,7 +130,8 @@ com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
 	toggle: {checked: button-down, focusBorder: border, down: button-down, up: button, over: button-over, disabled: button },
 	close: {down: button-down, up: button, over: button-over, imageUp: icon-close, disabled: button },
 	close-active-tab: {down: button-down, imageUp: icon-close, up: button-blue, over: button-blue-over, disabled: button-blue },
-	close-window: {up: button-window-bg, down: button-down, over: button-over, imageUp: icon-close, disabled: button }
+	close-window: {up: button-window-bg, down: button-down, over: button-over, imageUp: icon-close, disabled: button },
+	pack-log: {down: button-down, over: button-over}
 },
 com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle: {
 	default: {down: button-down, up: button, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey, focusBorder: border },

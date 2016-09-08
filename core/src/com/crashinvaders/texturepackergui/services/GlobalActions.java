@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.PackDialogController;
+import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
 import com.crashinvaders.texturepackergui.events.PackListOrderChanged;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
@@ -171,6 +171,7 @@ public class GlobalActions implements ActionContainer {
 
         interfaceService.showDialog(packDialogController.getClass());
         packDialogController.launchPack(packs);
+
     }
 
     @LmlAction("packSelected") public void packSelected() {

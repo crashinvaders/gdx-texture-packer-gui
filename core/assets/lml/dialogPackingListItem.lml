@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable onecolumn="true">
+
+    <vistable grow="true">
+
+        <!--<visimage style="custom/ic-sandglass3" imagescaling="none"/>-->
+        <animatedimage
+                id="imgStateIndicator"
+                minwidth="24"
+                frames="custom/ic-sandglass0;custom/ic-sandglass1;custom/ic-sandglass2;custom/ic-sandglass3;custom/ic-sandglass4;custom/ic-sandglass5;custom/ic-sandglass6;custom/ic-sandglass7"
+                delay="0.1"
+                scaling="none"/>
+
+        <actor width="12"/>
+
+        <vislabel id="lblPackName"/>
+
+        <actor width="12"/>
+
+        <vislabel id="lblState" growx="true"/>
+
+        <actor width="12"/>
+
+        <visimagebutton
+                id="btnLog"
+                style="pack-log"
+                image="custom/ic-log-msg"
+                imagescaling="none"
+                generatedisabled="true"
+                disabled="true"
+                tooltip="@seeLog"
+                tablepad="8f"
+                focusborder="false"/>
+
+    </vistable>
+
+</vistable>

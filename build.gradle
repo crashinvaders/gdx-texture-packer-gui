@@ -50,6 +50,7 @@ project(":core") {
         compile "com.github.czyzby:gdx-lml-vis:$lmlVersion"
         compile "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"
         compile 'commons-io:commons-io:2.5'
+        compile 'com.github.depsypher:pngtastic:1.2'
     }
 }
 

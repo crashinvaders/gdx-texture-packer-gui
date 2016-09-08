@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        id="window"
+        title="Package log"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false">
+
+    <visscrollpane
+            id="scrLog"
+            style="text-output"
+            width="480"
+            height="320"
+            fill="true"
+            align="top"
+            disabledx="true"
+            fadescrollbars="false"
+            overscroll="false"
+            flickscroll="false">
+        <container id="containerLog" fill="true"/>
+    </visscrollpane>
+
+    <textbutton id="btnCopyToClipboard"
+                text="@copyToClipboard"
+                align="right"
+                focusborder="false"/>
+
+</visdialog>

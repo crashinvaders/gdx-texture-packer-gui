@@ -108,7 +108,7 @@ public class PackModel {
 	}
 
 	public String getCanonicalFilename() {
-		String filename = this.filename.trim().isEmpty() ? getCanonicalName() : this.filename;
+		String filename = this.filename.trim().isEmpty() ? getCanonicalName()+settings.atlasExtension : this.filename;
 		return filename;
 	}
 
