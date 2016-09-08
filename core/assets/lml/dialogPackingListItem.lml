@@ -13,7 +13,7 @@
                 delay="0.1"
                 scaling="none"/>
 
-        <actor width="12"/>
+        <actor width="4"/>
 
         <vislabel id="lblPackName"/>
 

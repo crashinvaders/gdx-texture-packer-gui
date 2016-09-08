@@ -25,9 +25,12 @@
         <container id="containerLog" fill="true"/>
     </visscrollpane>
 
-    <textbutton id="btnCopyToClipboard"
-                text="@copyToClipboard"
-                align="right"
-                focusborder="false"/>
+    <imagetextbutton
+            id="btnCopyToClipboard"
+            image="custom/ic-clipboard"
+            imagescaling="none"
+            text="@copyToClipboard"
+            align="right"
+            focusborder="false"/>
 
 </visdialog>
