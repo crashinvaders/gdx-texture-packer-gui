@@ -119,9 +119,6 @@ public class PackModel {
 		String atlasPath = null;
 		if (outputDir != null && !outputDir.trim().isEmpty()) {
 			String filename = getCanonicalFilename();
-			if (!filename.contains(".")) {
-				filename += ".atlas";
-			}
 			atlasPath = outputDir + File.separator + filename;
 		}
 		return atlasPath;
