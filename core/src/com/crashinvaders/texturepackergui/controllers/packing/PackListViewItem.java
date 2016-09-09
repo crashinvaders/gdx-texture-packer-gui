@@ -13,9 +13,6 @@ import com.github.czyzby.lml.scene2d.ui.reflected.AnimatedImage;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 
-import java.awt.*;
-import java.awt.datatransfer.StringSelection;
-
 class PackListViewItem extends Container<VisTable> {
 
     private final PackModel pack;
@@ -88,7 +85,7 @@ class PackListViewItem extends Container<VisTable> {
         btnCopyToClipboard.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection(log), null);
+                Gdx.app.getClipboard().setContents(log);
             }
         });
 
