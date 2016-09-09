@@ -34,7 +34,7 @@
 
     <progressbar
             id="progressBar"
-            style="narrow-horizontal-grey"
+            style="narrow-horizontal"
             growx="true"/>
 
 </visdialog>

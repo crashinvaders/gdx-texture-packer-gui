@@ -18,6 +18,7 @@ com.badlogic.gdx.graphics.Color: {
 	semi-trn: { hex: ffffff88 },
 	orange: { hex: eb5c49ff },
 	light-grey: { hex: a0a0a0ff },
+	light-green: { hex: 8bcd4bff },
 	title-icon-tint: { hex: ffffff88 },
 
 	output-green: { hex: 79e053ff },
@@ -28,8 +29,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: {name: white, color: {r: 0, g: 0, b: 0, a: 0.45} },
 	tpTitleBg: {name: white, color: {hex:333333ff} },
 	mainMenuBg: {name: white, color: {hex:333333ff} },
-	darkBorder: {name: custom/white_frame, color: grey }
-	listBorder: {name: custom/list-border, color: white }
+	darkBorder: {name: custom/white_frame, color: grey },
+	listBorder: {name: custom/list-border, color: white },
+	progressBarErr: {name: progressbar-narrow-white, color: orange },
+	progressBarSucc: {name: progressbar-narrow-white, color: light-green },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {down: button-down, up: button },

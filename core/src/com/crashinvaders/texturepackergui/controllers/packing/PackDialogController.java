@@ -5,9 +5,10 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.packing.processors.PackingProcessor;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingManager;
@@ -25,6 +26,7 @@ import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.FocusManager;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.adapter.ListAdapter;
 import com.kotcrab.vis.ui.widget.*;
 
@@ -83,9 +85,9 @@ public class PackDialogController implements ActionContainer {
         }
 
         PackProcessingManager packProcessingManager = new PackProcessingManager(
-                new PackingProcessor(),
+//                new PackingProcessor(),
 //                new CompositePackProcessor(new PackingProcessor(), new CompressingProcessor()),
-//                new TestProcessor(),
+                new TestProcessor(),
                 new PackWorkerListener());
 
         for (int i = 0; i < packs.size; i++) {
@@ -136,6 +138,17 @@ public class PackDialogController implements ActionContainer {
             // If there is only one pack, show log on error
             if (errors && adapter.size() == 1) {
                 adapter.getView(adapter.get(0)).showLogWindow();
+            }
+
+            // Indicate total result by changing progress bar color
+            {
+                ProgressBar.ProgressBarStyle style = new ProgressBar.ProgressBarStyle(progressBar.getStyle());
+                Drawable fill = errors ?
+                        VisUI.getSkin().getDrawable("progressBarErr") :
+                        VisUI.getSkin().getDrawable("progressBarSucc");
+                style.knob = fill;
+                style.knobBefore = fill;
+                progressBar.setStyle(style);
             }
         }
 

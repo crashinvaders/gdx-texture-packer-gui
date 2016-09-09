@@ -798,6 +798,13 @@ progressbar-narrow-filled-grey
   orig: 1, 4
   offset: 0, 0
   index: -1
+progressbar-narrow-white
+  rotate: false
+  xy: 65, 6
+  size: 1, 4
+  orig: 1, 4
+  offset: 0, 0
+  index: -1
 progressbar-vertical
   rotate: false
   xy: 451, 469
@@ -883,28 +890,28 @@ select-up
   index: -1
 selection
   rotate: false
-  xy: 292, 353
+  xy: 308, 411
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 separator
   rotate: false
-  xy: 308, 411
+  xy: 300, 389
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 tree-over
   rotate: false
-  xy: 308, 411
+  xy: 300, 389
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 separator-menu
   rotate: false
-  xy: 300, 389
+  xy: 65, 3
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
@@ -960,14 +967,14 @@ splitpane-over
   index: -1
 splitpane-vertical
   rotate: false
-  xy: 65, 6
+  xy: 284, 327
   size: 1, 4
   orig: 1, 4
   offset: 0, 0
   index: -1
 splitpane-vertical-over
   rotate: false
-  xy: 284, 327
+  xy: 292, 350
   size: 1, 4
   orig: 1, 4
   offset: 0, 0
@@ -1107,7 +1114,7 @@ vis-radio-tick-disabled
   index: -1
 vis-red
   rotate: false
-  xy: 349, 451
+  xy: 68, 9
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
