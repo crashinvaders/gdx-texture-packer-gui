@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.PackingProcessor;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingManager;
@@ -85,9 +86,9 @@ public class PackDialogController implements ActionContainer {
         }
 
         PackProcessingManager packProcessingManager = new PackProcessingManager(
-//                new PackingProcessor(),
+                new PackingProcessor(),
 //                new CompositePackProcessor(new PackingProcessor(), new CompressingProcessor()),
-                new TestProcessor(),
+//                new TestProcessor(),
                 new PackWorkerListener());
 
         for (int i = 0; i < packs.size; i++) {
