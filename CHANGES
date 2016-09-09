@@ -1,0 +1,13 @@
+[4.1.0]
+- Parallel processing for atlas packing
+- Compression option for png atlases, see https://github.com/depsypher/pngtastic
+- "square" and "grid" pack setting added
+
+[4.0.0]
+- App rewritten from the scratch.
+- New reworked UI based on VisUI and LML
+- All reported bugs (for 3.2.0) were fixed, see https://github.com/aurelienRibonBackup/libgdx-texturepacker-gui/issues
+- New atlas preview widget, now with basic inspection capabilities
+
+[3.2.0]
+- Last Aurelien Ribon's release (2012)
