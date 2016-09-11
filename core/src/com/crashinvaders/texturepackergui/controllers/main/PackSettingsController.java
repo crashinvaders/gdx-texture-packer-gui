@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
@@ -12,6 +13,8 @@ public class PackSettingsController {
     @LmlActor("btnCopySettings") Button btnCopySettings;
     @LmlActor("cboEncodingFormat") VisSelectBox cboEncodingFormat;
     @LmlActor("cboOutputFormat") VisSelectBox cboOutputFormat;
+    @LmlActor("cboCompression") VisSelectBox cboCompression;
+    @LmlActor("compressionViewContainer") Container compressionViewContainer;
     @LmlActor("spnMinPageWidth") Spinner spnMinPageWidth;
     @LmlActor("spnMinPageHeight") Spinner spnMinPageHeight;
     @LmlActor("spnMaxPageWidth") Spinner spnMaxPageWidth;

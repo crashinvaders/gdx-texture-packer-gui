@@ -30,4 +30,12 @@ public class WidgetData {
     );
 
     public static final Array<String> outputFormats = Array.with("png", "jpg");
+
+    public enum compressionPng {
+        none, png0, png1, png2
+    }
+
+    public enum compressionJpg {
+        none, jpg0, jpg1, jpg2
+    }
 }

@@ -33,6 +33,23 @@
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
+                    <:item title="Compression">
+                        <visselectbox
+                                id="cboCompression"
+                                onchange="onSettingsCboChanged"/>
+                    </:item>
+
+                    <:item title="@psJpegQuality">
+                        <floatspinner
+                                id="spnJpegQuality"
+                                onchange="onSettingsFloatSpinnerChanged"
+                                min="0"
+                                max="1"
+                                step="0.05"/>
+                    </:item>
+
+                    <container id="compressionViewContainer" growx="true" colspan="2" row="true"/>
+
                     <:separator/>
 
                     <:item title="@psMinPageWidth">
@@ -121,17 +138,6 @@
                         <visselectbox
                                 id="cboWrapY"
                                 onchange="onSettingsCboChanged"/>
-                    </:item>
-
-                    <:separator/>
-
-                    <:item title="@psJpegQuality">
-                        <floatspinner
-                                id="spnJpegQuality"
-                                onchange="onSettingsFloatSpinnerChanged"
-                                min="0"
-                                max="1"
-                                step="0.05"/>
                     </:item>
 
                 </vistable>

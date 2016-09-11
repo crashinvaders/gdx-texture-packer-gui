@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable>
+    <label>Test</label>
+    <visprogressbar/>
+    <:row/>
+    <label>Hello</label>
+    <textfield/>
+</vistable>

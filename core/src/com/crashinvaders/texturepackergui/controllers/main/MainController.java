@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
@@ -345,11 +346,16 @@ public class MainController implements ActionContainer, ViewResizer {
         Object value = selectBox.getSelected();
         switch (selectBox.getName()) {
             case "cboEncodingFormat": settings.format = (Pixmap.Format) value; break;
-            case "cboOutputFormat": settings.outputFormat = (String) value; break;
             case "cboMinFilter": settings.filterMin = (Texture.TextureFilter) value; break;
             case "cboMagFilter": settings.filterMag = (Texture.TextureFilter) value; break;
             case "cboWrapX": settings.wrapX = (Texture.TextureWrap) value; break;
             case "cboWrapY": settings.wrapY = (Texture.TextureWrap) value; break;
+            case "cboOutputFormat": {
+                settings.outputFormat = (String) value;
+                updateCompressionOptions();
+                break;
+            }
+            case "cboCompression": onCompressionTypeChanged(); break;
         }
     }
     //endregion
@@ -479,6 +485,47 @@ public class MainController implements ActionContainer, ViewResizer {
             });
             fileMenu.pmOpenRecent.addItem(menuItem);
         }
+    }
+
+    private void updateCompressionOptions() {
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        String outputFormat = pack.getSettings().outputFormat;
+        switch (outputFormat) {
+            case "png":
+                viewsSettings.cboCompression.setItems(WidgetData.compressionPng.values());
+                break;
+            case "jpg":
+                viewsSettings.cboCompression.setItems(WidgetData.compressionJpg.values());
+                break;
+        }
+    }
+
+    private void onCompressionTypeChanged() {
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+        Container container = viewsSettings.compressionViewContainer;
+        Object compression = viewsSettings.cboCompression.getSelected();
+
+        if (compression instanceof WidgetData.compressionPng) {
+            switch (((WidgetData.compressionPng) compression)) {
+                case png0:
+                    container.setActor(parseLml(Gdx.files.internal("lml/testCompression.lml")));
+                    break;
+                default:
+                    container.setActor(null);
+            }
+
+        } else if (compression instanceof WidgetData.compressionJpg) {
+            switch (((WidgetData.compressionJpg) compression)) {
+                default:
+                    container.setActor(null);
+            }
+        }
+
+//        container.invalidateHierarchy();
     }
 
     private Runnable normalizePackListScrollRunnable = new Runnable() {
