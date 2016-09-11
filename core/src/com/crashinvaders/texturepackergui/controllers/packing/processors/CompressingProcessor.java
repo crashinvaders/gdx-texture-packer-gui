@@ -17,13 +17,14 @@ public class CompressingProcessor implements PackProcessor {
         System.out.println("Compression started");
 
         PngOptimizer pngOptimizer = new PngOptimizer(LOG_LEVEL);
+//        pngOptimizer.setCompressor();
 
         TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(
                 Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()),
                 Gdx.files.absolute(pack.getOutputDir()), false);
 
         for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
-            PngImage image = new PngImage(page.textureFile.file().getAbsolutePath(), "LOG_LEVEL");
+            PngImage image = new PngImage(page.textureFile.file().getAbsolutePath(), LOG_LEVEL);
             pngOptimizer.optimize(
                     image,
                     page.textureFile.file().getAbsolutePath(),

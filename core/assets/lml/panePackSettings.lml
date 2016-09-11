@@ -18,7 +18,7 @@
                     <actor growx="true" height="8" colspan="2" row="true"/>
                 </:macro>
 
-                <vistable growx="true" defaultpad="2" defaultminwidth="0" debug="false">
+                <vistable growx="true" defaultpad="2" defaultminwidth="0">
                     <:column column="1" prefwidth="150"/>
 
                     <:item title="@psEncodingFormat">
@@ -39,16 +39,20 @@
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
+                    <:row padtop="-2">
+                        <actor padright="4"/>
+                        <container id="compressionViewContainer" expandx="true" fill="true" row="true"/>
+                    </:row>
+
                     <:item title="@psJpegQuality">
                         <floatspinner
                                 id="spnJpegQuality"
                                 onchange="onSettingsFloatSpinnerChanged"
                                 min="0"
                                 max="1"
-                                step="0.05"/>
+                                step="0.05"
+                                padright="2"/>
                     </:item>
-
-                    <container id="compressionViewContainer" growx="true" colspan="2" row="true"/>
 
                     <:separator/>
 
@@ -58,7 +62,8 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                padright="2"/>
                     </:item>
 
                     <:item title="@psMinPageHeight">
@@ -67,7 +72,8 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                padright="2"/>
                     </:item>
 
                     <:item title="@psMaxPageWidth">
@@ -76,7 +82,8 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                padright="2"/>
                     </:item>
 
                     <:item title="@psMaxPageHeight">
@@ -85,7 +92,8 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                padright="2"/>
                     </:item>
 
                     <:separator/>
@@ -95,7 +103,8 @@
                                 id="spnAlphaThreshold"
                                 onchange="onSettingsIntSpinnerChanged"
                                 min="0"
-                                max="255"/>
+                                max="255"
+                                padright="2"/>
                     </:item>
 
                     <:item title="@psMinFilter">
@@ -117,7 +126,8 @@
                                 id="spnPaddingX"
                                 onchange="onSettingsIntSpinnerChanged"
                                 min="0"
-                                max="64"/>
+                                max="64"
+                                padright="2"/>
                     </:item>
 
                     <:item title="@psPaddingY">
@@ -125,7 +135,8 @@
                                 id="spnPaddingY"
                                 onchange="onSettingsIntSpinnerChanged"
                                 min="0"
-                                max="64"/>
+                                max="64"
+                                padright="2"/>
                     </:item>
 
                     <:item title="@psWrapX">

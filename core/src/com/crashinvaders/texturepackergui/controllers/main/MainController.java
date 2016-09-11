@@ -511,7 +511,10 @@ public class MainController implements ActionContainer, ViewResizer {
 
         if (compression instanceof WidgetData.compressionPng) {
             switch (((WidgetData.compressionPng) compression)) {
-                case png0:
+                case pngtastic:
+                    container.setActor(parseLml(Gdx.files.internal("lml/testCompression.lml")));
+                    break;
+                case zopfli:
                     container.setActor(parseLml(Gdx.files.internal("lml/testCompression.lml")));
                     break;
                 default:
