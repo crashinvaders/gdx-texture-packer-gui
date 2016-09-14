@@ -8,10 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.PackingProcessor;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.PngtasticCompressingProcessor;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.ZopfliCompressingProcessor;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.utils.packprocessing.CompositePackProcessor;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingManager;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -74,11 +79,11 @@ public class PackDialogController implements ActionContainer {
         prefs.flush();
     }
 
-    public void launchPack(final PackModel pack) {
-        launchPack(Array.with(pack));
+    public void launchPack(ProjectModel project, PackModel pack) {
+        launchPack(project, Array.with(pack));
     }
 
-    public void launchPack(final Array<PackModel> packs) {
+    public void launchPack(ProjectModel project, Array<PackModel> packs) {
         PackListAdapter adapter = (PackListAdapter)listItems.getListView().getAdapter();
         adapter.clear();
         for (PackModel pack : packs) {
@@ -86,8 +91,10 @@ public class PackDialogController implements ActionContainer {
         }
 
         PackProcessingManager packProcessingManager = new PackProcessingManager(
-                new PackingProcessor(),
-//                new CompositePackProcessor(new PackingProcessor(), new CompressingProcessor()),
+                new CompositePackProcessor(
+                        new PackingProcessor(),
+                        new PngtasticCompressingProcessor(),
+                        new ZopfliCompressingProcessor()),
 //                new TestProcessor(),
                 new PackWorkerListener());
 
@@ -95,7 +102,7 @@ public class PackDialogController implements ActionContainer {
             PackModel pack = packs.get(i);
             packProcessingManager.postPack(pack);
         }
-        packProcessingManager.execute();
+        packProcessingManager.execute(project);
     }
 
     /** @return localized string */
@@ -158,22 +165,23 @@ public class PackDialogController implements ActionContainer {
         }
 
         @Override
-        public void onError(final PackModel pack, String log, Exception e) {
-            onFinished(pack, log);
+        public void onError(final PackModel pack, String log, ObjectMap metadata, Exception e) {
+            onFinished(pack, log, metadata);
 
             adapter.getView(pack).setToError(e);
             errors = true;
         }
 
         @Override
-        public void onSuccess(PackModel pack, String log) {
-            onFinished(pack, log);
+        public void onSuccess(PackModel pack, String log, ObjectMap metadata) {
+            onFinished(pack, log, metadata);
 
             adapter.getView(pack).setToSuccess();
         }
 
-        private void onFinished(final PackModel pack, String log) {
+        private void onFinished(final PackModel pack, String log, ObjectMap metadata) {
             adapter.getView(pack).setLog(log);
+            adapter.getView(pack).parseMetadata(metadata);
 
             finishedCounter += 1;
             progressBar.setValue(finishedCounter);
@@ -190,7 +198,7 @@ public class PackDialogController implements ActionContainer {
 
     private static class TestProcessor implements PackProcessor {
         @Override
-        public void processPackage(PackModel packModel) {
+        public void processPackage(ProjectModel projectModel, PackModel packModel, ObjectMap metadata) {
             try {
                 System.out.println("start processing");
                 Thread.sleep(MathUtils.random(500, 2500));

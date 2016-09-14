@@ -15,11 +15,15 @@
 
         <actor width="4"/>
 
-        <vislabel id="lblPackName"/>
+        <vistable growx="true">
 
-        <actor width="12"/>
+            <vislabel id="lblPackName"/>
 
-        <vislabel id="lblState" growx="true"/>
+            <actor width="4"/>
+
+            <vislabel style="small" id="lblMetadata" growx="true"/>
+
+        </vistable>
 
         <actor width="12"/>
 

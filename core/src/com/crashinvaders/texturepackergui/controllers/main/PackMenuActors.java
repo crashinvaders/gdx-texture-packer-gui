@@ -4,7 +4,7 @@ import com.github.czyzby.lml.annotation.LmlActor;
 import com.kotcrab.vis.ui.widget.MenuItem;
 
 @SuppressWarnings("WeakerAccess")
-public class PackMenuController {
+public class PackMenuActors {
 
     @LmlActor("miPackPackSelected") MenuItem miPackSelected;
     @LmlActor("miPackPackAll") MenuItem miPackAll;

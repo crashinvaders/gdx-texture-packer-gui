@@ -7,7 +7,7 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
 @SuppressWarnings("WeakerAccess")
-public class PackSettingsController {
+public class PackSettingsActors {
 
     @LmlActor("btnCopySettings") Button btnCopySettings;
     @LmlActor("cboEncodingFormat") VisSelectBox cboEncodingFormat;

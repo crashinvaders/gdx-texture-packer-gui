@@ -5,7 +5,7 @@ import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 
 @SuppressWarnings("WeakerAccess")
-public class FileMenuController {
+public class FileMenuActors {
 
     @LmlActor("miFileNew") MenuItem miNew;
     @LmlActor("miFileOpen") MenuItem miOpen;

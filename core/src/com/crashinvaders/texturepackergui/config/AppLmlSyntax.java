@@ -1,10 +1,11 @@
 package com.crashinvaders.texturepackergui.config;
 
 import com.crashinvaders.texturepackergui.config.attributes.*;
-import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
 import com.crashinvaders.texturepackergui.config.tags.FixedFloatSpinnerLmlTagProvider;
 import com.crashinvaders.texturepackergui.config.tags.FixedIntSpinnerLmlTagProvider;
+import com.crashinvaders.texturepackergui.config.tags.ShrinkContainerLmlTag;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
+import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
 
 public class AppLmlSyntax extends VisLmlSyntax {
 
@@ -15,6 +16,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addTagProvider(new Canvas.CanvasLmlTagProvider(), "canvas");
         addTagProvider(new FixedIntSpinnerLmlTagProvider(), "intSpinner");
         addTagProvider(new FixedFloatSpinnerLmlTagProvider(), "floatSpinner");
+        addTagProvider(new ShrinkContainerLmlTag.Provider(), "shrinkContainer");
     }
 
     @Override
@@ -40,6 +42,12 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new ContainerPadRightLmlAttribute(), "padRight");
         addAttributeProcessor(new ContainerPadTopLmlAttribute(), "padTop");
         addAttributeProcessor(new ContainerPadBottomLmlAttribute(), "padBottom");
+
+        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Top(), "padTop");
+        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Left(), "padLeft");
+        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Bottom(), "padBottom");
+        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Right(), "padRight");
+        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.All(), "pad");
     }
 
     @Override

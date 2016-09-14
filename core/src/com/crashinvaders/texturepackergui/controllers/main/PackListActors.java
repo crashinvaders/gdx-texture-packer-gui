@@ -7,7 +7,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTextField;
 
 @SuppressWarnings("WeakerAccess")
-public class ProjectConfigController {
+public class PackListActors {
 
     @LmlActor("btnMenuNewPack") Button btnMenuNewPack;
     @LmlActor("btnMenuRenamePack") Button btnMenuRenamePack;

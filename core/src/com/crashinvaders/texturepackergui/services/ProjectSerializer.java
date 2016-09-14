@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.services;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -8,7 +9,11 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -24,6 +29,9 @@ import static com.crashinvaders.texturepackergui.utils.FileUtils.saveTextToFile;
 
 @Component
 public class ProjectSerializer {
+    private static final String TAG = ProjectSerializer.class.getSimpleName();
+    private static final String PACK_DIVIDER = "---";
+    private static final String SECTION_DIVIDER = "-PROJ-";
 
     @Inject EventDispatcher eventDispatcher;
     @Inject LocaleService localeService;
@@ -70,7 +78,19 @@ public class ProjectSerializer {
             }
         }
 
+        serializeProjectSection(projectModel, sb);
+
         return sb.toString();
+    }
+
+    private void serializeProjectSection(ProjectModel projectModel, StringBuilder sb) {
+        sb.append("\n\n").append(SECTION_DIVIDER).append("\n\n");
+
+        PngCompressionModel pngCompression = projectModel.getPngCompression();
+        if (pngCompression != null) {
+            sb.append("pngCompressionType=").append(pngCompression.getType().key).append("\n");
+            sb.append("pngCompressionData=").append(pngCompression.serializeState()).append("\n");
+        }
     }
 
     private String serializePack(PackModel pack, FileHandle root) {
@@ -121,7 +141,16 @@ public class ProjectSerializer {
     private ProjectModel deserializeProject(String serializedProject, FileHandle root) {
         ProjectModel project = new ProjectModel();
 
-        String[] serializedPacks = serializedProject.split("---");
+        String[] serializedSections = serializedProject.split(SECTION_DIVIDER);
+        if (serializedSections.length == 0) return project;
+
+        // Project section is always in the end
+        if (serializedSections.length > 1) {
+            String projectSection = serializedSections[1];
+            deserializeProjectSection(project, projectSection);
+        }
+
+        String[] serializedPacks = serializedSections[0].split(PACK_DIVIDER);
 
         for (String serializedPack : serializedPacks) {
             if (serializedPack.trim().length() == 0) continue;
@@ -132,6 +161,29 @@ public class ProjectSerializer {
         return project;
     }
 
+    private void deserializeProjectSection(ProjectModel project, String projectSection) {
+        Array<String> lines = splitAndTrim(projectSection);
+
+        PngCompressionType pngCompType = PngCompressionType.findByKey(find(lines, "pngCompressionType=", null));
+        if (pngCompType != null) {
+            PngCompressionModel pngCompModel = null;
+            switch (pngCompType) {
+                case PNGTASTIC:
+                    pngCompModel = new PngtasticCompressionModel();
+                    break;
+                case ZOPFLI:
+                    pngCompModel = new ZopfliCompressionModel();
+                    break;
+                default:
+                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + pngCompType);
+            }
+            if (pngCompModel != null) {
+                String pngCompData = find(lines, "pngCompressionData=", null);
+                pngCompModel.deserializeState(pngCompData);
+            }
+            project.setPngCompression(pngCompModel);
+        }
+    }
 
     private PackModel deserializePack(String serializedData, FileHandle root) {
         PackModel pack = new PackModel();

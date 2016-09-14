@@ -7,13 +7,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
+import com.crashinvaders.texturepackergui.controllers.PngtasticCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
+import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
+import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.events.PackListOrderChanged;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -32,6 +35,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
+    private static final String LOG = GlobalActions.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -166,20 +170,22 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("packAll") public void packAll() {
+        ProjectModel project = getProject();
         Array<PackModel> packs = getProject().getPacks();
         if (packs.size == 0) return;
 
         interfaceService.showDialog(packDialogController.getClass());
-        packDialogController.launchPack(packs);
+        packDialogController.launchPack(project, packs);
 
     }
 
     @LmlAction("packSelected") public void packSelected() {
+        ProjectModel project = getProject();
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         interfaceService.showDialog(packDialogController.getClass());
-        packDialogController.launchPack(pack);
+        packDialogController.launchPack(project, pack);
     }
 
     @LmlAction("newProject") public void newProject() {
@@ -333,6 +339,22 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("getCurrentVersion") public String getCurrentVersion() {
         return AppConstants.version.toString();
+    }
+
+    @LmlAction("showPngCompSettings") public void showPngCompSettings() {
+        PngCompressionModel compression = getProject().getPngCompression();
+        if (compression == null) return;
+
+        switch (compression.getType()) {
+            case PNGTASTIC:
+                interfaceService.showDialog(PngtasticCompDialogController.class);
+                break;
+            case ZOPFLI:
+                interfaceService.showDialog(ZopfliCompDialogController.class);
+                break;
+            default:
+                Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
+        }
     }
 
     /** @return localized string */

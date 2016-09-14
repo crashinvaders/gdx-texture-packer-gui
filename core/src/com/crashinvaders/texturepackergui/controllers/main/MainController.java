@@ -17,7 +17,11 @@ import com.crashinvaders.texturepackergui.services.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -57,11 +61,12 @@ public class MainController implements ActionContainer, ViewResizer {
     @ViewStage Stage stage;
 
     @LmlActor("canvas") Canvas canvas;
-    @LmlInject() ProjectConfigController viewsPacks;
-    @LmlInject() PackSettingsController viewsSettings;
-    @LmlInject() FileMenuController fileMenu;
-    @LmlInject() PackMenuController packMenu;
-    @LmlInject() HelpMenuController helpMenu;
+    @LmlInject() PackListActors actorsPacks;
+    @LmlInject() PackSettingsActors actorsPackSettings;
+    @LmlInject() GlobalSettingsActors actorsGlobalSettings;
+    @LmlInject() FileMenuActors actorsFileMenu;
+    @LmlInject() PackMenuActors actorsPackMenu;
+    @LmlInject() HelpMenuActors actorsHelpMenu;
 
     private ToastManager toastManager;
 
@@ -71,23 +76,25 @@ public class MainController implements ActionContainer, ViewResizer {
     @SuppressWarnings("unchecked")
     @LmlAfter
     void initialize() {
-        initialized = true;
-
-        viewsSettings.cboEncodingFormat.setItems(WidgetData.textureFormats);
-        viewsSettings.cboOutputFormat.setItems(WidgetData.outputFormats);
-        viewsSettings.cboMinFilter.setItems(WidgetData.textureFilters);
-        viewsSettings.cboMagFilter.setItems(WidgetData.textureFilters);
-        viewsSettings.cboWrapX.setItems(WidgetData.textureWraps);
-        viewsSettings.cboWrapY.setItems(WidgetData.textureWraps);
+        actorsPackSettings.cboEncodingFormat.setItems(WidgetData.textureFormats);
+        actorsPackSettings.cboOutputFormat.setItems(WidgetData.outputFormats);
+        actorsPackSettings.cboMinFilter.setItems(WidgetData.textureFilters);
+        actorsPackSettings.cboMagFilter.setItems(WidgetData.textureFilters);
+        actorsPackSettings.cboWrapX.setItems(WidgetData.textureWraps);
+        actorsPackSettings.cboWrapY.setItems(WidgetData.textureWraps);
+        actorsGlobalSettings.cboPngCompression.setItems(WidgetData.CompressionPng.values());
 
         toastManager = new ToastManager(getStage());
         toastManager.setAlignment(Align.bottomRight);
 
         canvasController.initialize(canvas);
 
+        initialized = true;
+
         updatePackList();
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
+        updatePngCompression();
     }
 
     @Override
@@ -104,6 +111,7 @@ public class MainController implements ActionContainer, ViewResizer {
             updatePackList();
             updateViewsFromPack(event.getProject().getSelectedPack());
             updateRecentProjects();
+            updatePngCompression();
         }
     }
 
@@ -115,6 +123,9 @@ public class MainController implements ActionContainer, ViewResizer {
                     break;
                 case PACKS:
                     updatePackList();
+                    break;
+                case PNG_COMPRESSION:
+                    updatePngCompression();
                     break;
             }
         }
@@ -130,23 +141,23 @@ public class MainController implements ActionContainer, ViewResizer {
                     break;
                 case INPUT:
                     if (event.getPack() == getSelectedPack()) {
-                        viewsPacks.edtInputDir.setProgrammaticChangeEvents(false);
-                        viewsPacks.edtInputDir.setText(event.getPack().getInputDir());
-                        viewsPacks.edtInputDir.setProgrammaticChangeEvents(true);
+                        actorsPacks.edtInputDir.setProgrammaticChangeEvents(false);
+                        actorsPacks.edtInputDir.setText(event.getPack().getInputDir());
+                        actorsPacks.edtInputDir.setProgrammaticChangeEvents(true);
                     }
                     break;
                 case OUTPUT:
                     if (event.getPack() == getSelectedPack()) {
-                        viewsPacks.edtOutputDir.setProgrammaticChangeEvents(false);
-                        viewsPacks.edtOutputDir.setText(event.getPack().getOutputDir());
-                        viewsPacks.edtOutputDir.setProgrammaticChangeEvents(true);
+                        actorsPacks.edtOutputDir.setProgrammaticChangeEvents(false);
+                        actorsPacks.edtOutputDir.setText(event.getPack().getOutputDir());
+                        actorsPacks.edtOutputDir.setProgrammaticChangeEvents(true);
                     }
                     break;
                 case FILENAME:
                     if (event.getPack() == getSelectedPack()) {
-                        viewsPacks.edtFileName.setProgrammaticChangeEvents(false);
-                        viewsPacks.edtFileName.setText(event.getPack().getFilename());
-                        viewsPacks.edtFileName.setProgrammaticChangeEvents(true);
+                        actorsPacks.edtFileName.setProgrammaticChangeEvents(false);
+                        actorsPacks.edtFileName.setText(event.getPack().getFilename());
+                        actorsPacks.edtFileName.setProgrammaticChangeEvents(true);
                     }
                     break;
             }
@@ -161,7 +172,7 @@ public class MainController implements ActionContainer, ViewResizer {
 
     @OnEvent(PackListOrderChanged.class) void onEvent(PackListOrderChanged event) {
         if (initialized) {
-            Array items = viewsPacks.listPacks.getItems();
+            Array items = actorsPacks.listPacks.getItems();
             items.clear();
             items.addAll(getProject().getPacks());
         }
@@ -338,6 +349,8 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @LmlAction("onSettingsCboChanged") void onSettingsCboChanged(VisSelectBox selectBox) {
+        if (!initialized) return;
+
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -345,11 +358,12 @@ public class MainController implements ActionContainer, ViewResizer {
         Object value = selectBox.getSelected();
         switch (selectBox.getName()) {
             case "cboEncodingFormat": settings.format = (Pixmap.Format) value; break;
-            case "cboOutputFormat": settings.outputFormat = (String) value; break;
             case "cboMinFilter": settings.filterMin = (Texture.TextureFilter) value; break;
             case "cboMagFilter": settings.filterMag = (Texture.TextureFilter) value; break;
             case "cboWrapX": settings.wrapX = (Texture.TextureWrap) value; break;
             case "cboWrapY": settings.wrapY = (Texture.TextureWrap) value; break;
+            case "cboOutputFormat": settings.outputFormat = (String) value; break;
+            case "cboPngCompression": onPngCompressionTypeChanged(); break;
         }
     }
     //endregion
@@ -386,74 +400,81 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     private void updateViewsFromPack(PackModel pack) {
-        if (viewsPacks.listPacks.getSelected() != pack) {
-            viewsPacks.listPacks.setSelected(pack);
+        if (actorsPacks.listPacks.getSelected() != pack) {
+            actorsPacks.listPacks.setSelected(pack);
         }
 
         if (pack != null) {
-            viewsPacks.edtInputDir.setText(pack.getInputDir());
-            viewsPacks.edtOutputDir.setText(pack.getOutputDir());
-            viewsPacks.edtFileName.setText(pack.getFilename());
-            viewsPacks.edtFileName.setMessageText(pack.getName() + ".atlas");
+            actorsPacks.edtInputDir.setText(pack.getInputDir());
+            actorsPacks.edtOutputDir.setText(pack.getOutputDir());
+            actorsPacks.edtFileName.setText(pack.getFilename());
+            actorsPacks.edtFileName.setMessageText(pack.getName() + ".atlas");
         } else {
-            viewsPacks.edtInputDir.setText(null);
-            viewsPacks.edtOutputDir.setText(null);
-            viewsPacks.edtFileName.setText(null);
+            actorsPacks.edtInputDir.setText(null);
+            actorsPacks.edtOutputDir.setText(null);
+            actorsPacks.edtFileName.setText(null);
         }
 
         if (pack != null) {
             TexturePacker.Settings settings = pack.getSettings();
 
-            viewsSettings.cbUseFastAlgorithm.setChecked(settings.fast);
-            viewsSettings.cbEdgePadding.setChecked(settings.edgePadding);
-            viewsSettings.cbStripWhitespaceX.setChecked(settings.stripWhitespaceX);
-            viewsSettings.cbStripWhitespaceY.setChecked(settings.stripWhitespaceY);
-            viewsSettings.cbAllowRotation.setChecked(settings.rotation);
-            viewsSettings.cbIncludeSubdirs.setChecked(settings.combineSubdirectories);
-            viewsSettings.cbBleeding.setChecked(settings.bleed);
-            viewsSettings.cbDuplicatePadding.setChecked(settings.duplicatePadding);
-            viewsSettings.cbForcePot.setChecked(settings.pot);
-            viewsSettings.cbUseAliases.setChecked(settings.alias);
-            viewsSettings.cbIgnoreBlankImages.setChecked(settings.ignoreBlankImages);
-            viewsSettings.cbDebug.setChecked(settings.debug);
-            viewsSettings.cbUseIndices.setChecked(settings.useIndexes);
-            viewsSettings.cbPremultiplyAlpha.setChecked(settings.premultiplyAlpha);
-            viewsSettings.cbGrid.setChecked(settings.grid);
-            viewsSettings.cbSquare.setChecked(settings.square);
+            actorsPackSettings.cbUseFastAlgorithm.setChecked(settings.fast);
+            actorsPackSettings.cbEdgePadding.setChecked(settings.edgePadding);
+            actorsPackSettings.cbStripWhitespaceX.setChecked(settings.stripWhitespaceX);
+            actorsPackSettings.cbStripWhitespaceY.setChecked(settings.stripWhitespaceY);
+            actorsPackSettings.cbAllowRotation.setChecked(settings.rotation);
+            actorsPackSettings.cbIncludeSubdirs.setChecked(settings.combineSubdirectories);
+            actorsPackSettings.cbBleeding.setChecked(settings.bleed);
+            actorsPackSettings.cbDuplicatePadding.setChecked(settings.duplicatePadding);
+            actorsPackSettings.cbForcePot.setChecked(settings.pot);
+            actorsPackSettings.cbUseAliases.setChecked(settings.alias);
+            actorsPackSettings.cbIgnoreBlankImages.setChecked(settings.ignoreBlankImages);
+            actorsPackSettings.cbDebug.setChecked(settings.debug);
+            actorsPackSettings.cbUseIndices.setChecked(settings.useIndexes);
+            actorsPackSettings.cbPremultiplyAlpha.setChecked(settings.premultiplyAlpha);
+            actorsPackSettings.cbGrid.setChecked(settings.grid);
+            actorsPackSettings.cbSquare.setChecked(settings.square);
 
-            ((IntSpinnerModel)viewsSettings.spnMinPageWidth.getModel()).setValue(settings.minWidth, false);
-            ((IntSpinnerModel)viewsSettings.spnMinPageHeight.getModel()).setValue(settings.minHeight, false);
-            ((IntSpinnerModel)viewsSettings.spnMaxPageWidth.getModel()).setValue(settings.maxWidth, false);
-            ((IntSpinnerModel)viewsSettings.spnMaxPageHeight.getModel()).setValue(settings.maxHeight, false);
-            ((IntSpinnerModel)viewsSettings.spnAlphaThreshold.getModel()).setValue(settings.alphaThreshold, false);
-            ((IntSpinnerModel)viewsSettings.spnPaddingX.getModel()).setValue(settings.paddingX, false);
-            ((IntSpinnerModel)viewsSettings.spnPaddingY.getModel()).setValue(settings.paddingY, false);
+            ((IntSpinnerModel) actorsPackSettings.spnMinPageWidth.getModel()).setValue(settings.minWidth, false);
+            ((IntSpinnerModel) actorsPackSettings.spnMinPageHeight.getModel()).setValue(settings.minHeight, false);
+            ((IntSpinnerModel) actorsPackSettings.spnMaxPageWidth.getModel()).setValue(settings.maxWidth, false);
+            ((IntSpinnerModel) actorsPackSettings.spnMaxPageHeight.getModel()).setValue(settings.maxHeight, false);
+            ((IntSpinnerModel) actorsPackSettings.spnAlphaThreshold.getModel()).setValue(settings.alphaThreshold, false);
+            ((IntSpinnerModel) actorsPackSettings.spnPaddingX.getModel()).setValue(settings.paddingX, false);
+            ((IntSpinnerModel) actorsPackSettings.spnPaddingY.getModel()).setValue(settings.paddingY, false);
 
-            ((FloatSpinnerModel) viewsSettings.spnJpegQuality.getModel()).setValue(BigDecimal.valueOf(settings.jpegQuality), false);
+            ((FloatSpinnerModel) actorsPackSettings.spnJpegQuality.getModel()).setValue(BigDecimal.valueOf(settings.jpegQuality), false);
 
-            viewsSettings.cboEncodingFormat.setSelected(settings.format);
-            viewsSettings.cboOutputFormat.setSelected(settings.outputFormat);
-            viewsSettings.cboMinFilter.setSelected(settings.filterMin);
-            viewsSettings.cboMagFilter.setSelected(settings.filterMag);
-            viewsSettings.cboWrapX.setSelected(settings.wrapX);
-            viewsSettings.cboWrapY.setSelected(settings.wrapY);
+            actorsPackSettings.cboEncodingFormat.setSelected(settings.format);
+            actorsPackSettings.cboOutputFormat.setSelected(settings.outputFormat);
+            actorsPackSettings.cboMinFilter.setSelected(settings.filterMin);
+            actorsPackSettings.cboMagFilter.setSelected(settings.filterMag);
+            actorsPackSettings.cboWrapX.setSelected(settings.wrapX);
+            actorsPackSettings.cboWrapY.setSelected(settings.wrapY);
         }
     }
 
     private void updatePackList() {
         Array<PackModel> packs = getProject().getPacks();
-        viewsPacks.listPacks.setItems(packs);
+        actorsPacks.listPacks.setItems(packs);
 
         PackModel selectedPack = getSelectedPack();
-        if (viewsPacks.listPacks.getSelected() != selectedPack) {
-            viewsPacks.listPacks.setSelected(selectedPack);
+        if (actorsPacks.listPacks.getSelected() != selectedPack) {
+            actorsPacks.listPacks.setSelected(selectedPack);
         }
+    }
+
+	private void updatePngCompression () {
+		PngCompressionModel compModel = getProject().getPngCompression();
+		WidgetData.CompressionPng compValue = WidgetData.CompressionPng.valueOf(compModel == null ? null : compModel.getType());
+        actorsGlobalSettings.cboPngCompression.setSelected(compValue);
+        actorsGlobalSettings.containerPngCompSettings.setVisible(compValue.hasSettings);
     }
 
     private void updateRecentProjects() {
         Array<FileHandle> recentProjects = this.recentProjects.getRecentProjects();
-        fileMenu.miOpenRecent.setDisabled(recentProjects.size == 0);
-        fileMenu.pmOpenRecent.clear();
+        actorsFileMenu.miOpenRecent.setDisabled(recentProjects.size == 0);
+        actorsFileMenu.pmOpenRecent.clear();
         for (final FileHandle file : recentProjects) {
             if (file.equals(getProject().getProjectFile())) continue;
 
@@ -477,14 +498,37 @@ public class MainController implements ActionContainer, ViewResizer {
                     });
                 }
             });
-            fileMenu.pmOpenRecent.addItem(menuItem);
+            actorsFileMenu.pmOpenRecent.addItem(menuItem);
+        }
+    }
+
+    private void onPngCompressionTypeChanged() {
+        if (!initialized) return;
+
+        ProjectModel project = getProject();
+        PngCompressionType compType = actorsGlobalSettings.cboPngCompression.getSelected().type;
+
+        if (compType == null) {
+            project.setPngCompression(null);
+            return;
+        }
+
+        if (project.getPngCompression() == null || compType != project.getPngCompression().getType()) {
+            switch (compType) {
+                case PNGTASTIC:
+                    project.setPngCompression(new PngtasticCompressionModel());
+                    break;
+                case ZOPFLI:
+                    project.setPngCompression(new ZopfliCompressionModel());
+                    break;
+            }
         }
     }
 
     private Runnable normalizePackListScrollRunnable = new Runnable() {
         @Override
         public void run() {
-            Scene2dUtils.scrollDownToSelectedListItem(viewsPacks.scrPacks, viewsPacks.listPacks);
+            Scene2dUtils.scrollDownToSelectedListItem(actorsPacks.scrPacks, actorsPacks.listPacks);
         }
     };
 }
