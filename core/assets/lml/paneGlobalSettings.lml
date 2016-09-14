@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable growx="true" onecolumn="true">
+
+    <vistable align="top" growx="true" tablepad="8" defaultpadbottom="4">
+
+        <label align="left" padright="4">@gsPngCompression</label>
+        <selectbox
+                id="cboPngCompression"
+                change="onSettingsCboChanged"
+                growx="true"
+                padbottom="0"/>
+        <shrinkcontainer
+                id="containerPngCompSettings"
+                visible="true"
+                padleft="4"
+                padbottom="-4">
+            <imagebutton
+                    image="custom/ic-settings"
+                    scaling="none"
+                    focusborder="false"
+                    change="showPngCompSettings"/>
+        </shrinkcontainer>
+
+    </vistable>
+
+</vistable>

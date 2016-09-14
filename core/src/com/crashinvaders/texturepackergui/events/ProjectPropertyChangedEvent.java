@@ -22,6 +22,7 @@ public class ProjectPropertyChangedEvent {
 
     public enum Property {
         SELECTED_PACK,
-        PACKS
+        PACKS,
+        PNG_COMPRESSION,
     }
 }

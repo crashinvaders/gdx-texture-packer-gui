@@ -2,7 +2,9 @@ package com.crashinvaders.texturepackergui.utils.packprocessing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.ThreadPrintStream;
 import org.apache.commons.io.IOUtils;
@@ -32,7 +34,7 @@ public class PackProcessingManager {
         packModels.add(pack);
     }
 
-    synchronized public void execute() {
+    synchronized public void execute(final ProjectModel projectModel) {
         if (processing) throw new IllegalStateException("Already in processing stage");
 
         processing = true;
@@ -44,12 +46,14 @@ public class PackProcessingManager {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    ObjectMap metadataMap = new ObjectMap();
+
                     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ThreadPrintStream.setThreadLocalSystemOut(new PrintStream(outputStream));
                     try {
                         listener.onBegin(packModel);
-                        processor.processPackage(packModel);
-                        listener.onSuccess(packModel, outputStream.toString());
+                        processor.processPackage(projectModel, packModel, metadataMap);
+                        listener.onSuccess(packModel, outputStream.toString(), metadataMap);
                         packProcessed(packModel);
                     } catch (Exception e) {
                         String message = CommonUtils.fetchMessageStack(e);
@@ -57,7 +61,7 @@ public class PackProcessingManager {
                         System.err.println("[output-red]Stack trace:[] ");
                         e.printStackTrace();
 
-                        listener.onError(packModel, outputStream.toString(), e);
+                        listener.onError(packModel, outputStream.toString(), metadataMap, e);
                         packProcessed(packModel);
                     } finally {
                         IOUtils.closeQuietly(outputStream);
@@ -117,20 +121,20 @@ public class PackProcessingManager {
             });
         }
         @Override
-        public void onError(final PackModel pack, final String log, final Exception e) {
+        public void onError(final PackModel pack, final String log, final ObjectMap metadataMap, final Exception e) {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onError(pack, log, e);
+                    listener.onError(pack, log, metadataMap, e);
                 }
             });
         }
         @Override
-        public void onSuccess(final PackModel pack, final String log) {
+        public void onSuccess(final PackModel pack, final String log, final ObjectMap metadataMap) {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onSuccess(pack, log);
+                    listener.onSuccess(pack, log, metadataMap);
                 }
             });
         }
@@ -141,7 +145,7 @@ public class PackProcessingManager {
         void onProcessingFinished();
 
         void onBegin(PackModel pack);
-        void onError(PackModel pack, String log, Exception e);
-        void onSuccess(PackModel pack, String log);
+        void onError(PackModel pack, String log, ObjectMap metadataMap, Exception e);
+        void onSuccess(PackModel pack, String log, ObjectMap metadataMap);
     }
 }

@@ -22,8 +22,14 @@
                 </:titledpane>
             </container>
 
+            <container growy="false" fill="true">
+                <:titledpane title="Global settings" icon="custom/ic-title-global-settings">
+                    <:import path="lml/paneGlobalSettings.lml"/>
+                </:titledpane>
+            </container>
+
             <container growy="true" fill="true">
-                <:titledpane title="@panelTitlePackSettings" icon="custom/ic-title-settings">
+                <:titledpane title="@panelTitlePackSettings" icon="custom/ic-title-pack-settings">
                     <:import path="lml/panePackSettings.lml"/>
                 </:titledpane>
             </container>

@@ -33,17 +33,6 @@
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
-                    <:item title="Compression">
-                        <visselectbox
-                                id="cboCompression"
-                                onchange="onSettingsCboChanged"/>
-                    </:item>
-
-                    <:row padtop="-2">
-                        <actor padright="4"/>
-                        <container id="compressionViewContainer" expandx="true" fill="true" row="true"/>
-                    </:row>
-
                     <:item title="@psJpegQuality">
                         <floatspinner
                                 id="spnJpegQuality"

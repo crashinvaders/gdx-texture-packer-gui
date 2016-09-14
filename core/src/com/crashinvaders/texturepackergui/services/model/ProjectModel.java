@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.services.model;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
+import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 public class ProjectModel {
@@ -11,6 +12,8 @@ public class ProjectModel {
     private PackModel selectedPack;
     private FileHandle projectFile;
     private EventDispatcher eventDispatcher;
+
+    private PngCompressionModel pngCompression;
 
     public ProjectModel() {
     }
@@ -70,6 +73,19 @@ public class ProjectModel {
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, ProjectPropertyChangedEvent.Property.PACKS));
+        }
+    }
+
+    public PngCompressionModel getPngCompression() {
+        return pngCompression;
+    }
+
+    public void setPngCompression(PngCompressionModel pngCompression) {
+        if (this.pngCompression == pngCompression) return;
+        this.pngCompression = pngCompression;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, ProjectPropertyChangedEvent.Property.PNG_COMPRESSION));
         }
     }
 }

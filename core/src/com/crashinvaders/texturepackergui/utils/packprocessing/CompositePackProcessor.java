@@ -1,7 +1,9 @@
 package com.crashinvaders.texturepackergui.utils.packprocessing;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 
 public class CompositePackProcessor implements PackProcessor {
 
@@ -16,9 +18,9 @@ public class CompositePackProcessor implements PackProcessor {
     }
 
     @Override
-    public void processPackage(PackModel packModel) throws Exception {
+    public void processPackage(ProjectModel projectModel, PackModel packModel, ObjectMap metadata) throws Exception {
         for (int i = 0; i < processors.size; i++) {
-            processors.get(i).processPackage(packModel);
+            processors.get(i).processPackage(projectModel, packModel, metadata);
         }
     }
 }
