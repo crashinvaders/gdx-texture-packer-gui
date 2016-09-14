@@ -35,7 +35,7 @@ public class PngtasticCompressingProcessor implements PackProcessor {
                 pngOptimizer.optimize(
                         image,
                         page.textureFile.file().getAbsolutePath(),
-                        false,
+                        compModel.isRemoveGamma(),
                         compModel.getLevel());
             }
         }

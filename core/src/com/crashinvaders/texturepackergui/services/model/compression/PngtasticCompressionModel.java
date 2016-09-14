@@ -8,6 +8,7 @@ import java.io.StringWriter;
 public class PngtasticCompressionModel extends PngCompressionModel {
 
     private int level = 5;
+    private boolean removeGamma = false;
 
     public PngtasticCompressionModel() {
         super(PngCompressionType.PNGTASTIC);
@@ -21,6 +22,14 @@ public class PngtasticCompressionModel extends PngCompressionModel {
         this.level = level;
     }
 
+    public boolean isRemoveGamma() {
+        return removeGamma;
+    }
+
+    public void setRemoveGamma(boolean removeGamma) {
+        this.removeGamma = removeGamma;
+    }
+
     @Override
     public String serializeState() {
         StringWriter buffer = new StringWriter();
@@ -29,6 +38,7 @@ public class PngtasticCompressionModel extends PngCompressionModel {
             json.setWriter(new JsonWriter(buffer));
             json.writeObjectStart();
             json.writeValue("level", level);
+            json.writeValue("removeGamma", removeGamma);
             json.writeObjectEnd();
             return buffer.toString();
         } finally {
@@ -42,5 +52,6 @@ public class PngtasticCompressionModel extends PngCompressionModel {
 
         JsonValue jsonValue = new JsonReader().parse(data);
         level = jsonValue.getInt("level", level);
+        removeGamma = jsonValue.getBoolean("removeGamma", removeGamma);
     }
 }

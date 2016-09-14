@@ -6,7 +6,7 @@
         closebutton="true"
         closeonescape="true">
     <vistable
-            minwidth="192"
+            minwidth="160"
             defaultalign="left"
             padtop="8">
 
@@ -20,6 +20,14 @@
                 step="1"
                 value="5"
                 padright="2"/>
+
+        <:row padtop="4"/>
+
+        <label padright="4">@dCompRemoveGamma</label>
+        <checkbox
+                id="chbRemoveGamma"
+                change="onRemoveGammaChanged"
+                align="left"/>
 
         <:row padtop="4"/>
 

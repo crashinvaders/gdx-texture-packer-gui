@@ -12,6 +12,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
@@ -22,6 +23,7 @@ public class PngtasticCompDialogController implements ActionContainer {
     @Inject ModelService modelService;
 
     @LmlActor("spnLevel") Spinner spnLevel;
+    @LmlActor("chbRemoveGamma") VisCheckBox chbRemoveGamma;
 
     private PngtasticCompressionModel compressionModel;
 
@@ -38,8 +40,14 @@ public class PngtasticCompDialogController implements ActionContainer {
         compressionModel.setLevel(level);
     }
 
+    @LmlAction("onRemoveGammaChanged") void onRemoveGammaChanged() {
+        boolean removeGamma = chbRemoveGamma.isChecked();
+        compressionModel.setRemoveGamma(removeGamma);
+    }
+
     private void updateValuesFromModel() {
         ((IntSpinnerModel) spnLevel.getModel()).setValue(compressionModel.getLevel());
+        chbRemoveGamma.setChecked(compressionModel.isRemoveGamma());
     }
 
     private PngtasticCompressionModel obtainCompressionModel() {
