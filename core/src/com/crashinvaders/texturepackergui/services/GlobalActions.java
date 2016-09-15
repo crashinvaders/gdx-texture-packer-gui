@@ -8,6 +8,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.PngtasticCompDialogController;
+import com.crashinvaders.texturepackergui.controllers.TextureUnpackerDialogController;
 import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
 import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
@@ -355,6 +356,10 @@ public class GlobalActions implements ActionContainer {
             default:
                 Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
         }
+    }
+
+    @LmlAction("launchTextureUnpacker") public void launchTextureUnpacker() {
+        interfaceService.showDialog(TextureUnpackerDialogController.class);
     }
 
     /** @return localized string */

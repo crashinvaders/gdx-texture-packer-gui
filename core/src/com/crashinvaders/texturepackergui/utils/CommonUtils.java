@@ -2,6 +2,8 @@ package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.utils.Array;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +20,12 @@ public class CommonUtils {
             throwable = throwable.getCause();
         }
         return sb.toString();
+    }
+
+    public static String obtainStackTrace(Throwable e) {
+        StringWriter sw = new StringWriter();
+        e.printStackTrace(new PrintWriter(sw));
+        return sw.toString();
     }
 
     /**

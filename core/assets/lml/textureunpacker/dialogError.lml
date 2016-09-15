@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        title="@dTuTitleError"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false">
+
+    <scrollpane
+            style="text-output"
+            expand="true"
+            width="480"
+            height="320"
+            fill="true"
+            align="top"
+            disabledx="true"
+            fadescrollbars="false"
+            overscroll="false"
+            flickscroll="false">
+        <label id="lblLog"
+               style="small"
+               wrap="true"
+               labelalignment="topleft"/>
+    </scrollpane>
+
+    <imagetextbutton
+            id="btnCopyToClipboard"
+            image="custom/ic-clipboard"
+            imagescaling="none"
+            text="@copyToClipboard"
+            align="right"
+            focusborder="false"/>
+</visdialog>

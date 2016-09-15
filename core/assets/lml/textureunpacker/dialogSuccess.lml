@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        title="@dTuTitleSuccess"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false">
+
+    <vistable padleft="32" padright="32" padbottom="4" padtop="8">
+
+        <visimage
+                style="custom/img-version-up-to-date"
+                scaling="none"/>
+
+        <:row padtop="8"/>
+
+        <imagetextbutton
+                id="btnOpenOutputDir"
+                text="@dTuOpenOutputDir"
+                focusborder="false"
+                icon="custom/ic-navigate-to-dir"
+                scaling="none"
+                tablepadleft="4"
+                tablepadright="4"/>
+
+    </vistable>
+</visdialog>
