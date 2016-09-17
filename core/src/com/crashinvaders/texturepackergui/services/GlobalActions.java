@@ -12,9 +12,9 @@ import com.crashinvaders.texturepackergui.controllers.TextureUnpackerDialogContr
 import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
 import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
-import com.crashinvaders.texturepackergui.events.PackListOrderChanged;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
@@ -43,9 +43,11 @@ public class GlobalActions implements ActionContainer {
     @Inject SkinService skinService;
     @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
+    @Inject ModelUtils modelUtils;
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject PackDialogController packDialogController;
+    @Inject CommonDialogs commonDialogs;
 
     /** Common preferences */
     private Preferences prefs;
@@ -57,17 +59,10 @@ public class GlobalActions implements ActionContainer {
         fileChooserHistory = new FileChooserHistory(prefs);
     }
 
-    @LmlAction("newPack") public void newPack() {
-        Dialogs.showInputDialog(getStage(), getString("newPack"), null, new InputDialogAdapter() {
-            @Override
-            public void finished(String input) {
-                PackModel pack = new PackModel();
-                pack.setName(input);
-                getProject().addPack(pack);
-                getProject().setSelectedPack(pack);
-            }
-        });
-    }
+	@LmlAction("newPack")
+	public void newPack () {
+        commonDialogs.newPack();
+	}
 
     @LmlAction("renamePack") public void renamePack() {
         final PackModel pack = getSelectedPack();
@@ -83,21 +78,11 @@ public class GlobalActions implements ActionContainer {
         dialog.setText(pack.getName(), true);
     }
 
-    @LmlAction("makeCopy") public void copyPack() {
+    @LmlAction({"makeCopy", "copyPack"}) public void copyPack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-		Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("makeCopy"), null, true, null, new InputDialogAdapter() {
-			@Override
-			public void finished (String input) {
-				PackModel newPack = new PackModel(pack);
-				newPack.setName(input);
-				getProject().addPack(newPack);
-				getProject().setSelectedPack(newPack);
-			}
-		});
-        getStage().addActor(dialog.fadeIn());
-        dialog.setText(pack.getName(), true);
+        commonDialogs.copyPack(pack);
     }
 
     @LmlAction("deletePack") public void deletePack() {
@@ -118,24 +103,17 @@ public class GlobalActions implements ActionContainer {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        Array<PackModel> packs = getProject().getPacks();
-        int idx = packs.indexOf(pack, true);
-        packs.swap(idx, Math.max(idx-1, 0));
-
-        eventDispatcher.postEvent(new PackListOrderChanged());
+        modelUtils.movePackUp(pack);
     }
 
     @LmlAction("movePackDown") public void movePackDown() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        Array<PackModel> packs = getProject().getPacks();
-        int idx = packs.indexOf(pack, true);
-        packs.swap(idx, Math.min(idx+1, packs.size-1));
-
-        eventDispatcher.postEvent(new PackListOrderChanged());
+        modelUtils.movePackDown(pack);
     }
 
+    //TODO move model logic code to ModelUtils
     @LmlAction("selectNextPack") public void selectNextPack() {
         ProjectModel project = getProject();
         Array<PackModel> packs = project.getPacks();
@@ -153,6 +131,7 @@ public class GlobalActions implements ActionContainer {
         project.setSelectedPack(nextPack);
     }
 
+    //TODO move model logic code to ModelUtils
     @LmlAction("selectPreviousPack") public void selectPreviousPack() {
         ProjectModel project = getProject();
         Array<PackModel> packs = project.getPacks();
@@ -189,6 +168,7 @@ public class GlobalActions implements ActionContainer {
         packDialogController.launchPack(project, pack);
     }
 
+    //TODO move model logic code to ModelUtils
     @LmlAction("newProject") public void newProject() {
         //TODO check if there were any changes
         ProjectModel project = getProject();
@@ -317,6 +297,7 @@ public class GlobalActions implements ActionContainer {
         getStage().addActor(fileChooser.fadeIn());
     }
 
+    //TODO move model logic code to ModelUtils
     @LmlAction("copySettingsToAllPacks") public void copySettingsToAllPacks() {
         PackModel selectedPack = getSelectedPack();
         if (selectedPack == null) return;

@@ -170,7 +170,7 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-    @OnEvent(PackListOrderChanged.class) void onEvent(PackListOrderChanged event) {
+    @OnEvent(PackListOrderChangedEvent.class) void onEvent(PackListOrderChangedEvent event) {
         if (initialized) {
             Array items = actorsPacks.listPacks.getItems();
             items.clear();

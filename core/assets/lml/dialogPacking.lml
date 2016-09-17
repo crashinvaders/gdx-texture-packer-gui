@@ -27,7 +27,7 @@
     <vischeckbox
             id="cbAutoClose"
             align="left"
-            text="@dPackAutoCloseCb"
+            text="@dPackingAutoCloseCb"
             change="onAutoCloseChecked"/>
 
     <actor padtop="2"/>
