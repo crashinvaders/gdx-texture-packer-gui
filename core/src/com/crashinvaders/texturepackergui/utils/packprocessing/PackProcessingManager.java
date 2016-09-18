@@ -13,18 +13,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-//TODO add max threads limitation and queue
 public class PackProcessingManager {
 
     private final Array<PackModel> packModels = new Array<>();
     private final PackProcessor processor;
     private final SyncListener listener;
+    private final ExecutorService executorService;
+
     private boolean processing;
 
     public PackProcessingManager(PackProcessor processor, Listener listener) {
         this.processor = processor;
         this.listener = new SyncListener(listener);
+        this.executorService = Executors.newFixedThreadPool(4);
     }
 
     public void postPack(PackModel pack) {
@@ -43,7 +47,7 @@ public class PackProcessingManager {
         ThreadPrintStream.replaceSystemOut();
 
         for (final PackModel packModel : packModels) {
-            new Thread(new Runnable() {
+            executorService.submit(new Runnable() {
                 @Override
                 public void run() {
                     ObjectMap metadataMap = new ObjectMap();
@@ -67,7 +71,7 @@ public class PackProcessingManager {
                         IOUtils.closeQuietly(outputStream);
                     }
                 }
-            }, "pack-processing-"+packModel.getName()).start();
+            });
         }
     }
 
