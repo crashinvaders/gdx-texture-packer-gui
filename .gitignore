@@ -56,11 +56,8 @@ nbactions.xml
 nb-configuration.xml
 
 ## Gradle
-gradle
 .gradle
 gradle-app.setting
-gradlew
-gradlew.bat
 build/
 
 ## OS Specific
