@@ -54,7 +54,6 @@ public class CommonDialogs {
                         getProject().addPack(pack);
                         getProject().setSelectedPack(pack);
 
-                        modelUtils.movePackNextTo(selectedPack, pack);
                         switch (btPlacing.getButtonGroup().getChecked().getName()) {
                             case "rbAbove":
                                 if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
@@ -110,7 +109,6 @@ public class CommonDialogs {
                         getProject().addPack(pack);
                         getProject().setSelectedPack(pack);
 
-                        modelUtils.movePackNextTo(selectedPack, pack);
                         switch (btPlacing.getButtonGroup().getChecked().getName()) {
                             case "rbAbove":
                                 if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
