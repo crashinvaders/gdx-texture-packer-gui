@@ -3,6 +3,7 @@
 - Compression option for png atlases, see https://github.com/depsypher/pngtastic
 - Texture unpacker added under tools section
 - "square" and "grid" pack setting added
+- Option to choose position for newly created and copied packs
 
 [4.0.0]
 - App rewritten from the scratch.
