@@ -24,6 +24,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerCommonAttributes();
 
         addAttributeProcessor(new OnRightClickLmlAttribute(), "onRightClick", "rightClick");
+        addAttributeProcessor(new OnDoubleClickLmlAttribute(), "onDoubleClick", "doubleClick");
         addAttributeProcessor(new ImageDrawableLmlAttribute(), "image", "drawable");
     }
 
