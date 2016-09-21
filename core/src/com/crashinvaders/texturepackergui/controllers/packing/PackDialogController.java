@@ -12,10 +12,13 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.PackingProcessor;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.PngtasticCompressingProcessor;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.TinifyCompressingProcessor;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.ZopfliCompressingProcessor;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
+import com.crashinvaders.texturepackergui.services.TinifyService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.crashinvaders.texturepackergui.utils.packprocessing.CompositePackProcessor;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingManager;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
@@ -43,6 +46,7 @@ public class PackDialogController implements ActionContainer {
     @Inject InterfaceService interfaceService;
     @Inject EventDispatcher eventDispatcher;
     @Inject LocaleService localeService;
+    @Inject TinifyService tinifyService;
 
     @ViewStage Stage stage;
     private Preferences prefs;
@@ -61,7 +65,7 @@ public class PackDialogController implements ActionContainer {
 
     @LmlAfter
     public void initView() {
-        btnClose = (VisImageButton) window.getTitleTable().getChildren().peek();
+        btnClose = WidgetUtils.obtainCloseButton(window);
         btnClose.setColor(new Color(0xffffff44));
         btnClose.setDisabled(true);
 
@@ -94,7 +98,8 @@ public class PackDialogController implements ActionContainer {
                 new CompositePackProcessor(
                         new PackingProcessor(),
                         new PngtasticCompressingProcessor(),
-                        new ZopfliCompressingProcessor()),
+                        new ZopfliCompressingProcessor(),
+                        new TinifyCompressingProcessor(tinifyService)),
 //                new TestProcessor(),
                 new PackWorkerListener());
 

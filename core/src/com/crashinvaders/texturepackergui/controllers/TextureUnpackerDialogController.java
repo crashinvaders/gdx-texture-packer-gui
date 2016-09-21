@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TextureUnpacker;
 import com.badlogic.gdx.utils.Array;
-import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
@@ -18,7 +17,6 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
@@ -31,6 +29,7 @@ public class TextureUnpackerDialogController implements ActionContainer {
     private static final String TAG = TextureUnpackerDialogController.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
+    @Inject ErrorDialogController errorDialogController;
 
     @LmlActor("edtAtlasPath") VisTextField edtAtlasPath;
     @LmlActor("edtOutputDir") VisTextField edtOutputDir;
@@ -87,7 +86,7 @@ public class TextureUnpackerDialogController implements ActionContainer {
 
             FileHandle outputDir = Gdx.files.absolute(edtOutputDir.getText());
             FileHandle atlasFile = FileUtils.obtainIfExists(edtAtlasPath.getText());
-            if (atlasFile == null) throw new IllegalStateException("Atlas file does not exit: " + edtAtlasPath.getText());
+            if (atlasFile == null) throw new IllegalStateException("Atlas file does not exist: " + edtAtlasPath.getText());
 
             TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(atlasFile, atlasFile.parent(), false);
 
@@ -121,20 +120,7 @@ public class TextureUnpackerDialogController implements ActionContainer {
     }
 
     private void showErrorDialog(Exception e) {
-        final String log = CommonUtils.fetchMessageStack(e) + "\n" + CommonUtils.obtainStackTrace(e);
-        VisDialog dialog = (VisDialog)interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/textureunpacker/dialogError.lml")).first();
-
-        final VisLabel lblLog = dialog.findActor("lblLog");
-        lblLog.setText(log);
-
-        dialog.findActor("btnCopyToClipboard").addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.getClipboard().setContents(log);
-            }
-        });
-
-        dialog.show(stage);
-        stage.setScrollFocus(dialog);
+        errorDialogController.setError(e);
+        interfaceService.showDialog(errorDialogController.getClass());
     }
 }

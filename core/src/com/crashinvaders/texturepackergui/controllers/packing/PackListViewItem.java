@@ -67,7 +67,7 @@ class PackListViewItem extends Container<VisTable> {
     public void parseMetadata(ObjectMap objectMap) {
         if (objectMap.containsKey(PackProcessor.META_COMPRESSION_RATE)) {
             float compression = (float) objectMap.get(PackProcessor.META_COMPRESSION_RATE);
-            lblMetadata.setText(String.format("[light-grey]%+5.2f%%[]", compression));
+            lblMetadata.setText(String.format("[light-grey]%+5.2f%%[]", compression*100f));
         }
     }
 

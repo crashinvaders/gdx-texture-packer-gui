@@ -182,6 +182,7 @@ com.kotcrab.vis.ui.widget.Tooltip$TooltipStyle: {
 com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle: {
 	default: {fontColor: link-label, underline: white, font: default-font }
 	orange: {fontColor: orange, underline: white, font: default-font }
+	orange-small: {fontColor: orange, underline: white, font: small-font }
 	grey: {fontColor: grey, underline: white, font: default-font }
 },
 com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle: {

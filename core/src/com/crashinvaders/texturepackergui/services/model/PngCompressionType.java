@@ -2,7 +2,8 @@ package com.crashinvaders.texturepackergui.services.model;
 
 public enum PngCompressionType {
     PNGTASTIC("pngtastic"),
-    ZOPFLI("zopfli");
+    ZOPFLI("zopfli"),
+    TINY_PNG("tinify");
 
     public final String key;
 

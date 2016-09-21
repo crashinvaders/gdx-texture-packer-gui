@@ -13,6 +13,7 @@ import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
 import com.github.czyzby.autumn.annotation.Component;
@@ -173,6 +174,9 @@ public class ProjectSerializer {
                     break;
                 case ZOPFLI:
                     pngCompModel = new ZopfliCompressionModel();
+                    break;
+                case TINY_PNG:
+                    pngCompModel = new TinyPngCompressionModel();
                     break;
                 default:
                     Gdx.app.error(TAG, "Unexpected PngCompressionType: " + pngCompType);

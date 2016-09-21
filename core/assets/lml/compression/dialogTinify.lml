@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        title="@dCompTitle|Tinify"
+        closebutton="true"
+        closeonescape="true"
+        modal="true">
+    <table
+            minwidth="300"
+            defaultalign="left"
+            padtop="8"
+            onecolumn="true">
+
+        <label padright="8">API key:</label>
+        <textfield id="edtApiKey" change="onApiKeyChanged" textalign="center" growx="true"/>
+
+        <:row padtop="8"/>
+
+        <horizontalgroup spacing="8" align="center">
+            <imagetextbutton
+                    image="custom/ic-register-user"
+                    imagescaling="none"
+                    change="registerNewUser"
+                    text="Register"/>
+            <imagetextbutton
+                    image="custom/ic-key-shield"
+                    imagescaling="none"
+                    change="validateApiKey"
+                    text="Validate API key"/>
+        </horizontalgroup>
+
+        <:row padtop="12"/>
+
+        <link
+                style="orange-small"
+                href="https://tinypng.com"
+                text="@dCompVisitPage|TinyPNG"
+                align="center"/>
+
+    </table>
+</visdialog>

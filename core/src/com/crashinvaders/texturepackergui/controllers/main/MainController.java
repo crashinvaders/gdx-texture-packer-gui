@@ -21,6 +21,7 @@ import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
@@ -521,6 +522,11 @@ public class MainController implements ActionContainer, ViewResizer {
                 case ZOPFLI:
                     project.setPngCompression(new ZopfliCompressionModel());
                     break;
+                case TINY_PNG:
+                    project.setPngCompression(new TinyPngCompressionModel());
+                    break;
+                default:
+                    project.setPngCompression(null);
             }
         }
     }

@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
 
+<!-- Default dialog for displaying any kind of an error with stacktrace -->
+
 <visdialog
-        title="@dTuTitleError"
+        title="@dErrorTitle"
         closebutton="true"
         closeonescape="true"
         onecolumn="true"
@@ -21,7 +23,7 @@
             fadescrollbars="false"
             overscroll="false"
             flickscroll="false">
-        <label id="lblLog"
+        <label id="lblMessage"
                style="small"
                wrap="true"
                labelalignment="topleft"/>
@@ -32,6 +34,7 @@
             image="custom/ic-clipboard"
             imagescaling="none"
             text="@copyToClipboard"
+            change="copyToClipboard"
             align="right"
             focusborder="false"/>
 </visdialog>

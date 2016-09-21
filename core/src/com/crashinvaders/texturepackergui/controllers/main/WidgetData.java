@@ -35,7 +35,8 @@ public class WidgetData {
 
     public enum CompressionPng {
         NONE (null, "compressionNone", false),
-        PNGTASTIC (PngCompressionType.PNGTASTIC, "compressionPngtastic", true);
+        PNGTASTIC (PngCompressionType.PNGTASTIC, "compressionPngtastic", true),
+        TINY_PNG (PngCompressionType.TINY_PNG, "compressionTinyPng", true);
 //        ZOPFLI (PngCompressionType.ZOPFLI, "compressionZopfli", true);
 
         public final PngCompressionType type;

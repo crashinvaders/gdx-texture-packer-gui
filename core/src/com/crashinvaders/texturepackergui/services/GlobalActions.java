@@ -7,10 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.PngtasticCompDialogController;
-import com.crashinvaders.texturepackergui.controllers.TextureUnpackerDialogController;
-import com.crashinvaders.texturepackergui.controllers.VersionCheckDialogController;
-import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
+import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -333,6 +330,9 @@ public class GlobalActions implements ActionContainer {
                 break;
             case ZOPFLI:
                 interfaceService.showDialog(ZopfliCompDialogController.class);
+                break;
+            case TINY_PNG:
+                interfaceService.showDialog(TinifyCompDialogController.class);
                 break;
             default:
                 Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());

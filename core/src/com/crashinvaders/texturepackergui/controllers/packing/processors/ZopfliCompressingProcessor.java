@@ -45,7 +45,7 @@ public class ZopfliCompressingProcessor implements PackProcessor {
         {
             float compressionRate = 0f;
             for (PngOptimizer.OptimizerResult optimizerResult : pngOptimizer.getResults()) {
-                float localCompressionRate = (optimizerResult.getOptimizedFileSize() - optimizerResult.getOriginalFileSize()) / (float) optimizerResult.getOriginalFileSize() * 100f;
+                float localCompressionRate = (optimizerResult.getOptimizedFileSize() - optimizerResult.getOriginalFileSize()) / (float) optimizerResult.getOriginalFileSize();
                 compressionRate += localCompressionRate / pngOptimizer.getResults().size();
             }
             metadata.put(META_COMPRESSION_RATE, compressionRate);
