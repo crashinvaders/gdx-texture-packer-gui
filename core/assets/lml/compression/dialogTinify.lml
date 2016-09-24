@@ -19,17 +19,21 @@
 
         <table defaultalign="center" onecolumn="true" defaultfillx="true">
             <imagetextbutton
-                    image="custom/ic-register-user"
-                    imagescaling="none"
-                    change="registerNewUser"
-                    text="@dCompSignUp"/>
-            <:row padtop="8"/>
-            <imagetextbutton
                     image="custom/ic-key-shield"
                     imagescaling="none"
                     change="validateApiKey"
                     text="@dCompValidateApiKey"/>
+            <:row padtop="8"/>
+            <imagetextbutton
+                    image="custom/ic-register-user"
+                    imagescaling="none"
+                    change="registerNewUser"
+                    text="@dCompSignUp"/>
         </table>
+
+        <:row padtop="4"/>
+
+        <label id="lblCompressionCount">@dCompCompressionCount|2</label>
 
         <:row padtop="12"/>
 

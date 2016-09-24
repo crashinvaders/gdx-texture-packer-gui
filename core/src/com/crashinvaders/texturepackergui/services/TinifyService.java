@@ -3,8 +3,12 @@ package com.crashinvaders.texturepackergui.services;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent.Property;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
+import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.tinify.AccountException;
 import com.tinify.Exception;
 import com.tinify.Tinify;
@@ -20,30 +24,37 @@ import java.util.concurrent.Executors;
 public class TinifyService {
     public static final String PREF_NAME = "tinify.xml";
     public static final String PREF_KEY_API_KEY = "api_key";
+    public static final String PREF_KEY_COMPRESSION_COUNT = "compression_count";
+
+    @Inject EventDispatcher eventDispatcher;
 
     private Preferences prefs;
 
-    private String apiKey;
     private ExecutorService executorService;
 
     @Initiate void initialize() {
         prefs = Gdx.app.getPreferences(PREF_NAME);
-        apiKey = prefs.getString(PREF_KEY_API_KEY);
-
-        Tinify.setKey(apiKey);
-
         executorService = Executors.newSingleThreadExecutor();
+
+        Tinify.setKey(prefs.getString(PREF_KEY_API_KEY));
+        Tinify.setCompressionCount(prefs.getInteger(PREF_KEY_COMPRESSION_COUNT, Tinify.compressionCount()));
+
+        eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
+        eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.COMPRESSION_COUNT));
     }
 
     public synchronized String getApiKey() {
-        return apiKey;
+        return Tinify.key();
+    }
+
+    public int getCompressionCount() {
+        return Tinify.compressionCount();
     }
 
     public synchronized void setApiKey(String apiKey) {
-        this.apiKey = apiKey;
-        prefs.putString(PREF_KEY_API_KEY, apiKey).flush();
-
         Tinify.setKey(apiKey);
+        prefs.putString(PREF_KEY_API_KEY, apiKey).flush();
+        eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
     }
 
     public void validateApiKey(final ValidationListener validationListener) {
@@ -53,6 +64,12 @@ public class TinifyService {
     /** WARNING: blocking call, use separate thread */
     public void compressImageSync(FileHandle fileHandle) throws IOException {
         Tinify.fromFile(fileHandle.path()).toFile(fileHandle.path());
+
+        updateCompressionCount(Tinify.compressionCount());
+    }
+
+    private synchronized void updateCompressionCount(int compressionCount) {
+        Gdx.app.postRunnable(updateCompressionCountRunnable);
     }
 
     public interface ValidationListener {
@@ -93,4 +110,13 @@ public class TinifyService {
             }
         }
     }
+
+    private Runnable updateCompressionCountRunnable = new Runnable() {
+        @Override
+        public void run() {
+            prefs.putInteger(PREF_KEY_COMPRESSION_COUNT, Tinify.compressionCount());
+            prefs.flush();
+            eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
+        }
+    };
 }
