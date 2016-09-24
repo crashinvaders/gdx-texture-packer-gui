@@ -8,27 +8,34 @@
         modal="true">
     <table
             minwidth="300"
-            defaultalign="left"
+            defaultalign="center"
             padtop="8"
             onecolumn="true">
 
-        <label padright="8">API key:</label>
+        <label padright="8">@dCompApiKey</label>
         <textfield id="edtApiKey" change="onApiKeyChanged" textalign="center" growx="true"/>
 
         <:row padtop="8"/>
 
-        <horizontalgroup spacing="8" align="center">
+        <table defaultalign="center" onecolumn="true" defaultfillx="true">
             <imagetextbutton
                     image="custom/ic-register-user"
                     imagescaling="none"
                     change="registerNewUser"
-                    text="Register"/>
+                    text="@dCompSignUp"/>
+            <:row padtop="8"/>
             <imagetextbutton
                     image="custom/ic-key-shield"
                     imagescaling="none"
                     change="validateApiKey"
-                    text="Validate API key"/>
-        </horizontalgroup>
+                    text="@dCompValidateApiKey"/>
+        </table>
+
+        <:row padtop="12"/>
+
+        <label wrap="true" growx="true" linealign="center">
+            @dCompTinifyDescription
+        </label>
 
         <:row padtop="12"/>
 
