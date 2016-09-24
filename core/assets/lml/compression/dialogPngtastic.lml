@@ -6,35 +6,46 @@
         closebutton="true"
         closeonescape="true">
     <vistable
-            minwidth="160"
+            minwidth="256"
             defaultalign="left"
             padtop="8">
 
-        <label padright="4">@dCompLevel</label>
-        <intspinner
-                id="spnLevel"
-                change="onLevelValueChanged"
-                growx="true"
-                min="1"
-                max="9"
-                step="1"
-                value="5"
-                padright="2"/>
+        <vistable align="center">
+            <label>@dCompLevel</label>
+            <actor width="8"/>
+            <intspinner
+                    id="spnLevel"
+                    change="onLevelValueChanged"
+                    growx="true"
+                    min="1"
+                    max="9"
+                    step="1"
+                    value="5"/>
+        </vistable>
+
+        <:row/>
+
+        <vistable align="center">
+            <label>@dCompRemoveGamma</label>
+            <actor width="8"/>
+            <checkbox
+                    id="chbRemoveGamma"
+                    change="onRemoveGammaChanged"
+                    align="center"/>
+        </vistable>
 
         <:row padtop="4"/>
 
-        <label padright="4">@dCompRemoveGamma</label>
-        <checkbox
-                id="chbRemoveGamma"
-                change="onRemoveGammaChanged"
-                align="left"/>
+        <label wrap="true" growx="true" textalign="center">
+            @dCompPngtasticDescription
+        </label>
 
-        <:row padtop="4"/>
+        <:row padtop="8"/>
 
         <link
-                style="orange"
+                style="orange-small"
                 href="https://github.com/depsypher/pngtastic#pngtastic"
-                text="@dCompAbout|Pngtastic"
+                text="@dCompVisitPage|Pngtastic"
                 colspan="2"
                 align="center"/>
     </vistable>
