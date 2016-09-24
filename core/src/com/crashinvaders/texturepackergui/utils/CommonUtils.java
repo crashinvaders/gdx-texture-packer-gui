@@ -74,4 +74,18 @@ public class CommonUtils {
             throw new RuntimeException(e);
         }
     }
+
+    /**
+     * Simple XOR encryption
+     * @see <a href="https://github.com/KyleBanks/XOREncryption/blob/master/Java%20(Android%20compatible)/XOREncryption.java">GitHub sources</a>
+     */
+    public static String xor(String key, String input) {
+        StringBuilder output = new StringBuilder();
+
+        for(int i = 0; i < input.length(); i++) {
+            output.append((char) (input.charAt(i) ^ key.charAt(i % key.length())));
+        }
+
+        return output.toString();
+    }
 }

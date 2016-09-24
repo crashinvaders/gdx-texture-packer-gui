@@ -3,6 +3,8 @@ package com.crashinvaders.texturepackergui.services;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.crashinvaders.common.stringecriptor.Base64StringEncryptor;
+import com.crashinvaders.common.stringecriptor.StringEncryptor;
 import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent.Property;
 import com.github.czyzby.autumn.annotation.Component;
@@ -28,6 +30,7 @@ public class TinifyService {
 
     @Inject EventDispatcher eventDispatcher;
 
+    private final StringEncryptor encryptor = new Base64StringEncryptor();
     private Preferences prefs;
 
     private ExecutorService executorService;
@@ -36,7 +39,7 @@ public class TinifyService {
         prefs = Gdx.app.getPreferences(PREF_NAME);
         executorService = Executors.newSingleThreadExecutor();
 
-        Tinify.setKey(prefs.getString(PREF_KEY_API_KEY));
+        Tinify.setKey(encryptor.decrypt(prefs.getString(PREF_KEY_API_KEY)));
         Tinify.setCompressionCount(prefs.getInteger(PREF_KEY_COMPRESSION_COUNT, Tinify.compressionCount()));
 
         eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
@@ -53,7 +56,7 @@ public class TinifyService {
 
     public synchronized void setApiKey(String apiKey) {
         Tinify.setKey(apiKey);
-        prefs.putString(PREF_KEY_API_KEY, apiKey).flush();
+        prefs.putString(PREF_KEY_API_KEY, encryptor.encrypt(apiKey)).flush();
         eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
     }
 
@@ -119,4 +122,5 @@ public class TinifyService {
             eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
         }
     };
+
 }
