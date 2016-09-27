@@ -72,10 +72,10 @@ public class TinifyService {
     public void compressImageSync(FileHandle fileHandle) throws IOException {
         Tinify.fromFile(fileHandle.path()).toFile(fileHandle.path());
 
-        updateCompressionCount(Tinify.compressionCount());
+        updateCompressionCount();
     }
 
-    private synchronized void updateCompressionCount(int compressionCount) {
+    private synchronized void updateCompressionCount() {
         Gdx.app.postRunnable(updateCompressionCountRunnable);
     }
 
