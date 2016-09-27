@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.crashinvaders.common.stringecriptor.Base64StringEncryptor;
+import com.crashinvaders.common.stringecriptor.CompositeStringEncryptor;
 import com.crashinvaders.common.stringecriptor.StringEncryptor;
+import com.crashinvaders.common.stringecriptor.XorStringEncryptor;
 import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent.Property;
 import com.github.czyzby.autumn.annotation.Component;
@@ -28,11 +30,13 @@ public class TinifyService {
     public static final String PREF_KEY_API_KEY = "api_key";
     public static final String PREF_KEY_COMPRESSION_COUNT = "compression_count";
 
+    private final StringEncryptor encryptor = new CompositeStringEncryptor(
+            new XorStringEncryptor("tinify"),
+            new Base64StringEncryptor());
+
     @Inject EventDispatcher eventDispatcher;
 
-    private final StringEncryptor encryptor = new Base64StringEncryptor();
     private Preferences prefs;
-
     private ExecutorService executorService;
 
     @Initiate void initialize() {
