@@ -2,7 +2,9 @@ package com.crashinvaders.texturepackergui;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -31,7 +33,11 @@ import com.github.czyzby.kiwi.util.gdx.GdxUtilities;
 import com.github.czyzby.kiwi.util.gdx.asset.Disposables;
 import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
 import com.github.czyzby.kiwi.util.tuple.immutable.Pair;
+import com.github.czyzby.lml.parser.LmlParser;
+import com.github.czyzby.lml.parser.impl.tag.Dtd;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+
+import java.io.Writer;
 
 public class App implements ApplicationListener {
     private static App instance;
@@ -67,10 +73,11 @@ public class App implements ApplicationListener {
         instance = this;
     }
 
-    /** Can be called only before {@link #create()} is invoked.
-     *
+    /**
+     * Can be called only before {@link #create()} is invoked.
      * @param componentScanner used to scan for annotated classes.
-     * @param scanningRoot root of the scanning. */
+     * @param scanningRoot root of the scanning.
+     */
     protected void registerComponents(final ClassScanner componentScanner, final Class<?> scanningRoot) {
         componentScanners.add(new Pair<Class<?>, ClassScanner>(scanningRoot, componentScanner));
     }
@@ -83,6 +90,9 @@ public class App implements ApplicationListener {
         clearComponentScanners();
 
         FileChooser.setDefaultPrefsName(".gdxtexturepackergui/file_chooser.xml");
+
+//        // Uncomment to update project's LML DTD schema
+//        saveDtdSchema(Gdx.files.local("../lml.dtd"));
     }
 
     private void initiateContext() {
@@ -166,6 +176,31 @@ public class App implements ApplicationListener {
     @Override
     public void dispose() {
         Disposables.disposeOf(contextDestroyer);
+    }
+
+    /**
+     * Uses current {@link LmlParser} to generate a DTD schema file with all supported tags, macros and attributes.
+     * Should be used only during development: DTD allows to validate LML templates during creation (and add content
+     * assist thanks to XML support in your IDE), but is not used in any way by the {@link LmlParser} in runtime.
+     *
+     * @param file path to the file where DTD schema should be saved. Advised to be local or absolute. Note that some
+     *            platforms (GWT) do not support file saving - this method should be used on desktop platform and only
+     *            during development.
+     * @throws GdxRuntimeException when unable to save DTD schema.
+     * @see Dtd
+     */
+    public void saveDtdSchema(final FileHandle file) {
+        try {
+            final LmlParser lmlParser = interfaceService.getParser();
+            final Writer appendable = file.writer(false, "UTF-8");
+            final boolean strict = lmlParser.isStrict();
+            lmlParser.setStrict(false); // Temporary setting to non-strict to generate as much tags as possible.
+            Dtd.saveSchema(lmlParser, appendable);
+            appendable.close();
+            lmlParser.setStrict(strict);
+        } catch (final Exception exception) {
+            throw new GdxRuntimeException("Unable to save DTD schema.", exception);
+        }
     }
 
     //region Accessors

@@ -10,7 +10,8 @@ import com.kotcrab.vis.ui.widget.spinner.SpinnerModel;
 
 import java.math.BigDecimal;
 
-/** Temporary patch for https://github.com/czyzby/gdx-lml/issues/31
+/**
+ * Temporary patch for https://github.com/kotcrab/vis-editor/issues/219
  *
  * @author MJ
  * @author Metaphore

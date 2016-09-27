@@ -5,8 +5,7 @@ import com.github.czyzby.lml.parser.tag.LmlTag;
 import com.github.czyzby.lml.parser.tag.LmlTagProvider;
 
 /**
- *
- * Temporary patch for https://github.com/czyzby/gdx-lml/issues/31
+ * Temporary patch for https://github.com/kotcrab/vis-editor/issues/219
  *
  * @author MJ
  * @author Metaphore

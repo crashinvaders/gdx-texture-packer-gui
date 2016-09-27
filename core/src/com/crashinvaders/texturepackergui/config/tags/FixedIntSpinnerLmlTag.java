@@ -8,7 +8,8 @@ import com.github.czyzby.lml.vis.parser.impl.tag.spinner.AbstractSpinnerLmlTag;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.SpinnerModel;
 
-/** Temporary patch for https://github.com/czyzby/gdx-lml/issues/31
+/**
+ * Temporary patch for https://github.com/kotcrab/vis-editor/issues/219
  *
  * @author MJ
  * @author Metaphore

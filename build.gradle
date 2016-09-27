@@ -15,8 +15,9 @@ allprojects {
         appName = "gdx-texturepacker"
         version = '4.2.0-SNAPSHOT'
 
-        gdxVersion = '1.9.3'
-        lmlVersion = '1.7.1.9.3'
+        gdxVersion = '1.9.4'
+        visuiVersion = '1.2.3'
+        lmlVersion = '1.8.1.9.4-b1'
     }
 
     repositories {
@@ -46,6 +47,7 @@ project(":core") {
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.kotcrab.vis:vis-ui:$visuiVersion"
         compile "com.github.czyzby:gdx-lml:$lmlVersion"
         compile "com.github.czyzby:gdx-lml-vis:$lmlVersion"
         compile "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"

@@ -39,8 +39,7 @@
                                 onchange="onSettingsFloatSpinnerChanged"
                                 min="0"
                                 max="1"
-                                step="0.05"
-                                padright="2"/>
+                                step="0.05"/>
                     </:item>
 
                     <:separator/>
@@ -51,8 +50,7 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"
-                                padright="2"/>
+                                max="8192"/>
                     </:item>
 
                     <:item title="@psMinPageHeight">
@@ -61,8 +59,7 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"
-                                padright="2"/>
+                                max="8192"/>
                     </:item>
 
                     <:item title="@psMaxPageWidth">
@@ -71,8 +68,7 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"
-                                padright="2"/>
+                                max="8192"/>
                     </:item>
 
                     <:item title="@psMaxPageHeight">
@@ -81,8 +77,7 @@
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
                                 min="16"
-                                max="8192"
-                                padright="2"/>
+                                max="8192"/>
                     </:item>
 
                     <:separator/>
@@ -92,8 +87,7 @@
                                 id="spnAlphaThreshold"
                                 onchange="onSettingsIntSpinnerChanged"
                                 min="0"
-                                max="255"
-                                padright="2"/>
+                                max="255"/>
                     </:item>
 
                     <:item title="@psMinFilter">
@@ -115,8 +109,7 @@
                                 id="spnPaddingX"
                                 onchange="onSettingsIntSpinnerChanged"
                                 min="0"
-                                max="64"
-                                padright="2"/>
+                                max="64"/>
                     </:item>
 
                     <:item title="@psPaddingY">
@@ -124,8 +117,7 @@
                                 id="spnPaddingY"
                                 onchange="onSettingsIntSpinnerChanged"
                                 min="0"
-                                max="64"
-                                padright="2"/>
+                                max="64"/>
                     </:item>
 
                     <:item title="@psWrapX">
@@ -146,7 +138,7 @@
 
             <vistable growx="true" defaultalign="left" padleft="8" padright="8">
 
-                <verticalgroup align="top" groupalign="left">
+                <vistable onecolumn="true" align="top" defaultalign="left">
 
                     <vischeckbox id="cbUseFastAlgorithm" onchange="onSettingsCbChecked">@psUseFastAlgorithm</vischeckbox>
 
@@ -164,11 +156,11 @@
 
                     <vischeckbox id="cbSquare" onchange="onSettingsCbChecked">@psSquare</vischeckbox>
 
-                </verticalgroup>
+                </vistable>
 
                 <actor width="12"/>
 
-                <verticalgroup align="top" groupalign="left">
+                <vistable onecolumn="true" align="top" defaultalign="left">
 
                     <vischeckbox id="cbDuplicatePadding" onchange="onSettingsCbChecked">@psDuplicatePadding</vischeckbox>
 
@@ -186,7 +178,7 @@
 
                     <vischeckbox id="cbGrid" onchange="onSettingsCbChecked">@psGrid</vischeckbox>
 
-                </verticalgroup>
+                </vistable>
 
             </vistable>
         </vistable>
