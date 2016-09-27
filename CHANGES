@@ -1,5 +1,5 @@
 [4.2.0]
-- Support of TinyPNG/TinyJPG compression service
+- Support of TinyPNG/TinyJPG compression service, see https://tinypng.com
 
 [4.1.0]
 - Parallel processing for atlas packing
