@@ -1,3 +1,6 @@
+[4.2.0]
+- Support of TinyPNG/TinyJPG compression service
+
 [4.1.0]
 - Parallel processing for atlas packing
 - Compression option for png atlases, see https://github.com/depsypher/pngtastic
