@@ -17,6 +17,7 @@ public class ExpandEditTextButton extends Button {
     private final Style style;
     private final VisLabel label;
     private Cell labelCell;
+    private Cell expandIconCell;
 
     public ExpandEditTextButton(String text, Skin skin, String styleName) {
         this(text, skin.get(styleName, Style.class));
@@ -30,13 +31,13 @@ public class ExpandEditTextButton extends Button {
         label.setAlignment(Align.left);
         label.setEllipsis(true);
 
-        labelCell = add(label).left();
+        labelCell = add(label).growX().left().width(new LabelCellWidthValue());
 
         if (style.expandIcon != null) {
             Image image = new Image(style.expandIcon);
             image.setScaling(Scaling.none);
 
-            add(image).padLeft(2f).padRight(-1f).growX().right();
+            expandIconCell = add(image).padLeft(4f);
         }
     }
 
@@ -105,6 +106,18 @@ public class ExpandEditTextButton extends Button {
         @Override
         public com.github.czyzby.lml.parser.tag.LmlTag create(final LmlParser parser, final com.github.czyzby.lml.parser.tag.LmlTag parentTag, final java.lang.StringBuilder rawTagData) {
             return new LmlTag(parser, parentTag, rawTagData);
+        }
+    }
+
+    private class LabelCellWidthValue extends Value {
+        @Override
+        public float get(Actor context) {
+            float extraSpace = 0f;
+            if (expandIconCell != null) {
+                extraSpace += expandIconCell.getPrefWidth();
+                extraSpace += expandIconCell.getPadLeft() + expandIconCell.getPadRight();
+            }
+            return getWidth() - 8f - extraSpace;
         }
     }
 }

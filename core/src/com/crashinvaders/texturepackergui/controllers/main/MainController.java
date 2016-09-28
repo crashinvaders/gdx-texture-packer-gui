@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
+import com.crashinvaders.texturepackergui.controllers.ScalesDialogController;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
@@ -376,7 +377,7 @@ public class MainController implements ActionContainer, ViewResizer {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-
+        interfaceService.showDialog(ScalesDialogController.class);
     }
     //endregion
 

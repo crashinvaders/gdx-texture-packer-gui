@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        title="Pack scales"
+        closebutton="true"
+        closeonescape="true">
+    <vistable width="192" onecolumn="true">
+
+        <container background="button" minheight="64" fill="true">
+            <listview id="lvScales">
+
+            </listview>
+        </container>
+
+        <:row padtop="4"/>
+
+        <vistable align="right" expandx="true">
+            <textbutton>Save</textbutton>
+            <actor width="8"/>
+            <textbutton>Cancel</textbutton>
+        </vistable>
+    </vistable>
+</visdialog>

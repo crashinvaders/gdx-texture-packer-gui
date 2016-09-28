@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
@@ -24,6 +25,7 @@ public class PackSettingsActors {
     @LmlActor("cboWrapX") VisSelectBox cboWrapX;
     @LmlActor("cboWrapY") VisSelectBox cboWrapY;
     @LmlActor("spnJpegQuality") Spinner spnJpegQuality;
+    @LmlActor("eetbScales") ExpandEditTextButton eetbScales;
     @LmlActor("cbUseFastAlgorithm") VisCheckBox cbUseFastAlgorithm;
     @LmlActor("cbEdgePadding") VisCheckBox cbEdgePadding;
     @LmlActor("cbStripWhitespaceX") VisCheckBox cbStripWhitespaceX;

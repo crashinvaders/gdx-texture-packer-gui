@@ -2,10 +2,11 @@
 package com.crashinvaders.texturepackergui.services.model;
 
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
-import com.github.czyzby.autumn.processor.event.EventDispatcher;
-import com.github.czyzby.kiwi.util.common.Strings;
+import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent.Property;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.kiwi.util.common.Strings;
 
 import java.io.File;
 
@@ -16,14 +17,16 @@ public class PackModel {
 	private String filename = "";
 	private String inputDir = "";
 	private String outputDir = "";
+	private final Array<ScaleModel> scales = new Array<>();
 
     private EventDispatcher eventDispatcher;
 
 	public PackModel () {
-
         settings = new Settings();
 		settings.maxWidth = 2048; // Default settings.maxWidth value (1024) is outdated and 2048 is recommended
 		settings.maxHeight = 2048; // Default settings.maxHeight value (1024) is outdated and 2048 is recommended
+
+		scales.add(new ScaleModel());
 	}
 
 	public PackModel (PackModel pack) {
@@ -32,6 +35,8 @@ public class PackModel {
 		this.filename = pack.filename;
 		this.inputDir = pack.inputDir;
 		this.outputDir = pack.outputDir;
+
+		scales.addAll(pack.scales);
 	}
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
@@ -98,11 +103,6 @@ public class PackModel {
 		this.settings = settings;
 	}
 
-	@Override
-	public String toString() {
-		return name;
-	}
-
 	public String getCanonicalName() {
 		return name.trim().isEmpty() ? "unnamed" : name;
 	}
@@ -122,5 +122,14 @@ public class PackModel {
 			atlasPath = outputDir + File.separator + filename;
 		}
 		return atlasPath;
+	}
+
+	public Array<ScaleModel> getScales() {
+		return scales;
+	}
+
+	@Override
+	public String toString() {
+		return name;
 	}
 }
