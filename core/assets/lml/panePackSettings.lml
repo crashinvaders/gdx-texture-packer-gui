@@ -132,6 +132,14 @@
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
+                    <:item title="Scales">
+                        <expandedittextbutton text="1.0, 2.0, 5.0, 0.5, 0.1, 10.0, 15.0"/>
+                        <!--<textbutton>1.0, 2.0, 5.0, 0.5, 0.1, 10.0, 15.0</textbutton>-->
+                        <!--<button id="btnScales" change="onScalesBtnClick" align="left">-->
+                            <!--<label text="1.0, 2.0, 5.0, 0.5, 0.1, 10.0, 15.0" ellipsis="true" align="left" width="150" debug="true"/>-->
+                        <!--</button>-->
+                    </:item>
+
                 </vistable>
 
             </vistable>

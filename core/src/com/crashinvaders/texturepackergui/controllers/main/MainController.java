@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
@@ -50,6 +51,7 @@ import java.math.BigDecimal;
 @SuppressWarnings("WeakerAccess")
 @View(id = "main", value = "lml/main.lml", first = true)
 public class MainController implements ActionContainer, ViewResizer {
+    private static final String LOG = MainController.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
@@ -366,6 +368,15 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cboOutputFormat": settings.outputFormat = (String) value; break;
             case "cboPngCompression": onPngCompressionTypeChanged(); break;
         }
+    }
+
+    @LmlAction("onScalesBtnClick") void onScalesBtnClick(Button scalesButton) {
+        if (!initialized) return;
+
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
+
+
     }
     //endregion
 

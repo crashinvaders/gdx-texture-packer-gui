@@ -215,6 +215,10 @@ com.kotcrab.vis.ui.util.form.SimpleFormValidator$FormValidatorStyle: {
 },
 com.kotcrab.vis.ui.util.adapter.SimpleListAdapter$SimpleListAdapterStyle: {
 	default: {background: window-bg, selection: list-selection }
+},
+
+com.crashinvaders.texturepackergui.views.ExpandEditTextButton$Style: {
+	default: {down: button-down, up: button, labelStyle: default, expandIcon: expand-arrow }
 }
 
 }
