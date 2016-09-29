@@ -61,6 +61,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
+    @Inject ScalesDialogController scalesDialogController;
 
     @ViewStage Stage stage;
 
@@ -377,7 +378,8 @@ public class MainController implements ActionContainer, ViewResizer {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        interfaceService.showDialog(ScalesDialogController.class);
+        scalesDialogController.setPackModel(pack);
+        interfaceService.showDialog(scalesDialogController.getClass());
     }
     //endregion
 
