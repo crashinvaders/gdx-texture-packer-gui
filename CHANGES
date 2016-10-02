@@ -1,5 +1,6 @@
 [4.2.0]
 - Support of TinyPNG/TinyJPG compression service, see https://tinypng.com
+- Export with multiple scale factors
 
 [4.1.0]
 - Parallel processing for atlas packing
