@@ -17,7 +17,7 @@ public class PackModel {
 	private String filename = "";
 	private String inputDir = "";
 	private String outputDir = "";
-	private final Array<ScaleModel> scales = new Array<>();
+	private final Array<ScaleFactorModel> scaleFactors = new Array<>();
 
     private EventDispatcher eventDispatcher;
 
@@ -26,7 +26,7 @@ public class PackModel {
 		settings.maxWidth = 2048; // Default settings.maxWidth value (1024) is outdated and 2048 is recommended
 		settings.maxHeight = 2048; // Default settings.maxHeight value (1024) is outdated and 2048 is recommended
 
-		scales.add(new ScaleModel());
+		scaleFactors.add(new ScaleFactorModel("", 1f));
 	}
 
 	public PackModel (PackModel pack) {
@@ -36,7 +36,7 @@ public class PackModel {
 		this.inputDir = pack.inputDir;
 		this.outputDir = pack.outputDir;
 
-		scales.addAll(pack.scales);
+		scaleFactors.addAll(pack.scaleFactors);
 	}
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
@@ -124,8 +124,17 @@ public class PackModel {
 		return atlasPath;
 	}
 
-	public Array<ScaleModel> getScales() {
-		return scales;
+	public Array<ScaleFactorModel> getScaleFactors() {
+		return scaleFactors;
+	}
+
+	public void setScaleFactors(Array<ScaleFactorModel> scaleFactors) {
+		this.scaleFactors.clear();
+		this.scaleFactors.addAll(scaleFactors);
+
+		if (eventDispatcher != null) {
+			eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.SCALE_FACTORS));
+		}
 	}
 
 	@Override

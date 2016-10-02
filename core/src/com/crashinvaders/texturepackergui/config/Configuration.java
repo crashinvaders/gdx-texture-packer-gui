@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppParams;
-import com.crashinvaders.texturepackergui.services.ProjectSerializer;
+import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.github.czyzby.autumn.annotation.Component;

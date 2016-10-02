@@ -132,8 +132,8 @@
                                 onchange="onSettingsCboChanged"/>
                     </:item>
 
-                    <:item title="Scales">
-                        <expandedittextbutton id="eetbScales" change="onScalesBtnClick"/>
+                    <:item title="Scale factors">
+                        <expandedittextbutton id="eetbScaleFactors" change="onScalesBtnClick"/>
                     </:item>
 
                 </vistable>

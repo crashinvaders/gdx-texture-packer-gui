@@ -25,7 +25,7 @@ public class PackSettingsActors {
     @LmlActor("cboWrapX") VisSelectBox cboWrapX;
     @LmlActor("cboWrapY") VisSelectBox cboWrapY;
     @LmlActor("spnJpegQuality") Spinner spnJpegQuality;
-    @LmlActor("eetbScales") ExpandEditTextButton eetbScales;
+    @LmlActor("eetbScaleFactors") ExpandEditTextButton eetbScaleFactors;
     @LmlActor("cbUseFastAlgorithm") VisCheckBox cbUseFastAlgorithm;
     @LmlActor("cbEdgePadding") VisCheckBox cbEdgePadding;
     @LmlActor("cbStripWhitespaceX") VisCheckBox cbStripWhitespaceX;

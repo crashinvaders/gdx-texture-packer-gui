@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.services;
+package com.crashinvaders.texturepackergui.services.projectserializer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -6,17 +6,20 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.ScaleFactorModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
 import com.github.czyzby.autumn.annotation.Component;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
@@ -36,6 +39,13 @@ public class ProjectSerializer {
 
     @Inject EventDispatcher eventDispatcher;
     @Inject LocaleService localeService;
+
+    private Json json;
+
+    @Initiate void initialize() {
+        json = new Json();
+        json.setSerializer(ScaleFactorModel.class, new ScaleFactorJsonSerializer());
+    }
 
     public void saveProject(ProjectModel project, FileHandle file) {
         String serialized = serializeProject(project, file.parent());
@@ -134,7 +144,11 @@ public class ProjectSerializer {
         sb.append("premultiplyAlpha=").append(settings.premultiplyAlpha).append("\n");
         sb.append("combineSubdirectories=").append(settings.combineSubdirectories).append("\n");
         sb.append("grid=").append(settings.grid).append("\n");
-        sb.append("square=").append(settings.square);
+        sb.append("square=").append(settings.square).append("\n");
+
+        sb.append("\n");
+
+        sb.append("scaleFactors=").append(json.toJson(pack.getScaleFactors()));
 
         return sb.toString();
     }
@@ -247,6 +261,12 @@ public class ProjectSerializer {
         settings.combineSubdirectories = find(lines, "combineSubdirectories=", defaultSettings.combineSubdirectories);
         settings.grid = find(lines, "grid=", defaultSettings.grid);
         settings.square = find(lines, "square=", defaultSettings.square);
+
+        String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
+        if (scaleFactorsSerialized != null) {
+            Array<ScaleFactorModel> scaleFactors = json.fromJson(Array.class, ScaleFactorModel.class, scaleFactorsSerialized);
+            pack.setScaleFactors(scaleFactors);
+        }
 
         return pack;
     }

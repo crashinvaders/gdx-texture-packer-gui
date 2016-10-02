@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../../lml.dtd">
+
+<visdialog
+        id="dialog"
+        title="Pack scale factors"
+        closebutton="true"
+        closeonescape="true">
+    <vistable width="200" height="192" onecolumn="true">
+
+        <container background="button" minheight="64" grow="true" fill="true">
+            <listview
+                    id="listScales"
+                    adapter="$obtainListAdapter"
+                    disabledx="true">
+                <table footer="true" tablealign="right">
+                    <imagebutton
+                            change="createScaleRecord"
+                            icon="custom/ic-scale-add"
+                            imagescaling="none"
+                            tablealign="right"
+                            focusborder="false"/>
+                </table>
+            </listview>
+        </container>
+
+        <:row padtop="4"/>
+
+        <vistable align="right" expandx="true">
+            <textbutton change="saveAndCloseDialog">Save</textbutton>
+            <actor width="4"/>
+            <textbutton change="closeDialog">Cancel</textbutton>
+        </vistable>
+    </vistable>
+</visdialog>

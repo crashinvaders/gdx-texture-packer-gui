@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "../../../../lml.dtd">
+
+<table id="content">
+    <textfield
+            id="edtSuffix"
+            width="72"
+            messagetext="no suffix"
+            expandx="true"
+            align="left"/>
+    <floatspinner
+            id="spnScale"
+            value="1.00"
+            min="0.01"
+            max="20"
+            step="0.5"
+            width="64"
+            textalign="right"/>
+    <actor width="8"/>
+    <imagebutton
+            change="deleteRecord"
+            icon="custom/ic-scale-del"
+            imagescaling="none"
+            focusborder="false"/>
+</table>

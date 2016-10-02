@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<!DOCTYPE table SYSTEM "../../../../lml.dtd">
-
-<table defaultgrowx="true">
-    <floatspinner step="0.5"/>
-    <textfield/>
-    <image style="icon-trash" growx="false"/>
-</table>

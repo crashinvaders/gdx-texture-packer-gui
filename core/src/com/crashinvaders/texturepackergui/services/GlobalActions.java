@@ -15,6 +15,7 @@ import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
+import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;

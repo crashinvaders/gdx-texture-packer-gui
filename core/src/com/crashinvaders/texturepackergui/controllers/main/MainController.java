@@ -13,14 +13,11 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
-import com.crashinvaders.texturepackergui.controllers.ScalesDialogController;
+import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
 import com.crashinvaders.texturepackergui.events.*;
-import com.crashinvaders.texturepackergui.services.ProjectSerializer;
+import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.*;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
@@ -48,6 +45,7 @@ import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
 import java.math.BigDecimal;
+import java.util.Locale;
 
 @SuppressWarnings("WeakerAccess")
 @View(id = "main", value = "lml/main.lml", first = true)
@@ -61,7 +59,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
-    @Inject ScalesDialogController scalesDialogController;
+    @Inject ScaleFactorsDialogController scaleFactorsDialogController;
 
     @ViewStage Stage stage;
 
@@ -140,6 +138,7 @@ public class MainController implements ActionContainer, ViewResizer {
         if (initialized) {
             switch (event.getProperty()) {
                 case NAME:
+                case SCALE_FACTORS:
                     if (event.getPack() == getSelectedPack()) {
                         updateViewsFromPack(event.getPack());
                     }
@@ -378,8 +377,8 @@ public class MainController implements ActionContainer, ViewResizer {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        scalesDialogController.setPackModel(pack);
-        interfaceService.showDialog(scalesDialogController.getClass());
+        scaleFactorsDialogController.setPackModel(pack);
+        interfaceService.showDialog(scaleFactorsDialogController.getClass());
     }
     //endregion
 
@@ -466,6 +465,18 @@ public class MainController implements ActionContainer, ViewResizer {
             actorsPackSettings.cboMagFilter.setSelected(settings.filterMag);
             actorsPackSettings.cboWrapX.setSelected(settings.wrapX);
             actorsPackSettings.cboWrapY.setSelected(settings.wrapY);
+
+            // Scale factors
+            {
+                StringBuilder sb = new StringBuilder();
+                Array<ScaleFactorModel> scaleFactors = pack.getScaleFactors();
+                for (int i = 0; i < scaleFactors.size; i++) {
+                    ScaleFactorModel scaleFactor = scaleFactors.get(i);
+                    sb.append(String.format(Locale.US, "%.2f", scaleFactor.getFactor()));
+                    if (i < scaleFactors.size-1) { sb.append(", "); }
+                }
+                actorsPackSettings.eetbScaleFactors.setText(sb.toString());
+            }
         }
     }
 
