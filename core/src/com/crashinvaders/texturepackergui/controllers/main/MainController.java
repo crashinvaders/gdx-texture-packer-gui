@@ -22,6 +22,7 @@ import com.crashinvaders.texturepackergui.services.model.compression.PngCompress
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
+import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -505,10 +506,10 @@ public class MainController implements ActionContainer, ViewResizer {
             if (file.equals(getProject().getProjectFile())) continue;
 
             MenuItem menuItem = new MenuItem(file.nameWithoutExtension());
-            menuItem.setShortcut(file.path()); // Will use shortcut label to display full project path
+            menuItem.setShortcut(CommonUtils.ellipsize(file.path(), 72)); // Will use shortcut label to display file path
             menuItem.getShortcutCell().left().expandX();
             menuItem.getLabelCell().expand(false, false).left();
-            menuItem.getImageCell().width(0); // Shrink image cell to zero, we wont use it
+            menuItem.getImageCell().width(0); // Shrink image cell to zero, we don't need it
             menuItem.pack();
             menuItem.addListener(new ChangeListener() {
                 @Override
