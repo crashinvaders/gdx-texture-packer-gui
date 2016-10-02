@@ -3,10 +3,10 @@
 
 <visdialog
         id="dialog"
-        title="Pack scale factors"
+        title="@dSfTitle"
         closebutton="true"
         closeonescape="true">
-    <vistable width="200" height="192" onecolumn="true">
+    <vistable width="200" height="224" onecolumn="true">
 
         <container background="button" minheight="64" grow="true" fill="true">
             <listview
@@ -24,12 +24,16 @@
             </listview>
         </container>
 
+        <shrinkcontainer id="errorContainer" fillx="true" expandx="true" visible="false">
+            <label id="lblError" color="orange" textalign="center" wrap="true"/>
+        </shrinkcontainer>
+
         <:row padtop="4"/>
 
         <vistable align="right" expandx="true">
-            <textbutton change="saveAndCloseDialog">Save</textbutton>
+            <textbutton change="saveAndCloseDialog" focusborder="false">@save</textbutton>
             <actor width="4"/>
-            <textbutton change="closeDialog">Cancel</textbutton>
+            <textbutton change="closeDialog" focusborder="false">@cancel</textbutton>
         </vistable>
     </vistable>
 </visdialog>

@@ -5,7 +5,7 @@
     <textfield
             id="edtSuffix"
             width="72"
-            messagetext="no suffix"
+            messagetext="@dSfNoSuffix"
             expandx="true"
             align="left"/>
     <floatspinner

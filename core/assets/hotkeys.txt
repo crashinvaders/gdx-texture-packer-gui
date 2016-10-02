@@ -15,3 +15,5 @@ selectPreviousPack: ALT+UP
 
 packSelected: CTRL+P
 packAll: CTRL+SHIFT+P
+
+reloadView: F1

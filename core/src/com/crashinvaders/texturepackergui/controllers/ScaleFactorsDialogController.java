@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ScaleFactorModel;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -18,14 +19,13 @@ import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
 import com.kotcrab.vis.ui.util.adapter.ListAdapter;
-import com.kotcrab.vis.ui.widget.ListView;
-import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.FloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @ViewDialog(id = "dialog_pack_scales", value = "lml/packdialogs/dialogPackScaleFactors.lml")
 public class ScaleFactorsDialogController implements ActionContainer {
@@ -37,6 +37,8 @@ public class ScaleFactorsDialogController implements ActionContainer {
 
     @LmlActor("dialog") VisDialog dialog;
     @LmlActor("listScales") ListView.ListViewTable<ScaleFactorModel> listScales;
+    @LmlActor("errorContainer") ShrinkContainer errorContainer;
+    @LmlActor("lblError") VisLabel lblError;
 
     @ViewStage Stage stage;
 
@@ -83,6 +85,14 @@ public class ScaleFactorsDialogController implements ActionContainer {
             ScaleFactorModel model = new ScaleFactorModel(view.getSuffix(), view.getFactor());
             scaleFactors.add(model);
         }
+
+        String error = validate(scaleFactors);
+        errorContainer.setVisible(error != null);
+        if (error != null) {
+            lblError.setText(error);
+            return;
+        }
+
         packModel.setScaleFactors(scaleFactors);
 
         closeDialog();
@@ -90,6 +100,23 @@ public class ScaleFactorsDialogController implements ActionContainer {
 
     @LmlAction("closeDialog") void closeDialog() {
         dialog.fadeOut();
+    }
+
+    /** @return non null value in case there is an error */
+    private String validate(Array<ScaleFactorModel> scaleFactors) {
+        if (scaleFactors.size == 0) {
+            return localeService.getI18nBundle().get("dSfErrNoEntries");
+        }
+
+        // Unique suffixes check
+        Set<String> suffixes = new HashSet<>(scaleFactors.size);
+        for (ScaleFactorModel scaleFactor : scaleFactors) {
+            if (!suffixes.add(scaleFactor.getSuffix())) {
+                return localeService.getI18nBundle().get("dSfErrNonUniqueSuffixes");
+            }
+        }
+
+        return null;
     }
 
     private static class ScaleListAdapter extends ArrayAdapter<ScaleFactorModel, ScaleListViewItem> {
