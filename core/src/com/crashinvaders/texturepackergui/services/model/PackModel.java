@@ -9,136 +9,155 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
 
 import java.io.File;
+import java.util.Arrays;
 
 public class PackModel {
 
     private Settings settings;
     private String name = "";
-	private String filename = "";
-	private String inputDir = "";
-	private String outputDir = "";
-	private final Array<ScaleFactorModel> scaleFactors = new Array<>();
+    private String filename = "";
+    private String inputDir = "";
+    private String outputDir = "";
+    private final Array<ScaleFactorModel> scaleFactors = new Array<>();
 
     private EventDispatcher eventDispatcher;
 
-	public PackModel () {
+    public PackModel() {
         settings = new Settings();
-		settings.maxWidth = 2048; // Default settings.maxWidth value (1024) is outdated and 2048 is recommended
-		settings.maxHeight = 2048; // Default settings.maxHeight value (1024) is outdated and 2048 is recommended
+        settings.maxWidth = 2048; // Default settings.maxWidth value (1024) is outdated and 2048 is recommended
+        settings.maxHeight = 2048; // Default settings.maxHeight value (1024) is outdated and 2048 is recommended
 
-		scaleFactors.add(new ScaleFactorModel("", 1f));
-	}
+        scaleFactors.add(new ScaleFactorModel("", 1f));
+    }
 
-	public PackModel (PackModel pack) {
-		settings = new Settings(pack.settings);
-		this.name = pack.name;
-		this.filename = pack.filename;
-		this.inputDir = pack.inputDir;
-		this.outputDir = pack.outputDir;
+    public PackModel(PackModel pack) {
+        settings = new Settings(pack.settings);
+        //TODO remove this when LibGDX will apply fix for Settings
+        settings.scale = Arrays.copyOf(settings.scale, settings.scale.length);
+        settings.scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
 
-		scaleFactors.addAll(pack.scaleFactors);
-	}
+        this.name = pack.name;
+        this.filename = pack.filename;
+        this.inputDir = pack.inputDir;
+        this.outputDir = pack.outputDir;
+
+        scaleFactors.addAll(pack.scaleFactors);
+    }
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
         this.eventDispatcher = eventDispatcher;
     }
 
-    public void setName (String name) {
+    public void setName(String name) {
         if (Strings.equals(this.name, name)) return;
 
         this.name = name;
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.NAME));
         }
-	}
+    }
 
-	public void setFilename (String filename) {
+    public void setFilename(String filename) {
         if (Strings.equals(this.filename, filename)) return;
 
-		this.filename = filename;
+        this.filename = filename;
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.FILENAME));
         }
-	}
+    }
 
-	public void setInputDir(String inputDir) {
+    public void setInputDir(String inputDir) {
         if (Strings.equals(this.inputDir, inputDir)) return;
 
         this.inputDir = inputDir;
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.INPUT));
         }
-	}
+    }
 
-	public void setOutputDir(String outputDir) {
+    public void setOutputDir(String outputDir) {
         if (Strings.equals(this.outputDir, outputDir)) return;
 
         this.outputDir = outputDir;
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.OUTPUT));
         }
-	}
+    }
 
-	public String getName () {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getFilename () {
-		return filename;
-	}
+    public String getFilename() {
+        return filename;
+    }
 
-	public String getInputDir() {
-		return inputDir;
-	}
+    public String getInputDir() {
+        return inputDir;
+    }
 
-	public String getOutputDir() {
-		return outputDir;
-	}
+    public String getOutputDir() {
+        return outputDir;
+    }
 
-	public Settings getSettings () {
-		return settings;
-	}
+    public Settings getSettings() {
+        return settings;
+    }
 
-	public void setSettings(Settings settings) {
-		this.settings = settings;
-	}
+    public void setSettings(Settings settings) {
+        //TODO use Settings#set(Settings) when it will be available in the next version
+        this.settings = new Settings(settings);
+        //TODO remove this when LibGDX will apply fix for Settings
+        this.settings.scale = Arrays.copyOf(settings.scale, settings.scale.length);
+        this.settings.scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
+    }
 
-	public String getCanonicalName() {
-		return name.trim().isEmpty() ? "unnamed" : name;
-	}
+    public String getCanonicalName() {
+        return name.trim().isEmpty() ? "unnamed" : name;
+    }
 
-	public String getCanonicalFilename() {
-		String filename = this.filename.trim().isEmpty() ? getCanonicalName()+settings.atlasExtension : this.filename;
-		return filename;
-	}
+    public String getCanonicalFilename() {
+        if (!filename.trim().isEmpty()) {
+            String name = filename;
+            String extension = "";
+            int dotIndex = filename.lastIndexOf(".");
+            if (dotIndex != -1 && dotIndex != filename.length()-1) {
+                name = filename.substring(0, dotIndex);
+                extension = filename.substring(dotIndex, filename.length());
+            }
+            return name + settings.scaleSuffix[0] + extension;
+        } else {
+            return getCanonicalName() + settings.scaleSuffix[0] + settings.atlasExtension;
+        }
+    }
 
-	/**
-	 * @return may be null
-	 */
-	public String getAtlasPath() {
-		String atlasPath = null;
-		if (outputDir != null && !outputDir.trim().isEmpty()) {
-			String filename = getCanonicalFilename();
-			atlasPath = outputDir + File.separator + filename;
-		}
-		return atlasPath;
-	}
+    /**
+     * @return may be null
+     */
+    public String getAtlasPath() {
+        String atlasPath = null;
+        if (outputDir != null && !outputDir.trim().isEmpty()) {
+            String filename = getCanonicalFilename();
+            atlasPath = outputDir + File.separator + filename;
+        }
+        return atlasPath;
+    }
 
-	public Array<ScaleFactorModel> getScaleFactors() {
-		return scaleFactors;
-	}
+    public Array<ScaleFactorModel> getScaleFactors() {
+        return scaleFactors;
+    }
 
-	public void setScaleFactors(Array<ScaleFactorModel> scaleFactors) {
-		this.scaleFactors.clear();
-		this.scaleFactors.addAll(scaleFactors);
+    public void setScaleFactors(Array<ScaleFactorModel> scaleFactors) {
+        this.scaleFactors.clear();
+        this.scaleFactors.addAll(scaleFactors);
 
-		if (eventDispatcher != null) {
-			eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.SCALE_FACTORS));
-		}
-	}
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.SCALE_FACTORS));
+        }
+    }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 }

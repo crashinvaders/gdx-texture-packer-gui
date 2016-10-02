@@ -305,7 +305,7 @@ public class GlobalActions implements ActionContainer {
         for (PackModel pack : packs) {
             if (pack == selectedPack) continue;
 
-            pack.setSettings(new TexturePacker.Settings(generalSettings));
+            pack.setSettings(generalSettings);
         }
 
         eventDispatcher.postEvent(new ToastNotificationEvent()

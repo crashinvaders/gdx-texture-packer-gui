@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.AppConstants;
@@ -18,6 +19,7 @@ import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.TinifyService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.ScaleFactorModel;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.crashinvaders.texturepackergui.utils.packprocessing.CompositePackProcessor;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingManager;
@@ -88,6 +90,8 @@ public class PackDialogController implements ActionContainer {
     }
 
     public void launchPack(ProjectModel project, Array<PackModel> packs) {
+        packs = prepareProcessingPacks(packs);
+
         PackListAdapter adapter = (PackListAdapter)listItems.getListView().getAdapter();
         adapter.clear();
         for (PackModel pack : packs) {
@@ -108,6 +112,22 @@ public class PackDialogController implements ActionContainer {
             packProcessingManager.postPack(pack);
         }
         packProcessingManager.execute(project);
+    }
+
+    private Array<PackModel> prepareProcessingPacks(Array<PackModel> packs) {
+        Array<PackModel> result = new Array<>();
+        for (PackModel origPack : packs) {
+            for (ScaleFactorModel scaleFactor : origPack.getScaleFactors()) {
+                PackModel pack = new PackModel(origPack);
+                pack.setScaleFactors(Array.with(scaleFactor));
+                TexturePacker.Settings settings = pack.getSettings();
+                settings.scaleSuffix[0] = scaleFactor.getSuffix();
+                settings.scale[0] = scaleFactor.getFactor();
+
+                result.add(pack);
+            }
+        }
+        return result;
     }
 
     /** @return localized string */

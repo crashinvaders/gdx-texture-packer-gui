@@ -40,7 +40,7 @@ public class PackingProcessor implements PackProcessor {
             oldFile.delete();
         }
 
-        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), filename);
+        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), pack.getCanonicalName());
 
         pack.getSettings().atlasExtension = settingsOrigExtension;
 

@@ -45,7 +45,7 @@ class PackListViewItem extends Container<VisTable> {
             }
         });
 
-        lblPackName.setText(pack.getCanonicalName());
+        lblPackName.setText(pack.getCanonicalName() + "[light-grey]" + pack.getSettings().scaleSuffix[0]);
     }
 
     public void setLog(String log) {

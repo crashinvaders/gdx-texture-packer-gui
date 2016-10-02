@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE table SYSTEM "../../../lml.dtd">
 
-<vistable growx="true" onecolumn="true">
+<table growx="true" onecolumn="true">
 
-    <vistable align="top" growx="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
+    <table align="top" growx="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
 
         <label align="left">@inputDir</label>
-        <vistextfield
+        <textfield
                 id="edtInputDir"
                 minwidth="24"
                 growx="true"
                 onchange="onInputDirTextChanged"/>
-        <visimagebutton
+        <imagebutton
                 image="custom/ic-folder-pick"
                 imagescaling="none"
                 width="22"
@@ -23,12 +23,12 @@
         <:row/>
 
         <label align="left">@outputDir</label>
-        <vistextfield
+        <textfield
                 id="edtOutputDir"
                 minwidth="24"
                 growx="true"
                 onchange="onOutputDirTextChanged"/>
-        <visimagebutton
+        <imagebutton
                 image="custom/ic-folder-pick"
                 imagescaling="none"
                 width="22"
@@ -39,7 +39,7 @@
         <:row padbottom="0"/>
 
         <label align="left">File name</label>
-        <vistextfield
+        <textfield
                 id="edtFileName"
                 minwidth="24"
                 growx="true"
@@ -47,6 +47,6 @@
                 colspan="2"
                 onchange="onPackFilenameTextChanged"/>
 
-    </vistable>
+    </table>
 
-</vistable>
+</table>
