@@ -125,9 +125,9 @@ public class PackModel {
                 name = filename.substring(0, dotIndex);
                 extension = filename.substring(dotIndex, filename.length());
             }
-            return name + settings.scaleSuffix[0] + extension;
+            return name + scaleFactors.first().getSuffix() + extension;
         } else {
-            return getCanonicalName() + settings.scaleSuffix[0] + settings.atlasExtension;
+            return getCanonicalName() + scaleFactors.first().getSuffix() + settings.atlasExtension;
         }
     }
 

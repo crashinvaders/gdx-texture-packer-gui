@@ -41,7 +41,7 @@ public class PackingProcessor implements PackProcessor {
             oldFile.delete();
         }
 
-        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), pack.getCanonicalName());
+        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), filename);
 
         pack.getSettings().atlasExtension = settingsOrigExtension;
 

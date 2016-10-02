@@ -43,7 +43,7 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
             }
         });
 
-        lblPackName.setText(node.getPack().getCanonicalName() + "[light-grey]" + node.getPack().getSettings().scaleSuffix[0]);
+        lblPackName.setText(node.getPack().getCanonicalName() + "[light-grey]" + node.getPack().getScaleFactors().first().getSuffix());
     }
 
     public void onFinishProcessing() {
