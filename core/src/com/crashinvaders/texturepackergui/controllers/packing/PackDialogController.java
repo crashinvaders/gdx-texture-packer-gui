@@ -9,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.PackingProcessor;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.PngtasticCompressingProcessor;
@@ -23,6 +22,7 @@ import com.crashinvaders.texturepackergui.services.model.ScaleFactorModel;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.crashinvaders.texturepackergui.utils.packprocessing.CompositePackProcessor;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingManager;
+import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -55,7 +55,7 @@ public class PackDialogController implements ActionContainer {
 
     @LmlActor("window") VisDialog window;
     @LmlActor("scrItems") VisScrollPane scrItems;
-    @LmlActor("listItems") ListView.ListViewTable<PackModel> listItems;
+    @LmlActor("listItems") ListView.ListViewTable<PackProcessingNode> listItems;
     @LmlActor("cbAutoClose") VisCheckBox cbAutoClose;
     @LmlActor("progressBar") VisProgressBar progressBar;
     private VisImageButton btnClose;
@@ -77,7 +77,7 @@ public class PackDialogController implements ActionContainer {
     }
 
     @LmlAction("obtainListAdapter") ListAdapter obtainListAdapter() {
-        return new PackListAdapter(interfaceService);
+        return new PackProcessingListAdapter(interfaceService);
     }
 
     @LmlAction("onAutoCloseChecked") void onAutoCloseChecked(VisCheckBox cbAutoClose) {
@@ -90,12 +90,12 @@ public class PackDialogController implements ActionContainer {
     }
 
     public void launchPack(ProjectModel project, Array<PackModel> packs) {
-        packs = prepareProcessingPacks(packs);
+        Array<PackProcessingNode> nodes = prepareProcessingNodes(project, packs);
 
-        PackListAdapter adapter = (PackListAdapter)listItems.getListView().getAdapter();
+        PackProcessingListAdapter adapter = (PackProcessingListAdapter)listItems.getListView().getAdapter();
         adapter.clear();
-        for (PackModel pack : packs) {
-            adapter.add(pack);
+        for (PackProcessingNode node : nodes) {
+            adapter.add(node);
         }
 
         PackProcessingManager packProcessingManager = new PackProcessingManager(
@@ -107,24 +107,27 @@ public class PackDialogController implements ActionContainer {
 //                new TestProcessor(),
                 new PackWorkerListener());
 
-        for (int i = 0; i < packs.size; i++) {
-            PackModel pack = packs.get(i);
-            packProcessingManager.postPack(pack);
+        for (int i = 0; i < nodes.size; i++) {
+            PackProcessingNode node = nodes.get(i);
+            packProcessingManager.postProcessingNode(node);
         }
         packProcessingManager.execute(project);
     }
 
-    private Array<PackModel> prepareProcessingPacks(Array<PackModel> packs) {
-        Array<PackModel> result = new Array<>();
-        for (PackModel origPack : packs) {
-            for (ScaleFactorModel scaleFactor : origPack.getScaleFactors()) {
-                PackModel pack = new PackModel(origPack);
-                pack.setScaleFactors(Array.with(scaleFactor));
-                TexturePacker.Settings settings = pack.getSettings();
+    private Array<PackProcessingNode> prepareProcessingNodes(ProjectModel project, Array<PackModel> packs) {
+        Array<PackProcessingNode> result = new Array<>();
+        for (PackModel pack : packs) {
+            for (ScaleFactorModel scaleFactor : pack.getScaleFactors()) {
+                PackModel newPack = new PackModel(pack);
+                newPack.setScaleFactors(Array.with(scaleFactor));
+                TexturePacker.Settings settings = newPack.getSettings();
                 settings.scaleSuffix[0] = scaleFactor.getSuffix();
                 settings.scale[0] = scaleFactor.getFactor();
 
-                result.add(pack);
+                PackProcessingNode processingNode = new PackProcessingNode(project, newPack);
+                processingNode.setOrigPack(pack);
+
+                result.add(processingNode);
             }
         }
         return result;
@@ -141,12 +144,12 @@ public class PackDialogController implements ActionContainer {
     }
 
     private class PackWorkerListener implements PackProcessingManager.Listener {
-        final PackListAdapter adapter;
+        final PackProcessingListAdapter adapter;
         boolean errors = false;
         int finishedCounter = 0;
 
         public PackWorkerListener() {
-            adapter = (PackListAdapter)listItems.getListView().getAdapter();
+            adapter = (PackProcessingListAdapter)listItems.getListView().getAdapter();
         }
 
         @Override
@@ -186,27 +189,26 @@ public class PackDialogController implements ActionContainer {
         }
 
         @Override
-        public void onBegin(PackModel pack) {
+        public void onBegin(PackProcessingNode node) {
         }
 
         @Override
-        public void onError(final PackModel pack, String log, ObjectMap metadata, Exception e) {
-            onFinished(pack, log, metadata);
+        public void onError(final PackProcessingNode node, Exception e) {
+            onFinished(node);
 
-            adapter.getView(pack).setToError(e);
+            adapter.getView(node).setToError(e);
             errors = true;
         }
 
         @Override
-        public void onSuccess(PackModel pack, String log, ObjectMap metadata) {
-            onFinished(pack, log, metadata);
+        public void onSuccess(PackProcessingNode node) {
+            onFinished(node);
 
-            adapter.getView(pack).setToSuccess();
+            adapter.getView(node).setToSuccess();
         }
 
-        private void onFinished(final PackModel pack, String log, ObjectMap metadata) {
-            adapter.getView(pack).setLog(log);
-            adapter.getView(pack).parseMetadata(metadata);
+        private void onFinished(final PackProcessingNode node) {
+            adapter.getView(node).onFinishProcessing();
 
             finishedCounter += 1;
             progressBar.setValue(finishedCounter);
@@ -215,7 +217,7 @@ public class PackDialogController implements ActionContainer {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    eventDispatcher.postEvent(new PackAtlasUpdatedEvent(pack));
+                    eventDispatcher.postEvent(new PackAtlasUpdatedEvent(node.getOrigPack()));
                 }
             });
         }
@@ -223,7 +225,7 @@ public class PackDialogController implements ActionContainer {
 
     private static class TestProcessor implements PackProcessor {
         @Override
-        public void processPackage(ProjectModel projectModel, PackModel packModel, ObjectMap metadata) {
+        public void processPackage(PackProcessingNode processingNode) {
             try {
                 System.out.println("start processing");
                 Thread.sleep(MathUtils.random(500, 2500));

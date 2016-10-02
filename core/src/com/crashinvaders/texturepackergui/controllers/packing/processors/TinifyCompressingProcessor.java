@@ -2,11 +2,11 @@ package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.services.TinifyService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
 public class TinifyCompressingProcessor implements PackProcessor {
@@ -18,10 +18,13 @@ public class TinifyCompressingProcessor implements PackProcessor {
     }
 
     @Override
-    public void processPackage(ProjectModel projectModel, PackModel pack, ObjectMap metadata) throws Exception {
+    public void processPackage(PackProcessingNode node) throws Exception {
+        PackModel pack = node.getPack();
+        ProjectModel project = node.getProject();
+
         //TODO it should support jpg, right?
         if (!pack.getSettings().outputFormat.equals("png")) return;
-        if (projectModel.getPngCompression() == null || projectModel.getPngCompression().getType() != PngCompressionType.TINY_PNG) return;
+        if (project.getPngCompression() == null || project.getPngCompression().getType() != PngCompressionType.TINY_PNG) return;
 
         System.out.println("Tinify compression started");
 
@@ -41,7 +44,7 @@ public class TinifyCompressingProcessor implements PackProcessor {
 
             System.out.println(String.format("%s compressed for %+5.2f%%", page.textureFile.name(), pageCompression*100f));
         }
-        metadata.put(META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
+        node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
 
         System.out.println("Tinify compression finished");
     }

@@ -2,11 +2,11 @@ package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
+import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.googlecode.pngtastic.core.PngImage;
 import com.googlecode.pngtastic.core.PngOptimizer;
@@ -15,13 +15,16 @@ public class ZopfliCompressingProcessor implements PackProcessor {
     private static final String LOG_LEVEL = "INFO";
 
     @Override
-    public void processPackage(ProjectModel projectModel, PackModel pack, ObjectMap metadata) throws Exception {
+    public void processPackage(PackProcessingNode node) throws Exception {
+        PackModel pack = node.getPack();
+        ProjectModel project = node.getProject();
+
         if (!pack.getSettings().outputFormat.equals("png")) return;
-        if (projectModel.getPngCompression() == null || projectModel.getPngCompression().getType() != PngCompressionType.ZOPFLI) return;
+        if (project.getPngCompression() == null || project.getPngCompression().getType() != PngCompressionType.ZOPFLI) return;
 
         System.out.println("Zopfli compression started");
 
-        ZopfliCompressionModel compModel = (ZopfliCompressionModel)projectModel.getPngCompression();
+        ZopfliCompressionModel compModel = (ZopfliCompressionModel)project.getPngCompression();
         PngOptimizer pngOptimizer = new PngOptimizer(LOG_LEVEL);
         pngOptimizer.setCompressor("zopfli", compModel.getIterations());
 
@@ -48,7 +51,7 @@ public class ZopfliCompressingProcessor implements PackProcessor {
                 float localCompressionRate = (optimizerResult.getOptimizedFileSize() - optimizerResult.getOriginalFileSize()) / (float) optimizerResult.getOriginalFileSize();
                 compressionRate += localCompressionRate / pngOptimizer.getResults().size();
             }
-            metadata.put(META_COMPRESSION_RATE, compressionRate);
+            node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRate);
         }
 
         System.out.println("Zopfli compression finished");

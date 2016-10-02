@@ -9,25 +9,23 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
+import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
+import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.lml.scene2d.ui.reflected.AnimatedImage;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 
-class PackListViewItem extends Container<VisTable> {
+class ProcessingNodeListViewItem extends Container<VisTable> {
 
-    private final PackModel pack;
+    private final PackProcessingNode node;
     private final VisTable view;
     private final AnimatedImage imgStateIndicator;
     private final VisLabel lblPackName;
     private final VisLabel lblMetadata;
     private final VisImageButton btnLog;
 
-    private String log;
-
-    public PackListViewItem(PackModel pack, VisTable view) {
-        this.pack = pack;
+    public ProcessingNodeListViewItem(PackProcessingNode node, VisTable view) {
+        this.node = node;
         this.view = view;
 
         setActor(view);
@@ -45,12 +43,14 @@ class PackListViewItem extends Container<VisTable> {
             }
         });
 
-        lblPackName.setText(pack.getCanonicalName() + "[light-grey]" + pack.getSettings().scaleSuffix[0]);
+        lblPackName.setText(node.getPack().getCanonicalName() + "[light-grey]" + node.getPack().getSettings().scaleSuffix[0]);
     }
 
-    public void setLog(String log) {
-            this.log = log;
+    public void onFinishProcessing() {
+        // Enable log button
         btnLog.setDisabled(false);
+
+        parseMetadata();
     }
 
     public void setToError(Exception e) {
@@ -63,16 +63,9 @@ class PackListViewItem extends Container<VisTable> {
         imgStateIndicator.setCurrentFrame(0);
     }
 
-    @SuppressWarnings("unchecked")
-    public void parseMetadata(ObjectMap objectMap) {
-        if (objectMap.containsKey(PackProcessor.META_COMPRESSION_RATE)) {
-            float compression = (float) objectMap.get(PackProcessor.META_COMPRESSION_RATE);
-            lblMetadata.setText(String.format("[light-grey]%+5.2f%%[]", compression*100f));
-        }
-    }
-
     public void showLogWindow() {
-        if (log == null) return;
+        final String log = node.getLog();
+        if (Strings.isEmpty(log)) return;
 
         VisDialog dialog = (VisDialog)App.inst().getInterfaceService().getParser().parseTemplate(Gdx.files.internal("lml/dialogPackingLog.lml")).first();
         Container containerLog = dialog.findActor("containerLog");
@@ -99,8 +92,16 @@ class PackListViewItem extends Container<VisTable> {
             }
         });
 
-        dialog.getTitleLabel().setText(App.inst().getI18n().format("dialogTitlePackLog", pack.getName()));
+        dialog.getTitleLabel().setText(App.inst().getI18n().format("dialogTitlePackLog", node.getPack().getName()));
         dialog.show(getStage());
         getStage().setScrollFocus(scrLog);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void parseMetadata() {
+        if (node.hasMetadata(PackProcessingNode.META_COMPRESSION_RATE)) {
+            float compression = node.getMetadata(PackProcessingNode.META_COMPRESSION_RATE);
+            lblMetadata.setText(String.format("[light-grey]%+5.2f%%[]", compression*100f));
+        }
     }
 }

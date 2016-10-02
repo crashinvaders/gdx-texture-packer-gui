@@ -3,16 +3,17 @@ package com.crashinvaders.texturepackergui.controllers.packing.processors;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
 import java.io.File;
 
 public class PackingProcessor implements PackProcessor {
     @Override
-    public void processPackage(ProjectModel projectModel, PackModel pack, ObjectMap metadata) throws Exception {
+    public void processPackage(PackProcessingNode node) throws Exception {
+        PackModel pack = node.getPack();
         String settingsOrigExtension = pack.getSettings().atlasExtension;
 
         System.out.println("Packing started");

@@ -3,7 +3,6 @@ package com.crashinvaders.texturepackergui.utils.packprocessing;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.ThreadPrintStream;
@@ -18,7 +17,7 @@ import java.util.concurrent.Executors;
 
 public class PackProcessingManager {
 
-    private final Array<PackModel> packModels = new Array<>();
+    private final Array<PackProcessingNode> processingNodes = new Array<>();
     private final PackProcessor processor;
     private final SyncListener listener;
     private final ExecutorService executorService;
@@ -31,11 +30,11 @@ public class PackProcessingManager {
         this.executorService = Executors.newFixedThreadPool(4);
     }
 
-    public void postPack(PackModel pack) {
+    public void postProcessingNode(PackProcessingNode node) {
         if (processing) {
-            throw new IllegalStateException("PackProcessingManager is in processing stage. Posting not supported");
+            throw new IllegalStateException("PackProcessingManager is in processing stage. Posting is prohibited");
         }
-        packModels.add(pack);
+        processingNodes.add(node);
     }
 
     synchronized public void execute(final ProjectModel projectModel) {
@@ -46,7 +45,7 @@ public class PackProcessingManager {
 
         ThreadPrintStream.replaceSystemOut();
 
-        for (final PackModel packModel : packModels) {
+        for (final PackProcessingNode processingNode : processingNodes) {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
@@ -55,18 +54,20 @@ public class PackProcessingManager {
                     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ThreadPrintStream.setThreadLocalSystemOut(new PrintStream(outputStream));
                     try {
-                        listener.onBegin(packModel);
-                        processor.processPackage(projectModel, packModel, metadataMap);
-                        listener.onSuccess(packModel, outputStream.toString(), metadataMap);
-                        packProcessed(packModel);
+                        listener.onBegin(processingNode);
+                        processor.processPackage(processingNode);
+                        processingNode.setLog(outputStream.toString());
+                        listener.onSuccess(processingNode);
+                        packProcessed(processingNode);
                     } catch (Exception e) {
                         String message = CommonUtils.fetchMessageStack(e);
                         System.err.println("[output-red]Exception occurred:[] " + message);
                         System.err.println("[output-red]Stack trace:[] ");
                         e.printStackTrace();
 
-                        listener.onError(packModel, outputStream.toString(), metadataMap, e);
-                        packProcessed(packModel);
+                        processingNode.setLog(outputStream.toString());
+                        listener.onError(processingNode, e);
+                        packProcessed(processingNode);
                     } finally {
                         IOUtils.closeQuietly(outputStream);
                     }
@@ -75,11 +76,11 @@ public class PackProcessingManager {
         }
     }
 
-    private void packProcessed(PackModel packModel) {
-        synchronized (packModels) {
-            packModels.removeValue(packModel, true);
+    private void packProcessed(PackProcessingNode processingNode) {
+        synchronized (processingNodes) {
+            processingNodes.removeValue(processingNode, true);
 
-            if (packModels.size == 0) {
+            if (processingNodes.size == 0) {
                 System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
                 System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
 
@@ -116,29 +117,29 @@ public class PackProcessingManager {
         }
 
         @Override
-        public void onBegin(final PackModel pack) {
+        public void onBegin(final PackProcessingNode node) {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onBegin(pack);
+                    listener.onBegin(node);
                 }
             });
         }
         @Override
-        public void onError(final PackModel pack, final String log, final ObjectMap metadataMap, final Exception e) {
+        public void onError(final PackProcessingNode node, final Exception e) {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onError(pack, log, metadataMap, e);
+                    listener.onError(node, e);
                 }
             });
         }
         @Override
-        public void onSuccess(final PackModel pack, final String log, final ObjectMap metadataMap) {
+        public void onSuccess(final PackProcessingNode node) {
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
-                    listener.onSuccess(pack, log, metadataMap);
+                    listener.onSuccess(node);
                 }
             });
         }
@@ -148,8 +149,8 @@ public class PackProcessingManager {
         void onProcessingStarted();
         void onProcessingFinished();
 
-        void onBegin(PackModel pack);
-        void onError(PackModel pack, String log, ObjectMap metadataMap, Exception e);
-        void onSuccess(PackModel pack, String log, ObjectMap metadataMap);
+        void onBegin(PackProcessingNode node);
+        void onSuccess(PackProcessingNode node);
+        void onError(PackProcessingNode node, Exception e);
     }
 }
