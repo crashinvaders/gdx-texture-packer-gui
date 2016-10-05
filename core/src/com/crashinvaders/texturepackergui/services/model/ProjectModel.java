@@ -12,7 +12,6 @@ public class ProjectModel {
     private PackModel selectedPack;
     private FileHandle projectFile;
     private EventDispatcher eventDispatcher;
-
     private PngCompressionModel pngCompression;
 
     public ProjectModel() {

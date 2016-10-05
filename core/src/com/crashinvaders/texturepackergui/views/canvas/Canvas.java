@@ -6,10 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
@@ -25,7 +22,7 @@ import com.github.czyzby.lml.parser.tag.LmlTagProvider;
 import com.kotcrab.vis.ui.widget.VisImageTextButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class Canvas extends WidgetGroup {
+public class Canvas extends Stack {
 
 	private final Rectangle widgetAreaBounds = new Rectangle();
 	private final Rectangle scissorBounds = new Rectangle();
@@ -46,7 +43,6 @@ public class Canvas extends WidgetGroup {
 			// Background
 			{
 				Image backgroundFill = new Image(skin.getTiledDrawable("custom/transparent-light"));
-				backgroundFill.setFillParent(true);
 				addActor(backgroundFill);
 			}
 
@@ -112,7 +108,6 @@ public class Canvas extends WidgetGroup {
 				table.add(btnPrevPage);
 
 				Container container = new Container<>(table);
-				container.setFillParent(true);
 				container.align(Align.topRight);
 				container.padTop(10f);
 				addActor(container);
@@ -123,7 +118,6 @@ public class Canvas extends WidgetGroup {
 				infoPanel = new InfoPanel(skin);
 
 				Container container = new Container<>(infoPanel);
-				container.setFillParent(true);
 				container.align(Align.bottomLeft);
 				addActor(container);
 			}

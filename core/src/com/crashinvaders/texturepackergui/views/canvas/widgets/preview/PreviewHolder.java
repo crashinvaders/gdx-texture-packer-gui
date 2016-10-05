@@ -29,7 +29,6 @@ public class PreviewHolder extends WidgetGroup {
 
     public PreviewHolder(Skin skin) {
         this.skin = skin;
-        setFillParent(true);
 
         noPageHint = new NoPageHint(skin);
         addActor(noPageHint);
