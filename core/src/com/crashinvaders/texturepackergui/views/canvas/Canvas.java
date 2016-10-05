@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.views.canvas.widgets.BackgroundWidget;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.InfoPanel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.preview.PreviewHolder;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -42,8 +43,8 @@ public class Canvas extends Stack {
 		{
 			// Background
 			{
-				Image backgroundFill = new Image(skin.getTiledDrawable("custom/transparent-light"));
-				addActor(backgroundFill);
+				BackgroundWidget backgroundWidget = new BackgroundWidget(skin);
+				addActor(backgroundWidget);
 			}
 
 			// Page preview
