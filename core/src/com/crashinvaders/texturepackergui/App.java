@@ -10,7 +10,9 @@ import com.crashinvaders.common.PrioritizedInputMultiplexer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.shortcuts.GlobalShortcutHandler;
 import com.github.czyzby.autumn.annotation.Component;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.context.Context;
 import com.github.czyzby.autumn.context.ContextDestroyer;
 import com.github.czyzby.autumn.context.ContextInitializer;
 import com.github.czyzby.autumn.mvc.component.asset.AssetService;
@@ -52,7 +54,9 @@ public class App implements ApplicationListener {
     private ModelService modelService;
     private LocaleService localeService;
     private GlobalShortcutHandler shortcutHandler;
-    private ComponentExtractorService componentExtractorService;
+    private ComponentExtractor componentExtractor;
+    private EventDispatcher eventDispatcher;
+    private MessageDispatcher messageDispatcher;
 
     /** Singleton accessor */
     public static App inst() {
@@ -142,7 +146,7 @@ public class App implements ApplicationListener {
                 // Custom
                 modelService = new ModelService(),
                 shortcutHandler = new GlobalShortcutHandler(),
-                componentExtractorService = new ComponentExtractorService());
+                componentExtractor = new ComponentExtractor());
     }
 
     private void clearComponentScanners() {
@@ -206,8 +210,8 @@ public class App implements ApplicationListener {
     //region Accessors
     public InterfaceService getInterfaceService() { return interfaceService; }
     public ModelService getModelService() { return modelService; }
-    public EventDispatcher getEventDispatcher() { return componentExtractorService.eventDispatcher; }
-    public MessageDispatcher getMessageDispatcher() { return componentExtractorService.messageDispatcher; }
+    public EventDispatcher getEventDispatcher() { return eventDispatcher; }
+    public MessageDispatcher getMessageDispatcher() { return messageDispatcher; }
     public AppParams getParams() { return params; }
     public PrioritizedInputMultiplexer getInput() { return inputMultiplexer; }
     public GlobalShortcutHandler getShortcuts() { return shortcutHandler; }
@@ -216,11 +220,10 @@ public class App implements ApplicationListener {
 
     /** This is utility component class that helps to get access to some system components for App class */
     @SuppressWarnings("WeakerAccess")
-    @Component
-    public static class ComponentExtractorService {
-        @Inject EventDispatcher eventDispatcher;
-        @Inject MessageDispatcher messageDispatcher;
-
-        public ComponentExtractorService() { }
+    private class ComponentExtractor {
+        @Initiate() void extractComponents(EventDispatcher eventDispatcher, MessageDispatcher messageDispatcher) {
+            App.this.eventDispatcher = eventDispatcher;
+            App.this.messageDispatcher = messageDispatcher;
+        }
     }
 }

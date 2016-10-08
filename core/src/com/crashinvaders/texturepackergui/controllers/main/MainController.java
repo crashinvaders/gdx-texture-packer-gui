@@ -88,6 +88,16 @@ public class MainController implements ActionContainer, ViewResizer {
         actorsPackSettings.cboWrapY.setItems(WidgetData.textureWraps);
         actorsGlobalSettings.cboPngCompression.setItems(WidgetData.CompressionPng.values());
 
+        actorsPacks.packList = actorsPacks.packListTable.getListView();
+        actorsPacks.packListAdapter = ((PackListAdapter) actorsPacks.packList.getAdapter());
+        actorsPacks.packListAdapter.setSelectionChangeListener(new PackListAdapter.SelectionChangedListener() {
+            @Override
+            public void onSelectionChanged(PackModel pack) {
+                getProject().setSelectedPack(pack);
+                Gdx.app.postRunnable(normalizePackListScrollRunnable);
+            }
+        });
+
         toastManager = new ToastManager(getStage());
         toastManager.setAlignment(Align.bottomRight);
 
@@ -177,9 +187,8 @@ public class MainController implements ActionContainer, ViewResizer {
 
     @OnEvent(PackListOrderChangedEvent.class) void onEvent(PackListOrderChangedEvent event) {
         if (initialized) {
-            Array items = actorsPacks.listPacks.getItems();
-            items.clear();
-            items.addAll(getProject().getPacks());
+            //TODO rearrange items within adapter (do not recreate items)
+            updatePackList();
         }
     }
 
@@ -213,23 +222,11 @@ public class MainController implements ActionContainer, ViewResizer {
 
     //endregion
 
-    //region Actions
-    @LmlAction("onPackListSelectionChanged") void onPackListSelectionChanged(final VisList list) {
-        // Scroll down to selection
-        Gdx.app.postRunnable(normalizePackListScrollRunnable);
-
-        final PackModel selectedPack = (PackModel) list.getSelected();
-        if (getSelectedPack() == selectedPack) return;
-
-        final ProjectModel project = getProject();
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                project.setSelectedPack(selectedPack);
-            }
-        });
+    @LmlAction("createPacksListAdapter") PackListAdapter createPacksListAdapter() {
+        return new PackListAdapter(interfaceService.getParser());
     }
 
+    //region Actions
     @LmlAction("onPackListRightClick") void onPackListRightClick(final OnRightClickLmlAttribute.Params params) {
         VisList list = (VisList)params.actor;
 
@@ -383,40 +380,15 @@ public class MainController implements ActionContainer, ViewResizer {
     }
     //endregion
 
-    /** @return localized string */
-    private String getString(String key) {
-        return localeService.getI18nBundle().get(key);
-    }
-
-    /** @return localized string */
-    private String getString(String key, Object... args) {
-        return localeService.getI18nBundle().format(key, args);
-    }
-
-    private Stage getStage() {
-        return stage;
-    }
-
-    private PackModel getSelectedPack() {
-        return getProject().getSelectedPack();
-    }
-
-    private ProjectModel getProject() {
-        return modelService.getProject();
-    }
-
-    @SuppressWarnings("unchecked")
-    private <T extends Actor> T parseLml(FileHandle fileHandle) {
-        LmlParser parser = interfaceService.getParser();
-        parser.getData().addActionContainer(this.getClass().getSimpleName(), this);
-        T actor = (T) parser.parseTemplate(fileHandle).first();
-        parser.getData().removeActionContainer(this.getClass().getSimpleName());
-        return actor;
-    }
-
     private void updateViewsFromPack(PackModel pack) {
-        if (actorsPacks.listPacks.getSelected() != pack) {
-            actorsPacks.listPacks.setSelected(pack);
+        if (actorsPacks.packListAdapter.getSelected() != pack) {
+            actorsPacks.packListAdapter.setSelected(pack, false);
+        }
+
+        // Update pack list item
+        PackListAdapter.ViewHolder viewHolder = actorsPacks.packListAdapter.getViewHolder(pack);
+        if (viewHolder != null) {
+            viewHolder.updateViewData();
         }
 
         if (pack != null) {
@@ -483,12 +455,10 @@ public class MainController implements ActionContainer, ViewResizer {
 
     private void updatePackList() {
         Array<PackModel> packs = getProject().getPacks();
-        actorsPacks.listPacks.setItems(packs);
 
-        PackModel selectedPack = getSelectedPack();
-        if (actorsPacks.listPacks.getSelected() != selectedPack) {
-            actorsPacks.listPacks.setSelected(selectedPack);
-        }
+        actorsPacks.packListAdapter.clear();
+        actorsPacks.packListAdapter.addAll(packs);
+        actorsPacks.packListAdapter.setSelected(getSelectedPack(), false);
     }
 
 	private void updatePngCompression () {
@@ -557,10 +527,46 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
+    //region Utility methods
+    /** @return localized string */
+    private String getString(String key) {
+        return localeService.getI18nBundle().get(key);
+    }
+
+    /** @return localized string */
+    private String getString(String key, Object... args) {
+        return localeService.getI18nBundle().format(key, args);
+    }
+
+    private Stage getStage() {
+        return stage;
+    }
+
+    private PackModel getSelectedPack() {
+        return getProject().getSelectedPack();
+    }
+
+    private ProjectModel getProject() {
+        return modelService.getProject();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends Actor> T parseLml(FileHandle fileHandle) {
+        LmlParser parser = interfaceService.getParser();
+        parser.getData().addActionContainer(this.getClass().getSimpleName(), this);
+        T actor = (T) parser.parseTemplate(fileHandle).first();
+        parser.getData().removeActionContainer(this.getClass().getSimpleName());
+        return actor;
+    }
+    //endregion
+
     private Runnable normalizePackListScrollRunnable = new Runnable() {
         @Override
         public void run() {
-            Scene2dUtils.scrollDownToSelectedListItem(actorsPacks.scrPacks, actorsPacks.listPacks);
+            PackModel pack = getSelectedPack();
+            if (pack != null) {
+                Scene2dUtils.scrollDownToSelectedListItem(actorsPacks.packList, pack);
+            }
         }
     };
 }

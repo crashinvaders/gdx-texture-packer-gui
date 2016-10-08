@@ -91,6 +91,24 @@ public class ModelUtils {
 		eventDispatcher.postEvent(new PackListOrderChangedEvent());
 	}
 
+    public void selectPrevPack(PackModel pack) {
+        ensurePackExists(pack);
+
+        ProjectModel project = getProject();
+        Array<PackModel> packs = project.getPacks();
+
+        project.setSelectedPack(packs.get(Math.max(0, packs.indexOf(pack, true)-1)));
+    }
+
+    public void selectNextPack(PackModel pack) {
+        ensurePackExists(pack);
+
+        ProjectModel project = getProject();
+        Array<PackModel> packs = project.getPacks();
+
+        project.setSelectedPack(packs.get(Math.min(packs.size-1, packs.indexOf(pack, true)+1)));
+    }
+
 	private void ensurePackExists(PackModel pack) {
         Array<PackModel> packs = getProject().getPacks();
         if (!packs.contains(pack, true)) {
@@ -101,5 +119,4 @@ public class ModelUtils {
     private ProjectModel getProject() {
         return modelService.getProject();
     }
-
 }

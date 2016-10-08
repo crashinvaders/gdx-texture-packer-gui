@@ -4,6 +4,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
+import com.github.czyzby.autumn.processor.event.EventListener;
 
 public class BackgroundWidget extends Stack {
 
@@ -31,17 +34,17 @@ public class BackgroundWidget extends Stack {
     }
 
     private void initialize() {
-//        eventDispatcher.addListener(new EventListener<ProjectPropertyChangedEvent>() {
-//            @Override
-//            public boolean processEvent(ProjectPropertyChangedEvent event) {
-//                if (!initialized) return false;
-//
-//                return true;
-//            }
-//        }, ProjectPropertyChangedEvent.class, true);
+        App.inst().getEventDispatcher().addListener(new EventListener<ProjectPropertyChangedEvent>() {
+            @Override
+            public boolean processEvent(ProjectPropertyChangedEvent event) {
+                if (!initialized) return false;
+
+                return true;
+            }
+        }, ProjectPropertyChangedEvent.class, true);
     }
 
     private void dispose() {
-
+        //TODO unsubscribe from events when Autumn will be updated to 1.8
     }
 }

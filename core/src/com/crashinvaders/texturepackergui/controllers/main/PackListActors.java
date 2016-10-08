@@ -1,7 +1,10 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.github.czyzby.lml.annotation.LmlActor;
+import com.github.czyzby.lml.annotation.LmlAfter;
+import com.kotcrab.vis.ui.widget.ListView;
 import com.kotcrab.vis.ui.widget.VisList;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTextField;
@@ -17,8 +20,6 @@ public class PackListActors {
     @LmlActor("btnMenuPackDown") Button btnMenuPackDown;
     @LmlActor("btnMenuOpenProject") Button btnMenuOpenProject;
     @LmlActor("btnMenuCloseProject") Button btnMenuCloseProject;
-    @LmlActor("scrPacks") VisScrollPane scrPacks;
-    @LmlActor("listPacks") VisList listPacks;
     @LmlActor("edtInputDir") VisTextField edtInputDir;
     @LmlActor("btnPickInputDir") Button btnPickInputDir;
     @LmlActor("edtOutputDir") VisTextField edtOutputDir;
@@ -26,4 +27,8 @@ public class PackListActors {
     @LmlActor("edtFileName") VisTextField edtFileName;
     @LmlActor("btnPackAll") Button btnPackAll;
     @LmlActor("btnPackSelected") Button btnPackSelected;
+
+    @LmlActor("lvPacks") ListView.ListViewTable<PackModel> packListTable;
+    ListView<PackModel> packList;
+    PackListAdapter packListAdapter;
 }

@@ -5,6 +5,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter;
+import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
+import com.kotcrab.vis.ui.util.adapter.ItemAdapter;
+import com.kotcrab.vis.ui.widget.ListView;
 
 @SuppressWarnings("WeakerAccess")
 public class Scene2dUtils {
@@ -47,4 +51,13 @@ public class Scene2dUtils {
         scrollPane.scrollTo(0, y, 0, height);
     }
 
+    /**
+     * @param listView should has {@link ItemAdapter}
+     * @param item to scroll to
+     */
+    public static void scrollDownToSelectedListItem(ListView listView, Object item) {
+        ItemAdapter adapter = (ItemAdapter) listView.getAdapter();
+        Actor itemView = adapter.getView(item);
+        listView.getScrollPane().scrollTo(0, itemView.getY(), 0, itemView.getHeight());
+    }
 }

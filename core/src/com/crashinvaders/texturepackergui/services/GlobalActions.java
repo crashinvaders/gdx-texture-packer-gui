@@ -91,6 +91,7 @@ public class GlobalActions implements ActionContainer {
                 Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
                     @Override
                     public void yes() {
+                        modelUtils.selectPrevPack(pack);
                         getProject().removePack(pack);
                     }
                 });
@@ -111,40 +112,18 @@ public class GlobalActions implements ActionContainer {
         modelUtils.movePackDown(pack);
     }
 
-    //TODO move model logic code to ModelUtils
     @LmlAction("selectNextPack") public void selectNextPack() {
-        ProjectModel project = getProject();
-        Array<PackModel> packs = project.getPacks();
-        PackModel pack = project.getSelectedPack();
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
 
-        if (pack == null) {
-            if (packs.size > 0) {
-                project.setSelectedPack(packs.first());
-            }
-            return;
-        }
-
-        int idx = packs.indexOf(pack, true) + 1;
-        PackModel nextPack = packs.get(Math.min(idx, packs.size - 1));
-        project.setSelectedPack(nextPack);
+        modelUtils.selectNextPack(pack);
     }
 
-    //TODO move model logic code to ModelUtils
     @LmlAction("selectPreviousPack") public void selectPreviousPack() {
-        ProjectModel project = getProject();
-        Array<PackModel> packs = project.getPacks();
-        PackModel pack = project.getSelectedPack();
+        PackModel pack = getSelectedPack();
+        if (pack == null) return;
 
-        if (pack == null) {
-            if (packs.size > 0) {
-                project.setSelectedPack(packs.peek());
-            }
-            return;
-        }
-
-        int idx = packs.indexOf(pack, true) - 1;
-        PackModel prevPack = packs.get(Math.max(idx, 0));
-        project.setSelectedPack(prevPack);
+        modelUtils.selectPrevPack(pack);
     }
 
     @LmlAction("packAll") public void packAll() {
