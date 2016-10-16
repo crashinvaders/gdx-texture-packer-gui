@@ -5,6 +5,9 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../core/assets");
+project.ext.distOutputDir = "../distribution/output"
+project.ext.distFileName = "$project.ext.appName-$project.ext.version"
+project.ext.nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -43,10 +46,22 @@ distRelease.dependsOn classes
 
 task zipRelease(type: Zip) {
     from distRelease
-    from file("../distribution")
-    archiveName = "$project.ext.appName-$project.ext.version.$extension"
+    from file("../distribution/files")
+    archiveName = "$project.ext.distFileName.$extension"
+    destinationDir = file("$project.ext.distOutputDir")
 }
 zipRelease.dependsOn distRelease
+
+task nsisInstaller(type:Exec) {
+    workingDir '../distribution'
+
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        commandLine 'cmd', '/c', "$project.ext.nsisCommand"
+    } else {
+        commandLine "$project.ext.nsisCommand"
+    }
+}
+nsisInstaller.dependsOn zipRelease
 
 eclipse {
     project {

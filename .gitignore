@@ -63,6 +63,9 @@ build/
 ## OS Specific
 .DS_Store
 
+## Distributions
+/distribution/output/
+
 ## Resources
 /resources/ignore/
 *.psd

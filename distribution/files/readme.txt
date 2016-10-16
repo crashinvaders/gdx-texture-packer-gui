@@ -17,9 +17,6 @@ MacOS and UNIX
 You may execute launch.sh bash script to launch application
 
 Windows
-There are number of utility files to integrate application with Windows:
-create_desktop_shortcut.bat - creates runnable shortcut on the user's desktop
-add_to_start_menu.bat - adds runnable shortcut to user's start menu
 launch.bat - starts application
 launcher_no_cmd.vbs - does exactly what launch.bat does, but CMD window won't appear in that case
 
