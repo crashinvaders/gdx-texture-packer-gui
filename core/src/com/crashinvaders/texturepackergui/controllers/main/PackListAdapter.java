@@ -1,7 +1,11 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -36,26 +40,9 @@ public class PackListAdapter extends ArrayAdapter<PackModel, VisTable> {
         return (ViewHolder) getView(item).getUserObject();
     }
 
-//    @Override
-//    public void itemsChanged() {
-//        super.itemsChanged();
-//
-//        Array<PackModel> selection = getSelectionManager().getSelection();
-//        Iterator<PackModel> iterator = selection.iterator();
-//        while (iterator.hasNext()) {
-//            PackModel item = iterator.next();
-//            if (indexOf(item) == -1) {
-//                iterator.remove();
-//            }
-//        }
-//    }
-//
-//    @Override
-//    protected void itemRemoved(PackModel item) {
-//        super.itemRemoved(item);
-//
-//        getSelectionManager().getSelection().removeValue(item, true);
-//    }
+    public ViewHolder getViewHolder(Actor view) {
+        return (ViewHolder) view.getUserObject();
+    }
 
     @Override
     protected VisTable createView(PackModel item) {
@@ -63,6 +50,11 @@ public class PackListAdapter extends ArrayAdapter<PackModel, VisTable> {
         lmlParser.createView(viewHolder, Gdx.files.internal("lml/packListItem.lml"));
         viewHolder.root.setUserObject(viewHolder);
         return viewHolder.root;
+    }
+
+    @Override
+    protected void prepareViewBeforeAddingToTable(PackModel item, VisTable view) {
+        super.prepareViewBeforeAddingToTable(item, view);
     }
 
     @Override
@@ -104,6 +96,10 @@ public class PackListAdapter extends ArrayAdapter<PackModel, VisTable> {
             this.selected = selected;
 
             root.setBackground(selected ? skin.getDrawable("padded-list-selection") : null);
+        }
+
+        public PackModel getPack() {
+            return pack;
         }
     }
 }

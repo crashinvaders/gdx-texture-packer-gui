@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
@@ -23,6 +24,7 @@ import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCo
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
+import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -51,9 +53,10 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 @SuppressWarnings("WeakerAccess")
-@View(id = "main", value = "lml/main.lml", first = true)
+@View(id = MainController.VIEW_ID, value = "lml/main.lml", first = true)
 public class MainController implements ActionContainer, ViewResizer {
-    private static final String LOG = MainController.class.getSimpleName();
+    public static final String VIEW_ID = "main";
+    public static final String LOG = MainController.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
@@ -221,24 +224,18 @@ public class MainController implements ActionContainer, ViewResizer {
                 throw new IllegalStateException("Unexpected version check event: " + event.getAction());
         }
     }
-
     //endregion
 
+    //region Actions
     @LmlAction("createPacksListAdapter") PackListAdapter createPacksListAdapter() {
         return new PackListAdapter(interfaceService.getParser());
     }
 
-    //region Actions
     @LmlAction("onPackListRightClick") void onPackListRightClick(final OnRightClickLmlAttribute.Params params) {
-        VisList list = (VisList)params.actor;
+        PackListAdapter.ViewHolder viewHolder = actorsPacks.packListAdapter.getViewHolder(params.actor);
+        PackModel pack = viewHolder.getPack();
 
-        // Simulate left click to trigger selection logic
-        Scene2dUtils.simulateClickGlobal(list, 0, 0, params.stageX, params.stageY);
-
-        final PackModel pack = (PackModel) list.getSelected();
-
-        PopupMenu popupMenu = parseLml(Gdx.files.internal("lml/packListMenu.lml"));
-
+        PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, VIEW_ID, this, Gdx.files.internal("lml/packListMenu.lml"));
         MenuItem menuItem;
         menuItem = popupMenu.findActor("miRename");
         menuItem.setDisabled(pack == null);
@@ -462,11 +459,17 @@ public class MainController implements ActionContainer, ViewResizer {
         Array<PackModel> packs = getProject().getPacks();
         PackModel pack = getSelectedPack();
 
+        boolean acRegistered = LmlAutumnUtils.registerActionContainer(interfaceService, VIEW_ID, this);
+
         actorsPacks.packListAdapter.clear();
         actorsPacks.packListAdapter.addAll(packs);
         actorsPacks.packListAdapter.getSelectionManager().deselectAll();
         if (pack != null) {
             actorsPacks.packListAdapter.getSelectionManager().select(pack);
+        }
+
+        if (acRegistered) {
+            LmlAutumnUtils.unregisterActionContainer(interfaceService, VIEW_ID);
         }
     }
 
@@ -559,14 +562,23 @@ public class MainController implements ActionContainer, ViewResizer {
         return modelService.getProject();
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends Actor> T parseLml(FileHandle fileHandle) {
-        LmlParser parser = interfaceService.getParser();
-        parser.getData().addActionContainer(this.getClass().getSimpleName(), this);
-        T actor = (T) parser.parseTemplate(fileHandle).first();
-        parser.getData().removeActionContainer(this.getClass().getSimpleName());
-        return actor;
-    }
+//    @SuppressWarnings("unchecked")
+//    private <T extends Actor> T parseLml(FileHandle fileHandle) {
+//        LmlParser parser = interfaceService.getParser();
+//        String actionContainerId = interfaceService.getController(this.getClass()).getViewId();
+//        boolean explicitAddActionContainer = parser.getData().getActionContainer(actionContainerId) == null;
+//
+//        if (explicitAddActionContainer) {
+//            parser.getData().addActionContainer(actionContainerId, this);
+//        }
+//
+//        T actor = (T) parser.parseTemplate(fileHandle).first();
+//
+//        if (explicitAddActionContainer) {
+//            parser.getData().removeActionContainer(actionContainerId);
+//        }
+//        return actor;
+//    }
     //endregion
 
     private Runnable normalizePackListScrollRunnable = new Runnable() {
