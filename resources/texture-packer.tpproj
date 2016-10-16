@@ -1,7 +1,7 @@
 name=uiskin
 filename=
-input=uiskin\images
-output=..\core\assets\skin
+input=uiskin/images
+output=../core/assets/skin
 
 alias=true
 alphaThreshold=0
@@ -29,3 +29,11 @@ wrapX=ClampToEdge
 wrapY=ClampToEdge
 premultiplyAlpha=false
 combineSubdirectories=true
+grid=false
+square=false
+
+scaleFactors=[{suffix:"",factor:1}]
+
+-PROJ-
+
+previewBackgroundColor=808080ff

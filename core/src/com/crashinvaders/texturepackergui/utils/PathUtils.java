@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.utils;
 
+import com.github.czyzby.kiwi.util.common.Strings;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -20,6 +21,7 @@ public class PathUtils {
 
 	/**
 	 * Gets the relative path from one file to another.
+	 * @return in unix format
 	 */
 	public static String relativize(String targetPath, String basePath) {
 		if (basePath == null || basePath.equals("")) return targetPath;
@@ -92,6 +94,8 @@ public class PathUtils {
 		}
 
 		relative.append(normalizedTargetPath.substring(common.length()));
+		// Return path in unix format
+		relative = Strings.replace(relative, File.separator, "/");
 		return relative.toString();
 	}
 }
