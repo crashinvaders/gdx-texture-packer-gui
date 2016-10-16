@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
@@ -169,6 +170,7 @@ public class GlobalActions implements ActionContainer {
         }
 
         final FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
 		fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
 			.rule(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT).get());
@@ -208,6 +210,7 @@ public class GlobalActions implements ActionContainer {
         }
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.SAVE);
+        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
 		fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
 			.rule(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT).get());
@@ -240,6 +243,7 @@ public class GlobalActions implements ActionContainer {
         }
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
@@ -262,6 +266,7 @@ public class GlobalActions implements ActionContainer {
         }
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
         fileChooser.setListener(new FileChooserAdapter() {
             @Override

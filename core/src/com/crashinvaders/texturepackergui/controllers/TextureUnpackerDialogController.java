@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TextureUnpacker;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
@@ -48,6 +49,7 @@ public class TextureUnpackerDialogController implements ActionContainer {
         FileHandle dir = FileUtils.obtainIfExists(edtAtlasPath.getText());
 
         final FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
                 .rule("Texture atlas (*.json;*.pack;*.atlas)", "json", "pack", "atlas").get());
@@ -69,6 +71,7 @@ public class TextureUnpackerDialogController implements ActionContainer {
         }
 
         FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
+        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
