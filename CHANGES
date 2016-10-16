@@ -3,6 +3,7 @@
 - Export with multiple scale factors
 - Atlas preview background color can be changed
 - Double click on pack list triggers packing procedure
+- Fixed: relative file paths now correctly saved in UNIX format
 
 [4.1.0]
 - Parallel processing for atlas packing
