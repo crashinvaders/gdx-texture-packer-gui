@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE table SYSTEM "../../../lml.dtd">
 
-<table id="root" padleft="4" padright="4" rightclick="onPackListRightClick">
+<table id="root" padleft="4" padright="4" rightclick="onPackListRightClick" doubleclick="global.packSelected">
     <label id="lblName" textalign="left" growx="true"/>
 </table>
