@@ -26,11 +26,11 @@ public class ModelService {
         projectModel.setEventDispatcher(eventDispatcher);
         this.projectModel = projectModel;
 
+        eventDispatcher.postEvent(new ProjectInitializedEvent(this, projectModel));
+
         // Assign first available pack as selected
         if (projectModel.getPacks().size > 0) {
             projectModel.setSelectedPack(projectModel.getPacks().first());
         }
-
-        eventDispatcher.postEvent(new ProjectInitializedEvent(this, projectModel));
     }
 }

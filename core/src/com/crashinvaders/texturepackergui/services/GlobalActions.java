@@ -91,7 +91,7 @@ public class GlobalActions implements ActionContainer {
                 Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
                     @Override
                     public void yes() {
-                        modelUtils.selectPrevPack(pack);
+                        modelUtils.selectClosestPack(pack);
                         getProject().removePack(pack);
                     }
                 });

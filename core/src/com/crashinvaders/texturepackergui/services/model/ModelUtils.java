@@ -109,6 +109,21 @@ public class ModelUtils {
         project.setSelectedPack(packs.get(Math.min(packs.size-1, packs.indexOf(pack, true)+1)));
     }
 
+    /**
+     * Selects previous pack. If there is no previous pack, selects next pack
+     */
+    public void selectClosestPack(PackModel pack) {
+        ensurePackExists(pack);
+        Array<PackModel> packs = getProject().getPacks();
+
+        int index = packs.indexOf(pack, true);
+        if (index > 0) {
+            selectPrevPack(pack);
+        } else {
+            selectNextPack(pack);
+        }
+    }
+
 	private void ensurePackExists(PackModel pack) {
         Array<PackModel> packs = getProject().getPacks();
         if (!packs.contains(pack, true)) {

@@ -40,6 +40,8 @@ import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.ToastManager;
+import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter;
+import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.FloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
@@ -90,9 +92,9 @@ public class MainController implements ActionContainer, ViewResizer {
 
         actorsPacks.packList = actorsPacks.packListTable.getListView();
         actorsPacks.packListAdapter = ((PackListAdapter) actorsPacks.packList.getAdapter());
-        actorsPacks.packListAdapter.setSelectionChangeListener(new PackListAdapter.SelectionChangedListener() {
+        actorsPacks.packListAdapter.getSelectionManager().setListener(new ListSelectionAdapter<PackModel, VisTable>() {
             @Override
-            public void onSelectionChanged(PackModel pack) {
+            public void selected(PackModel pack, VisTable view) {
                 getProject().setSelectedPack(pack);
                 Gdx.app.postRunnable(normalizePackListScrollRunnable);
             }
@@ -382,7 +384,10 @@ public class MainController implements ActionContainer, ViewResizer {
 
     private void updateViewsFromPack(PackModel pack) {
         if (actorsPacks.packListAdapter.getSelected() != pack) {
-            actorsPacks.packListAdapter.setSelected(pack, false);
+            actorsPacks.packListAdapter.getSelectionManager().deselectAll();
+            if (pack != null) {
+                actorsPacks.packListAdapter.getSelectionManager().select(pack);
+            }
         }
 
         // Update pack list item
@@ -455,10 +460,14 @@ public class MainController implements ActionContainer, ViewResizer {
 
     private void updatePackList() {
         Array<PackModel> packs = getProject().getPacks();
+        PackModel pack = getSelectedPack();
 
         actorsPacks.packListAdapter.clear();
         actorsPacks.packListAdapter.addAll(packs);
-        actorsPacks.packListAdapter.setSelected(getSelectedPack(), false);
+        actorsPacks.packListAdapter.getSelectionManager().deselectAll();
+        if (pack != null) {
+            actorsPacks.packListAdapter.getSelectionManager().select(pack);
+        }
     }
 
 	private void updatePngCompression () {

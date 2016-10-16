@@ -6,16 +6,21 @@
     <vistable tablealign="topleft" grow="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8">
 
         <vistable growx="true">
-            <container background="listBorder" growx="true" fill="true" minwidth="64" maxheight="200">
+            <!--<container background="listBorder" growx="true" fill="true" minwidth="64" maxheight="200">-->
                 <listview
                         id="lvPacks"
                         adapter="createPacksListAdapter"
+                        style="custom"
                         align="top"
+                        growx="true"
+                        fill="true"
+                        minwidth="64"
+                        maxheight="200"
                         disabledx="true"
                         fadescrollbars="false"
                         overscroll="false"
                         flickscroll="false"/>
-            </container>
+            <!--</container>-->
 
             <!--FIXME ScrollPane sometimes grows a way too much in height (hard to control), so we just restrict it with 200 points by height for now -->
             <!--<visscrollpane id="scrPacks" style="custom" growx="true" filly="true" minwidth="64" maxheight="200" disabledx="true" flickscroll="false" fadescrollbars="false">-->
