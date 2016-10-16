@@ -37,7 +37,7 @@
 
         <separator growy="true"/>
 
-        <container grow="true" fill="true">
+        <container grow="true" fill="true" rightclick="onCanvasRightClick">
             <:titledpane title="@panelTitleAtlasPreview" icon="custom/ic-title-atlas">
                 <container id="canvasContainer" grow="true" fill="true">
                     <canvas id="canvas"/>

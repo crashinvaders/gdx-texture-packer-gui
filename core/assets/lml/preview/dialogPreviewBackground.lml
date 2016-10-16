@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../../lml.dtd">
+
+<visdialog
+        id="root"
+        title="@dPbTitle"
+        closebutton="true"
+        closeonescape="true">
+    <vistable onecolumn="true">
+        <basiccolorpicker id="colorPicker" listener="onColorChanged"/>
+    </vistable>
+</visdialog>

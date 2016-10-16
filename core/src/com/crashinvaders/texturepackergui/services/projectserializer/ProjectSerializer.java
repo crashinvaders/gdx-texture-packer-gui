@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.services.projectserializer;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -102,6 +103,8 @@ public class ProjectSerializer {
             sb.append("pngCompressionType=").append(pngCompression.getType().key).append("\n");
             sb.append("pngCompressionData=").append(pngCompression.serializeState()).append("\n");
         }
+
+        sb.append("previewBackgroundColor=").append(projectModel.getPreviewBackgroundColor().toString()).append("\n");
     }
 
     private String serializePack(PackModel pack, FileHandle root) {
@@ -200,6 +203,11 @@ public class ProjectSerializer {
                 pngCompModel.deserializeState(pngCompData);
             }
             project.setPngCompression(pngCompModel);
+        }
+
+        String previewBgColorHex = find(lines, "previewBackgroundColor=", null);
+        if (previewBgColorHex != null) {
+            project.setPreviewBackgroundColor(Color.valueOf(previewBgColorHex));
         }
     }
 

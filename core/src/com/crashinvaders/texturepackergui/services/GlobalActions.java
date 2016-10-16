@@ -323,6 +323,10 @@ public class GlobalActions implements ActionContainer {
         interfaceService.showDialog(TextureUnpackerDialogController.class);
     }
 
+    @LmlAction("changePreviewBackground") public void changePreviewBackground() {
+        interfaceService.showDialog(PreviewBackgroundDialogController.class);
+    }
+
     /** @return localized string */
     private String getString(String key) {
         return localeService.getI18nBundle().get(key);

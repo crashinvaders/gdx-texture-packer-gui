@@ -230,11 +230,12 @@ public class MainController implements ActionContainer, ViewResizer {
         return new PackListAdapter(interfaceService.getParser());
     }
 
-    @LmlAction("onPackListRightClick") void onPackListRightClick(final OnRightClickLmlAttribute.Params params) {
+    @LmlAction("onPackListRightClick") void onPackListRightClick(OnRightClickLmlAttribute.Params params) {
         PackListAdapter.ViewHolder viewHolder = actorsPacks.packListAdapter.getViewHolder(params.actor);
         PackModel pack = viewHolder.getPack();
 
         PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, VIEW_ID, this, Gdx.files.internal("lml/packListMenu.lml"));
+
         MenuItem menuItem;
         menuItem = popupMenu.findActor("miRename");
         menuItem.setDisabled(pack == null);
@@ -251,6 +252,17 @@ public class MainController implements ActionContainer, ViewResizer {
         menuItem = popupMenu.findActor("miPackAll");
         menuItem.setDisabled(getProject().getPacks().size == 0);
         menuItem = popupMenu.findActor("miCopySettingsToAllPacks");
+        menuItem.setDisabled(pack == null);
+
+        popupMenu.showMenu(getStage(), params.stageX, params.stageY);
+    }
+
+    @LmlAction("onCanvasRightClick") void onCanvasRightClick(OnRightClickLmlAttribute.Params params) {
+        PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, VIEW_ID, this, Gdx.files.internal("lml/preview/canvasMenu.lml"));
+        PackModel pack = getSelectedPack();
+
+        MenuItem menuItem;
+        menuItem = popupMenu.findActor("miRepack");
         menuItem.setDisabled(pack == null);
 
         popupMenu.showMenu(getStage(), params.stageX, params.stageY);
@@ -375,6 +387,11 @@ public class MainController implements ActionContainer, ViewResizer {
 
         scaleFactorsDialogController.setPackModel(pack);
         interfaceService.showDialog(scaleFactorsDialogController.getClass());
+    }
+
+    @LmlAction("changePreviewBackground") void changePreviewBackground() {
+        //TODO implement
+        System.out.println("MainController.changePreviewBackground");
     }
     //endregion
 

@@ -24,5 +24,6 @@ public class ProjectPropertyChangedEvent {
         SELECTED_PACK,
         PACKS,
         PNG_COMPRESSION,
+        PREVIEW_BG_COLOR,
     }
 }

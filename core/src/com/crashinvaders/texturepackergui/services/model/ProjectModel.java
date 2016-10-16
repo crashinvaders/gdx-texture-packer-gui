@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.services.model;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
@@ -9,6 +10,7 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 public class ProjectModel {
 
     private final Array<PackModel> packs = new Array<>(true, 16);
+    private final Color previewBackgroundColor = new Color(Color.WHITE);
     private PackModel selectedPack;
     private FileHandle projectFile;
     private EventDispatcher eventDispatcher;
@@ -85,6 +87,18 @@ public class ProjectModel {
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, ProjectPropertyChangedEvent.Property.PNG_COMPRESSION));
+        }
+    }
+
+    public Color getPreviewBackgroundColor() {
+        return previewBackgroundColor;
+    }
+
+    public void setPreviewBackgroundColor(Color color) {
+        this.previewBackgroundColor.set(color);
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, ProjectPropertyChangedEvent.Property.PREVIEW_BG_COLOR));
         }
     }
 }
