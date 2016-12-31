@@ -148,6 +148,7 @@ public class ProjectSerializer {
         sb.append("combineSubdirectories=").append(settings.combineSubdirectories).append("\n");
         sb.append("grid=").append(settings.grid).append("\n");
         sb.append("square=").append(settings.square).append("\n");
+        sb.append("bleed=").append(settings.bleed).append("\n");
 
         sb.append("\n");
 
@@ -269,6 +270,7 @@ public class ProjectSerializer {
         settings.combineSubdirectories = find(lines, "combineSubdirectories=", defaultSettings.combineSubdirectories);
         settings.grid = find(lines, "grid=", defaultSettings.grid);
         settings.square = find(lines, "square=", defaultSettings.square);
+        settings.bleed = find(lines, "bleed=", defaultSettings.bleed);
 
         String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
         if (scaleFactorsSerialized != null) {
