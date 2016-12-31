@@ -1,10 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.crashinvaders.common.Timer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
@@ -13,6 +15,7 @@ import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.color.BasicColorPicker;
 
 @ViewDialog(id = "dialog_preview_background", value = "lml/preview/dialogPreviewBackground.lml")
@@ -23,9 +26,10 @@ public class PreviewBackgroundDialogController implements ActionContainer {
     @Inject ModelService modelService;
     @ViewStage Stage stage;
 
-    @LmlActor("root") VisDialog root;
+    @LmlActor("root") VisDialog dialog;
     @LmlActor("colorPicker") BasicColorPicker colorPicker;
 
+    private final Color originalColor = new Color();
     private final Color selectedColor = new Color();
     private TimerAction timerAction;
 
@@ -38,15 +42,46 @@ public class PreviewBackgroundDialogController implements ActionContainer {
         });
         stage.addAction(timerAction);
 
-        selectedColor.set(modelService.getProject().getPreviewBackgroundColor());
+        originalColor.set(modelService.getProject().getPreviewBackgroundColor());
+        selectedColor.set(originalColor);
         colorPicker.setColor(selectedColor);
+
+        // Close dialog on ESC
+        dialog.addListener(new InputListener() {
+            @Override
+            public boolean keyDown (InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ESCAPE) {
+                    onCancelClick();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        VisImageButton btnClose = WidgetUtils.obtainCloseButton(dialog);
+        btnClose.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                onCancelClick();
+            }
+        });
     }
 
     @LmlAction("onColorChanged") void onColorChanged(Color color) {
-        if (root == null) return;
+        if (dialog == null) return;
 
         selectedColor.set(color);
         timerAction.restartTimer();
+    }
+
+    @LmlAction("onOkPressed") void onOkClick() {
+        dialog.hide();
+    }
+
+    @LmlAction("onCancelPressed") void onCancelClick() {
+        dialog.hide();
+        selectedColor.set(originalColor);
+        updateProjectProperty();
     }
 
     private void updateProjectProperty() {
