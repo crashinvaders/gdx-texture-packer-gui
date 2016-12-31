@@ -28,6 +28,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new OnRightClickLmlAttribute(), "onRightClick", "rightClick");
         addAttributeProcessor(new OnDoubleClickLmlAttribute(), "onDoubleClick", "doubleClick");
         addAttributeProcessor(new ImageDrawableLmlAttribute(), "image", "drawable");
+        addAttributeProcessor(new TooltipLmlAttribute(), "visTooltip", "tooltip");
     }
 
     @Override

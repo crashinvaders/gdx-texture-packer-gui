@@ -24,19 +24,22 @@
                     <:item title="@psEncodingFormat">
                         <visselectbox
                                 id="cboEncodingFormat"
-                                onchange="onSettingsCboChanged"/>
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtFormat"/>
                     </:item>
 
                     <:item title="@psOutputFormat">
                         <visselectbox
                                 id="cboOutputFormat"
-                                onchange="onSettingsCboChanged"/>
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtOutputFormat"/>
                     </:item>
 
                     <:item title="@psJpegQuality">
                         <floatspinner
                                 id="spnJpegQuality"
                                 onchange="onSettingsFloatSpinnerChanged"
+                                tooltip="@psTtJpegQuality"
                                 min="0"
                                 max="1"
                                 step="0.05"/>
@@ -49,6 +52,7 @@
                                 id="spnMinPageWidth"
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
+                                tooltip="@psTtMinWidth"
                                 min="16"
                                 max="8192"/>
                     </:item>
@@ -58,6 +62,7 @@
                                 id="spnMinPageHeight"
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
+                                tooltip="@psTtMinHeight"
                                 min="16"
                                 max="8192"/>
                     </:item>
@@ -67,6 +72,7 @@
                                 id="spnMaxPageWidth"
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
+                                tooltip="@psTtMaxWidth"
                                 min="16"
                                 max="8192"/>
                     </:item>
@@ -76,6 +82,7 @@
                                 id="spnMaxPageHeight"
                                 onchange="onSettingsIntSpinnerChanged"
                                 value="2048"
+                                tooltip="@psTtMaxHeight"
                                 min="16"
                                 max="8192"/>
                     </:item>
@@ -86,6 +93,7 @@
                         <intspinner
                                 id="spnAlphaThreshold"
                                 onchange="onSettingsIntSpinnerChanged"
+                                tooltip="@psTtAlphaThreshold"
                                 min="0"
                                 max="255"/>
                     </:item>
@@ -93,13 +101,15 @@
                     <:item title="@psMinFilter">
                         <visselectbox
                                 id="cboMinFilter"
-                                onchange="onSettingsCboChanged"/>
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtFilterMin"/>
                     </:item>
 
                     <:item title="@psMagFilter">
                         <visselectbox
                                 id="cboMagFilter"
-                                onchange="onSettingsCboChanged"/>
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtFilterMag"/>
                     </:item>
 
                     <:separator/>
@@ -108,6 +118,7 @@
                         <intspinner
                                 id="spnPaddingX"
                                 onchange="onSettingsIntSpinnerChanged"
+                                tooltip="@psTtPaddingX"
                                 min="0"
                                 max="64"/>
                     </:item>
@@ -116,6 +127,7 @@
                         <intspinner
                                 id="spnPaddingY"
                                 onchange="onSettingsIntSpinnerChanged"
+                                tooltip="@psTtPaddingY"
                                 min="0"
                                 max="64"/>
                     </:item>
@@ -123,17 +135,22 @@
                     <:item title="@psWrapX">
                         <visselectbox
                                 id="cboWrapX"
-                                onchange="onSettingsCboChanged"/>
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtWrapX"/>
                     </:item>
 
                     <:item title="@psWrapY">
                         <visselectbox
                                 id="cboWrapY"
-                                onchange="onSettingsCboChanged"/>
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtWrapY"/>
                     </:item>
 
                     <:item title="Scale factors">
-                        <expandedittextbutton id="eetbScaleFactors" change="onScalesBtnClick"/>
+                        <expandedittextbutton
+                                id="eetbScaleFactors"
+                                change="onScalesBtnClick"
+                                tooltip="@psTtScale"/>
                     </:item>
 
                 </vistable>
@@ -144,21 +161,23 @@
 
                 <vistable onecolumn="true" align="top" defaultalign="left">
 
-                    <vischeckbox id="cbUseFastAlgorithm" onchange="onSettingsCbChecked">@psUseFastAlgorithm</vischeckbox>
+                    <vischeckbox id="cbUseFastAlgorithm" onchange="onSettingsCbChecked" tooltip="@psTtFast">@psUseFastAlgorithm</vischeckbox>
 
-                    <vischeckbox id="cbEdgePadding" onchange="onSettingsCbChecked">@psEdgePadding</vischeckbox>
+                    <vischeckbox id="cbEdgePadding" onchange="onSettingsCbChecked" tooltip="@psTtEdgePadding">@psEdgePadding</vischeckbox>
 
-                    <vischeckbox id="cbStripWhitespaceX" onchange="onSettingsCbChecked">@psStripWhitespaceX</vischeckbox>
+                    <vischeckbox id="cbStripWhitespaceX" onchange="onSettingsCbChecked" tooltip="@psTtStripWhitespaceX">@psStripWhitespaceX</vischeckbox>
 
-                    <vischeckbox id="cbStripWhitespaceY" onchange="onSettingsCbChecked">@psStripWhitespaceY</vischeckbox>
+                    <vischeckbox id="cbStripWhitespaceY" onchange="onSettingsCbChecked" tooltip="@psTtStripWhitespaceY">@psStripWhitespaceY</vischeckbox>
 
-                    <vischeckbox id="cbAllowRotation" onchange="onSettingsCbChecked">@psAllowRotation</vischeckbox>
+                    <vischeckbox id="cbAllowRotation" onchange="onSettingsCbChecked" tooltip="@psTtRotation">@psAllowRotation</vischeckbox>
 
-                    <vischeckbox id="cbIncludeSubdirs" onchange="onSettingsCbChecked">@psIncludeSubdirs</vischeckbox>
+                    <vischeckbox id="cbIncludeSubdirs" onchange="onSettingsCbChecked" tooltip="@psTtCombineSubdirectories">@psIncludeSubdirs</vischeckbox>
 
-                    <vischeckbox id="cbBleeding" onchange="onSettingsCbChecked">@psBleeding</vischeckbox>
+                    <vischeckbox id="cbBleeding" onchange="onSettingsCbChecked" tooltip="@psTtBleed">@psBleeding</vischeckbox>
 
-                    <vischeckbox id="cbSquare" onchange="onSettingsCbChecked">@psSquare</vischeckbox>
+                    <vischeckbox id="cbSquare" onchange="onSettingsCbChecked" tooltip="@psTtSquare">@psSquare</vischeckbox>
+
+                    <vischeckbox id="cbGrid" onchange="onSettingsCbChecked" tooltip="@psTtGrid">@psGrid</vischeckbox>
 
                 </vistable>
 
@@ -166,21 +185,23 @@
 
                 <vistable onecolumn="true" align="top" defaultalign="left">
 
-                    <vischeckbox id="cbDuplicatePadding" onchange="onSettingsCbChecked">@psDuplicatePadding</vischeckbox>
+                    <vischeckbox id="cbDuplicatePadding" onchange="onSettingsCbChecked" tooltip="@psTtDuplicatePadding">@psDuplicatePadding</vischeckbox>
 
-                    <vischeckbox id="cbForcePot" onchange="onSettingsCbChecked">@psForcePoT</vischeckbox>
+                    <vischeckbox id="cbForcePot" onchange="onSettingsCbChecked" tooltip="@psTtPot">@psForcePoT</vischeckbox>
 
-                    <vischeckbox id="cbUseAliases" onchange="onSettingsCbChecked">@psUseAliases</vischeckbox>
+                    <vischeckbox id="cbUseAliases" onchange="onSettingsCbChecked" tooltip="@psTtAlias">@psUseAliases</vischeckbox>
 
-                    <vischeckbox id="cbIgnoreBlankImages" onchange="onSettingsCbChecked">@psIgnoreBlankImgs</vischeckbox>
+                    <vischeckbox id="cbIgnoreBlankImages" onchange="onSettingsCbChecked" tooltip="@psTtIgnoreBlankImages">@psIgnoreBlankImgs</vischeckbox>
 
-                    <vischeckbox id="cbDebug" onchange="onSettingsCbChecked">@psDebug</vischeckbox>
+                    <vischeckbox id="cbDebug" onchange="onSettingsCbChecked" tooltip="@psTtDebug">@psDebug</vischeckbox>
 
-                    <vischeckbox id="cbUseIndices" onchange="onSettingsCbChecked">@psUseIndices</vischeckbox>
+                    <vischeckbox id="cbFlattenPaths" onchange="onSettingsCbChecked" tooltip="@psTtFlattenPaths">@psFlattenPaths</vischeckbox>
 
-                    <vischeckbox id="cbPremultiplyAlpha" onchange="onSettingsCbChecked">@psPremultiplyAlpha</vischeckbox>
+                    <vischeckbox id="cbUseIndices" onchange="onSettingsCbChecked" tooltip="@psTtUseIndexes">@psUseIndices</vischeckbox>
 
-                    <vischeckbox id="cbGrid" onchange="onSettingsCbChecked">@psGrid</vischeckbox>
+                    <vischeckbox id="cbPremultiplyAlpha" onchange="onSettingsCbChecked" tooltip="@psTtPremultiplyAlpha">@psPremultiplyAlpha</vischeckbox>
+
+                    <vischeckbox id="cbLimitMemory" onchange="onSettingsCbChecked" tooltip="@psTtLimitMemory">@psLimitMemory</vischeckbox>
 
                 </vistable>
 

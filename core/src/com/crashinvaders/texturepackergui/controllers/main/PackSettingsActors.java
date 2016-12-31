@@ -32,6 +32,7 @@ public class PackSettingsActors {
     @LmlActor("cbStripWhitespaceY") VisCheckBox cbStripWhitespaceY;
     @LmlActor("cbAllowRotation") VisCheckBox cbAllowRotation;
     @LmlActor("cbIncludeSubdirs") VisCheckBox cbIncludeSubdirs;
+    @LmlActor("cbFlattenPaths") VisCheckBox cbFlattenPaths;
     @LmlActor("cbBleeding") VisCheckBox cbBleeding;
     @LmlActor("cbDuplicatePadding") VisCheckBox cbDuplicatePadding;
     @LmlActor("cbForcePot") VisCheckBox cbForcePot;
@@ -42,4 +43,5 @@ public class PackSettingsActors {
     @LmlActor("cbPremultiplyAlpha") VisCheckBox cbPremultiplyAlpha;
     @LmlActor("cbGrid") VisCheckBox cbGrid;
     @LmlActor("cbSquare") VisCheckBox cbSquare;
+    @LmlActor("cbLimitMemory") VisCheckBox cbLimitMemory;
 }

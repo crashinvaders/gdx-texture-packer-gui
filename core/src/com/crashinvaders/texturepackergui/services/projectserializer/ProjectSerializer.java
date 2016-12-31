@@ -149,6 +149,8 @@ public class ProjectSerializer {
         sb.append("grid=").append(settings.grid).append("\n");
         sb.append("square=").append(settings.square).append("\n");
         sb.append("bleed=").append(settings.bleed).append("\n");
+        sb.append("flattenPaths=").append(settings.flattenPaths).append("\n");
+        sb.append("limitMemory=").append(settings.limitMemory).append("\n");
 
         sb.append("\n");
 
@@ -271,6 +273,8 @@ public class ProjectSerializer {
         settings.grid = find(lines, "grid=", defaultSettings.grid);
         settings.square = find(lines, "square=", defaultSettings.square);
         settings.bleed = find(lines, "bleed=", defaultSettings.bleed);
+        settings.flattenPaths = find(lines, "flattenPaths=", defaultSettings.flattenPaths);
+        settings.limitMemory = find(lines, "limitMemory=", defaultSettings.limitMemory);
 
         String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
         if (scaleFactorsSerialized != null) {

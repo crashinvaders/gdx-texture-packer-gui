@@ -319,6 +319,7 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cbStripWhitespaceY": settings.stripWhitespaceY = checkBox.isChecked(); break;
             case "cbAllowRotation": settings.rotation = checkBox.isChecked(); break;
             case "cbIncludeSubdirs": settings.combineSubdirectories = checkBox.isChecked(); break;
+            case "cbFlattenPaths": settings.square = checkBox.isChecked(); break;
             case "cbBleeding": settings.bleed = checkBox.isChecked(); break;
             case "cbDuplicatePadding": settings.duplicatePadding = checkBox.isChecked(); break;
             case "cbForcePot": settings.pot = checkBox.isChecked(); break;
@@ -329,6 +330,7 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cbPremultiplyAlpha": settings.premultiplyAlpha = checkBox.isChecked(); break;
             case "cbGrid": settings.grid = checkBox.isChecked(); break;
             case "cbSquare": settings.square = checkBox.isChecked(); break;
+            case "cbLimitMemory": settings.limitMemory = checkBox.isChecked(); break;
         }
     }
 
@@ -429,6 +431,7 @@ public class MainController implements ActionContainer, ViewResizer {
             actorsPackSettings.cbStripWhitespaceY.setChecked(settings.stripWhitespaceY);
             actorsPackSettings.cbAllowRotation.setChecked(settings.rotation);
             actorsPackSettings.cbIncludeSubdirs.setChecked(settings.combineSubdirectories);
+            actorsPackSettings.cbFlattenPaths.setChecked(settings.flattenPaths);
             actorsPackSettings.cbBleeding.setChecked(settings.bleed);
             actorsPackSettings.cbDuplicatePadding.setChecked(settings.duplicatePadding);
             actorsPackSettings.cbForcePot.setChecked(settings.pot);
@@ -439,6 +442,7 @@ public class MainController implements ActionContainer, ViewResizer {
             actorsPackSettings.cbPremultiplyAlpha.setChecked(settings.premultiplyAlpha);
             actorsPackSettings.cbGrid.setChecked(settings.grid);
             actorsPackSettings.cbSquare.setChecked(settings.square);
+            actorsPackSettings.cbLimitMemory.setChecked(settings.limitMemory);
 
             ((IntSpinnerModel) actorsPackSettings.spnMinPageWidth.getModel()).setValue(settings.minWidth, false);
             ((IntSpinnerModel) actorsPackSettings.spnMinPageHeight.getModel()).setValue(settings.minHeight, false);
