@@ -11,8 +11,8 @@
         <basiccolorpicker id="colorPicker" listener="onColorChanged" defaultgrowx="true"/>
 
         <vistable growx="true" defaultuniform="true" defaultgrowx="true" padtop="8">
-            <vistextbutton change="onOkPressed" padright="8">OK</vistextbutton>
-            <vistextbutton change="onCancelPressed">Cancel</vistextbutton>
+            <vistextbutton change="onOkPressed" focusborder="false" padright="8">@ok</vistextbutton>
+            <vistextbutton change="onCancelPressed" focusborder="false">@cancel</vistextbutton>
         </vistable>
 
     </vistable>

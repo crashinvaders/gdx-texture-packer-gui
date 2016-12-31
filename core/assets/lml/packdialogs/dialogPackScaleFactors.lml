@@ -30,9 +30,8 @@
 
         <:row padtop="4"/>
 
-        <vistable align="right" expandx="true">
-            <textbutton change="saveAndCloseDialog" focusborder="false">@save</textbutton>
-            <actor width="4"/>
+        <vistable growx="true" defaultuniform="true" defaultgrowx="true">
+            <textbutton change="saveAndCloseDialog" focusborder="false" padright="4">@save</textbutton>
             <textbutton change="closeDialog" focusborder="false">@cancel</textbutton>
         </vistable>
     </vistable>
