@@ -19,9 +19,11 @@
 
             <vislabel id="lblPackName"/>
 
-            <actor width="4"/>
+            <actor width="8"/>
 
-            <vislabel style="small" id="lblMetadata" growx="true"/>
+            <vistable id="tableMetadata" tablealign="left" growx="true" defaultpadright="4"/>
+
+            <!--<vislabel style="small" id="lblMetadata" growx="true"/>-->
 
         </vistable>
 

@@ -42,7 +42,7 @@ public class TinifyCompressingProcessor implements PackProcessor {
             float pageCompression = ((postCompressedSize-preCompressedSize) / (float)preCompressedSize);
             compressionRateSum += pageCompression;
 
-            System.out.println(String.format("%s compressed for %+5.2f%%", page.textureFile.name(), pageCompression*100f));
+            System.out.println(String.format("%s compressed for %+.2f%%", page.textureFile.name(), pageCompression*100f));
         }
         node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
 

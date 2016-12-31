@@ -5,7 +5,10 @@ import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 
 public class PackProcessingNode {
+    /** Compression result percents */
     public static final String META_COMPRESSION_RATE = "compressionRate";
+    /** Total files size after compression (in bytes) */
+    public static final String META_FILE_SIZE = "fileSize";
 
     private final ObjectMap<String, Object> metadata = new ObjectMap<>();
     private final ProjectModel project;

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable>
+    <image id="imgIcon" scaling="none" color="light-grey" padright="2" padbottom="-2"/>
+    <vislabel id="lblContent" style="grey-small"/>
+</vistable>

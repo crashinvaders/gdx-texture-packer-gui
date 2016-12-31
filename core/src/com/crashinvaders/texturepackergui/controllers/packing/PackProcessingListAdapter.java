@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
 import com.kotcrab.vis.ui.widget.VisTable;
 
@@ -17,7 +18,7 @@ class PackProcessingListAdapter extends ArrayAdapter<PackProcessingNode, Process
 
     @Override
     protected ProcessingNodeListViewItem createView(PackProcessingNode node) {
-        VisTable view = (VisTable)interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/dialogPackingListItem.lml")).first();
-        return new ProcessingNodeListViewItem(node, view);
+        LmlParser parser = interfaceService.getParser();
+        return new ProcessingNodeListViewItem(parser, node);
     }
 }

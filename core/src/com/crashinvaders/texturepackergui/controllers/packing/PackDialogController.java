@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.packing.processors.PackingProcessor;
-import com.crashinvaders.texturepackergui.controllers.packing.processors.PngtasticCompressingProcessor;
-import com.crashinvaders.texturepackergui.controllers.packing.processors.TinifyCompressingProcessor;
-import com.crashinvaders.texturepackergui.controllers.packing.processors.ZopfliCompressingProcessor;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.*;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.services.TinifyService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
@@ -103,7 +100,8 @@ public class PackDialogController implements ActionContainer {
                         new PackingProcessor(),
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
-                        new TinifyCompressingProcessor(tinifyService)),
+                        new TinifyCompressingProcessor(tinifyService),
+                        new FileSizeMetadataProcessor()),
 //                new TestProcessor(),
                 new PackWorkerListener());
 
