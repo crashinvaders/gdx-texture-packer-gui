@@ -179,6 +179,8 @@ public class Canvas extends Stack {
 			}
 		}
 		updatePageButtonsVisibility();
+
+		infoPanel.setVisible(atlas != null);
 	}
 
 	public void setCallback(Callback callback) {

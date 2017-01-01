@@ -36,6 +36,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	progressBarSucc: {name: progressbar-narrow-white, color: light-green },
 	packingItemBg: {name: white, color: dark-grey },
 	canvasInfoPanel: {name: white, color: {hex:252526ff} },
+	noPreviewFill: {name: white, color: {hex:000000aa} },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {down: button-down, up: button },

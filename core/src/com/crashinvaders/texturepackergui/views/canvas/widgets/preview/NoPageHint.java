@@ -6,15 +6,20 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
+import com.crashinvaders.texturepackergui.App;
 
-class NoPageHint extends Container<Label> {
+class NoPageHint extends Container {
     public NoPageHint(Skin skin) {
-        Label lblMessage = new Label("[#ffffffaa]PACK ATLAS TO SEE PAGES", new Label.LabelStyle(skin.getFont("default-font"), new Color(0xffffffff)));
+        String text = App.inst().getI18n().get("atlasPreviewNoPageMsg");
+
+        Label lblMessage = new Label(text, new Label.LabelStyle(skin.getFont("default-font"), Color.WHITE));
+        lblMessage.setAlignment(Align.center);
+        lblMessage.getColor().a = 0.25f;
         setActor(lblMessage);
 
         setFillParent(true);
         align(Align.center);
         setTouchable(Touchable.disabled);
-        setBackground(skin.newDrawable("white", new Color(0x000000aa)), false);
+        setBackground(skin.getDrawable("noPreviewFill"));
     }
 }
