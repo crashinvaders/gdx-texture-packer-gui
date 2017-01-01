@@ -37,6 +37,7 @@ import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
 import com.github.czyzby.kiwi.util.tuple.immutable.Pair;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.impl.tag.Dtd;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 
 import java.io.Writer;
@@ -180,6 +181,7 @@ public class App implements ApplicationListener {
     @Override
     public void dispose() {
         Disposables.disposeOf(contextDestroyer);
+        VisUI.dispose();
     }
 
     /**

@@ -16,6 +16,7 @@
             adapter="$obtainListAdapter"
             grow="true"
             minheight="240"
+            width="360"
             align="top"
             disabledx="true"
             fadescrollbars="false"

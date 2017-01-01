@@ -21,7 +21,7 @@
 
             <actor width="8"/>
 
-            <vistable id="tableMetadata" tablealign="left" growx="true" defaultpadright="4"/>
+            <vistable id="tableMetadata" tablealign="left" growx="true" defaultpadright="8"/>
 
             <!--<vislabel style="small" id="lblMetadata" growx="true"/>-->
 
@@ -37,7 +37,7 @@
                 generatedisabled="true"
                 disabled="true"
                 tooltip="@seeLog"
-                tablepad="8f"
+                tablepad="8"
                 focusborder="false"/>
 
     </vistable>

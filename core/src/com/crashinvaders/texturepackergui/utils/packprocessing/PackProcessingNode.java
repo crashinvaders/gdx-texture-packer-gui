@@ -9,6 +9,12 @@ public class PackProcessingNode {
     public static final String META_COMPRESSION_RATE = "compressionRate";
     /** Total files size after compression (in bytes) */
     public static final String META_FILE_SIZE = "fileSize";
+    /** Time when processing was started (nanoseconds) */
+    public static final String META_START_TIME = "startTime";
+    /** Time when processing was finished (nanoseconds) */
+    public static final String META_END_TIME = "endTime";
+    /** Total processing time (nanoseconds) */
+    public static final String META_TOTAL_TIME = "totalTime";
 
     private final ObjectMap<String, Object> metadata = new ObjectMap<>();
     private final ProjectModel project;
