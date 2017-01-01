@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.utils.Align;
 
+import java.util.Locale;
+
 public class InfoPanel extends Container<VerticalGroup> {
     private final Label lblCurrentPage;
     private final Label lblZoom;
@@ -42,7 +44,7 @@ public class InfoPanel extends Container<VerticalGroup> {
     }
 
     public void setZoomLevel(float zoom) {
-        lblZoom.setText(String.format("Zoom: %.0f%%", zoom));
+        lblZoom.setText(String.format(Locale.US, "Zoom: %.0f%%", zoom));
     }
 
     public void setPagesAmount(int pagesAmount) {

@@ -9,14 +9,14 @@
         onecolumn="true"
         modal="true"
         movable="true"
-        resizable="false">
+        resizable="true">
 
     <listview
             id="listItems"
             adapter="$obtainListAdapter"
             grow="true"
             minheight="240"
-            width="360"
+            minwidth="360"
             align="top"
             disabledx="true"
             fadescrollbars="false"

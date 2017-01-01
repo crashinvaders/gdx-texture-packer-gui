@@ -3,7 +3,7 @@
 
 <vistable onecolumn="true">
 
-    <vistable grow="true">
+    <vistable grow="true" tablealign="left">
 
         <!--<visimage style="custom/ic-sandglass3" imagescaling="none"/>-->
         <animatedimage
@@ -15,17 +15,11 @@
 
         <actor width="4"/>
 
-        <vistable growx="true">
+        <vislabel id="lblPackName"/>
 
-            <vislabel id="lblPackName"/>
+        <actor width="8"/>
 
-            <actor width="8"/>
-
-            <vistable id="tableMetadata" tablealign="left" growx="true" defaultpadright="8"/>
-
-            <!--<vislabel style="small" id="lblMetadata" growx="true"/>-->
-
-        </vistable>
+        <vistable id="tableMetadata" tablealign="left" growx="true" minwidth="0" defaultpadright="8"/>
 
         <actor width="12"/>
 
@@ -36,7 +30,7 @@
                 imagescaling="none"
                 generatedisabled="true"
                 disabled="true"
-                tooltip="@seeLog"
+                tooltip="@dPackingSeeLog"
                 tablepad="8"
                 focusborder="false"/>
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
@@ -16,6 +17,8 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.scene2d.ui.reflected.AnimatedImage;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
+
+import java.util.Locale;
 
 class ProcessingNodeListViewItem extends Container<VisTable> {
 
@@ -110,50 +113,57 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
     @SuppressWarnings("unchecked")
     private void parseMetadata() {
         if (node.hasMetadata(PackProcessingNode.META_TOTAL_TIME)) {
-//            long seconds = (Long)node.getMetadata(PackProcessingNode.META_TOTAL_TIME) / 1000000000D + 1;
             double seconds = (Long)node.getMetadata(PackProcessingNode.META_TOTAL_TIME) / 1000000000D;
 
-            Group metadataRoot = (Group) parser.parseTemplate(Gdx.files.internal("lml/dialogPackingMetaRegularItem.lml")).first();
-            VisLabel lblContent = metadataRoot.findActor("lblContent");
-            VisImage imgIcon = metadataRoot.findActor("imgIcon");
-//            lblContent.setText(seconds+"");
-            lblContent.setText(String.format("%.1f", seconds));
-            imgIcon.setDrawable(VisUI.getSkin(), "custom/ic-small-time");
-            tableMetadata.add(metadataRoot);
+            RegularMetadataItemViewHolder viewHolder = new RegularMetadataItemViewHolder(parser);
+            viewHolder.lblContent.setText(String.format(Locale.US, "%.1f", seconds));
+            viewHolder.imgIcon.setDrawable(VisUI.getSkin(), "custom/ic-small-time");
+            viewHolder.createTooltip("dPackingMetaTotalTime");
+            tableMetadata.add(viewHolder.root);
         }
         if (node.hasMetadata(PackProcessingNode.META_FILE_SIZE)) {
             long size = node.getMetadata(PackProcessingNode.META_FILE_SIZE);
-            String  sizeMb = String.format("%.2fMB", size / 1048576.0); // 1024 x 1024
+            String  sizeMb = String.format(Locale.US, "%.2fMB", size / 1048576.0); // 1024 x 1024
 
-            Group metadataRoot = (Group)parser.parseTemplate(Gdx.files.internal("lml/dialogPackingMetaRegularItem.lml")).first();
-            VisLabel lblContent = metadataRoot.findActor("lblContent");
-            VisImage imgIcon = metadataRoot.findActor("imgIcon");
-            lblContent.setText(sizeMb);
-            imgIcon.setDrawable(VisUI.getSkin(), "custom/ic-small-weight");
-            tableMetadata.add(metadataRoot);
+            RegularMetadataItemViewHolder viewHolder = new RegularMetadataItemViewHolder(parser);
+            viewHolder.lblContent.setText(sizeMb);
+            viewHolder.imgIcon.setDrawable(VisUI.getSkin(), "custom/ic-small-weight");
+            viewHolder.createTooltip("dPackingMetaTotalSize");
+            tableMetadata.add(viewHolder.root);
         }
         if (node.hasMetadata(PackProcessingNode.META_COMPRESSION_RATE)) {
             float compression = node.getMetadata(PackProcessingNode.META_COMPRESSION_RATE);
-            String compressionPercents = String.format("%+.2f%%", compression * 100f);
+            String compressionPercents = String.format(Locale.US, "%.2f%%", compression * -100f);
 
-            Group metadataRoot = (Group)parser.parseTemplate(Gdx.files.internal("lml/dialogPackingMetaRegularItem.lml")).first();
-            VisLabel lblContent = metadataRoot.findActor("lblContent");
-            VisImage imgIcon = metadataRoot.findActor("imgIcon");
-            lblContent.setText(compressionPercents);
-            imgIcon.setDrawable(VisUI.getSkin(), "custom/ic-small-compression");
-            tableMetadata.add(metadataRoot);
+            RegularMetadataItemViewHolder viewHolder = new RegularMetadataItemViewHolder(parser);
+            viewHolder.lblContent.setText(compressionPercents);
+            viewHolder.imgIcon.setDrawable(VisUI.getSkin(), "custom/ic-small-compression");
+            viewHolder.createTooltip("dPackingMetaCompression");
+            tableMetadata.add(viewHolder.root);
         }
     }
 
     private static class RegularMetadataItemViewHolder {
+        final LmlParser parser;
         final VisLabel lblContent;
         final VisImage imgIcon;
         final Group root;
 
         public RegularMetadataItemViewHolder(LmlParser parser) {
             root = (Group) parser.parseTemplate(Gdx.files.internal("lml/dialogPackingMetaRegularItem.lml")).first();
+            this.parser = parser;
             lblContent = root.findActor("lblContent");
             imgIcon = root.findActor("imgIcon");
+        }
+
+        public void createTooltip(String i18nKey) {
+            String text = parser.getData().getDefaultI18nBundle().get(i18nKey);
+
+            final Tooltip tooltip = new Tooltip();
+            tooltip.clearChildren(); // Removing empty cell with predefined paddings.
+            tooltip.add(text).center().pad(0f, 4f, 2f, 4f);
+            tooltip.pack();
+            tooltip.setTarget(root);
         }
     }
 }

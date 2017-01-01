@@ -9,6 +9,8 @@ import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
+import java.util.Locale;
+
 public class TinifyCompressingProcessor implements PackProcessor {
 
     private final TinifyService tinifyService;
@@ -42,7 +44,7 @@ public class TinifyCompressingProcessor implements PackProcessor {
             float pageCompression = ((postCompressedSize-preCompressedSize) / (float)preCompressedSize);
             compressionRateSum += pageCompression;
 
-            System.out.println(String.format("%s compressed for %+.2f%%", page.textureFile.name(), pageCompression*100f));
+            System.out.println(String.format(Locale.US, "%s compressed for %+.2f%%", page.textureFile.name(), pageCompression*100f));
         }
         node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
 
