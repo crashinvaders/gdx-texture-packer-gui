@@ -11,6 +11,6 @@ public class TotalTimeMetadataProcessor implements PackProcessor {
         long totalTime = (long)node.getMetadata(PackProcessingNode.META_END_TIME) - (long)node.getMetadata(PackProcessingNode.META_START_TIME);
         node.addMetadata(PackProcessingNode.META_TOTAL_TIME, totalTime);
 
-        System.out.println(String.format(Locale.US, "Total processing time: %+.2fsec", totalTime/1000000000D));
+        System.out.println(String.format(Locale.US, "Total processing time: %.2fsec", totalTime/1000000000D));
     }
 }

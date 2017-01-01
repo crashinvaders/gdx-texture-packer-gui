@@ -4,14 +4,20 @@
 <visdialog title="@dAboutTitle" closebutton="true" closeonescape="true">
     <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
 
-        <actor height="24"/>
+        <vistable onecolumn="true" growx="true" background="packingItemBg" padleft="-32" padright="-32">
 
-        <vistable onecolumn="true" align="center">
-            <image drawable="custom/app-logo-2x" scaling="none"/>
-            <horizontalgroup align="right" spacing="4">
-                <label style="small" text="@dAboutVersion"/>
-                <label style="small" text="{currentVersionCode}"/>
-            </horizontalgroup>
+            <actor height="16"/>
+
+            <vistable onecolumn="true" align="center">
+                <image drawable="custom/app-logo-2x" scaling="none"/>
+                <horizontalgroup align="right" spacing="4">
+                    <label style="small" text="@dAboutVersion"/>
+                    <label style="small" text="{currentVersionCode}"/>
+                </horizontalgroup>
+            </vistable>
+
+            <actor height="8"/>
+
         </vistable>
 
         <actor height="16"/>
