@@ -11,10 +11,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.BackgroundWidget;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.InfoPanel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.preview.PreviewHolder;
+import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.impl.tag.AbstractNonParentalActorLmlTag;
 import com.github.czyzby.lml.parser.tag.LmlActorBuilder;
@@ -25,20 +27,24 @@ import com.kotcrab.vis.ui.widget.VisTable;
 
 public class Canvas extends Stack {
 
+	private final InterfaceService interfaceService;
+
+	private final PreviewHolder previewHolder;
+	private final InfoPanel infoPanel;
+	private final VisImageTextButton btnNextPage;
+	private final VisImageTextButton btnPrevPage;
+
 	private final Rectangle widgetAreaBounds = new Rectangle();
 	private final Rectangle scissorBounds = new Rectangle();
 
 	private Callback callback;
 
-	private PreviewHolder previewHolder;
-	private InfoPanel infoPanel;
-	private final VisImageTextButton btnNextPage;
-	private final VisImageTextButton btnPrevPage;
-
 	private AtlasModel atlas;
 	private int pageIndex = 0;
 
 	public Canvas(Skin skin) {
+		this.interfaceService = App.inst().getInterfaceService();
+
 		// Layout
 		{
 			// Background
@@ -110,17 +116,14 @@ public class Canvas extends Stack {
 
 				Container container = new Container<>(table);
 				container.align(Align.topRight);
-				container.padTop(10f);
+				container.padTop(30f);
 				addActor(container);
 			}
 
 			// Info pane
 			{
-				infoPanel = new InfoPanel(skin);
-
-				Container container = new Container<>(infoPanel);
-				container.align(Align.bottomLeft);
-				addActor(container);
+				infoPanel = new InfoPanel(interfaceService.getParser());
+				addActor(infoPanel);
 			}
 		}
 	}
@@ -148,7 +151,7 @@ public class Canvas extends Stack {
 
 		pageIndex = 0;
 		previewHolder.reset();
-		infoPanel.setPagesAmount(0);
+//		infoPanel.setPagesAmount(0);
 		if (atlas != null) {
 			atlas.dispose();
 			atlas = null;
@@ -161,8 +164,10 @@ public class Canvas extends Stack {
 					atlas = new AtlasModel(packFile);
 
 					previewHolder.setPage(atlas, pageIndex);
-					infoPanel.setCurrentPage(pageIndex + 1);
-					infoPanel.setPagesAmount(atlas.getPages().size);
+					infoPanel.setAtlasPage(atlas.getPages().get(pageIndex));
+//					infoPanel.setCurrentPage(pageIndex + 1);
+//					infoPanel.setPagesAmount(atlas.getPages().size);
+//					infoPanel.updatePageInfo();
 
 				} catch (GdxRuntimeException ex) {
 					if (atlas != null) {
@@ -186,7 +191,8 @@ public class Canvas extends Stack {
 		pageIndex = pageIndex +1 >= atlas.getPages().size ? 0 : pageIndex+1;
 
 		previewHolder.setPage(atlas, pageIndex);
-		infoPanel.setCurrentPage(pageIndex +1);
+//		infoPanel.setCurrentPage(pageIndex +1);
+		infoPanel.setAtlasPage(atlas.getPages().get(pageIndex));
 		updatePageButtonsVisibility();
 	}
 
@@ -196,7 +202,8 @@ public class Canvas extends Stack {
 		pageIndex = pageIndex -1 < 0 ? atlas.getPages().size-1 : pageIndex-1;
 
 		previewHolder.setPage(atlas, pageIndex);
-		infoPanel.setCurrentPage(pageIndex +1);
+//		infoPanel.setCurrentPage(pageIndex +1);
+		infoPanel.setAtlasPage(atlas.getPages().get(pageIndex));
 		updatePageButtonsVisibility();
 	}
 

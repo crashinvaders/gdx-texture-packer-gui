@@ -11,25 +11,25 @@
 
         <vistable align="topleft" onecolumn="true">
             <container growy="false" fill="true">
-                <:titledpane title="@panelTitlePackList" icon="custom/ic-title-packs">
+                <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">
                     <:import path="lml/panePackList.lml"/>
                 </:titledpane>
             </container>
 
             <container growy="false" fill="true">
-                <:titledpane title="@panelTitlePackGeneral" icon="custom/ic-title-folder">
+                <:titledpane id="titledPanePackGeneral" title="@panelTitlePackGeneral" icon="custom/ic-title-folder">
                     <:import path="lml/panePackGeneral.lml"/>
                 </:titledpane>
             </container>
 
             <container growy="false" fill="true">
-                <:titledpane title="Global settings" icon="custom/ic-title-global-settings">
+                <:titledpane id="titledPaneGlobalSettings" title="Global settings" icon="custom/ic-title-global-settings">
                     <:import path="lml/paneGlobalSettings.lml"/>
                 </:titledpane>
             </container>
 
             <container growy="true" fill="true">
-                <:titledpane title="@panelTitlePackSettings" icon="custom/ic-title-pack-settings">
+                <:titledpane id="titledPanePackSettings" title="@panelTitlePackSettings" icon="custom/ic-title-pack-settings">
                     <:import path="lml/panePackSettings.lml"/>
                 </:titledpane>
             </container>
@@ -38,7 +38,7 @@
         <separator growy="true"/>
 
         <container grow="true" fill="true" rightclick="onCanvasRightClick">
-            <:titledpane title="@panelTitleAtlasPreview" icon="custom/ic-title-atlas">
+            <:titledpane id="titledPaneAtlasPreview" title="@panelTitleAtlasPreview" icon="custom/ic-title-atlas">
                 <container id="canvasContainer" grow="true" fill="true">
                     <canvas id="canvas"/>
                 </container>

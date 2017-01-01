@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable background="canvasInfoPanel" tablealign="right" padright="8" defaultalign="left">
+
+    <vistable tooltip="@canvasInfoTtPages">
+        <visimage style="custom/ic-small-pages" color="light-grey"/>
+        <actor width="4"/>
+        <vislabel id="lblPages" style="small" text="1/5"/>
+    </vistable>
+
+    <actor width="12"/>
+
+    <vistable tooltip="@canvasInfoTtZoom">
+        <visimage style="custom/ic-small-zoom" color="light-grey"/>
+        <actor width="4"/>
+        <vislabel id="lblZoom" style="small" text="100%"/>
+    </vistable>
+
+    <actor width="12"/>
+
+    <vistable tooltip="@canvasInfoTtPageDimen">
+        <visimage style="custom/ic-small-dimens" color="light-grey"/>
+        <actor width="4"/>
+        <vislabel id="lblPageDimens" style="small" text="1024x256"/>
+    </vistable>
+
+    <actor width="12"/>
+
+    <vistable tooltip="@canvasInfoTtPageFileSize">
+        <visimage style="custom/ic-small-weight" color="light-grey"/>
+        <actor width="4"/>
+        <vislabel id="lblFileSize" style="small" text="1.53"/>
+        <actor width="2"/>
+        <vislabel style="small" text="@mb" color="light-grey"/>
+    </vistable>
+
+</vistable>

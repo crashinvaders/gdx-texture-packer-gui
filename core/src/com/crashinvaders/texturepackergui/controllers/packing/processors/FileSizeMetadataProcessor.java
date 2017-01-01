@@ -21,7 +21,8 @@ public class FileSizeMetadataProcessor implements PackProcessor {
         FileHandle imagesDirFileHandle = Gdx.files.absolute(pack.getOutputDir());
         TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(
                 packFileHandle,
-                imagesDirFileHandle, false);
+                imagesDirFileHandle,
+                false);
 
         long totalSize = 0; // Bytes
         totalSize += packFileHandle.length();

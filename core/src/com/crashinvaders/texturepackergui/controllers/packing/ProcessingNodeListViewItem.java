@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.github.czyzby.kiwi.util.common.Strings;
@@ -112,6 +113,8 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
 
     @SuppressWarnings("unchecked")
     private void parseMetadata() {
+        I18NBundle i18nBundle = parser.getData().getDefaultI18nBundle();
+
         if (node.hasMetadata(PackProcessingNode.META_TOTAL_TIME)) {
             double seconds = (Long)node.getMetadata(PackProcessingNode.META_TOTAL_TIME) / 1000000000D;
 
@@ -123,7 +126,7 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
         }
         if (node.hasMetadata(PackProcessingNode.META_FILE_SIZE)) {
             long size = node.getMetadata(PackProcessingNode.META_FILE_SIZE);
-            String  sizeMb = String.format(Locale.US, "%.2fMB", size / 1048576.0); // 1024 x 1024
+            String  sizeMb = String.format(Locale.US, "%.2f%s", size / 1048576.0, i18nBundle.get("mb")); // 1024 x 1024
 
             RegularMetadataItemViewHolder viewHolder = new RegularMetadataItemViewHolder(parser);
             viewHolder.lblContent.setText(sizeMb);

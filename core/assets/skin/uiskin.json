@@ -29,12 +29,13 @@ com.badlogic.gdx.graphics.Color: {
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: {name: white, color: {r: 0, g: 0, b: 0, a: 0.45} },
 	settingsInternalPanel: {name: white, color: {hex:202020ff} },
-	mainMenuBg: {name: white, color: {hex:333333ff} },
+	mainMenuBg: {name: white, color: dark-grey },
 	darkBorder: {name: custom/white_frame, color: grey },
 	listBorder: {name: custom/list-border, color: white },
 	progressBarErr: {name: progressbar-narrow-white, color: orange },
 	progressBarSucc: {name: progressbar-narrow-white, color: light-green },
 	packingItemBg: {name: white, color: dark-grey },
+	canvasInfoPanel: {name: white, color: {hex:252526ff} },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {down: button-down, up: button },

@@ -14,10 +14,12 @@ public class AtlasModel implements Disposable {
     private final TextureAtlas atlas;
     private final Array<Page> pages = new Array<>(true, 8);
     private final String atlasPath;
+    private final TextureAtlas.TextureAtlasData atlasData;
 
     public AtlasModel(FileHandle atlasFile) {
         this.atlasFile = atlasFile;
-        this.atlas = new TextureAtlas(atlasFile);
+        this.atlasData = new TextureAtlas.TextureAtlasData(atlasFile, atlasFile.parent(), false);
+        this.atlas = new TextureAtlas(atlasData);
         atlasPath = atlasFile.file().getAbsolutePath();
 
         generatePages(atlas);
@@ -33,7 +35,7 @@ public class AtlasModel implements Disposable {
         }
         pages.clear();
         for (int i = 0; i < textures.size; i++) {
-            Page page = new Page(atlas, textures.get(i), i);
+            Page page = new Page(this, textures.get(i), i);
             pages.add(page);
 
         }
@@ -56,30 +58,34 @@ public class AtlasModel implements Disposable {
         return atlas;
     }
 
+    public TextureAtlas.TextureAtlasData getAtlasData() {
+        return atlasData;
+    }
+
     public Array<Page> getPages() {
         return pages;
     }
 
     public static class Page {
-        private final TextureAtlas atlas;
+        private final AtlasModel atlasModel;
         private final Texture texture;
         private final int pageIndex;
         private final Array<AtlasRegion> regions = new Array<>(true, 32);
 
-        private Page(TextureAtlas atlas, Texture pageTexture, int pageIndex) {
-            this.atlas = atlas;
+        private Page(AtlasModel atlasModel, Texture pageTexture, int pageIndex) {
+            this.atlasModel = atlasModel;
             this.texture = pageTexture;
             this.pageIndex = pageIndex;
 
-            for (AtlasRegion atlasRegion : atlas.getRegions()) {
+            for (AtlasRegion atlasRegion : atlasModel.atlas.getRegions()) {
                 if (atlasRegion.getTexture().equals(texture)) {
                     regions.add(atlasRegion);
                 }
             }
         }
 
-        public TextureAtlas getAtlas() {
-            return atlas;
+        public AtlasModel getAtlasModel() {
+            return atlasModel;
         }
 
         public Texture getTexture() {
