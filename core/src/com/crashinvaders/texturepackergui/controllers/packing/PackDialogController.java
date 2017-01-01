@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.*;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
+import com.crashinvaders.texturepackergui.events.RemoveToastEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.TinifyService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -32,11 +35,15 @@ import com.github.czyzby.kiwi.util.common.Exceptions;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.github.czyzby.lml.parser.action.ActorConsumer;
 import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.adapter.ListAdapter;
 import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.toast.Toast;
+import com.kotcrab.vis.ui.widget.toast.ToastTable;
 
 @ViewDialog(id = "dialog_packing", value = "lml/dialogPacking.lml")
 public class PackDialogController implements ActionContainer {
@@ -56,6 +63,9 @@ public class PackDialogController implements ActionContainer {
     @LmlActor("cbAutoClose") VisCheckBox cbAutoClose;
     @LmlActor("progressBar") VisProgressBar progressBar;
     private VisImageButton btnClose;
+
+    /** Last show "reopen last packing results" toast notification */
+    private Toast prevReopenDialogToast;
 
     @Initiate
     public void initialize() {
@@ -134,6 +144,37 @@ public class PackDialogController implements ActionContainer {
         return result;
     }
 
+    private void showReopenLastDialogNotification() {
+        final LmlParser parser = interfaceService.getParser();
+        final ToastTable toastTable = new ToastTable();
+        final String actionName = "showLastDialog";
+
+        if (prevReopenDialogToast != null) {
+            eventDispatcher.postEvent(new RemoveToastEvent().toast(prevReopenDialogToast));
+            prevReopenDialogToast = null;
+        }
+
+        parser.getData().addActorConsumer(actionName, new ActorConsumer<Void, Object>() {
+            @Override
+            public Void consume(Object actor) {
+                if (window != null) {
+                    window.show(stage);
+                }
+                toastTable.fadeOut();
+                return null;
+            }
+        });
+        Actor content = parser.parseTemplate(Gdx.files.internal("lml/toastReopenLastPackingDialog.lml")).first();
+        parser.getData().removeActorConsumer(actionName);
+        toastTable.add(content).grow();
+
+        eventDispatcher.postEvent(new ShowToastEvent()
+                .content(toastTable)
+                .duration(10f));
+
+        prevReopenDialogToast = toastTable.getToast();
+    }
+
     /** @return localized string */
     private String getString(String key) {
         return localeService.getI18nBundle().get(key);
@@ -170,6 +211,7 @@ public class PackDialogController implements ActionContainer {
 
             if (!errors && cbAutoClose.isChecked()) {
                 window.hide();
+                showReopenLastDialogNotification();
             }
 
             // If there is only one pack, show log on error

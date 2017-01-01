@@ -44,7 +44,7 @@
         <actor height="16"/>
 
         <container growx="true" fill="true">
-            <vislabel style="grey" wrap="true" multiline="true">@dAboutLicenseInfo</vislabel>
+            <vislabel style="grey-small" wrap="true" multiline="true">@dAboutLicenseInfo</vislabel>
         </container>
     </vistable>
 </visdialog>

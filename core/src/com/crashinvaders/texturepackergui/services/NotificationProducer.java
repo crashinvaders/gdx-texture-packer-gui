@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.services;
 
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
-import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
@@ -17,7 +17,7 @@ public class NotificationProducer {
 
     @OnEvent(ProjectSerializerEvent.class) void onEvent(ProjectSerializerEvent event) {
         if (event.getAction() == ProjectSerializerEvent.Action.SAVED) {
-            eventDispatcher.postEvent(new ToastNotificationEvent()
+            eventDispatcher.postEvent(new ShowToastEvent()
                     .message(getString("toastProjectSaved", event.getFile().path()))
             );
         }

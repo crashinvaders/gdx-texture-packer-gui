@@ -9,7 +9,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
-import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -53,7 +53,7 @@ public class ProjectSerializer {
         try {
             saveTextToFile(serialized, file);
         } catch (IOException e) {
-            eventDispatcher.postEvent(new ToastNotificationEvent().message(localeService.getI18nBundle()
+            eventDispatcher.postEvent(new ShowToastEvent().message(localeService.getI18nBundle()
                     .format("toastProjectSaveError", project.getProjectFile().path())));
             return;
         }
@@ -66,7 +66,7 @@ public class ProjectSerializer {
         try {
             serialized = loadTextFromFile(file);
         } catch (IOException e) {
-            eventDispatcher.postEvent(new ToastNotificationEvent().message(localeService.getI18nBundle()
+            eventDispatcher.postEvent(new ShowToastEvent().message(localeService.getI18nBundle()
                     .format("toastProjectLoadError", file.path())));
             return null;
         }

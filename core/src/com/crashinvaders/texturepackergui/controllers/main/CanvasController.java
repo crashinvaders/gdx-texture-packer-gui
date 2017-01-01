@@ -4,7 +4,7 @@ package com.crashinvaders.texturepackergui.controllers.main;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
-import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -33,7 +33,7 @@ public class CanvasController {
             @Override
             public void atlasLoadError(PackModel pack) {
                 //TODO supply with details
-                eventDispatcher.postEvent(new ToastNotificationEvent().message(getString("toastPackLoadError", pack.getName())));
+                eventDispatcher.postEvent(new ShowToastEvent().message(getString("toastPackLoadError", pack.getName())));
             }
         });
 

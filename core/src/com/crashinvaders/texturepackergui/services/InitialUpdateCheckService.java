@@ -5,7 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.crashinvaders.common.Version;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.events.VersionUpdateCheckEvent;
 import com.crashinvaders.texturepackergui.services.versioncheck.VersionCheckService;
 import com.crashinvaders.texturepackergui.services.versioncheck.VersionData;
@@ -81,9 +81,9 @@ public class InitialUpdateCheckService {
         toastTable.add(content).grow();
         toastActions.setToastTable(toastTable);
 
-        eventDispatcher.postEvent(new ToastNotificationEvent()
+        eventDispatcher.postEvent(new ShowToastEvent()
                 .content(toastTable)
-                .duration(ToastNotificationEvent.DURATION_INDEFINITELY));
+                .duration(ShowToastEvent.DURATION_INDEFINITELY));
     }
 
     public static class ToastActions implements ActionContainer {

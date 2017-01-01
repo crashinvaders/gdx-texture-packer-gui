@@ -10,7 +10,7 @@ import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
-import com.crashinvaders.texturepackergui.events.ToastNotificationEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
@@ -59,7 +59,7 @@ public class GlobalActions implements ActionContainer {
     }
 
 	@LmlAction("newPack")
-	public void newPack () {
+	public void newPack() {
         commonDialogs.newPack();
 	}
 
@@ -292,9 +292,9 @@ public class GlobalActions implements ActionContainer {
             pack.setSettings(generalSettings);
         }
 
-        eventDispatcher.postEvent(new ToastNotificationEvent()
+        eventDispatcher.postEvent(new ShowToastEvent()
                 .message(getString("toastCopyAllSettings"))
-                .duration(ToastNotificationEvent.DURATION_SHORT));
+                .duration(ShowToastEvent.DURATION_SHORT));
     }
 
     @LmlAction("checkForUpdates") public void checkForUpdates() {

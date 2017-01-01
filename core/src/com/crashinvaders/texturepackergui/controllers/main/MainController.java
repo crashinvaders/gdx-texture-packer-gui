@@ -196,13 +196,20 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-    @OnEvent(ToastNotificationEvent.class) void onEvent(ToastNotificationEvent event) {
+    @OnEvent(ShowToastEvent.class) void onEvent(ShowToastEvent event) {
         if (initialized) {
-
             if (event.getContent() != null) {
                 toastManager.show(event.getContent(), event.getDuration());
             } else {
                 toastManager.show(event.getMessage(), event.getDuration());
+            }
+        }
+    }
+
+    @OnEvent(RemoveToastEvent.class) void onEvent(RemoveToastEvent event) {
+        if (initialized) {
+            if (event.getToast() != null) {
+                toastManager.remove(event.getToast());
             }
         }
     }
