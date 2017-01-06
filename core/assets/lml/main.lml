@@ -23,7 +23,7 @@
             </container>
 
             <container growy="false" fill="true">
-                <:titledpane id="titledPaneGlobalSettings" title="Global settings" icon="custom/ic-title-global-settings">
+                <:titledpane id="titledPaneGlobalSettings" title="@panelTitleGlobalSettings" icon="custom/ic-title-global-settings">
                     <:import path="lml/paneGlobalSettings.lml"/>
                 </:titledpane>
             </container>

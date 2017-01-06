@@ -66,6 +66,7 @@ public class App implements ApplicationListener {
         }
         return instance;
     }
+
     public App(ClassScanner componentScanner, AppParams params) {
         this.componentScanner = componentScanner;
         this.params = params;

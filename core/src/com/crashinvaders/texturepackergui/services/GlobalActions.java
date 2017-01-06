@@ -33,9 +33,13 @@ import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
+import java.util.Locale;
+
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
     private static final String LOG = GlobalActions.class.getSimpleName();
+    private static final Locale LOCALE_RU = new Locale("ru", "");
+    private static final Locale LOCALE_EN = Locale.ENGLISH;
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -330,6 +334,15 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("changePreviewBackground") public void changePreviewBackground() {
         interfaceService.showDialog(PreviewBackgroundDialogController.class);
+    }
+
+    @LmlAction("changeLanguageEn") public void changeLanguageEn() {
+        localeService.setCurrentLocale(LOCALE_EN);
+//        interfaceService.reload();
+    }
+    @LmlAction("changeLanguageRu") public void changeLanguageRu() {
+        localeService.setCurrentLocale(LOCALE_RU);
+//        interfaceService.reload();
     }
 
     /** @return localized string */

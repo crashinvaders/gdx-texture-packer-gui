@@ -38,7 +38,7 @@
                 focusborderenabled="false"/>
         <:row padbottom="0"/>
 
-        <label align="left">File name</label>
+        <label align="left">@fileName</label>
         <textfield
                 id="edtFileName"
                 minwidth="24"

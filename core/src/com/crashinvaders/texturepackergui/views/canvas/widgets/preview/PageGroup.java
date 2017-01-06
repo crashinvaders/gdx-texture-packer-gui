@@ -64,8 +64,8 @@ class PageGroup extends Group {
     }
 
     private class RegionSpotlight extends Actor {
-        private final Color colorSpotlight;/* = new Color(0xff9500ff);*/
-        private final Color colorTextFrame;/* = new Color(0x2a6b56aa);*/
+        private final Color colorSpotlight;
+        private final Color colorTextFrame;
         private final float framePad = 1f;
 
         private final TextureRegion whiteTex;

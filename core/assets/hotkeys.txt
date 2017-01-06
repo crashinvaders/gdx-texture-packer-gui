@@ -17,3 +17,4 @@ packSelected: CTRL+P
 packAll: CTRL+SHIFT+P
 
 reloadView: F1
+reloadLocalization: F2

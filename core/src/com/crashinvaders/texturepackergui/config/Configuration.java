@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -35,10 +36,6 @@ import com.kotcrab.vis.ui.widget.file.FileUtils;
 @SuppressWarnings("unused")
 @Component
 public class Configuration {
-    /** Path to application's main {@link Preferences}. */
-    public static final String PREFERENCES_PATH = "autumn_mvc_simple";
-
-    @I18nBundle String bundlePath = "i18n/bundle";
 
     @LmlParserSyntax LmlSyntax syntax = new AppLmlSyntax();
 
@@ -52,9 +49,9 @@ public class Configuration {
 
     /** These i18n-related fields will allow {@link LocaleService} to save game's locale in preferences file. Locale
      * changing actions will be automatically added to LML templates - see settings.lml. */
-    @I18nLocale(propertiesPath = PREFERENCES_PATH, defaultLocale = "en") String localePreference = "locale";
-    @AvailableLocales
-    String[] availableLocales = new String[] { "en", "ru" };
+    @I18nLocale(propertiesPath = AppConstants.PREF_NAME_COMMON, defaultLocale = "en") String localePreference = "locale";
+    @AvailableLocales String[] availableLocales = new String[] { "en", "ru" };
+    @I18nBundle String bundlePath = "i18n/bundle";
 
     @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
     public void initiateSkin(final SkinService skinService) {

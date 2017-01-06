@@ -95,7 +95,8 @@
                 <actor height="4"/>
                 <vislabel
                         text="@dVersionUpToDate"
-                        padright="2"/>
+                        padright="2"
+                        textalign="center"/>
             </vistable>
 
         </stack>
