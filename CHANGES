@@ -1,3 +1,9 @@
+[4.3.0]
+- "bleed", "limitMemory" and "flattenPaths" flags were added to pack settings
+- Full set of tooltips for all pack setting properties
+- Russian localization added
+- Common UI improvements and some new inspection data is shown for packing and atlas preview
+
 [4.2.0]
 - Support of TinyPNG/TinyJPG compression service, see https://tinypng.com
 - Export with multiple scale factors
