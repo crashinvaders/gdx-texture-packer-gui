@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE vistable SYSTEM "../../../lml.dtd">
 
-<vistable onecolumn="true" defaultalign="left" defaultgrowx="true" padleft="8">
+<vistable onecolumn="true" defaultalign="left" defaultexpandx="true" padleft="8">
     <horizontalgroup>
         @toastNewVersionAvailable
         <actor width="4"/>
