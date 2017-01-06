@@ -6,7 +6,7 @@ and offers more convenient way of using it.
 
 This project is a successor of [Aurelien Ribon's project](https://github.com/aurelienRibon/libgdx-texturepacker-gui) with whole new GUI and features.
 
-![](http://i.imgur.com/pemUEYU.png)
+![](http://i.imgur.com/xCpv0DN.png)
 
 ### Backlog
 See what features are currently planned from project's [Trello board](https://trello.com/b/mugauAoC)
