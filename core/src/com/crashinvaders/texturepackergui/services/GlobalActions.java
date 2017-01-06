@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
@@ -27,6 +28,7 @@ import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
@@ -337,12 +339,24 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("changeLanguageEn") public void changeLanguageEn() {
+        Locales.setLocale(LOCALE_EN);
+//        Locales.setButtonBarBundle(null);
+//        Locales.setColorPickerBundle(null);
+//        Locales.setDialogsBundle(null);
+//        Locales.setFileChooserBundle(null);
+//        Locales.setTabbedPaneBundle(null);
+
         localeService.setCurrentLocale(LOCALE_EN);
-//        interfaceService.reload();
     }
     @LmlAction("changeLanguageRu") public void changeLanguageRu() {
+        Locales.setLocale(LOCALE_RU);
+//        Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar")));
+//        Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker")));
+//        Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs")));
+//        Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser")));
+//        Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane")));
+
         localeService.setCurrentLocale(LOCALE_RU);
-//        interfaceService.reload();
     }
 
     /** @return localized string */

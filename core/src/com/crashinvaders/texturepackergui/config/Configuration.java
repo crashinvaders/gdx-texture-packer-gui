@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -30,8 +31,11 @@ import com.github.czyzby.autumn.mvc.stereotype.preference.*;
 import com.github.czyzby.kiwi.util.gdx.asset.lazy.provider.ObjectProvider;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.LmlSyntax;
+import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileUtils;
+
+import java.util.Locale;
 
 @SuppressWarnings("unused")
 @Component
@@ -52,6 +56,22 @@ public class Configuration {
     @I18nLocale(propertiesPath = AppConstants.PREF_NAME_COMMON, defaultLocale = "en") String localePreference = "locale";
     @AvailableLocales String[] availableLocales = new String[] { "en", "ru" };
     @I18nBundle String bundlePath = "i18n/bundle";
+
+    @Initiate(priority = AutumnActionPriority.LOW_PRIORITY)
+    public void initVisUiI18n(InterfaceService interfaceService, final LocaleService localeService) {
+        Locales.setLocale(localeService.getCurrentLocale());
+        interfaceService.setActionOnBundlesReload(new Runnable() {
+            @Override
+            public void run() {
+                Locale locale = localeService.getCurrentLocale();
+                Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar"), locale));
+                Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker"), locale));
+                Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs"), locale));
+                Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser"), locale));
+                Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane"), locale));
+            }
+        });
+    }
 
     @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
     public void initiateSkin(final SkinService skinService) {

@@ -5,11 +5,12 @@
 
     <table align="top" growx="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
 
-        <label align="left">@inputDir</label>
+        <label align="left">@packGeneralInputDir</label>
         <textfield
                 id="edtInputDir"
                 minwidth="24"
                 growx="true"
+                tooltip="@packGeneralTtInputDir"
                 onchange="onInputDirTextChanged"/>
         <imagebutton
                 image="custom/ic-folder-pick"
@@ -22,11 +23,12 @@
 
         <:row/>
 
-        <label align="left">@outputDir</label>
+        <label align="left">@packGeneralOutputDir</label>
         <textfield
                 id="edtOutputDir"
                 minwidth="24"
                 growx="true"
+                tooltip="@packGeneralTtOutputDir"
                 onchange="onOutputDirTextChanged"/>
         <imagebutton
                 image="custom/ic-folder-pick"
@@ -38,13 +40,14 @@
                 focusborderenabled="false"/>
         <:row padbottom="0"/>
 
-        <label align="left">@fileName</label>
+        <label align="left">@packGeneralFileName</label>
         <textfield
                 id="edtFileName"
                 minwidth="24"
                 growx="true"
                 padright="0"
                 colspan="2"
+                tooltip="@packGeneralTtFileName"
                 onchange="onPackFilenameTextChanged"/>
 
     </table>
