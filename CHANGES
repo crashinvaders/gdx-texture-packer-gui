@@ -1,3 +1,7 @@
+[4.3.1]
+- Input/output paths that are equal to project file dir, now correctly save and load
+- Minor layout and localization text fixes
+
 [4.3.0]
 - "bleed", "limitMemory" and "flattenPaths" flags were added to pack settings
 - Full set of tooltips for all pack setting properties
