@@ -9,8 +9,7 @@
         <selectbox
                 id="cboPngCompression"
                 change="onSettingsCboChanged"
-                growx="true"
-                padbottom="0"/>
+                growx="true"/>
         <shrinkcontainer
                 id="containerPngCompSettings"
                 visible="true"
