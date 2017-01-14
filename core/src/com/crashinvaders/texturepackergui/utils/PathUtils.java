@@ -33,7 +33,7 @@ public class PathUtils {
 		String normalizedTargetPath = FilenameUtils.normalizeNoEndSeparator(targetPath);
 		String normalizedBasePath = FilenameUtils.normalizeNoEndSeparator(basePath);
 
-		if (basePath.equals(targetPath)) return "";
+		if (basePath.equals(targetPath)) return ".";
 
 		// Undo the changes to the separators made by normalization
 		if (pathSeparator.equals("/")) {
