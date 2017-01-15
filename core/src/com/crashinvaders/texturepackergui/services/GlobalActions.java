@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -372,9 +373,15 @@ public class GlobalActions implements ActionContainer {
     }
 
     private void changeLanguage(Locale locale) {
+        if (localeService.getCurrentLocale().equals(locale)) return;
+
         Locales.setLocale(locale);
         localeService.setCurrentLocale(locale);
-        Timer.instance().clear(); //TODO remove when VisUI will be updated to 1.2.6+
+
+        { // Prevent stage from tooltip appearing //TODO remove when VisUI will be updated to 1.2.6+
+            getStage().getRoot().findActor("root").setTouchable(Touchable.disabled);
+            Timer.instance().clear();
+        }
     }
 
     /** Stores last used dir for specific actions */

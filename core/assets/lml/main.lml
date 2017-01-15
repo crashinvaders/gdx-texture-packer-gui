@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE vistable SYSTEM "../../../lml.dtd">
 
-<vistable fillparent="true" bgtiled="custom/background-fill">
+<vistable id="root" fillparent="true" bgtiled="custom/background-fill">
 
     <:import path="lml/mainMenu.lml"/>
 
