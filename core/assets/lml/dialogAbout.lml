@@ -33,6 +33,11 @@
             <label style="grey">-</label>
             <label style="grey">@dAboutARibonDesc</label>
         </horizontalgroup>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://www.terafog.de">@dAboutTeraFog</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutTeraFogDesc</label>
+        </horizontalgroup>
 
         <actor height="16"/>
 
