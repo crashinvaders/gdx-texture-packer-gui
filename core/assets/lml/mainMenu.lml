@@ -64,6 +64,10 @@
                         onchange="changeLanguageEn"
                         text="@langEn"/>
                 <menuitem
+                        id="miLanguageDe"
+                        onchange="changeLanguageDe"
+                        text="@langDe"/>
+                <menuitem
                         id="miLanguageRu"
                         onchange="changeLanguageRu"
                         text="@langRu"/>

@@ -54,7 +54,7 @@ public class Configuration {
     /** These i18n-related fields will allow {@link LocaleService} to save game's locale in preferences file. Locale
      * changing actions will be automatically added to LML templates - see settings.lml. */
     @I18nLocale(propertiesPath = AppConstants.PREF_NAME_COMMON, defaultLocale = "en") String localePreference = "locale";
-    @AvailableLocales String[] availableLocales = new String[] { "en", "ru" };
+    @AvailableLocales String[] availableLocales = new String[] { "en", "ru", "de" };
     @I18nBundle String bundlePath = "i18n/bundle";
 
     @Initiate(priority = AutumnActionPriority.LOW_PRIORITY)

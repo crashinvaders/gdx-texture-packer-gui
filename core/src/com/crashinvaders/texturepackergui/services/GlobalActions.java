@@ -40,8 +40,9 @@ import java.util.Locale;
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
     private static final String LOG = GlobalActions.class.getSimpleName();
-    private static final Locale LOCALE_RU = new Locale("ru", "");
     private static final Locale LOCALE_EN = Locale.ENGLISH;
+    private static final Locale LOCALE_DE = Locale.GERMAN;
+    private static final Locale LOCALE_RU = new Locale("ru", "");
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -340,22 +341,14 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("changeLanguageEn") public void changeLanguageEn() {
         Locales.setLocale(LOCALE_EN);
-//        Locales.setButtonBarBundle(null);
-//        Locales.setColorPickerBundle(null);
-//        Locales.setDialogsBundle(null);
-//        Locales.setFileChooserBundle(null);
-//        Locales.setTabbedPaneBundle(null);
-
         localeService.setCurrentLocale(LOCALE_EN);
+    }
+    @LmlAction("changeLanguageDe") public void changeLanguageDe() {
+        Locales.setLocale(LOCALE_DE);
+        localeService.setCurrentLocale(LOCALE_DE);
     }
     @LmlAction("changeLanguageRu") public void changeLanguageRu() {
         Locales.setLocale(LOCALE_RU);
-//        Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar")));
-//        Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker")));
-//        Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs")));
-//        Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser")));
-//        Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane")));
-
         localeService.setCurrentLocale(LOCALE_RU);
     }
 
