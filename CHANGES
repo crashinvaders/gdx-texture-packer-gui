@@ -1,3 +1,6 @@
+[4.4.0]
+- German localization added, thanks to terafog 
+
 [4.3.1]
 - Input/output paths that are equal to project file dir, now correctly save and load
 - Minor layout and localization text fixes
