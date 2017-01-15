@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
@@ -340,16 +341,13 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("changeLanguageEn") public void changeLanguageEn() {
-        Locales.setLocale(LOCALE_EN);
-        localeService.setCurrentLocale(LOCALE_EN);
+        changeLanguage(LOCALE_EN);
     }
     @LmlAction("changeLanguageDe") public void changeLanguageDe() {
-        Locales.setLocale(LOCALE_DE);
-        localeService.setCurrentLocale(LOCALE_DE);
+        changeLanguage(LOCALE_DE);
     }
     @LmlAction("changeLanguageRu") public void changeLanguageRu() {
-        Locales.setLocale(LOCALE_RU);
-        localeService.setCurrentLocale(LOCALE_RU);
+        changeLanguage(LOCALE_RU);
     }
 
     /** @return localized string */
@@ -371,6 +369,12 @@ public class GlobalActions implements ActionContainer {
 
     private Stage getStage() {
         return interfaceService.getCurrentController().getStage();
+    }
+
+    private void changeLanguage(Locale locale) {
+        Locales.setLocale(locale);
+        localeService.setCurrentLocale(locale);
+        Timer.instance().clear(); //TODO remove when VisUI will be updated to 1.2.6+
     }
 
     /** Stores last used dir for specific actions */
