@@ -13,8 +13,7 @@
         <shrinkcontainer
                 id="containerPngCompSettings"
                 visible="true"
-                padleft="4"
-                padbottom="-4">
+                padleft="4">
             <imagebutton
                     image="custom/ic-settings"
                     scaling="none"
