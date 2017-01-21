@@ -10,6 +10,14 @@ project.ext.distOutputDir = "../distribution/output"
 project.ext.distFileName = "$project.ext.appName-$project.ext.version"
 project.ext.nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
 
+macAppBundle {
+    mainClassName = project.ext.mainClassName
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    bundleJRE = false
+//    icon = "myIcon.icns"
+//    backgroundImage = "doc/macbackground.png"
+}
+
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
