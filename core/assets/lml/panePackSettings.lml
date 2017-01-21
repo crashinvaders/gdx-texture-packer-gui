@@ -146,7 +146,7 @@
                                 tooltip="@psTtWrapY"/>
                     </:item>
 
-                    <:item title="Scale factors">
+                    <:item title="@psScaleFactors">
                         <expandedittextbutton
                                 id="eetbScaleFactors"
                                 change="onScalesBtnClick"
