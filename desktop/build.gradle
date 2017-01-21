@@ -1,4 +1,5 @@
 apply plugin: "java"
+apply plugin: "edu.sc.seis.macAppBundle"
 
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]

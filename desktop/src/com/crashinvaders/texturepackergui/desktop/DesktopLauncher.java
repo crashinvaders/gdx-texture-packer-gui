@@ -24,7 +24,6 @@ public class DesktopLauncher {
 			return;
 		}
 
-
 		final LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
 		configuration.title = "LibGDX Texture Packer GUI";
 		configuration.addIcon("icon128.png", Files.FileType.Internal);
