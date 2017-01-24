@@ -4,7 +4,7 @@
 <table id="content">
     <textfield
             id="edtSuffix"
-            width="72"
+            width="122"
             messagetext="@dSfNoSuffix"
             expandx="true"
             align="left"/>
