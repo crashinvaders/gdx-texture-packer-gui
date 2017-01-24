@@ -1,6 +1,7 @@
 [LATES]
-- German localization added, thanks to terafog 
-- Fixed occasional crash upon language change 
+- German localization added, thanks to terafog
+- Fixed occasional crash upon language change
+- Fixed "Flatten paths" checkbox (it works now!)
 
 [4.3.1]
 - Input/output paths that are equal to project file dir, now correctly save and load
