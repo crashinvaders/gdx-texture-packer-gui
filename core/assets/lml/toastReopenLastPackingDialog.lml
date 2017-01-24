@@ -3,7 +3,7 @@
 
 <vistable onecolumn="true" defaultalign="left" defaultgrowx="true" padleft="8">
     <linklabel
-            style="orange"
+            style="light-grey"
             text="@dPackingReopenLastDialog"
             href="#"
             click="showLastDialog"/>
