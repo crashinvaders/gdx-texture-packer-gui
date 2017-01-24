@@ -68,7 +68,8 @@ public class Canvas extends Stack {
 
 			// Page buttons
 			{
-				btnNextPage = new VisImageTextButton("Next page", "default");
+				String text = App.inst().getI18n().get("atlasPreviewNextPage");
+				btnNextPage = new VisImageTextButton(text, "default");
 				{
 					btnNextPage.addListener(new ChangeListener() {
                         @Override
@@ -88,7 +89,8 @@ public class Canvas extends Stack {
 					btnNextPage.getLabelCell().padBottom(2f);
 				}
 
-				btnPrevPage = new VisImageTextButton("Previous page", "default");
+				text = App.inst().getI18n().get("atlasPreviewPrevPage");
+				btnPrevPage = new VisImageTextButton(text, "default");
 				{
 					btnPrevPage.addListener(new ChangeListener() {
 						@Override

@@ -7,7 +7,7 @@
         closeonescape="true">
     <vistable minwidth="360" onecolumn="true">
 
-        <label wrap="true" growx="true" color="light-grey" labelalignment="left">Unpacks a texture atlas into individual image files</label>
+        <label wrap="true" growx="true" color="light-grey" labelalignment="left">@dTuDescription</label>
 
         <:row padtop="4"/>
 
@@ -49,7 +49,7 @@
 
         <:row padtop="4"/>
 
-        <textbutton change="launchUnpackProcess" text="Process" align="right" tablepadleft="16" tablepadright="16"/>
+        <textbutton change="launchUnpackProcess" text="@dTuProcess" align="right" tablepadleft="16" tablepadright="16"/>
 
     </vistable>
 </visdialog>
