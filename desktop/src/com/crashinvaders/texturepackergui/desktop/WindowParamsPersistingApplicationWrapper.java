@@ -6,9 +6,12 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFiles;
 import com.badlogic.gdx.backends.lwjgl.LwjglPreferences;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.crashinvaders.texturepackergui.App;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
+
+import java.awt.*;
 
 /**
  * Saves and loads window position and size across application shutdowns
@@ -29,12 +32,15 @@ class WindowParamsPersistingApplicationWrapper extends ApplicationListenerWrappe
         FileHandle file = new FileHandle(LwjglFiles.externalPath + configuration.preferencesDirectory + "/window_params.xml");
         if (!file.exists()) return;
 
-        Preferences prefs = new LwjglPreferences(file);
+        DisplayMode displayMode = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
+        int screenWidth = displayMode.getWidth();
+        int screenHeight = displayMode.getHeight();
 
-        configuration.x = prefs.getInteger("x", configuration.x);
-        configuration.y = prefs.getInteger("y", configuration.y);
-        configuration.width = prefs.getInteger("width", configuration.width);
-        configuration.height = prefs.getInteger("height", configuration.height);
+        Preferences prefs = new LwjglPreferences(file);
+        configuration.width = MathUtils.clamp(prefs.getInteger("width", configuration.width), 320, screenWidth);
+        configuration.height = MathUtils.clamp(prefs.getInteger("height", configuration.height), 320, screenHeight);
+        configuration.x = MathUtils.clamp(prefs.getInteger("x", configuration.x), 0, screenWidth - configuration.width);
+        configuration.y = MathUtils.clamp(prefs.getInteger("y", configuration.y), 0, screenHeight - configuration.height);
     }
 
     private void saveWindowParams() {
