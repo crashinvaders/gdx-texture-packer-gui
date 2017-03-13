@@ -102,6 +102,7 @@ SectionEnd
 Section "Uninstall"
 
   RMDir /r "$INSTDIR"
+  RMDir /r "$PROFILE\.gdxtexturepackergui"
 
   Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
   Delete "$DESKTOP\GdxTexturePacker.lnk"
