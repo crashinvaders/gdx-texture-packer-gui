@@ -95,7 +95,7 @@ public class App implements ApplicationListener {
         initiateContext();
         clearComponentScanners();
 
-        FileChooser.setDefaultPrefsName(".gdxtexturepackergui/file_chooser.xml");
+        FileChooser.setDefaultPrefsName("file_chooser.xml");
 
 //        // Uncomment to update project's LML DTD schema
 //        saveDtdSchema(Gdx.files.local("../lml.dtd"));
