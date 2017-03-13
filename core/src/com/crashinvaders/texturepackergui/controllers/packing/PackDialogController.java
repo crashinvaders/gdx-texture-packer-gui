@@ -113,6 +113,7 @@ public class PackDialogController implements ActionContainer {
                         new ZopfliCompressingProcessor(),
                         new TinifyCompressingProcessor(tinifyService),
                         new FileSizeMetadataProcessor(),
+                        new PageAmountMetadataProcessor(),
                         new EndTimeMetadataProcessor(),
                         new TotalTimeMetadataProcessor()),
 //                new TestProcessor(),

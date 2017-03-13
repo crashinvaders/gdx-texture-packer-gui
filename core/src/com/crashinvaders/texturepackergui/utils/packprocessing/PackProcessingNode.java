@@ -15,6 +15,8 @@ public class PackProcessingNode {
     public static final String META_END_TIME = "endTime";
     /** Total processing time (nanoseconds) */
     public static final String META_TOTAL_TIME = "totalTime";
+    /** Total amount of texture pages */
+    public static final String META_ATLAS_PAGES = "atlasPages";
 
     private final ObjectMap<String, Object> metadata = new ObjectMap<>();
     private final ProjectModel project;
