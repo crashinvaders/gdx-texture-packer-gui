@@ -1,7 +1,10 @@
 package com.crashinvaders.texturepackergui.services;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -39,36 +42,54 @@ public class CommonDialogs {
         final VisTextField edtName = dialog.findActor("edtName");
         final ButtonTable btPlacing = dialog.findActor("btPlacing");
 
+        final Runnable okRunnable = new Runnable() {
+            @Override
+            public void run() {
+                dialog.fadeOut();
+
+                PackModel pack = new PackModel();
+                pack.setName(edtName.getText());
+                getProject().addPack(pack);
+                getProject().setSelectedPack(pack);
+
+                switch (btPlacing.getButtonGroup().getChecked().getName()) {
+                    case "rbAbove":
+                        if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
+                        break;
+                    case "rbBelow":
+                        if (selectedPack != null) modelUtils.movePackNextTo(selectedPack, pack);
+                        break;
+                    case "rbTop":
+                        modelUtils.movePackTop(pack);
+                        break;
+                    case "rbBottom":
+                        modelUtils.movePackBottom(pack);
+                        break;
+                }
+            }
+        };
+
         dialog.closeOnEscape();
         dialog.addCloseButton();
         edtName.focusField();
+        edtName.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                switch (keycode) {
+                    case Input.Keys.ENTER: {
+                        okRunnable.run();
+                        return true;
+                    }
+                }
+                return super.keyDown(event, keycode);
+            }
+        });
 
         dialog.setupButtons(new ButtonBarBuilder()
                 .button(ButtonBar.ButtonType.OK, new ChangeListener() {
                     @Override
                     public void changed (ChangeEvent event, Actor actor) {
-                        dialog.fadeOut();
-
-                        PackModel pack = new PackModel();
-                        pack.setName(edtName.getText());
-                        getProject().addPack(pack);
-                        getProject().setSelectedPack(pack);
-
-                        switch (btPlacing.getButtonGroup().getChecked().getName()) {
-                            case "rbAbove":
-                                if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
-                                break;
-                            case "rbBelow":
-                                if (selectedPack != null) modelUtils.movePackNextTo(selectedPack, pack);
-                                break;
-                            case "rbTop":
-                                modelUtils.movePackTop(pack);
-                                break;
-                            case "rbBottom":
-                                modelUtils.movePackBottom(pack);
-                                break;
-                        }
-
+                        okRunnable.run();
                     }
                 }).button(ButtonBar.ButtonType.CANCEL, new ChangeListener() {
                     @Override
@@ -92,38 +113,56 @@ public class CommonDialogs {
         final VisTextField edtName = dialog.findActor("edtName");
         final ButtonTable btPlacing = dialog.findActor("btPlacing");
 
+        final Runnable okRunnable = new Runnable() {
+            @Override
+            public void run() {
+                dialog.fadeOut();
+
+                PackModel pack = new PackModel(sourcePack);
+                pack.setName(edtName.getText());
+                getProject().addPack(pack);
+                getProject().setSelectedPack(pack);
+
+                switch (btPlacing.getButtonGroup().getChecked().getName()) {
+                    case "rbAbove":
+                        if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
+                        break;
+                    case "rbBelow":
+                        if (selectedPack != null) modelUtils.movePackNextTo(selectedPack, pack);
+                        break;
+                    case "rbTop":
+                        modelUtils.movePackTop(pack);
+                        break;
+                    case "rbBottom":
+                        modelUtils.movePackBottom(pack);
+                        break;
+                }
+            }
+        };
+
         dialog.closeOnEscape();
         dialog.addCloseButton();
         edtName.focusField();
         edtName.setText(sourcePack.getName());
         edtName.selectAll();
+        edtName.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                switch (keycode) {
+                    case Input.Keys.ENTER: {
+                        okRunnable.run();
+                        return true;
+                    }
+                }
+                return super.keyDown(event, keycode);
+            }
+        });
 
         dialog.setupButtons(new ButtonBarBuilder()
                 .button(ButtonBar.ButtonType.OK, new ChangeListener() {
                     @Override
                     public void changed (ChangeEvent event, Actor actor) {
-                        dialog.fadeOut();
-
-                        PackModel pack = new PackModel(sourcePack);
-                        pack.setName(edtName.getText());
-                        getProject().addPack(pack);
-                        getProject().setSelectedPack(pack);
-
-                        switch (btPlacing.getButtonGroup().getChecked().getName()) {
-                            case "rbAbove":
-                                if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
-                                break;
-                            case "rbBelow":
-                                if (selectedPack != null) modelUtils.movePackNextTo(selectedPack, pack);
-                                break;
-                            case "rbTop":
-                                modelUtils.movePackTop(pack);
-                                break;
-                            case "rbBottom":
-                                modelUtils.movePackBottom(pack);
-                                break;
-                        }
-
+                        okRunnable.run();
                     }
                 }).button(ButtonBar.ButtonType.CANCEL, new ChangeListener() {
                     @Override

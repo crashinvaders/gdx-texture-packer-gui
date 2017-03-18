@@ -67,8 +67,7 @@ public class GlobalActions implements ActionContainer {
         fileChooserHistory = new FileChooserHistory(prefs);
     }
 
-	@LmlAction("newPack")
-	public void newPack() {
+	@LmlAction("newPack") public void newPack() {
         commonDialogs.newPack();
 	}
 
