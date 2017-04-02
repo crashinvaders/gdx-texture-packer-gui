@@ -18,7 +18,7 @@ public class PackModel {
 
 //    private final SourceFileSet sourceFileSet = new SourceFileSet();
     private final Array<ScaleFactorModel> scaleFactors = new Array<>();
-    private final Array<InputFile> sourceFiles = new Array<>();
+    private final Array<InputFile> inputFiles = new Array<>();
     private Settings settings;
     private String name = "";
     private String filename = "";
@@ -47,6 +47,8 @@ public class PackModel {
         this.outputDir = pack.outputDir;
 
         scaleFactors.addAll(pack.scaleFactors);
+
+        inputFiles.addAll(pack.inputFiles);
     }
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
@@ -109,8 +111,8 @@ public class PackModel {
 //        return sourceFileSet;
 //    }
 
-    public Array<InputFile> getSourceFiles() {
-        return sourceFiles;
+    public Array<InputFile> getInputFiles() {
+        return inputFiles;
     }
 
     public Settings getSettings() {
@@ -169,11 +171,11 @@ public class PackModel {
         }
     }
 
-    public void addSourceFile(FileHandle fileHandle, InputFile.Type type) {
-        addSourceFile(new InputFile(fileHandle, type));
+    public void addInputFile(FileHandle fileHandle, InputFile.Type type) {
+        addInputFile(new InputFile(fileHandle, type));
     }
-    public void addSourceFile(InputFile inputFile) {
-        if (sourceFiles.contains(inputFile, false)) {
+    public void addInputFile(InputFile inputFile) {
+        if (inputFiles.contains(inputFile, false)) {
             Gdx.app.error(TAG, "File: " + inputFile + " is already added");
             return;
         }
@@ -181,7 +183,7 @@ public class PackModel {
             Gdx.app.error(TAG, "File: " + inputFile + " is a directory. Ignore files cannot be directories.");
             return;
         }
-        sourceFiles.add(inputFile);
+        inputFiles.add(inputFile);
         inputFile.setEventDispatcher(eventDispatcher);
 
         if (eventDispatcher != null) {
@@ -190,15 +192,15 @@ public class PackModel {
         }
     }
 
-    public void removeSourceFile(final FileHandle fileHandle, final InputFile.Type type) {
-        removeSourceFile(new InputFile(fileHandle, type));
+    public void removeInputFile(final FileHandle fileHandle, final InputFile.Type type) {
+        removeInputFile(new InputFile(fileHandle, type));
     }
-    public void removeSourceFile(InputFile inputFile) {
-        if (!sourceFiles.contains(inputFile, false)) {
+    public void removeInputFile(InputFile inputFile) {
+        if (!inputFiles.contains(inputFile, false)) {
             Gdx.app.error(TAG, "File: " + inputFile + " wasn't added");
             return;
         }
-        sourceFiles.removeValue(inputFile, false);
+        inputFiles.removeValue(inputFile, false);
         inputFile.setEventDispatcher(null);
 
         if (eventDispatcher != null) {

@@ -2,14 +2,9 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.config.attributes.OnDoubleClickLmlAttribute;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
@@ -27,15 +22,10 @@ import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
-import com.github.czyzby.lml.annotation.LmlAfter;
-import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
-
-import java.util.Comparator;
 
 @Component
 public class PackInputFilesController implements ActionContainer {
@@ -59,21 +49,23 @@ public class PackInputFilesController implements ActionContainer {
         this.stage = stage;
 
         listAdapter = ((SourceFileSetAdapter) listTable.getListView().getAdapter());
-        listAdapter.setItemsSorter(new SourceFileComparator());
 
         //TODO remove
         try {
             PackModel pack = modelService.getProject().getSelectedPack();
-            pack.addSourceFile(Gdx.files.internal("lml/compression"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("test/file0.png"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("test/file1.png"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("test/file2.png"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("test/file3.png"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("test/file4.png"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("test/file5.png"), InputFile.Type.Input);
-            pack.addSourceFile(Gdx.files.internal("lml/preview"), InputFile.Type.Ignore);
-            pack.addSourceFile(Gdx.files.internal("lml/ignore.png"), InputFile.Type.Ignore);
-            pack.addSourceFile(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"), InputFile.Type.Ignore);
+            pack.addInputFile(Gdx.files.absolute("C:/assets/res/textures/offerings"), InputFile.Type.Input);
+            pack.addInputFile(Gdx.files.absolute("C:/Projects/libgdx/gdx-texture-packer-gui/resources/uiskin/images/window-resizable.9.png"), InputFile.Type.Input);
+            pack.addInputFile(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"), InputFile.Type.Ignore);
+//            pack.addInputFile(Gdx.files.internal("lml/compression"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("test/file0.png"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("test/file1.png"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("test/file2.png"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("test/file3.png"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("test/file4.png"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("test/file5.png"), InputFile.Type.Input);
+//            pack.addInputFile(Gdx.files.internal("lml/preview"), InputFile.Type.Ignore);
+//            pack.addInputFile(Gdx.files.internal("lml/ignore.png"), InputFile.Type.Ignore);
+//            pack.addInputFile(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"), InputFile.Type.Ignore);
         } catch (Exception ignored) { }
 
         initialized = true;
@@ -150,13 +142,13 @@ public class PackInputFilesController implements ActionContainer {
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES_AND_DIRECTORIES);
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                .rule("Image files", "png").get()); //TODO localize and check if we need to support .jpeg
+                .rule("Image files", "png", "jpg", "jpeg").get()); //TODO localize
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
                 PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
                 for (FileHandle file : files) {
-                    pack.addSourceFile(file, InputFile.Type.Input);
+                    pack.addInputFile(file, InputFile.Type.Input);
                 }
             }
         });
@@ -169,13 +161,13 @@ public class PackInputFilesController implements ActionContainer {
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                .rule("Image files", "png").get()); //TODO localize and check if we need to support .jpeg
+                .rule("Image files", "png", "jpg", "jpeg").get()); //TODO localize
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
                 PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
                 for (FileHandle file : files) {
-                    pack.addSourceFile(file, InputFile.Type.Ignore);
+                    pack.addInputFile(file, InputFile.Type.Ignore);
                 }
             }
         });
@@ -186,7 +178,7 @@ public class PackInputFilesController implements ActionContainer {
         PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
         Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
         for (InputFile selectedNode : selectedNodes) {
-            pack.removeSourceFile(selectedNode);
+            pack.removeInputFile(selectedNode);
         }
     }
 
@@ -198,195 +190,10 @@ public class PackInputFilesController implements ActionContainer {
         PackModel pack = modelService.getProject().getSelectedPack();
         if (pack == null) return;
 
-        Array<InputFile> inputFiles = pack.getSourceFiles();
+        Array<InputFile> inputFiles = pack.getInputFiles();
         for (InputFile inputFile : inputFiles) {
             listAdapter.add(inputFile);
         }
     }
 
-    private static class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
-
-        private final LmlParser lmlParser;
-
-        public SourceFileSetAdapter(LmlParser lmlParser) {
-            super(new Array<InputFile>());
-            this.lmlParser = lmlParser;
-
-            setSelectionMode(SelectionMode.MULTIPLE);
-        }
-
-        public InputFile getSelected() {
-            Array<InputFile> selection = getSelectionManager().getSelection();
-            if (selection.size == 0) return null;
-            return selection.first();
-        }
-
-        public SourceFileSetAdapter.ViewHolder getViewHolder(InputFile item) {
-            if (indexOf(item) == -1) return null;
-
-            return (SourceFileSetAdapter.ViewHolder) getView(item).getUserObject();
-        }
-
-        public SourceFileSetAdapter.ViewHolder getViewHolder(Actor view) {
-            return (SourceFileSetAdapter.ViewHolder) view.getUserObject();
-        }
-
-        @Override
-        protected VisTable createView(InputFile item) {
-            SourceFileSetAdapter.ViewHolder viewHolder = new SourceFileSetAdapter.ViewHolder(lmlParser.getData().getDefaultSkin(), item);
-            lmlParser.createView(viewHolder, Gdx.files.internal("lml/inputFileListItem.lml"));
-            viewHolder.root.setUserObject(viewHolder);
-            return viewHolder.root;
-        }
-
-        @Override
-        protected void prepareViewBeforeAddingToTable(InputFile item, VisTable view) {
-            super.prepareViewBeforeAddingToTable(item, view);
-        }
-
-        @Override
-        protected void selectView(VisTable view) {
-            SourceFileSetAdapter.ViewHolder viewHolder = (SourceFileSetAdapter.ViewHolder) view.getUserObject();
-            viewHolder.setSelected(true);
-        }
-
-        @Override
-        protected void deselectView(VisTable view) {
-            SourceFileSetAdapter.ViewHolder viewHolder = (SourceFileSetAdapter.ViewHolder) view.getUserObject();
-            viewHolder.setSelected(false);
-        }
-
-        public static class ViewHolder {
-            @LmlActor("root") VisTable root;
-            @LmlActor("lblName") VisLabel lblName;
-            @LmlActor("imgTypeIndicator") Image imgTypeIndicator;
-
-            private final Skin skin;
-            private final InputFile inputFile;
-            private final Tooltip tooltip;
-
-            private boolean selected = false;
-            private boolean pathProcessed = false;
-
-            public ViewHolder(Skin skin, InputFile inputFile) {
-                this.skin = skin;
-                this.inputFile = inputFile;
-
-                tooltip = new Tooltip();
-                tooltip.setAppearDelayTime(0.25f);
-            }
-
-            @LmlAfter void initView() {
-                tooltip.setTarget(lblName);
-
-                root.pack();
-                updateViewData();
-            }
-
-            public void remapData() {
-                pathProcessed = false;
-                updateViewData();
-            }
-
-            public void updateViewData() {
-                processPathText();
-
-                tooltip.setText(inputFile.getFileHandle().path());
-
-                String imgName = "custom/ic-fileset-";
-                if (inputFile.isDirectory()) {
-                    imgName += "dir";
-                } else {
-                    imgName += "file";
-                }
-                switch (inputFile.getType()) {
-                    case Input:
-                        break;
-                    case Ignore:
-                        imgName += "-ignore";
-                        break;
-                }
-                imgTypeIndicator.setDrawable(skin.getDrawable(imgName));
-            }
-
-            public void setSelected(boolean selected) {
-                if (this.selected == selected) return;
-                this.selected = selected;
-
-                root.setBackground(selected ? skin.getDrawable("padded-list-selection") : null);
-            }
-
-            public InputFile getInputFile() {
-                return inputFile;
-            }
-
-            private void processPathText() {
-                if (pathProcessed) return;
-                pathProcessed = true;
-
-                String pathText = inputFile.getFileHandle().path();
-
-                // Cut the last slash
-                int lastSlashIndex = pathText.lastIndexOf("/");
-                if (lastSlashIndex == pathText.length()-1) {
-                    pathText = pathText.substring(0, lastSlashIndex);
-                }
-
-                // Try to shorten path by cutting slash divided pieces starting from beginning
-                GlyphLayout glyphLayout = lblName.getGlyphLayout();
-                boolean pathCut = false;
-                while (true) {
-                    glyphLayout.setText(lblName.getStyle().font, pathText, lblName.getStyle().fontColor, 0f, lblName.getLabelAlign(), false);
-                    if (glyphLayout.width < (lblName.getWidth() - 8)) break;  // -8 is extra ellipsis ".../" space
-
-                    int slashIndex = pathText.indexOf("/");
-                    if (slashIndex == -1) break;
-                    pathText = pathText.substring(slashIndex+1);
-                    pathCut = true;
-                }
-
-                // Add ellipsis if path was cut
-                if (pathCut) {
-                    pathText = ".../"+pathText;
-                }
-
-                lastSlashIndex = pathText.lastIndexOf("/");
-                if (lastSlashIndex > 0) {
-                    int dotLastIndex = pathText.lastIndexOf(".");
-
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("[light-grey]");
-                    sb.append(pathText.substring(0, lastSlashIndex + 1));
-                    sb.append("[]");
-                    if (!inputFile.isDirectory() && dotLastIndex > 0 && dotLastIndex - lastSlashIndex > 1) {
-                        // Grey out extension text
-                        sb.append(pathText.substring(lastSlashIndex + 1, dotLastIndex));
-                        sb.append("[light-grey]");
-                        sb.append(pathText.substring(dotLastIndex));
-                        sb.append("[]");
-                    } else {
-                        // No extension
-                        sb.append(pathText.substring(lastSlashIndex + 1));
-                    }
-                    pathText = sb.toString();
-                }
-
-                lblName.setText(pathText);
-            }
-        }
-    }
-
-    private static class SourceFileComparator implements Comparator<InputFile> {
-
-        @Override
-        public int compare(InputFile l, InputFile r) {
-            int type = l.getType().compareTo(r.getType());
-            if (type != 0) return type;
-
-            int dir = Boolean.compare(r.isDirectory(), l.isDirectory());
-            if (dir != 0) return dir;
-
-            return l.getFileHandle().path().compareTo(r.getFileHandle().path());
-        }
-    }
 }

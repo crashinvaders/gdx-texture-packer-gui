@@ -108,7 +108,8 @@ public class PackDialogController implements ActionContainer {
         PackProcessingManager packProcessingManager = new PackProcessingManager(
                 new CompositePackProcessor(
                         new StartTimeMetadataProcessor(),
-                        new PackingProcessor(),
+//                        new PackingProcessor(),
+                        new PackingProcessorNew(),
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
                         new TinifyCompressingProcessor(tinifyService),

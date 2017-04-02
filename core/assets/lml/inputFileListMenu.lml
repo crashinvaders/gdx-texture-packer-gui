@@ -5,6 +5,7 @@
     <menuitem
             text="Show details"
             onchange="PackInputFilesController.showInputFileDialog"/>
+    <menuseparator/>
     <menuitem
             text="Add source files"
             onchange="PackInputFilesController.addSourceFiles"/>

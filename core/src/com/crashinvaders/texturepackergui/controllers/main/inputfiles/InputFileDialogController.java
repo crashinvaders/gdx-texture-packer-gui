@@ -63,7 +63,7 @@ public class InputFileDialogController implements ActionContainer {
         }  else {
             fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
             fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                    .rule("Image files", "png").get()); //TODO localize and check if we need to support .jpeg
+                    .rule("Image files", "png", "jpg", "jpeg").get()); //TODO localize
         }
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setListener(new FileChooserAdapter() {
