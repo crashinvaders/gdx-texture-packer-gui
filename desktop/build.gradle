@@ -88,6 +88,7 @@ macAppBundle {
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     bundleJRE = false
     appName = "GdxTexturePacker"
+    dmgName = "gdx-texturepacker-$project.ext.version"
     icon = "icons.icns"
 //    backgroundImage = "doc/macbackground.png"
 }
