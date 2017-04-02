@@ -1,5 +1,5 @@
 ASE="/Applications/Aseprite.app/Contents/MacOS/aseprite"
-ASE_FILE="icon.ase"
+ASE_FILE="../resources/icon.ase"
 IMG_DIR="macIcons.iconset"
 
 function renderIcon() {

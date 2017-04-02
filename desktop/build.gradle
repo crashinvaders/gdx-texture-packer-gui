@@ -102,7 +102,7 @@ task copyUberJar (type: Copy) {
     into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java"
 }
 task copyMacAppFiles (type: Copy) {
-    from '../resources/macApp'
+    from '../distribution/macApp'
     into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents"
 }
 createApp.dependsOn copyUberJar, copyMacAppFiles
