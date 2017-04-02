@@ -6,6 +6,6 @@
        rightclick="PackSourceFileSetController.showContextMenu"
        doubleclick="PackSourceFileSetController.changeFileHandle">
     <image id="imgTypeIndicator" scaling="none"/>
-    <actor width="2"/>
+    <actor width="4"/>
     <label id="lblName" textalign="left" growx="true" width="270" align="left"/>
 </table>

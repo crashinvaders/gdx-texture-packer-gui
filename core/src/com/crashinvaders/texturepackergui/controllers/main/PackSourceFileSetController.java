@@ -6,21 +6,19 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
 import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnDoubleClickLmlAttribute;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
-import com.crashinvaders.texturepackergui.services.GlobalActions;
+import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
 import com.github.czyzby.autumn.annotation.Component;
@@ -43,15 +41,13 @@ import java.util.Comparator;
 @Component
 public class PackSourceFileSetController implements ActionContainer {
     private static final String TAG = PackSourceFileSetController.class.getSimpleName();
-    private static final FileHandleComparator fileHandleComparator = new FileHandleComparator();
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
 
-    @LmlActor("lvSourceFiles") ListView.ListViewTable<ListNode> listTable;
+    @LmlActor("lvSourceFiles") ListView.ListViewTable<InputFile> listTable;
     private SourceFileSetAdapter listAdapter;
 
-    private final Array<FileHandle> tmpFileHandles = new Array<>();
     private Stage stage;
     private boolean initialized;
 
@@ -63,6 +59,7 @@ public class PackSourceFileSetController implements ActionContainer {
         this.stage = stage;
 
         listAdapter = ((SourceFileSetAdapter) listTable.getListView().getAdapter());
+        listAdapter.setItemsSorter(new SourceFileComparator());
 //        actorsPacks.packListAdapter.getSelectionManager().setListener(new ListSelectionAdapter<PackModel, VisTable>() {
 //            @Override
 //            public void selected(PackModel pack, VisTable view) {
@@ -70,38 +67,50 @@ public class PackSourceFileSetController implements ActionContainer {
 //                Gdx.app.postRunnable(normalizePackListScrollRunnable);
 //            }
 //        });
-        initialized = true;
 
         //TODO remove
         try {
-            PackModel.SourceFileSet sourceFileSet = modelService.getProject().getSelectedPack().getSourceFileSet();
-            sourceFileSet.setMuteChangeEvents(true);
-            sourceFileSet.addSource(Gdx.files.internal("lml/compression"));
-            sourceFileSet.addSource(Gdx.files.internal("test/file0.png"));
-            sourceFileSet.addSource(Gdx.files.internal("test/file1.png"));
-            sourceFileSet.addSource(Gdx.files.internal("test/file2.png"));
-            sourceFileSet.addSource(Gdx.files.internal("test/file3.png"));
-            sourceFileSet.addSource(Gdx.files.internal("test/file4.png"));
-            sourceFileSet.addSource(Gdx.files.internal("test/file5.png"));
-            sourceFileSet.addIgnore(Gdx.files.internal("lml/preview"));
-            sourceFileSet.addIgnore(Gdx.files.internal("lml/ignore.png"));
-            sourceFileSet.addIgnore(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"));
-            sourceFileSet.setMuteChangeEvents(false);
+            PackModel pack = modelService.getProject().getSelectedPack();
+            pack.addSourceFile(Gdx.files.internal("lml/compression"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("test/file0.png"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("test/file1.png"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("test/file2.png"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("test/file3.png"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("test/file4.png"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("test/file5.png"), InputFile.Type.Input);
+            pack.addSourceFile(Gdx.files.internal("lml/preview"), InputFile.Type.Ignore);
+            pack.addSourceFile(Gdx.files.internal("lml/ignore.png"), InputFile.Type.Ignore);
+            pack.addSourceFile(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"), InputFile.Type.Ignore);
         } catch (Exception ignored) { }
 
-        updateListContent();
+        initialized = true;
+
+        reloadListContent();
     }
 
     @OnEvent(ProjectPropertyChangedEvent.class) void onEvent(ProjectPropertyChangedEvent event) {
         if (event.getProperty() == ProjectPropertyChangedEvent.Property.SELECTED_PACK) {
-            updateListContent();
+            reloadListContent();
         }
     }
 
     @OnEvent(PackPropertyChangedEvent.class) void onEvent(PackPropertyChangedEvent event) {
         if (modelService.getProject().getSelectedPack() != event.getPack()) return;
-        if (event.getProperty() == PackPropertyChangedEvent.Property.SOURCE_FILE_SET) {
-            updateListContent();
+        switch (event.getProperty()) {
+            case INPUT_FILE_ADDED:
+                listAdapter.add(event.getInputFile());
+                break;
+            case INPUT_FILE_REMOVED:
+                listAdapter.removeValue(event.getInputFile(), true);
+                break;
+        }
+    }
+
+    @OnEvent(InputFilePropertyChangedEvent.class) void onEvent(InputFilePropertyChangedEvent event) {
+        InputFile inputFile = event.getInputFile();
+        SourceFileSetAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(inputFile);
+        if (viewHolder != null) {
+            viewHolder.remapData();
         }
     }
 
@@ -111,7 +120,7 @@ public class PackSourceFileSetController implements ActionContainer {
 
     @LmlAction("showContextMenu") void showContextMenu(OnRightClickLmlAttribute.Params params) {
         SourceFileSetAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(params.actor);
-        ListNode listNode = viewHolder.getListNode();
+        InputFile inputFile = viewHolder.getInputFile();
 
         PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, "IGNORE", this, Gdx.files.internal("lml/sourceFileSetListMenu.lml"));
 
@@ -137,11 +146,11 @@ public class PackSourceFileSetController implements ActionContainer {
     }
 
     @LmlAction("changeFileHandle") void changeFileHandle(OnDoubleClickLmlAttribute.Params params) {
-        final ListNode listNode = listAdapter.getViewHolder(params.actor).getListNode();
+        final InputFile inputFile = listAdapter.getViewHolder(params.actor).getInputFile();
 
-        final FileChooser fileChooser = new FileChooser(listNode.fileHandle.parent(), FileChooser.Mode.OPEN);
+        final FileChooser fileChooser = new FileChooser(inputFile.getFileHandle().parent(), FileChooser.Mode.OPEN);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        if (listNode.directory) {
+        if (inputFile.isDirectory()) {
             fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
         }  else {
             fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
@@ -152,23 +161,18 @@ public class PackSourceFileSetController implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
-                PackModel.SourceFileSet sourceFileSet = App.inst().getModelService().getProject().getSelectedPack().getSourceFileSet();
+                PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
 
                 FileHandle fileHandle = files.first();
-                if (fileHandle.equals(listNode.fileHandle)) return;
+                if (fileHandle.equals(inputFile.getFileHandle())) return;
 
-                if (listNode.type == ListNode.Type.Source) {
-                    sourceFileSet.removeSource(listNode.fileHandle);
-                    sourceFileSet.addSource(fileHandle);
-                } else {
-                    sourceFileSet.removeIgnore(listNode.fileHandle);
-                    sourceFileSet.addIgnore(fileHandle);
-                }
+                pack.removeSourceFile(inputFile);
+                pack.addSourceFile(fileHandle, inputFile.getType());
             }
         });
         stage.addActor(fileChooser.fadeIn());
 
-        if (FileUtils.fileExists(listNode.fileHandle)) { fileChooser.setSelectedFiles(listNode.fileHandle); }
+        if (FileUtils.fileExists(inputFile.getFileHandle())) { fileChooser.setSelectedFiles(inputFile.getFileHandle()); }
     }
 
     @LmlAction("addSourceFiles") void addSourceFiles() {
@@ -181,9 +185,9 @@ public class PackSourceFileSetController implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
-                PackModel.SourceFileSet sourceFileSet = App.inst().getModelService().getProject().getSelectedPack().getSourceFileSet();
+                PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
                 for (FileHandle file : files) {
-                    sourceFileSet.addSource(file);
+                    pack.addSourceFile(file, InputFile.Type.Input);
                 }
             }
         });
@@ -200,9 +204,9 @@ public class PackSourceFileSetController implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
-                PackModel.SourceFileSet sourceFileSet = App.inst().getModelService().getProject().getSelectedPack().getSourceFileSet();
+                PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
                 for (FileHandle file : files) {
-                    sourceFileSet.addIgnore(file);
+                    pack.addSourceFile(file, InputFile.Type.Ignore);
                 }
             }
         });
@@ -210,67 +214,45 @@ public class PackSourceFileSetController implements ActionContainer {
     }
 
     @LmlAction("removeSelected") void removeSelected() {
-        PackModel.SourceFileSet sourceFileSet = App.inst().getModelService().getProject().getSelectedPack().getSourceFileSet();
-        Array<ListNode> selectedNodes = new Array<>(listAdapter.getSelection());
-        for (ListNode selectedNode : selectedNodes) {
-            if (selectedNode.type == ListNode.Type.Source) {
-                sourceFileSet.removeSource(selectedNode.fileHandle);
-            } else {
-                sourceFileSet.removeIgnore(selectedNode.fileHandle);
-            }
+        PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
+        Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
+        for (InputFile selectedNode : selectedNodes) {
+            pack.removeSourceFile(selectedNode);
         }
     }
 
-    private void updateListContent() {
+    private void reloadListContent() {
         if (!initialized) return;
 
-        // Clear list
-        for (int i = 0; i < listAdapter.size(); i++) {
-            Pools.free(listAdapter.get(i));
-        }
         listAdapter.clear();
 
         PackModel pack = modelService.getProject().getSelectedPack();
         if (pack == null) return;
 
-        PackModel.SourceFileSet sourceFileSet = pack.getSourceFileSet();
-
-        tmpFileHandles.addAll(sourceFileSet.getSourceFiles());
-        tmpFileHandles.sort(fileHandleComparator);
-        for (FileHandle fileHandle : tmpFileHandles) {
-            ListNode node = Pools.obtain(ListNode.class);
-            node.init(fileHandle, ListNode.Type.Source);
-            listAdapter.add(node);
+        Array<InputFile> sourceFiles = pack.getSourceFiles();
+        for (InputFile inputFile : sourceFiles) {
+            listAdapter.add(inputFile);
         }
-        tmpFileHandles.clear();
-        tmpFileHandles.addAll(sourceFileSet.getIgnoreFiles());
-        tmpFileHandles.sort(fileHandleComparator);
-        for (FileHandle fileHandle : tmpFileHandles) {
-            ListNode node = Pools.obtain(ListNode.class);
-            node.init(fileHandle, ListNode.Type.Ignore);
-            listAdapter.add(node);
-        }
-        tmpFileHandles.clear();
     }
 
-    private static class SourceFileSetAdapter extends ArrayAdapter<ListNode, VisTable> {
+    private static class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
 
         private final LmlParser lmlParser;
 
         public SourceFileSetAdapter(LmlParser lmlParser) {
-            super(new Array<ListNode>());
+            super(new Array<InputFile>());
             this.lmlParser = lmlParser;
 
             setSelectionMode(SelectionMode.MULTIPLE);
         }
 
-        public ListNode getSelected() {
-            Array<ListNode> selection = getSelectionManager().getSelection();
+        public InputFile getSelected() {
+            Array<InputFile> selection = getSelectionManager().getSelection();
             if (selection.size == 0) return null;
             return selection.first();
         }
 
-        public SourceFileSetAdapter.ViewHolder getViewHolder(ListNode item) {
+        public SourceFileSetAdapter.ViewHolder getViewHolder(InputFile item) {
             if (indexOf(item) == -1) return null;
 
             return (SourceFileSetAdapter.ViewHolder) getView(item).getUserObject();
@@ -281,7 +263,7 @@ public class PackSourceFileSetController implements ActionContainer {
         }
 
         @Override
-        protected VisTable createView(ListNode item) {
+        protected VisTable createView(InputFile item) {
             SourceFileSetAdapter.ViewHolder viewHolder = new SourceFileSetAdapter.ViewHolder(lmlParser.getData().getDefaultSkin(), item);
             lmlParser.createView(viewHolder, Gdx.files.internal("lml/sourceFileSetListItem.lml"));
             viewHolder.root.setUserObject(viewHolder);
@@ -289,7 +271,7 @@ public class PackSourceFileSetController implements ActionContainer {
         }
 
         @Override
-        protected void prepareViewBeforeAddingToTable(ListNode item, VisTable view) {
+        protected void prepareViewBeforeAddingToTable(InputFile item, VisTable view) {
             super.prepareViewBeforeAddingToTable(item, view);
         }
 
@@ -311,39 +293,45 @@ public class PackSourceFileSetController implements ActionContainer {
             @LmlActor("imgTypeIndicator") Image imgTypeIndicator;
 
             private final Skin skin;
-            private final ListNode listNode;
-            private boolean selected;
+            private final InputFile inputFile;
+            private final Tooltip tooltip;
 
+            private boolean selected = false;
             private boolean pathProcessed = false;
 
-            public ViewHolder(Skin skin, ListNode listNode) {
+            public ViewHolder(Skin skin, InputFile inputFile) {
                 this.skin = skin;
-                this.listNode = listNode;
+                this.inputFile = inputFile;
+
+                tooltip = new Tooltip();
+                tooltip.setAppearDelayTime(0.25f);
             }
 
             @LmlAfter void initView() {
+                tooltip.setTarget(lblName);
+
                 root.pack();
                 updateViewData();
+            }
 
-                final Tooltip tooltip = new Tooltip();
-                tooltip.clearChildren(); // Removing empty cell with predefined paddings.
-                tooltip.add(listNode.fileHandle.path());
-                tooltip.pack();
-                tooltip.setAppearDelayTime(0.25f);
-                tooltip.setTarget(lblName);
+            public void remapData() {
+                pathProcessed = false;
+                updateViewData();
             }
 
             public void updateViewData() {
                 processPathText();
 
+                tooltip.setText(inputFile.getFileHandle().path());
+
                 String imgName = "custom/ic-fileset-";
-                if (listNode.directory) {
+                if (inputFile.isDirectory()) {
                     imgName += "dir";
                 } else {
                     imgName += "file";
                 }
-                switch (listNode.type) {
-                    case Source:
+                switch (inputFile.getType()) {
+                    case Input:
                         break;
                     case Ignore:
                         imgName += "-ignore";
@@ -359,15 +347,15 @@ public class PackSourceFileSetController implements ActionContainer {
                 root.setBackground(selected ? skin.getDrawable("padded-list-selection") : null);
             }
 
-            public ListNode getListNode() {
-                return listNode;
+            public InputFile getInputFile() {
+                return inputFile;
             }
 
             private void processPathText() {
                 if (pathProcessed) return;
                 pathProcessed = true;
 
-                String pathText = listNode.fileHandle.path();
+                String pathText = inputFile.getFileHandle().path();
 
                 // Cut the last slash
                 int lastSlashIndex = pathText.lastIndexOf("/");
@@ -401,7 +389,7 @@ public class PackSourceFileSetController implements ActionContainer {
                     sb.append("[light-grey]");
                     sb.append(pathText.substring(0, lastSlashIndex + 1));
                     sb.append("[]");
-                    if (!listNode.directory && dotLastIndex > 0 && dotLastIndex - lastSlashIndex > 1) {
+                    if (!inputFile.isDirectory() && dotLastIndex > 0 && dotLastIndex - lastSlashIndex > 1) {
                         // Grey out extension text
                         sb.append(pathText.substring(lastSlashIndex + 1, dotLastIndex));
                         sb.append("[light-grey]");
@@ -421,36 +409,17 @@ public class PackSourceFileSetController implements ActionContainer {
         }
     }
 
-    static class ListNode implements Pool.Poolable {
-        FileHandle fileHandle;
-        Type type;
-        boolean directory = false;
-
-        public void init(FileHandle fileHandle, Type type) {
-            this.fileHandle = fileHandle;
-            this.type = type;
-            this.directory = fileHandle.isDirectory();
-        }
+    private static class SourceFileComparator implements Comparator<InputFile> {
 
         @Override
-        public void reset() {
-            fileHandle = null;
-            type = null;
-        }
+        public int compare(InputFile l, InputFile r) {
+            int type = l.getType().compareTo(r.getType());
+            if (type != 0) return type;
 
-        public enum Type {
-            Source, Ignore
-        }
-    }
-
-    private static class FileHandleComparator implements Comparator<FileHandle> {
-
-        @Override
-        public int compare(FileHandle l, FileHandle r) {
             int dir = Boolean.compare(r.isDirectory(), l.isDirectory());
             if (dir != 0) return dir;
 
-            return l.name().compareTo(r.name());
+            return l.getFileHandle().path().compareTo(r.getFileHandle().path());
         }
     }
 }
