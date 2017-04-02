@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
+import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
@@ -65,7 +66,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
-    @Inject @LmlInject PackSourceFileSetController packSourceFileSetController;
+    @Inject @LmlInject PackInputFilesController packInputFilesController;
 
     @ViewStage Stage stage;
 
@@ -107,7 +108,7 @@ public class MainController implements ActionContainer, ViewResizer {
         toastManager.setAlignment(Align.bottomRight);
 
         canvasController.initialize(canvas);
-        packSourceFileSetController.onViewCreated(stage);
+        packInputFilesController.onViewCreated(stage);
 
         initialized = true;
 

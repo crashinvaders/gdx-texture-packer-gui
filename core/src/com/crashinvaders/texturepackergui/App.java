@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.shortcuts.GlobalShortcutHandler;
+import com.crashinvaders.texturepackergui.utils.LmlUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -97,8 +98,8 @@ public class App implements ApplicationListener {
 
         FileChooser.setDefaultPrefsName("file_chooser.xml");
 
-//        // Uncomment to update project's LML DTD schema
-//        saveDtdSchema(Gdx.files.local("../lml.dtd"));
+        // Uncomment to update project's LML DTD schema
+        // LmlUtils.saveDtdSchema(interfaceService.getParser(), Gdx.files.local("../lml.dtd"));
     }
 
     private void initiateContext() {
@@ -183,31 +184,6 @@ public class App implements ApplicationListener {
     public void dispose() {
         Disposables.disposeOf(contextDestroyer);
         VisUI.dispose();
-    }
-
-    /**
-     * Uses current {@link LmlParser} to generate a DTD schema file with all supported tags, macros and attributes.
-     * Should be used only during development: DTD allows to validate LML templates during creation (and add content
-     * assist thanks to XML support in your IDE), but is not used in any way by the {@link LmlParser} in runtime.
-     *
-     * @param file path to the file where DTD schema should be saved. Advised to be local or absolute. Note that some
-     *            platforms (GWT) do not support file saving - this method should be used on desktop platform and only
-     *            during development.
-     * @throws GdxRuntimeException when unable to save DTD schema.
-     * @see Dtd
-     */
-    public void saveDtdSchema(final FileHandle file) {
-        try {
-            final LmlParser lmlParser = interfaceService.getParser();
-            final Writer appendable = file.writer(false, "UTF-8");
-            final boolean strict = lmlParser.isStrict();
-            lmlParser.setStrict(false); // Temporary setting to non-strict to generate as much tags as possible.
-            Dtd.saveSchema(lmlParser, appendable);
-            appendable.close();
-            lmlParser.setStrict(strict);
-        } catch (final Exception exception) {
-            throw new GdxRuntimeException("Unable to save DTD schema.", exception);
-        }
     }
 
     //region Accessors

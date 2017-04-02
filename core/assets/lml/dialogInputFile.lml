@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        id="window"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false">
+
+    <table transform="false" width="360">
+        <container growx="true" background="textfield" fill="true">
+            <label id="lblFilePath" style="grey" text="D:/test/test.png" textalign="left"/>
+        </container>
+        <actor width="4"/>
+        <visimagebutton image="custom/ic-folder-pick" change="InputFileDialogController.showFilePicker"/>
+    </table>
+
+    <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
+        <table>
+            <label text="File prefix" padright="8"/>
+            <textfield id="edtFilePrefix"
+                       growx="true"
+                       keyboardFocus="InputFileDialogController.onFilePrefixFocusChanged"/>
+        </table>
+    </shrinkContainer>
+
+    <shrinkContainer id="shrinkInputFile" growx="true" fillx="true">
+        <table>
+            <label text="Region name" padright="8"/>
+            <textfield id="edtRegionName"
+                       growx="true"
+                       keyboardFocus="InputFileDialogController.onRegionNameFocusChanged"/>
+        </table>
+    </shrinkContainer>
+
+    <imagetextbutton
+            id="btnClose"
+            text="@close"
+            align="right"
+            focusborder="false"
+            change="InputFileDialogController.close"/>
+
+</visdialog>

@@ -1,9 +1,10 @@
 package com.crashinvaders.texturepackergui.config;
 
+import com.crashinvaders.texturepackergui.config.tags.GroupLmlTag;
+import com.crashinvaders.texturepackergui.config.tags.ShrinkContainerLmlTag;
 import com.crashinvaders.texturepackergui.config.attributes.*;
 import com.crashinvaders.texturepackergui.config.tags.FixedFloatSpinnerLmlTagProvider;
 import com.crashinvaders.texturepackergui.config.tags.FixedIntSpinnerLmlTagProvider;
-import com.crashinvaders.texturepackergui.config.tags.ShrinkContainerLmlTag;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
@@ -14,11 +15,12 @@ public class AppLmlSyntax extends VisLmlSyntax {
     protected void registerActorTags() {
         super.registerActorTags();
 
+        addTagProvider(new GroupLmlTag.TagProvider(), "group");
         addTagProvider(new Canvas.CanvasLmlTagProvider(), "canvas");
         addTagProvider(new FixedIntSpinnerLmlTagProvider(), "intSpinner");
         addTagProvider(new FixedFloatSpinnerLmlTagProvider(), "floatSpinner");
-        addTagProvider(new ShrinkContainerLmlTag.Provider(), "shrinkContainer");
-        addTagProvider(new ExpandEditTextButton.LmlTagProvider(), "expandEditTextButton");
+        addTagProvider(new ShrinkContainerLmlTag.TagProvider(), "shrinkContainer");
+        addTagProvider(new ExpandEditTextButton.TagProvider(), "expandEditTextButton");
     }
 
     @Override
@@ -29,6 +31,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new OnDoubleClickLmlAttribute(), "onDoubleClick", "doubleClick");
         addAttributeProcessor(new ImageDrawableLmlAttribute(), "image", "drawable");
         addAttributeProcessor(new TooltipLmlAttribute(), "visTooltip", "tooltip");
+        addAttributeProcessor(new KeyboardFocusChangedLmlAttribute(), "keyboardFocus");
     }
 
     @Override

@@ -20,7 +20,7 @@ public class ShrinkContainerLmlTag extends ContainerLmlTag {
         return new ShrinkContainer<Actor>();
     }
 
-    public static class Provider implements LmlTagProvider {
+    public static class TagProvider implements LmlTagProvider {
         @Override
         public LmlTag create(final LmlParser parser, final LmlTag parentTag, final StringBuilder rawTagData) {
             return new ShrinkContainerLmlTag(parser, parentTag, rawTagData);

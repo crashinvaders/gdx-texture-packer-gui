@@ -102,7 +102,7 @@ public class ExpandEditTextButton extends Button {
         }
     }
 
-    public static class LmlTagProvider implements com.github.czyzby.lml.parser.tag.LmlTagProvider {
+    public static class TagProvider implements com.github.czyzby.lml.parser.tag.LmlTagProvider {
         @Override
         public com.github.czyzby.lml.parser.tag.LmlTag create(final LmlParser parser, final com.github.czyzby.lml.parser.tag.LmlTag parentTag, final java.lang.StringBuilder rawTagData) {
             return new LmlTag(parser, parentTag, rawTagData);

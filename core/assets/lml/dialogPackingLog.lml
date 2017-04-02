@@ -3,7 +3,7 @@
 
 <visdialog
         id="window"
-        title="Package log"
+        title="@dPackingLogTitle"
         closebutton="true"
         closeonescape="true"
         onecolumn="true"

@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.controllers.main;
+package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
@@ -39,11 +38,12 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import java.util.Comparator;
 
 @Component
-public class PackSourceFileSetController implements ActionContainer {
-    private static final String TAG = PackSourceFileSetController.class.getSimpleName();
+public class PackInputFilesController implements ActionContainer {
+    private static final String TAG = PackInputFilesController.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
+    @Inject InputFileDialogController inputFileDialog;
 
     @LmlActor("lvSourceFiles") ListView.ListViewTable<InputFile> listTable;
     private SourceFileSetAdapter listAdapter;
@@ -60,13 +60,6 @@ public class PackSourceFileSetController implements ActionContainer {
 
         listAdapter = ((SourceFileSetAdapter) listTable.getListView().getAdapter());
         listAdapter.setItemsSorter(new SourceFileComparator());
-//        actorsPacks.packListAdapter.getSelectionManager().setListener(new ListSelectionAdapter<PackModel, VisTable>() {
-//            @Override
-//            public void selected(PackModel pack, VisTable view) {
-//                getProject().setSelectedPack(pack);
-//                Gdx.app.postRunnable(normalizePackListScrollRunnable);
-//            }
-//        });
 
         //TODO remove
         try {
@@ -122,7 +115,7 @@ public class PackSourceFileSetController implements ActionContainer {
         SourceFileSetAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(params.actor);
         InputFile inputFile = viewHolder.getInputFile();
 
-        PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, "IGNORE", this, Gdx.files.internal("lml/sourceFileSetListMenu.lml"));
+        PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, "IGNORE", this, Gdx.files.internal("lml/inputFileListMenu.lml"));
 
 //        MenuItem menuItem;
 //        menuItem = popupMenu.findActor("miRename");
@@ -145,37 +138,13 @@ public class PackSourceFileSetController implements ActionContainer {
         popupMenu.showMenu(stage, params.stageX, params.stageY);
     }
 
-    @LmlAction("changeFileHandle") void changeFileHandle(OnDoubleClickLmlAttribute.Params params) {
-        final InputFile inputFile = listAdapter.getViewHolder(params.actor).getInputFile();
-
-        final FileChooser fileChooser = new FileChooser(inputFile.getFileHandle().parent(), FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        if (inputFile.isDirectory()) {
-            fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        }  else {
-            fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-            fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                    .rule("Image files", "png").get()); //TODO localize and check if we need to support .jpeg
-        }
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> files) {
-                PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
-
-                FileHandle fileHandle = files.first();
-                if (fileHandle.equals(inputFile.getFileHandle())) return;
-
-                pack.removeSourceFile(inputFile);
-                pack.addSourceFile(fileHandle, inputFile.getType());
-            }
-        });
-        stage.addActor(fileChooser.fadeIn());
-
-        if (FileUtils.fileExists(inputFile.getFileHandle())) { fileChooser.setSelectedFiles(inputFile.getFileHandle()); }
+    @LmlAction("showInputFileDialog") void showInputFileDialog() {
+        InputFile inputFile = listAdapter.getSelected();
+        if (inputFile == null) return;
+        inputFileDialog.show(inputFile);
     }
 
-    @LmlAction("addSourceFiles") void addSourceFiles() {
+    @LmlAction("addInputFiles") void addSourceFiles() {
         final FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES_AND_DIRECTORIES);
@@ -229,8 +198,8 @@ public class PackSourceFileSetController implements ActionContainer {
         PackModel pack = modelService.getProject().getSelectedPack();
         if (pack == null) return;
 
-        Array<InputFile> sourceFiles = pack.getSourceFiles();
-        for (InputFile inputFile : sourceFiles) {
+        Array<InputFile> inputFiles = pack.getSourceFiles();
+        for (InputFile inputFile : inputFiles) {
             listAdapter.add(inputFile);
         }
     }
@@ -265,7 +234,7 @@ public class PackSourceFileSetController implements ActionContainer {
         @Override
         protected VisTable createView(InputFile item) {
             SourceFileSetAdapter.ViewHolder viewHolder = new SourceFileSetAdapter.ViewHolder(lmlParser.getData().getDefaultSkin(), item);
-            lmlParser.createView(viewHolder, Gdx.files.internal("lml/sourceFileSetListItem.lml"));
+            lmlParser.createView(viewHolder, Gdx.files.internal("lml/inputFileListItem.lml"));
             viewHolder.root.setUserObject(viewHolder);
             return viewHolder.root;
         }
@@ -400,8 +369,6 @@ public class PackSourceFileSetController implements ActionContainer {
                         sb.append(pathText.substring(lastSlashIndex + 1));
                     }
                     pathText = sb.toString();
-
-//                    pathText = "[light-grey]" + pathText.substring(0, lastSlashIndex+1) + "[]" + pathText.substring(lastSlashIndex+1);
                 }
 
                 lblName.setText(pathText);

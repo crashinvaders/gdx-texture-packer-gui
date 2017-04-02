@@ -14,7 +14,7 @@ public class InputFile {
     private String dirFilePrefix;
 
     // Input file fields
-    private String fileNameOverwrite;
+    private String regionName;
 
 
     public InputFile(FileHandle fileHandle, Type type) {
@@ -58,12 +58,12 @@ public class InputFile {
         }
     }
 
-    public String getFileNameOverwrite() {
-        return fileNameOverwrite;
+    public String getRegionName() {
+        return regionName;
     }
 
-    public void setFileNameOverwrite(String fileNameOverwrite) {
-        this.fileNameOverwrite = fileNameOverwrite;
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));

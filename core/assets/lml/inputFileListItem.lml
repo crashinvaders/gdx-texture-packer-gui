@@ -3,8 +3,8 @@
 
 <!--rightclick="onPackListRightClick" doubleclick="global.packSelected"-->
 <table id="root" padleft="4" padright="4" transform="false"
-       rightclick="PackSourceFileSetController.showContextMenu"
-       doubleclick="PackSourceFileSetController.changeFileHandle">
+       rightclick="PackInputFilesController.showContextMenu"
+       doubleclick="PackInputFilesController.showInputFileDialog">
     <image id="imgTypeIndicator" scaling="none"/>
     <actor width="4"/>
     <label id="lblName" textalign="left" growx="true" width="270" align="left"/>

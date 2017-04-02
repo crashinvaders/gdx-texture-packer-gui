@@ -54,9 +54,9 @@
         <:row/>
 
         <horizontalgroup growx="true" colspan="3">
-            <textbutton text="Add source" change="PackSourceFileSetController.addSourceFiles"/>
-            <textbutton text="Add ignore" change="PackSourceFileSetController.addIgnoreFiles"/>
-            <textbutton text="Delete" change="PackSourceFileSetController.removeSelected"/>
+            <textbutton text="Add input files" change="PackInputFilesController.addInputFiles"/>
+            <textbutton text="Add ignore files" change="PackInputFilesController.addIgnoreFiles"/>
+            <textbutton text="Delete" change="PackInputFilesController.removeSelected"/>
         </horizontalgroup>
 
         <:row padbottom="0"/>
@@ -72,7 +72,7 @@
                 fadescrollbars="false"
                 overscroll="false"
                 flickscroll="false"
-                adapter="PackSourceFileSetController.createAdapter"/>
+                adapter="PackInputFilesController.createAdapter"/>
 
     </table>
 
