@@ -16,7 +16,6 @@ public class InputFile {
     // Input file fields
     private String regionName;
 
-
     public InputFile(FileHandle fileHandle, Type type) {
         this.fileHandle = fileHandle;
         this.type = type;

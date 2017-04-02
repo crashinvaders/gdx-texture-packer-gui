@@ -34,16 +34,8 @@ public class PackingProcessorNew implements PackProcessor {
             pack.getSettings().atlasExtension = "";
         }
 
-        // Due to hardcoded old file deletion logic at TexturePackerFileProcessor:134 (deletes only .atlas files)
-        // We need to clean old files manually
-        FileHandle oldFile = Gdx.files.absolute(pack.getOutputDir()).child(filename + pack.getSettings().atlasExtension);
-        if (oldFile.exists()) {
-            oldFile.delete();
-        }
-
         PackagingHandler packagingHandler = new PackagingHandler(pack);
         packagingHandler.pack();
-//        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), filename);
 
         pack.getSettings().atlasExtension = settingsOrigExtension;
 

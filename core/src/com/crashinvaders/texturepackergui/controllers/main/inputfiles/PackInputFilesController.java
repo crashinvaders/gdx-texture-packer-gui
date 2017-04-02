@@ -50,24 +50,6 @@ public class PackInputFilesController implements ActionContainer {
 
         listAdapter = ((SourceFileSetAdapter) listTable.getListView().getAdapter());
 
-        //TODO remove
-        try {
-            PackModel pack = modelService.getProject().getSelectedPack();
-            pack.addInputFile(Gdx.files.absolute("C:/assets/res/textures/offerings"), InputFile.Type.Input);
-            pack.addInputFile(Gdx.files.absolute("C:/Projects/libgdx/gdx-texture-packer-gui/resources/uiskin/images/window-resizable.9.png"), InputFile.Type.Input);
-            pack.addInputFile(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"), InputFile.Type.Ignore);
-//            pack.addInputFile(Gdx.files.internal("lml/compression"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("test/file0.png"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("test/file1.png"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("test/file2.png"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("test/file3.png"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("test/file4.png"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("test/file5.png"), InputFile.Type.Input);
-//            pack.addInputFile(Gdx.files.internal("lml/preview"), InputFile.Type.Ignore);
-//            pack.addInputFile(Gdx.files.internal("lml/ignore.png"), InputFile.Type.Ignore);
-//            pack.addInputFile(Gdx.files.absolute("C:/assets/res/textures/offerings/bowl0.png"), InputFile.Type.Ignore);
-        } catch (Exception ignored) { }
-
         initialized = true;
 
         reloadListContent();

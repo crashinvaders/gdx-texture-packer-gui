@@ -10,10 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
-import com.crashinvaders.texturepackergui.services.model.ScaleFactorModel;
+import com.crashinvaders.texturepackergui.services.model.*;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
@@ -42,10 +39,12 @@ public class ProjectSerializer {
     @Inject LocaleService localeService;
 
     private Json json;
+    private InputFileSerializer inputFileSerializer;
 
     @Initiate void initialize() {
         json = new Json();
         json.setSerializer(ScaleFactorModel.class, new ScaleFactorJsonSerializer());
+        json.setSerializer(InputFile.class, inputFileSerializer = new InputFileSerializer());
     }
 
     public void saveProject(ProjectModel project, FileHandle file) {
@@ -154,7 +153,10 @@ public class ProjectSerializer {
 
         sb.append("\n");
 
-        sb.append("scaleFactors=").append(json.toJson(pack.getScaleFactors()));
+        sb.append("scaleFactors=").append(json.toJson(pack.getScaleFactors())).append("\n");
+
+        inputFileSerializer.setRoot(root.file());
+        sb.append("inputFiles=").append(json.toJson(pack.getInputFiles())).append("\n");
 
         return sb.toString();
     }
@@ -280,6 +282,15 @@ public class ProjectSerializer {
         if (scaleFactorsSerialized != null) {
             Array<ScaleFactorModel> scaleFactors = json.fromJson(Array.class, ScaleFactorModel.class, scaleFactorsSerialized);
             pack.setScaleFactors(scaleFactors);
+        }
+
+        String inputFilesSerialized = find(lines, "inputFiles=", null);
+        inputFileSerializer.setRoot(root.file());
+        if (inputFilesSerialized != null) {
+            Array<InputFile> inputFiles = json.fromJson(Array.class, InputFile.class, inputFilesSerialized);
+            for (InputFile inputFile : inputFiles) {
+                pack.addInputFile(inputFile);
+            }
         }
 
         return pack;

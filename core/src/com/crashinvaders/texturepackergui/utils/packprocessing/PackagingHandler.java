@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.utils.packprocessing;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.tools.FileProcessor;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -14,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 public class PackagingHandler {
     private final PackModel packModel;
@@ -22,7 +24,23 @@ public class PackagingHandler {
         this.packModel = packModel;
     }
 
-    public static Array<ImageEntry> collectImageFiles(PackModel packModel) {
+    public void pack() throws Exception {
+        Array<ImageEntry> imageEntries = collectImageFiles(packModel);
+        if (imageEntries.size == 0) {
+            throw new IllegalStateException("No images to pack");
+        }
+
+        deleteOldFiles(packModel);
+
+        TexturePacker packer = new TexturePacker(packModel.getSettings());
+        for (ImageEntry image : imageEntries) {
+            BufferedImage bufferedImage = createBufferedImage(image.fileHandle);
+            packer.addImage(bufferedImage, image.name);
+        }
+        packer.pack(new File(packModel.getOutputDir()), packModel.getName());
+    }
+
+    private static Array<ImageEntry> collectImageFiles(PackModel packModel) {
         ObjectSet<ImageEntry> images = new ObjectSet<>();
         Array<InputFile> inputFiles = packModel.getInputFiles();
 
@@ -64,20 +82,38 @@ public class PackagingHandler {
         return result;
     }
 
-    public void pack() {
-        TexturePacker packer = new TexturePacker(packModel.getSettings());
+    private static void deleteOldFiles(PackModel packModel) throws Exception {
+        TexturePacker.Settings settings = packModel.getSettings();
+        String atlasExtension = settings.atlasExtension == null ? "" : settings.atlasExtension;
+        atlasExtension = Pattern.quote(atlasExtension);
 
-        Array<ImageEntry> imageEntries = collectImageFiles(packModel);
-        for (ImageEntry image : imageEntries) {
-            BufferedImage bufferedImage = createBufferedImage(image.fileHandle);
-            packer.addImage(bufferedImage, image.name);
+        for (int i = 0, n = settings.scale.length; i < n; i++) {
+            FileProcessor deleteProcessor = new FileProcessor() {
+                protected void processFile (Entry inputFile) throws Exception {
+                    inputFile.inputFile.delete();
+                }
+            };
+            deleteProcessor.setRecursive(false);
+
+            String scaledPackFileName = settings.getScaledPackFileName(packModel.getFilename(), i);
+            File packFile = new File(scaledPackFileName);
+
+            String prefix = packFile.getName();
+            int dotIndex = prefix.lastIndexOf('.');
+            if (dotIndex != -1) prefix = prefix.substring(0, dotIndex);
+            deleteProcessor.addInputRegex("(?i)" + prefix + "\\d*\\.(png|jpg|jpeg)");
+            deleteProcessor.addInputRegex("(?i)" + prefix + atlasExtension);
+
+            File outputRoot = new File(packModel.getOutputDir());
+            String dir = packFile.getParent();
+            if (dir == null)
+                deleteProcessor.process(outputRoot, null);
+            else if (new File(outputRoot + "/" + dir).exists()) //
+                deleteProcessor.process(outputRoot + "/" + dir, null);
         }
-
-        packer.pack(new File(packModel.getOutputDir()), packModel.getName());
-
     }
 
-    public BufferedImage createBufferedImage (FileHandle fileHandle) {
+    private static BufferedImage createBufferedImage (FileHandle fileHandle) {
         File file = fileHandle.file();
         BufferedImage image;
         try {
