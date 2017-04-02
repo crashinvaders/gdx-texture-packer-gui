@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE table SYSTEM "../../../lml.dtd">
 
-<table growx="true" onecolumn="true">
+<table growx="true" growy="true" onecolumn="true" tablealign="top">
 
-    <table align="top" growx="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
+    <table align="top" grow="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
 
         <label align="left">@packGeneralInputDir</label>
         <textfield
@@ -38,7 +38,8 @@
                 filly="true"
                 onchange="pickOutputDir"
                 focusborderenabled="false"/>
-        <:row padbottom="0"/>
+
+        <:row/>
 
         <label align="left">@packGeneralFileName</label>
         <textfield
@@ -49,6 +50,29 @@
                 colspan="2"
                 tooltip="@packGeneralTtFileName"
                 onchange="onPackFilenameTextChanged"/>
+
+        <:row/>
+
+        <horizontalgroup growx="true" colspan="3">
+            <textbutton text="Add source" change="PackSourceFileSetController.addSourceFiles"/>
+            <textbutton text="Add ignore" change="PackSourceFileSetController.addIgnoreFiles"/>
+            <textbutton text="Delete" change="PackSourceFileSetController.removeSelected"/>
+        </horizontalgroup>
+
+        <:row padbottom="0"/>
+
+        <listview
+                id="lvSourceFiles"
+                style="custom"
+                colspan="3"
+                padright="0"
+                growx="true"
+                growy="true"
+                disabledx="true"
+                fadescrollbars="false"
+                overscroll="false"
+                flickscroll="false"
+                adapter="PackSourceFileSetController.createAdapter"/>
 
     </table>
 

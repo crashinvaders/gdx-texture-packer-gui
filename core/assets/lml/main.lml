@@ -9,19 +9,23 @@
 
     <vistable grow="true">
 
-        <vistable align="topleft" onecolumn="true">
+        <vistable align="topleft" onecolumn="true" growy="true">
             <container growy="false" fill="true">
                 <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">
                     <:import path="lml/panePackList.lml"/>
                 </:titledpane>
             </container>
 
-            <container growy="false" fill="true">
+            <container growy="true" fill="true">
                 <:titledpane id="titledPanePackGeneral" title="@panelTitlePackGeneral" icon="custom/ic-title-folder">
                     <:import path="lml/panePackGeneral.lml"/>
                 </:titledpane>
             </container>
+        </vistable>
 
+        <separator growy="true"/>
+
+        <vistable align="topleft" onecolumn="true">
             <container growy="false" fill="true">
                 <:titledpane id="titledPaneGlobalSettings" title="@panelTitleGlobalSettings" icon="custom/ic-title-global-settings">
                     <:import path="lml/paneGlobalSettings.lml"/>

@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE popupmenu SYSTEM "../../../lml.dtd">
+
+<popupmenu>
+    <menuitem
+            text="Add source files"
+            onchange="PackSourceFileSetController.addSourceFiles"/>
+    <menuitem
+            text="Add ignore files"
+            onchange="PackSourceFileSetController.addIgnoreFiles"/>
+    <menuitem
+            text="Remove selected"
+            onchange="PackSourceFileSetController.removeSelected"/>
+</popupmenu>

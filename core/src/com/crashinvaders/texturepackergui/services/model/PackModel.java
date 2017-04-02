@@ -1,6 +1,8 @@
 
 package com.crashinvaders.texturepackergui.services.model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
@@ -13,12 +15,13 @@ import java.util.Arrays;
 
 public class PackModel {
 
+    private final SourceFileSet sourceFileSet = new SourceFileSet();
+    private final Array<ScaleFactorModel> scaleFactors = new Array<>();
     private Settings settings;
     private String name = "";
     private String filename = "";
     private String inputDir = "";
     private String outputDir = "";
-    private final Array<ScaleFactorModel> scaleFactors = new Array<>();
 
     private EventDispatcher eventDispatcher;
 
@@ -100,6 +103,10 @@ public class PackModel {
         return outputDir;
     }
 
+    public SourceFileSet getSourceFileSet() {
+        return sourceFileSet;
+    }
+
     public Settings getSettings() {
         return settings;
     }
@@ -159,5 +166,71 @@ public class PackModel {
     @Override
     public String toString() {
         return name;
+    }
+
+    public class SourceFileSet {
+        private final String TAG = SourceFileSet.class.getSimpleName();
+
+        private final Array<FileHandle> sourceFiles = new Array<>();
+        private final Array<FileHandle> ignoreFiles = new Array<>();
+        private boolean muteChangeEvents = false;
+
+        public void setMuteChangeEvents(boolean muteChangeEvents) {
+            this.muteChangeEvents = muteChangeEvents;
+        }
+
+        public Array<FileHandle> getSourceFiles() {
+            return sourceFiles;
+        }
+
+        public Array<FileHandle> getIgnoreFiles() {
+            return ignoreFiles;
+        }
+
+        public void addSource(FileHandle fileHandle) {
+            if (sourceFiles.contains(fileHandle, false)) {
+                Gdx.app.error(TAG, "File: " + fileHandle + " already added");
+                return;
+            }
+            sourceFiles.add(fileHandle);
+            dispatchChangeEvent();
+        }
+
+        public void removeSource(FileHandle fileHandle) {
+            if (!sourceFiles.contains(fileHandle, false)) {
+                Gdx.app.error(TAG, "File: " + fileHandle + " wasn't added");
+                return;
+            }
+            sourceFiles.removeValue(fileHandle, false);
+            dispatchChangeEvent();
+        }
+
+        public void addIgnore(FileHandle fileHandle) {
+            if (ignoreFiles.contains(fileHandle, false)) {
+                Gdx.app.error(TAG, "File: " + fileHandle + " already added");
+                return;
+            }
+            if (fileHandle.isDirectory()) {
+                Gdx.app.error(TAG, "File: " + fileHandle + " is a directory. Ignore files cannot be directories.");
+                return;
+            }
+            ignoreFiles.add(fileHandle);
+            dispatchChangeEvent();
+        }
+
+        public void removeIgnore(FileHandle fileHandle) {
+            if (!ignoreFiles.contains(fileHandle, false)) {
+                Gdx.app.error(TAG, "File: " + fileHandle + " wasn't added");
+                return;
+            }
+            ignoreFiles.removeValue(fileHandle, false);
+            dispatchChangeEvent();
+        }
+
+        public void dispatchChangeEvent() {
+            if (!muteChangeEvents && eventDispatcher != null) {
+                eventDispatcher.postEvent(new PackPropertyChangedEvent(PackModel.this, Property.SOURCE_FILE_SET));
+            }
+        }
     }
 }

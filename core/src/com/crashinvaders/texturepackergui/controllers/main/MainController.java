@@ -60,21 +60,22 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject ModelService modelService;
     @Inject LocaleService localeService;
     @Inject EventDispatcher eventDispatcher;
+    @Inject GlobalActions globalActions;
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
-    @Inject GlobalActions globalActions;
+    @Inject @LmlInject PackSourceFileSetController packSourceFileSetController;
 
     @ViewStage Stage stage;
 
     @LmlActor("canvas") Canvas canvas;
-    @LmlInject() PackListActors actorsPacks;
-    @LmlInject() PackSettingsActors actorsPackSettings;
-    @LmlInject() GlobalSettingsActors actorsGlobalSettings;
-    @LmlInject() FileMenuActors actorsFileMenu;
-    @LmlInject() PackMenuActors actorsPackMenu;
-    @LmlInject() HelpMenuActors actorsHelpMenu;
+    @LmlInject PackListActors actorsPacks;
+    @LmlInject PackSettingsActors actorsPackSettings;
+    @LmlInject GlobalSettingsActors actorsGlobalSettings;
+    @LmlInject FileMenuActors actorsFileMenu;
+    @LmlInject PackMenuActors actorsPackMenu;
+    @LmlInject HelpMenuActors actorsHelpMenu;
 
     private ToastManager toastManager;
 
@@ -106,6 +107,7 @@ public class MainController implements ActionContainer, ViewResizer {
         toastManager.setAlignment(Align.bottomRight);
 
         canvasController.initialize(canvas);
+        packSourceFileSetController.onViewCreated(stage);
 
         initialized = true;
 

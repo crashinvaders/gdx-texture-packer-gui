@@ -25,6 +25,7 @@ public class PackPropertyChangedEvent {
         INPUT,
         OUTPUT,
         FILENAME,
-        SCALE_FACTORS
+        SCALE_FACTORS,
+        SOURCE_FILE_SET
     }
 }
