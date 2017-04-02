@@ -33,6 +33,7 @@ public class PackPropertyChangedEvent {
 
     public enum Property {
         NAME,
+        INPUT,
         OUTPUT,
         FILENAME,
         SCALE_FACTORS,
