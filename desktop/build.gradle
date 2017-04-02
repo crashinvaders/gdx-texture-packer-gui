@@ -10,14 +10,6 @@ project.ext.distOutputDir = "../distribution/output"
 project.ext.distFileName = "$project.ext.appName-$project.ext.version"
 project.ext.nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
 
-macAppBundle {
-    mainClassName = project.ext.mainClassName
-    javaProperties.put("apple.laf.useScreenMenuBar", "true")
-    bundleJRE = false
-//    icon = "myIcon.icns"
-//    backgroundImage = "doc/macbackground.png"
-}
-
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
@@ -61,7 +53,7 @@ task zipRelease(type: Zip) {
 }
 zipRelease.dependsOn distRelease
 
-task nsisInstaller(type:Exec) {
+task nsisInstaller(type: Exec) {
     workingDir '../distribution'
 
     if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
@@ -89,3 +81,30 @@ task afterEclipseImport(description: "Post processing after project generation",
     printer.print(classpath)
   }
 }
+
+//region Mac App Bundle
+macAppBundle {
+    mainClassName = project.ext.mainClassName
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    bundleJRE = false
+    appName = "GdxTexturePacker"
+    icon = "icons.icns"
+//    backgroundImage = "doc/macbackground.png"
+}
+
+// Since macAppBundle 2.1.6 doesn't let us customize jar assembling we will simply swap it by hand
+task cleanAppJavaDir (type: Delete) {
+    delete fileTree(dir: "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java")
+}
+task copyUberJar (type: Copy) {
+    from 'build/libs/desktop.jar'
+    into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java"
+}
+task copyMacAppFiles (type: Copy) {
+    from '../resources/macApp'
+    into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents"
+}
+createApp.dependsOn copyUberJar, copyMacAppFiles
+copyUberJar.dependsOn dist, cleanAppJavaDir
+cleanAppJavaDir.dependsOn generatePlist
+//endregion
