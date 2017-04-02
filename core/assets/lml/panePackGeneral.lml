@@ -5,24 +5,6 @@
 
     <table align="top" grow="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
 
-        <label align="left">@packGeneralInputDir</label>
-        <textfield
-                id="edtInputDir"
-                minwidth="24"
-                growx="true"
-                tooltip="@packGeneralTtInputDir"
-                onchange="onInputDirTextChanged"/>
-        <imagebutton
-                image="custom/ic-folder-pick"
-                imagescaling="none"
-                width="22"
-                padright="0"
-                filly="true"
-                onchange="pickInputDir"
-                focusborderenabled="false"/>
-
-        <:row/>
-
         <label align="left">@packGeneralOutputDir</label>
         <textfield
                 id="edtOutputDir"

@@ -113,7 +113,6 @@ public class ProjectSerializer {
 
         sb.append("name=").append(pack.getName()).append("\n");
         sb.append("filename=").append(filename).append("\n");
-        sb.append("input=").append(PathUtils.relativize(pack.getInputDir(), root.file().getPath())).append("\n");
         sb.append("output=").append(PathUtils.relativize(pack.getOutputDir(), root.file().getPath())).append("\n");
 
         sb.append("\n");
@@ -218,20 +217,29 @@ public class ProjectSerializer {
 
     private PackModel deserializePack(String serializedData, FileHandle root) {
         PackModel pack = new PackModel();
+        String inputDir = null;
 
         Array<String> lines = splitAndTrim(serializedData);
         for (String line : lines) {
             if (line.startsWith("name=")) pack.setName(PathUtils.trim(line.substring("name=".length())).trim());
             if (line.startsWith("filename=")) pack.setFilename(PathUtils.trim(line.substring("filename=".length())).trim());
-            if (line.startsWith("input=")) pack.setInputDir(PathUtils.trim(line.substring("input=".length())).trim());
+            if (line.startsWith("input=")) inputDir = PathUtils.trim(line.substring("input=".length())).trim();
             if (line.startsWith("output=")) pack.setOutputDir(PathUtils.trim(line.substring("output=".length())).trim());
         }
 
         try {
-            String inputDir = pack.getInputDir();
-            if (!inputDir.equals("") && !new File(inputDir).isAbsolute()) {
-                pack.setInputDir(new File(root.file(), inputDir).getCanonicalPath());
+            // This code is for legacy save format support. We no more save "input" field
+            // and if it is present will simply treat it as input directory
+            if (inputDir != null && !inputDir.equals("")) {
+                FileHandle fileHandle;
+                if (new File(inputDir).isAbsolute()) {
+                    fileHandle = Gdx.files.absolute(inputDir);
+                } else {
+                    fileHandle = Gdx.files.absolute(new File(root.file(), inputDir).getAbsolutePath());
+                }
+                pack.addInputFile(fileHandle, InputFile.Type.Input);
             }
+
             String outputDir = pack.getOutputDir();
             if (!outputDir.equals("") && !new File(outputDir).isAbsolute()) {
                 pack.setOutputDir(new File(root.file(), outputDir).getCanonicalPath());
@@ -239,7 +247,6 @@ public class ProjectSerializer {
         } catch (IOException ex) {
             //TODO show error to user somehow
             System.err.println(ex.getMessage());
-            pack.setInputDir("");
             pack.setOutputDir("");
         }
 

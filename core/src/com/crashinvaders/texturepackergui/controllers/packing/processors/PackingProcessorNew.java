@@ -18,13 +18,6 @@ public class PackingProcessorNew implements PackProcessor {
 
         System.out.println("Packing started");
 
-        if (!new File(pack.getInputDir()).exists()) {
-            throw new Exception("[output-red]Input directory doesn't exist:[] "+pack.getInputDir());
-        }
-        if (!new File(pack.getInputDir()).isDirectory()) {
-            throw new Exception("[output-red]Input directory is not of directory type:[] "+pack.getInputDir());
-        }
-
         String filename = pack.getCanonicalFilename();
         if (filename.lastIndexOf(".") > -1) {
             String extension = filename.substring(filename.lastIndexOf("."));

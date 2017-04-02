@@ -241,29 +241,6 @@ public class GlobalActions implements ActionContainer {
         if (FileUtils.fileExists(projectFile)) { fileChooser.setSelectedFiles(projectFile); }
     }
 
-    @LmlAction("pickInputDir") public void pickInputDir() {
-        final PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        FileHandle dir = FileUtils.obtainIfExists(pack.getInputDir());
-        if (dir == null) {
-            dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.INPUT_DIR);
-        }
-
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                fileChooserHistory.putLastDir(FileChooserHistory.Type.INPUT_DIR, chosenFile);
-                pack.setInputDir(chosenFile.file().getAbsolutePath());
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
-    }
-
     @LmlAction("pickOutputDir") public void pickOutputDir() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;

@@ -18,12 +18,12 @@ public class PackingProcessor implements PackProcessor {
 
         System.out.println("Packing started");
 
-        if (!new File(pack.getInputDir()).exists()) {
-            throw new Exception("[output-red]Input directory doesn't exist:[] "+pack.getInputDir());
-        }
-        if (!new File(pack.getInputDir()).isDirectory()) {
-            throw new Exception("[output-red]Input directory is not of directory type:[] "+pack.getInputDir());
-        }
+//        if (!new File(pack.getInputDir()).exists()) {
+//            throw new Exception("[output-red]Input directory doesn't exist:[] "+pack.getInputDir());
+//        }
+//        if (!new File(pack.getInputDir()).isDirectory()) {
+//            throw new Exception("[output-red]Input directory is not of directory type:[] "+pack.getInputDir());
+//        }
 
         String filename = pack.getCanonicalFilename();
         if (filename.lastIndexOf(".") > -1) {
@@ -41,7 +41,7 @@ public class PackingProcessor implements PackProcessor {
             oldFile.delete();
         }
 
-        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), filename);
+//        TexturePacker.process(pack.getSettings(), pack.getInputDir(), pack.getOutputDir(), filename);
 
         pack.getSettings().atlasExtension = settingsOrigExtension;
 

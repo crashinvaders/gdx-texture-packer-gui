@@ -20,8 +20,6 @@ public class PackListActors {
     @LmlActor("btnMenuPackDown") Button btnMenuPackDown;
     @LmlActor("btnMenuOpenProject") Button btnMenuOpenProject;
     @LmlActor("btnMenuCloseProject") Button btnMenuCloseProject;
-    @LmlActor("edtInputDir") VisTextField edtInputDir;
-    @LmlActor("btnPickInputDir") Button btnPickInputDir;
     @LmlActor("edtOutputDir") VisTextField edtOutputDir;
     @LmlActor("btnPickOutputDir") Button btnPickOutputDir;
     @LmlActor("edtFileName") VisTextField edtFileName;

@@ -87,6 +87,15 @@ public class PackagingHandler {
         String atlasExtension = settings.atlasExtension == null ? "" : settings.atlasExtension;
         atlasExtension = Pattern.quote(atlasExtension);
 
+        String filename = packModel.getCanonicalFilename();
+        if (filename.lastIndexOf(".") > -1) {
+            String extension = filename.substring(filename.lastIndexOf("."));
+            filename = filename.substring(0, filename.lastIndexOf("."));
+            packModel.getSettings().atlasExtension = extension;
+        } else {
+            packModel.getSettings().atlasExtension = "";
+        }
+
         for (int i = 0, n = settings.scale.length; i < n; i++) {
             FileProcessor deleteProcessor = new FileProcessor() {
                 protected void processFile (Entry inputFile) throws Exception {
@@ -95,7 +104,7 @@ public class PackagingHandler {
             };
             deleteProcessor.setRecursive(false);
 
-            String scaledPackFileName = settings.getScaledPackFileName(packModel.getFilename(), i);
+            String scaledPackFileName = settings.getScaledPackFileName(filename, i);
             File packFile = new File(scaledPackFileName);
 
             String prefix = packFile.getName();

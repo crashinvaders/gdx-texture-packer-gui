@@ -22,7 +22,6 @@ public class PackModel {
     private Settings settings;
     private String name = "";
     private String filename = "";
-    private String inputDir = "";
     private String outputDir = "";
 
     private EventDispatcher eventDispatcher;
@@ -43,7 +42,6 @@ public class PackModel {
 
         this.name = pack.name;
         this.filename = pack.filename;
-        this.inputDir = pack.inputDir;
         this.outputDir = pack.outputDir;
 
         scaleFactors.addAll(pack.scaleFactors);
@@ -73,15 +71,6 @@ public class PackModel {
         }
     }
 
-    public void setInputDir(String inputDir) {
-        if (Strings.equals(this.inputDir, inputDir)) return;
-
-        this.inputDir = inputDir;
-        if (eventDispatcher != null) {
-            eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.INPUT));
-        }
-    }
-
     public void setOutputDir(String outputDir) {
         if (Strings.equals(this.outputDir, outputDir)) return;
 
@@ -97,10 +86,6 @@ public class PackModel {
 
     public String getFilename() {
         return filename;
-    }
-
-    public String getInputDir() {
-        return inputDir;
     }
 
     public String getOutputDir() {

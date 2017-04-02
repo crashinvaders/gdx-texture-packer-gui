@@ -161,13 +161,6 @@ public class MainController implements ActionContainer, ViewResizer {
                         updateViewsFromPack(event.getPack());
                     }
                     break;
-                case INPUT:
-                    if (event.getPack() == getSelectedPack()) {
-                        actorsPacks.edtInputDir.setProgrammaticChangeEvents(false);
-                        actorsPacks.edtInputDir.setText(event.getPack().getInputDir());
-                        actorsPacks.edtInputDir.setProgrammaticChangeEvents(true);
-                    }
-                    break;
                 case OUTPUT:
                     if (event.getPack() == getSelectedPack()) {
                         actorsPacks.edtOutputDir.setProgrammaticChangeEvents(false);
@@ -276,19 +269,6 @@ public class MainController implements ActionContainer, ViewResizer {
         menuItem.setDisabled(pack == null);
 
         popupMenu.showMenu(getStage(), params.stageX, params.stageY);
-    }
-
-    @LmlAction("onInputDirTextChanged") void onInputDirTextChanged(final VisTextField textField) {
-        if (getSelectedPack() == null) return;
-
-        final String text = textField.getText();
-        final PackModel pack = getSelectedPack();
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                pack.setInputDir(text);
-            }
-        });
     }
 
     @LmlAction("onOutputDirTextChanged") void onOutputDirTextChanged(final VisTextField textField) {
@@ -422,12 +402,10 @@ public class MainController implements ActionContainer, ViewResizer {
         }
 
         if (pack != null) {
-            actorsPacks.edtInputDir.setText(pack.getInputDir());
             actorsPacks.edtOutputDir.setText(pack.getOutputDir());
             actorsPacks.edtFileName.setText(pack.getFilename());
             actorsPacks.edtFileName.setMessageText(pack.getName() + ".atlas");
         } else {
-            actorsPacks.edtInputDir.setText(null);
             actorsPacks.edtOutputDir.setText(null);
             actorsPacks.edtFileName.setText(null);
         }
