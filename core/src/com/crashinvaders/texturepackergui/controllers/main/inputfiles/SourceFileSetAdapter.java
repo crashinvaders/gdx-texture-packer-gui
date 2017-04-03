@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
+import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -89,8 +90,6 @@ class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
         }
 
         @LmlAfter void initView() {
-            tooltip.setTarget(lblName);
-
             root.pack();
             updateViewData();
         }
@@ -102,8 +101,6 @@ class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
 
         public void updateViewData() {
             processPathText();
-
-            tooltip.setText(inputFile.getFileHandle().path());
 
             String imgName = "custom/ic-fileset-";
             if (inputFile.isDirectory()) {
@@ -136,54 +133,19 @@ class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
             if (pathProcessed) return;
             pathProcessed = true;
 
-            String pathText = inputFile.getFileHandle().path();
+            boolean fileShortened = false;
+            String origFilePath = inputFile.getFileHandle().path();
+            String filePath = origFilePath;
 
-            // Cut the last slash
-            int lastSlashIndex = pathText.lastIndexOf("/");
-            if (lastSlashIndex == pathText.length()-1) {
-                pathText = pathText.substring(0, lastSlashIndex);
-            }
+            filePath = Scene2dUtils.ellipsisFilePath(filePath, lblName.getStyle().font, lblName.getWidth());
+            fileShortened = !origFilePath.equals(filePath);
+            filePath = Scene2dUtils.colorizeFilePath(filePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white");
 
-            // Try to shorten path by cutting slash divided pieces starting from beginning
-            GlyphLayout glyphLayout = lblName.getGlyphLayout();
-            boolean pathCut = false;
-            while (true) {
-                glyphLayout.setText(lblName.getStyle().font, pathText, lblName.getStyle().fontColor, 0f, lblName.getLabelAlign(), false);
-                if (glyphLayout.width < (lblName.getWidth() - 8)) break;  // -8 is extra ellipsis ".../" space
+            lblName.setText(filePath);
 
-                int slashIndex = pathText.indexOf("/");
-                if (slashIndex == -1) break;
-                pathText = pathText.substring(slashIndex+1);
-                pathCut = true;
-            }
-
-            // Add ellipsis if path was cut
-            if (pathCut) {
-                pathText = ".../"+pathText;
-            }
-
-            lastSlashIndex = pathText.lastIndexOf("/");
-            if (lastSlashIndex > 0) {
-                int dotLastIndex = pathText.lastIndexOf(".");
-
-                StringBuilder sb = new StringBuilder();
-                sb.append("[light-grey]");
-                sb.append(pathText.substring(0, lastSlashIndex + 1));
-                sb.append("[]");
-                if (!inputFile.isDirectory() && dotLastIndex > 0 && dotLastIndex - lastSlashIndex > 1) {
-                    // Grey out extension text
-                    sb.append(pathText.substring(lastSlashIndex + 1, dotLastIndex));
-                    sb.append("[light-grey]");
-                    sb.append(pathText.substring(dotLastIndex));
-                    sb.append("[]");
-                } else {
-                    // No extension
-                    sb.append(pathText.substring(lastSlashIndex + 1));
-                }
-                pathText = sb.toString();
-            }
-
-            lblName.setText(pathText);
+            // Show tooltip only if displayed file name was shortened
+            tooltip.setTarget(fileShortened ? lblName : null);
+            tooltip.setText(Scene2dUtils.colorizeFilePath(origFilePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white"));
         }
     }
 }

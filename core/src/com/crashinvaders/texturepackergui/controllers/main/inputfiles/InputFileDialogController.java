@@ -11,6 +11,7 @@ import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
+import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
@@ -21,6 +22,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.widget.Tooltip;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
@@ -42,10 +44,14 @@ public class InputFileDialogController implements ActionContainer {
     @LmlActor("edtRegionName") VisTextField edtRegionName;
     @LmlActor("shrinkInputDir") ShrinkContainer shrinkInputDir;
     @LmlActor("shrinkInputFile") ShrinkContainer shrinkInputFile;
+    private Tooltip tooltip;
 
     private InputFile inputFile;
 
     @LmlAfter void init() {
+        tooltip = new Tooltip();
+        tooltip.setAppearDelayTime(0.25f);
+
         mapDataFromModel();
     }
 
@@ -105,7 +111,21 @@ public class InputFileDialogController implements ActionContainer {
     }
 
     private void mapDataFromModel() {
-        lblFilePath.setText(inputFile.getFileHandle().path());
+        dialog.pack();
+
+        boolean fileShortened = false;
+        String origFilePath = inputFile.getFileHandle().path();
+        String filePath = origFilePath;
+
+        filePath = Scene2dUtils.ellipsisFilePath(filePath, lblFilePath.getStyle().font, lblFilePath.getWidth());
+        fileShortened = !origFilePath.equals(filePath);
+        filePath = Scene2dUtils.colorizeFilePath(filePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white");
+
+        lblFilePath.setText(filePath);
+
+        // Show tooltip only if displayed file name was shortened
+        tooltip.setTarget(fileShortened ? lblFilePath : null);
+        tooltip.setText(Scene2dUtils.colorizeFilePath(origFilePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white"));
 
         shrinkInputDir.setVisible(false);
         shrinkInputFile.setVisible(false);

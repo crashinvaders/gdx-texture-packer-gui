@@ -35,7 +35,7 @@ public class PackInputFilesController implements ActionContainer {
     @Inject ModelService modelService;
     @Inject InputFileDialogController inputFileDialog;
 
-    @LmlActor("lvSourceFiles") ListView.ListViewTable<InputFile> listTable;
+    @LmlActor("lvInputFiles") ListView.ListViewTable<InputFile> listTable;
     private SourceFileSetAdapter listAdapter;
 
     private Stage stage;

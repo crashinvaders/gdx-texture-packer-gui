@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "../../../lml.dtd">
+
+<table grow="true">
+
+    <table growx="true" tablealign="left" defaultpadright="4" background="button">
+        <:column column="0"/>
+
+        <:macro alias="sidebutton" id icon onchange tooltip>
+            <visimagebutton
+                    id="{id}"
+                    icon="{icon}"
+                    onchange="{onchange}"
+                    imagescaling="none"
+                    generatedisabled="true"
+                    focusborder="false"
+                    tooltip="{tooltip}"
+                    width="25"
+                    height="25"/>
+        </:macro>
+
+        <!--TODO localized tooltips-->
+        <:sidebutton id="btnAddInput" icon="custom/ic-input-file-add" tooltip="tooltip"
+                     onchange="PackInputFilesController.addInputFiles"/>
+        <:sidebutton id="btnAddIgnore" icon="custom/ic-input-file-ignore-add" tooltip="tooltip"
+                     onchange="PackInputFilesController.addIgnoreFiles"/>
+        <:sidebutton id="btnPfDelete" icon="custom/ic-input-file-delete" tooltip="tooltip"
+                     onchange="PackInputFilesController.removeSelected"/>
+        <:sidebutton id="btnPfProperties" icon="custom/ic-input-file-properties" tooltip="tooltip"
+                     onchange="PackInputFilesController.showInputFileDialog"/>
+    </table>
+
+    <:row/>
+
+    <listview
+            id="lvInputFiles"
+            style="custom"
+            colspan="3"
+            pad="4"
+            grow="true"
+            disabledx="true"
+            fadescrollbars="false"
+            overscroll="false"
+            flickscroll="false"
+            adapter="PackInputFilesController.createAdapter"/>
+
+</table>

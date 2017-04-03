@@ -10,7 +10,7 @@ import com.github.czyzby.lml.parser.tag.LmlAttribute;
 import com.github.czyzby.lml.parser.tag.LmlTag;
 
 public class OnDoubleClickLmlAttribute implements LmlAttribute<Actor> {
-    private static final long SECOND_CLICK_TIME = 500000000L; // 500ms
+    private static final long SECOND_CLICK_TIME = 250000000L; // 250ms
 
     @Override
     public Class<Actor> getHandledType() {

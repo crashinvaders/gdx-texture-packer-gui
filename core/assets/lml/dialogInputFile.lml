@@ -10,9 +10,11 @@
         movable="true"
         resizable="false">
 
+    <actor height="4"/>
+
     <table transform="false" width="360">
         <container growx="true" background="textfield" fill="true">
-            <label id="lblFilePath" style="grey" text="D:/test/test.png" textalign="left"/>
+            <label id="lblFilePath" text="D:/test/test.png" textalign="left"/>
         </container>
         <actor width="4"/>
         <visimagebutton image="custom/ic-folder-pick" change="InputFileDialogController.showFilePicker"/>
@@ -36,9 +38,12 @@
         </table>
     </shrinkContainer>
 
+    <image style="white" color="dark-grey" growx="true" height="2" padtop="4" padbottom="4" padleft="0" padright="0"/>
+
     <imagetextbutton
             id="btnClose"
             text="@close"
+            minwidth="120"
             align="right"
             focusborder="false"
             change="InputFileDialogController.close"/>

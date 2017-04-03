@@ -9,19 +9,31 @@
 
     <vistable grow="true">
 
-        <vistable align="topleft" onecolumn="true" growy="true">
-            <container growy="false" fill="true">
-                <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">
-                    <:import path="lml/panePackList.lml"/>
-                </:titledpane>
-            </container>
+        <container growy="true" fill="true" width="320">
+            <vissplitpane vertical="true" min="0.2" max="0.7">
 
-            <container growy="true" fill="true">
-                <:titledpane id="titledPanePackGeneral" title="@panelTitlePackGeneral" icon="custom/ic-title-folder">
-                    <:import path="lml/panePackGeneral.lml"/>
-                </:titledpane>
-            </container>
-        </vistable>
+                <container fill="true">
+                    <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">
+                        <:import path="lml/panePackList.lml"/>
+                    </:titledpane>
+                </container>
+
+                <container fill="true">
+                    <table onecolumn="true" transform="false" defaultgrowx="true">
+                        <:titledpane id="titledPanePackGeneral" title="@panelTitlePackGeneral" icon="custom/ic-title-exclamation">
+                            <:import path="lml/panePackGeneral.lml"/>
+                        </:titledpane>
+
+                        <container growy="true" fill="true">
+                            <:titledpane id="titledPanePackFiles" title="Pack files" icon="custom/ic-title-folder"> <!--TODO localize-->
+                                <:import path="lml/panePackFiles.lml"/>
+                            </:titledpane>
+                        </container>
+                    </table>
+                </container>
+
+            </vissplitpane>
+        </container>
 
         <separator growy="true"/>
 

@@ -3,7 +3,7 @@
 
 <table growx="true" growy="true" onecolumn="true" tablealign="top">
 
-    <table align="top" grow="true" tablepadleft="8" tablepadright="8" tablepadbottom="8" tablepadtop="8" defaultpadbottom="4" defaultpadright="4" row="true">
+    <table align="top" grow="true" pad="8" defaultpadbottom="4" defaultpadright="4" row="true">
 
         <label align="left">@packGeneralOutputDir</label>
         <textfield
@@ -30,31 +30,32 @@
                 growx="true"
                 padright="0"
                 colspan="2"
+                padbottom="0"
                 tooltip="@packGeneralTtFileName"
                 onchange="onPackFilenameTextChanged"/>
 
-        <:row/>
+        <!--<:row/>-->
 
-        <horizontalgroup growx="true" colspan="3">
-            <textbutton text="Add input files" change="PackInputFilesController.addInputFiles"/>
-            <textbutton text="Add ignore files" change="PackInputFilesController.addIgnoreFiles"/>
-            <textbutton text="Delete" change="PackInputFilesController.removeSelected"/>
-        </horizontalgroup>
+        <!--<horizontalgroup growx="true" colspan="3">-->
+            <!--<textbutton text="Add input files" change="PackInputFilesController.addInputFiles"/>-->
+            <!--<textbutton text="Add ignore files" change="PackInputFilesController.addIgnoreFiles"/>-->
+            <!--<textbutton text="Delete" change="PackInputFilesController.removeSelected"/>-->
+        <!--</horizontalgroup>-->
 
-        <:row padbottom="0"/>
+        <!--<:row padbottom="0"/>-->
 
-        <listview
-                id="lvSourceFiles"
-                style="custom"
-                colspan="3"
-                padright="0"
-                growx="true"
-                growy="true"
-                disabledx="true"
-                fadescrollbars="false"
-                overscroll="false"
-                flickscroll="false"
-                adapter="PackInputFilesController.createAdapter"/>
+        <!--<listview-->
+                <!--id="lvSourceFiles"-->
+                <!--style="custom"-->
+                <!--colspan="3"-->
+                <!--padright="0"-->
+                <!--growx="true"-->
+                <!--growy="true"-->
+                <!--disabledx="true"-->
+                <!--fadescrollbars="false"-->
+                <!--overscroll="false"-->
+                <!--flickscroll="false"-->
+                <!--adapter="PackInputFilesController.createAdapter"/>-->
 
     </table>
 
