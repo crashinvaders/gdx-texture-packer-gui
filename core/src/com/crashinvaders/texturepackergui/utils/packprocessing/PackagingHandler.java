@@ -15,6 +15,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.regex.Pattern;
 
 public class PackagingHandler {
@@ -31,13 +32,14 @@ public class PackagingHandler {
         }
 
         deleteOldFiles(packModel);
+        String filename = getFilename(packModel);
 
         TexturePacker packer = new TexturePacker(packModel.getSettings());
         for (ImageEntry image : imageEntries) {
             BufferedImage bufferedImage = createBufferedImage(image.fileHandle);
             packer.addImage(bufferedImage, image.name);
         }
-        packer.pack(new File(packModel.getOutputDir()), packModel.getName());
+        packer.pack(new File(packModel.getOutputDir()), filename);
     }
 
     private static Array<ImageEntry> collectImageFiles(PackModel packModel) {
@@ -87,19 +89,14 @@ public class PackagingHandler {
         String atlasExtension = settings.atlasExtension == null ? "" : settings.atlasExtension;
         atlasExtension = Pattern.quote(atlasExtension);
 
-        String filename = packModel.getCanonicalFilename();
-        if (filename.lastIndexOf(".") > -1) {
-            String extension = filename.substring(filename.lastIndexOf("."));
-            filename = filename.substring(0, filename.lastIndexOf("."));
-            packModel.getSettings().atlasExtension = extension;
-        } else {
-            packModel.getSettings().atlasExtension = "";
-        }
+        String filename = getFilename(packModel);
 
         for (int i = 0, n = settings.scale.length; i < n; i++) {
             FileProcessor deleteProcessor = new FileProcessor() {
                 protected void processFile (Entry inputFile) throws Exception {
-                    inputFile.inputFile.delete();
+                    Files.delete(inputFile.inputFile.toPath());
+//                    boolean delete = inputFile.inputFile.delete();
+//                    System.out.println("delete = " + delete);
                 }
             };
             deleteProcessor.setRecursive(false);
@@ -107,7 +104,7 @@ public class PackagingHandler {
             String scaledPackFileName = settings.getScaledPackFileName(filename, i);
             File packFile = new File(scaledPackFileName);
 
-            String prefix = packFile.getName();
+            String prefix = filename;
             int dotIndex = prefix.lastIndexOf('.');
             if (dotIndex != -1) prefix = prefix.substring(0, dotIndex);
             deleteProcessor.addInputRegex("(?i)" + prefix + "\\d*\\.(png|jpg|jpeg)");
@@ -120,6 +117,18 @@ public class PackagingHandler {
             else if (new File(outputRoot + "/" + dir).exists()) //
                 deleteProcessor.process(outputRoot + "/" + dir, null);
         }
+    }
+
+    private static String getFilename(PackModel packModel) {
+        String filename = packModel.getCanonicalFilename();
+        if (filename.lastIndexOf(".") > -1) {
+            String extension = filename.substring(filename.lastIndexOf("."));
+            filename = filename.substring(0, filename.lastIndexOf("."));
+            packModel.getSettings().atlasExtension = extension;
+        } else {
+            packModel.getSettings().atlasExtension = "";
+        }
+        return filename;
     }
 
     private static BufferedImage createBufferedImage (FileHandle fileHandle) {

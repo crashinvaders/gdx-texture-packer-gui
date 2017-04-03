@@ -11,6 +11,9 @@ import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.googlecode.pngtastic.core.PngImage;
 import com.googlecode.pngtastic.core.PngOptimizer;
 
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+
 public class PngtasticCompressingProcessor implements PackProcessor {
     private static final String LOG_LEVEL = "INFO";
 
@@ -34,12 +37,22 @@ public class PngtasticCompressingProcessor implements PackProcessor {
                             Gdx.files.absolute(pack.getOutputDir()), false);
 
             for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
-                PngImage image = new PngImage(page.textureFile.file().getAbsolutePath(), LOG_LEVEL);
-                pngOptimizer.optimize(
-                        image,
-                        page.textureFile.file().getAbsolutePath(),
-                        compModel.isRemoveGamma(),
-                        compModel.getLevel());
+                BufferedInputStream bis = null;
+                try {
+                    String fileName = page.textureFile.file().getAbsolutePath();
+                    bis = new BufferedInputStream(new FileInputStream(fileName));
+                    PngImage image = new PngImage(bis, LOG_LEVEL);
+                    image.setFileName(fileName);
+                    pngOptimizer.optimize(
+                            image,
+                            fileName,
+                            compModel.isRemoveGamma(),
+                            compModel.getLevel());
+                } finally {
+                    if (bis != null) {
+                        bis.close();
+                    }
+                }
             }
         }
 

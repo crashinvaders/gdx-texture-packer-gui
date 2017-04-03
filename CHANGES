@@ -1,4 +1,5 @@
 [LATEST]
+- Fixed occasional output image file locking after Pngtastic compression
 
 [4.3.2]
 - German localization added, thanks to terafog
