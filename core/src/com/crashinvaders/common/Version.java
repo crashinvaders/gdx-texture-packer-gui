@@ -66,15 +66,15 @@ public class Version {
     }
 
     @Override
-    public boolean equals (Object o) {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Version version = (Version)o;
-		return major == version.major && minor == version.minor && revision == version.revision;
+        Version version = (Version) o;
+        return major == version.major && minor == version.minor && revision == version.revision;
     }
 
     @Override
-    public int hashCode () {
+    public int hashCode() {
         int result = (major != +0.0f ? NumberUtils.floatToIntBits(major) : 0);
         result = 31 * result + (minor != +0.0f ? NumberUtils.floatToIntBits(minor) : 0);
         result = 31 * result + (revision != +0.0f ? NumberUtils.floatToIntBits(revision) : 0);

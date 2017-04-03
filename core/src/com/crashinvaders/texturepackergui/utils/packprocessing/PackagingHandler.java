@@ -62,7 +62,7 @@ public class PackagingHandler {
                 FileHandle fileHandle = inputFile.getFileHandle();
                 FileHandle[] children = fileHandle.list((FileFilter) new SuffixFileFilter(new String[]{".png", ".jpg", "jpeg"}));
                 for (FileHandle child : children) {
-                    String name = child.name();
+                    String name = child.nameWithoutExtension();
                     if (Strings.isNotEmpty(inputFile.getDirFilePrefix())) {
                         name = inputFile.getDirFilePrefix() + name;
                     }

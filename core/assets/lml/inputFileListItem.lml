@@ -6,6 +6,6 @@
        rightclick="PackInputFilesController.showContextMenu"
        doubleclick="PackInputFilesController.showInputFileDialog">
     <image id="imgTypeIndicator" scaling="none"/>
-    <actor width="4"/>
+    <actor width="6"/>
     <label id="lblName" textalign="left" growx="true" width="270" align="left"/>
 </table>

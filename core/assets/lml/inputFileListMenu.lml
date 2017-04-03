@@ -3,7 +3,7 @@
 
 <popupmenu>
     <menuitem
-            text="Show details"
+            text="Properties"
             onchange="PackInputFilesController.showInputFileDialog"/>
     <menuseparator/>
     <menuitem

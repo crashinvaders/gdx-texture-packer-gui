@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.crashinvaders.common.Version;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.model.*;
@@ -23,6 +25,7 @@ import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
@@ -34,6 +37,7 @@ public class ProjectSerializer {
     private static final String TAG = ProjectSerializer.class.getSimpleName();
     private static final String PACK_DIVIDER = "---";
     private static final String SECTION_DIVIDER = "-PROJ-";
+    private static final Version versionNone = new Version(0,0,0);
 
     @Inject EventDispatcher eventDispatcher;
     @Inject LocaleService localeService;
@@ -96,6 +100,8 @@ public class ProjectSerializer {
 
     private void serializeProjectSection(ProjectModel projectModel, StringBuilder sb) {
         sb.append("\n\n").append(SECTION_DIVIDER).append("\n\n");
+
+        sb.append("version=").append(AppConstants.version.toString()).append("\n");
 
         PngCompressionModel pngCompression = projectModel.getPngCompression();
         if (pngCompression != null) {
@@ -166,10 +172,15 @@ public class ProjectSerializer {
         String[] serializedSections = serializedProject.split(SECTION_DIVIDER);
         if (serializedSections.length == 0) return project;
 
+        Version version = null;
+
         // Project section is always in the end
         if (serializedSections.length > 1) {
             String projectSection = serializedSections[1];
-            deserializeProjectSection(project, projectSection);
+            version = deserializeProjectSection(project, projectSection);
+        }
+        if (version == null) {
+            version = versionNone;
         }
 
         String[] serializedPacks = serializedSections[0].split(PACK_DIVIDER);
@@ -177,13 +188,13 @@ public class ProjectSerializer {
         for (String serializedPack : serializedPacks) {
             if (serializedPack.trim().length() == 0) continue;
 
-            PackModel pack = deserializePack(serializedPack, root);
+            PackModel pack = deserializePack(serializedPack, root, version);
             project.addPack(pack);
         }
         return project;
     }
 
-    private void deserializeProjectSection(ProjectModel project, String projectSection) {
+    private Version deserializeProjectSection(ProjectModel project, String projectSection) {
         Array<String> lines = splitAndTrim(projectSection);
 
         PngCompressionType pngCompType = PngCompressionType.findByKey(find(lines, "pngCompressionType=", null));
@@ -213,9 +224,15 @@ public class ProjectSerializer {
         if (previewBgColorHex != null) {
             project.setPreviewBackgroundColor(Color.valueOf(previewBgColorHex));
         }
+
+        String versionString = find(lines, "version=", null);
+        Version version = null;
+        try { version = new Version(versionString); } catch (Exception ignore) {}
+        if (version == null) version = versionNone;
+        return version;
     }
 
-    private PackModel deserializePack(String serializedData, FileHandle root) {
+    private PackModel deserializePack(String serializedData, FileHandle root, Version version) {
         PackModel pack = new PackModel();
         String inputDir = null;
 
@@ -228,18 +245,6 @@ public class ProjectSerializer {
         }
 
         try {
-            // This code is for legacy save format support. We no more save "input" field
-            // and if it is present will simply treat it as input directory
-            if (inputDir != null && !inputDir.equals("")) {
-                FileHandle fileHandle;
-                if (new File(inputDir).isAbsolute()) {
-                    fileHandle = Gdx.files.absolute(inputDir);
-                } else {
-                    fileHandle = Gdx.files.absolute(new File(root.file(), inputDir).getAbsolutePath());
-                }
-                pack.addInputFile(fileHandle, InputFile.Type.Input);
-            }
-
             String outputDir = pack.getOutputDir();
             if (!outputDir.equals("") && !new File(outputDir).isAbsolute()) {
                 pack.setOutputDir(new File(root.file(), outputDir).getCanonicalPath());
@@ -278,11 +283,11 @@ public class ProjectSerializer {
         settings.wrapX = Texture.TextureWrap.valueOf(find(lines, "wrapX=", defaultSettings.wrapX.toString()));
         settings.wrapY = Texture.TextureWrap.valueOf(find(lines, "wrapY=", defaultSettings.wrapY.toString()));
         settings.premultiplyAlpha = find(lines, "premultiplyAlpha=", defaultSettings.premultiplyAlpha);
-        settings.combineSubdirectories = find(lines, "combineSubdirectories=", defaultSettings.combineSubdirectories);
+        settings.combineSubdirectories = find(lines, "combineSubdirectories=", defaultSettings.combineSubdirectories);  //TODO remove this property
         settings.grid = find(lines, "grid=", defaultSettings.grid);
         settings.square = find(lines, "square=", defaultSettings.square);
         settings.bleed = find(lines, "bleed=", defaultSettings.bleed);
-        settings.flattenPaths = find(lines, "flattenPaths=", defaultSettings.flattenPaths);
+        settings.flattenPaths = find(lines, "flattenPaths=", defaultSettings.flattenPaths);  //TODO remove this property
         settings.limitMemory = find(lines, "limitMemory=", defaultSettings.limitMemory);
 
         String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
@@ -297,6 +302,41 @@ public class ProjectSerializer {
             Array<InputFile> inputFiles = json.fromJson(Array.class, InputFile.class, inputFilesSerialized);
             for (InputFile inputFile : inputFiles) {
                 pack.addInputFile(inputFile);
+            }
+        }
+
+        // Legacy support and migrations section
+        {
+            // We have selective file packing now and no more save "input" field.
+            // If it is present will simply treat it as input directory.
+            if (version.isLower(new Version(4,4,0))) {
+                if (inputDir != null && !inputDir.equals("")) {
+                    // Input directory
+                    FileHandle fileHandle;
+                    if (new File(inputDir).isAbsolute()) {
+                        fileHandle = Gdx.files.absolute(inputDir);
+                    } else {
+                        fileHandle = Gdx.files.absolute(new File(root.file(), inputDir).getAbsolutePath());
+                    }
+                    pack.addInputFile(fileHandle, InputFile.Type.Input);
+
+                    // TexturePacker includes all files from level one subdirs by default.
+                    // We will create appropriate entries as well.
+                    boolean flattenPaths = find(lines, "flattenPaths=", false);
+                    FileHandle[] subDirs = fileHandle.list(new FileFilter() {
+                        @Override public boolean accept(File file) {
+                            return file.isDirectory();
+                        }
+                    });
+                    for (int i = 0; i < subDirs.length; i++) {
+                        FileHandle subDir = subDirs[i];
+                        InputFile inputFile = new InputFile(subDir, InputFile.Type.Input);
+                        if (!flattenPaths) {
+                            inputFile.setDirFilePrefix(subDir.name() + "/");
+                        }
+                        pack.addInputFile(inputFile);
+                    }
+                }
             }
         }
 
