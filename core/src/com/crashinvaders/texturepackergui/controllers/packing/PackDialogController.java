@@ -110,6 +110,7 @@ public class PackDialogController implements ActionContainer {
                         new StartTimeMetadataProcessor(),
 //                        new PackingProcessor(),
                         new PackingProcessorNew(),
+                        new EtcCompressingProcessor(),
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
                         new TinifyCompressingProcessor(tinifyService),

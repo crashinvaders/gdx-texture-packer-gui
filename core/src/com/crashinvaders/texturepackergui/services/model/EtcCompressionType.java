@@ -1,8 +1,7 @@
 package com.crashinvaders.texturepackergui.services.model;
 
 public enum EtcCompressionType {
-    KTX("ktx"),
-    ZKTX("zktx");
+    KTX("ktx");
 
     public final String key;
 
