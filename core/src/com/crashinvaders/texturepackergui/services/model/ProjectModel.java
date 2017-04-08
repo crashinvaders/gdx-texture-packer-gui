@@ -4,6 +4,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
+import com.crashinvaders.texturepackergui.services.model.compression.EtcCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
@@ -15,6 +16,7 @@ public class ProjectModel {
     private FileHandle projectFile;
     private EventDispatcher eventDispatcher;
     private PngCompressionModel pngCompression;
+    private EtcCompressionModel etcCompression;
 
     public ProjectModel() {
     }
@@ -80,6 +82,10 @@ public class ProjectModel {
     public PngCompressionModel getPngCompression() {
         return pngCompression;
     }
+    
+    public EtcCompressionModel getEtcCompression() {
+        return etcCompression;
+    }
 
     public void setPngCompression(PngCompressionModel pngCompression) {
         if (this.pngCompression == pngCompression) return;
@@ -87,6 +93,15 @@ public class ProjectModel {
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, ProjectPropertyChangedEvent.Property.PNG_COMPRESSION));
+        }
+    }
+    
+    public void setEtcCompression(EtcCompressionModel etcCompression) {
+        if (this.etcCompression == etcCompression) return;
+        this.etcCompression = etcCompression;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, ProjectPropertyChangedEvent.Property.ETC_COMPRESSION));
         }
     }
 

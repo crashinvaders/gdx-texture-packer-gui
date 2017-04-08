@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        title="@dCompTitle|ETC"
+        closebutton="true"
+        closeonescape="true">
+    <vistable
+            minwidth="256"
+            defaultalign="left"
+            padtop="8">
+
+        <vistable align="center">
+        	<label>@dCompEtc1</label>
+            <actor width="8"/>
+        	<selectbox
+        			id="cboEtc1Compression"
+                	change="onEtc1CboChanged"
+               		growx="true"/>
+               		
+            <:row/>
+               	
+            <label>@dCompEtc2</label>
+            <actor width="8"/>  		
+            <selectbox
+        			id="cboEtc2Compression"
+                	change="onEtc2CboChanged"
+               		growx="true"/>
+        </vistable>
+
+        <:row/>
+
+        <vistable align="center">
+            <label>@dCompUseCompression</label>
+            <actor width="8"/>
+            <checkbox
+                    id="chbUseCompression"
+                    change="onUseCompressionChanged"
+                    align="center"/>
+        </vistable>
+
+        <:row padtop="4"/>
+
+        <label wrap="true" growx="true" textalign="center">
+            @dCompEtcDescription
+        </label>
+
+        <:row padtop="8"/>
+
+        <link
+                style="orange-small"
+                href="https://github.com/libgdx/libgdx/wiki/Texture-Compression"
+                text="@dCompCompressionPage"
+                colspan="2"
+                align="center"/>
+    </vistable>
+</visdialog>

@@ -20,6 +20,24 @@
                     focusborder="false"
                     change="showPngCompSettings"/>
         </shrinkcontainer>
+        
+        <:row/>
+        
+        <label align="left" padright="4">@gsEtcCompression</label>
+        <selectbox
+                id="cboEtcCompression"
+                change="onSettingsCboChanged"
+                growx="true"/>
+        <shrinkcontainer
+                id="containerEtcCompSettings"
+                visible="true"
+                padleft="4">
+            <imagebutton
+                    image="custom/ic-settings"
+                    scaling="none"
+                    focusborder="false"
+                    change="showEtcCompSettings"/>
+        </shrinkcontainer>
 
     </vistable>
 

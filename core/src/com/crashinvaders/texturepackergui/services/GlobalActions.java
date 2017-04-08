@@ -18,6 +18,7 @@ import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.compression.EtcCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
@@ -303,6 +304,19 @@ public class GlobalActions implements ActionContainer {
                 break;
             case TINY_PNG:
                 interfaceService.showDialog(TinifyCompDialogController.class);
+                break;
+            default:
+                Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
+        }
+    }
+    
+    @LmlAction("showEtcCompSettings") public void showEtcCompSettings() {
+        EtcCompressionModel compression = getProject().getEtcCompression();
+        if (compression == null) return;
+
+        switch (compression.getType()) {
+            case KTX:
+                interfaceService.showDialog(EtcCompDialogController.class);
                 break;
             default:
                 Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
