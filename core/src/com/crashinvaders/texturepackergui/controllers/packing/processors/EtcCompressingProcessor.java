@@ -2,7 +2,6 @@ package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.services.model.EtcCompressionType;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -29,17 +28,12 @@ public class EtcCompressingProcessor implements PackProcessor {
                             Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()),
                             Gdx.files.absolute(pack.getOutputDir()), false);
 
-            int i = 0;
-            Array<TextureAtlas.TextureAtlasData.Page> pages = atlasData.getPages();
-            while(KTXProcessor.isRunning || i < pages.size) {
-            	if(KTXProcessor.isRunning) continue;
-            	TextureAtlas.TextureAtlasData.Page page = pages.get(i);
+            for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
 				String fileName = page.textureFile.file().getAbsolutePath();
 				String outFileName = fileName.substring(0, fileName.lastIndexOf('.'))
-						+ (compModel.isCompressed() ? "ktx" : "zktx");
+						+ (compModel.isCompressed() ? ".ktx" : ".zktx");
 
 				KTXProcessor.convert(fileName, outFileName, compModel.getEtc1Comp(), compModel.getEtc2Comp());
-				i++;
 			}
         }
 

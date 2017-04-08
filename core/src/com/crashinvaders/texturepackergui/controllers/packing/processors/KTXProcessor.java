@@ -45,8 +45,6 @@ import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 // This class is temporary, until GDX tools will be updated
 public class KTXProcessor {
-	
-	public static boolean isRunning = false;
 
 	final static byte[] HEADER_MAGIC = {(byte)0x0AB, (byte)0x04B, (byte)0x054, (byte)0x058, (byte)0x020, (byte)0x031,
 		(byte)0x031, (byte)0x0BB, (byte)0x00D, (byte)0x00A, (byte)0x01A, (byte)0x00A};
@@ -85,7 +83,7 @@ public class KTXProcessor {
 		if (genMipmaps) opts.add("-mipmaps");
 		if (packETC1 && !genAlphaAtlas) opts.add("-etc1");
 		if (packETC1 && genAlphaAtlas) opts.add("-etc1a");
-		main(opts.toArray());
+		KTXProcessorListener.init(opts.toArray());
 	}
 
 	private final static int DISPOSE_DONT = 0;
@@ -94,14 +92,7 @@ public class KTXProcessor {
 	private final static int DISPOSE_LEVEL = 4;
 
 	public static void main (String[] args) {
-		new HeadlessApplication(new KTXProcessorListener(args)).addLifecycleListener(new LifecycleListener() {
-			@Override
-			public void resume() { isRunning = true; }
-			@Override
-			public void pause() { isRunning = false; }
-			@Override
-			public void dispose() { isRunning = false; }
-		});
+		new HeadlessApplication(new KTXProcessorListener(args));
 	}
 
 	public static class KTXProcessorListener extends ApplicationAdapter {
@@ -113,6 +104,10 @@ public class KTXProcessor {
 
 		@Override
 		public void create () {
+			init(args);
+		}
+		
+		public static void init (String[] args) {
 			boolean isCubemap = args.length == 7 || args.length == 8 || args.length == 9;
 			boolean isTexture = args.length == 2 || args.length == 3 || args.length == 4 || args.length == 5;
 			boolean isPackETC1 = false, isAlphaAtlas = false, isGenMipMaps = false, useEtc2Comp = false;

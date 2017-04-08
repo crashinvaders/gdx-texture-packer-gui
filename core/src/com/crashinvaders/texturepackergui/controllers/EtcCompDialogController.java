@@ -54,7 +54,7 @@ public class EtcCompDialogController implements ActionContainer {
     	else compressionModel.setEtc2Comp(value);
     }
 
-    @LmlAction("onUseCompressionChanged") void onRemoveGammaChanged() {
+    @LmlAction("onUseCompressionChanged") void onUseCompressionChanged() {
         boolean useCompression = chbUseCompression.isChecked();
         compressionModel.setCompressed(useCompression);
     }
