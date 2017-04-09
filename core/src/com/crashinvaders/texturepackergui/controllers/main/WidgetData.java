@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.services.model.EtcCompressionType;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 
 public class WidgetData {
@@ -52,6 +53,37 @@ public class WidgetData {
         public static CompressionPng valueOf(PngCompressionType type) {
             for (int i = 0; i < values().length; i++) {
                 CompressionPng value = values()[i];
+                if (value.type == type) {
+                    return value;
+                }
+            }
+            throw new IllegalArgumentException("Can't find constant for " + type);
+        }
+
+        @Override
+        public String toString() {
+            return App.inst().getI18n().get(nameKey);
+        }
+    }
+    
+    public enum CompressionEtc {
+        NONE (null, "compressionNone", false),
+        KTX (EtcCompressionType.KTX, "compressionKtx", true);
+//        ZKTX (EtcCompressionType.ZKTX, "compressionZktx", true);
+
+        public final EtcCompressionType type;
+        public final String nameKey;
+        public final boolean hasSettings;
+
+        CompressionEtc(EtcCompressionType type, String nameKey, boolean hasSettings) {
+            this.type = type;
+            this.nameKey = nameKey;
+            this.hasSettings = hasSettings;
+        }
+
+        public static CompressionEtc valueOf(EtcCompressionType type) {
+            for (int i = 0; i < values().length; i++) {
+            	CompressionEtc value = values()[i];
                 if (value.type == type) {
                     return value;
                 }

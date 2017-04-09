@@ -13,6 +13,7 @@ import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.model.*;
+import com.crashinvaders.texturepackergui.services.model.compression.EtcCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
@@ -107,6 +108,12 @@ public class ProjectSerializer {
         if (pngCompression != null) {
             sb.append("pngCompressionType=").append(pngCompression.getType().key).append("\n");
             sb.append("pngCompressionData=").append(pngCompression.serializeState()).append("\n");
+        }
+        
+        EtcCompressionModel etcCompression = projectModel.getEtcCompression();
+        if (etcCompression != null) {
+            sb.append("etcCompressionType=").append(etcCompression.getType().key).append("\n");
+            sb.append("etcCompressionData=").append(etcCompression.serializeState()).append("\n");
         }
 
         sb.append("previewBackgroundColor=").append(projectModel.getPreviewBackgroundColor().toString()).append("\n");
@@ -218,6 +225,23 @@ public class ProjectSerializer {
                 pngCompModel.deserializeState(pngCompData);
             }
             project.setPngCompression(pngCompModel);
+        }
+        
+        EtcCompressionType etcCompType = EtcCompressionType.findByKey(find(lines, "etcCompressionType=", null));
+        if (etcCompType != null) {
+            EtcCompressionModel etcCompModel = null;
+            switch (etcCompType) {
+                case KTX:
+                	etcCompModel = new EtcCompressionModel(etcCompType);
+                    break;
+                default:
+                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + etcCompType);
+            }
+            if (etcCompModel != null) {
+                String etcCompData = find(lines, "etcCompressionData=", null);
+                etcCompModel.deserializeState(etcCompData);
+            }
+            project.setEtcCompression(etcCompModel);
         }
 
         String previewBgColorHex = find(lines, "previewBackgroundColor=", null);
