@@ -4,7 +4,7 @@ import com.crashinvaders.texturepackergui.services.model.InputFile;
 
 import java.util.Comparator;
 
-class SourceFileComparator implements Comparator<InputFile> {
+class InputFileComparator implements Comparator<InputFile> {
 
     @Override
     public int compare(InputFile l, InputFile r) {

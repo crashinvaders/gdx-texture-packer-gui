@@ -17,7 +17,7 @@
             <label id="lblFilePath" text="D:/test/test.png" textalign="left"/>
         </container>
         <actor width="4"/>
-        <visimagebutton image="custom/ic-folder-pick" change="InputFileDialogController.showFilePicker"/>
+        <visimagebutton image="custom/ic-folder-pick" change="InputFilePropertiesDialogController.showFilePicker"/>
     </table>
 
     <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
@@ -25,7 +25,7 @@
             <label text="File prefix" padright="8"/>
             <textfield id="edtFilePrefix"
                        growx="true"
-                       keyboardFocus="InputFileDialogController.onFilePrefixFocusChanged"/>
+                       keyboardFocus="InputFilePropertiesDialogController.onFilePrefixFocusChanged"/>
         </table>
     </shrinkContainer>
 
@@ -34,7 +34,7 @@
             <label text="Region name" padright="8"/>
             <textfield id="edtRegionName"
                        growx="true"
-                       keyboardFocus="InputFileDialogController.onRegionNameFocusChanged"/>
+                       keyboardFocus="InputFilePropertiesDialogController.onRegionNameFocusChanged"/>
         </table>
     </shrinkContainer>
 
@@ -46,6 +46,6 @@
             minwidth="120"
             align="right"
             focusborder="false"
-            change="InputFileDialogController.close"/>
+            change="InputFilePropertiesDialogController.close"/>
 
 </visdialog>

@@ -6,7 +6,7 @@
     <table growx="true" tablealign="left" defaultpadright="4" background="button">
         <:column column="0"/>
 
-        <:macro alias="sidebutton" id icon onchange tooltip>
+        <:macro alias="sidebutton" replace="ignored" id icon tooltip onchange>
             <visimagebutton
                     id="{id}"
                     icon="{icon}"
@@ -19,14 +19,13 @@
                     height="25"/>
         </:macro>
 
-        <!--TODO localized tooltips-->
-        <:sidebutton id="btnAddInput" icon="custom/ic-input-file-add" tooltip="tooltip"
+        <:sidebutton id="btnPfAddInput" icon="custom/ic-input-file-add" tooltip="@addSourceFiles"
                      onchange="PackInputFilesController.addInputFiles"/>
-        <:sidebutton id="btnAddIgnore" icon="custom/ic-input-file-ignore-add" tooltip="tooltip"
+        <:sidebutton id="btnPfAddIgnore" icon="custom/ic-input-file-ignore-add" tooltip="@addIgnoreFiles"
                      onchange="PackInputFilesController.addIgnoreFiles"/>
-        <:sidebutton id="btnPfDelete" icon="custom/ic-input-file-delete" tooltip="tooltip"
+        <:sidebutton id="btnPfRemove" icon="custom/ic-input-file-delete" tooltip="@removeSelected"
                      onchange="PackInputFilesController.removeSelected"/>
-        <:sidebutton id="btnPfProperties" icon="custom/ic-input-file-properties" tooltip="tooltip"
+        <:sidebutton id="btnPfProperties" icon="custom/ic-input-file-properties" tooltip="@properties"
                      onchange="PackInputFilesController.showInputFileDialog"/>
     </table>
 

@@ -1,17 +1,20 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
@@ -29,6 +32,7 @@ import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
+import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
@@ -57,6 +61,7 @@ import java.util.Locale;
 public class MainController implements ActionContainer, ViewResizer {
     public static final String VIEW_ID = "main";
     public static final String LOG = MainController.class.getSimpleName();
+    public static final String PREF_KEY_PACK_LIST_SPLIT = "pack_list_split";
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
@@ -72,6 +77,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @ViewStage Stage stage;
 
     @LmlActor("canvas") Canvas canvas;
+    @LmlActor("packListSplitPane") VisSplitPane packListSplitPane;
     @LmlInject PackListActors actorsPacks;
     @LmlInject PackSettingsActors actorsPackSettings;
     @LmlInject GlobalSettingsActors actorsGlobalSettings;
@@ -112,6 +118,13 @@ public class MainController implements ActionContainer, ViewResizer {
         canvasController.initialize(canvas);
         packInputFilesController.onViewCreated(stage);
 
+        // Load pack list split value
+        {
+            Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+            float splitValue = prefs.getFloat(PREF_KEY_PACK_LIST_SPLIT, 0f);
+            packListSplitPane.setSplitAmount(splitValue);
+        }
+
         initialized = true;
 
         updatePackList();
@@ -119,6 +132,14 @@ public class MainController implements ActionContainer, ViewResizer {
         updateRecentProjects();
         updatePngCompression();
         updateEtcCompression();
+    }
+
+    @Destroy
+    void destroy() {
+        // Save pack list split value
+        float packListSplitValue = packListSplitPane.getSplit();
+        Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+        prefs.putFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitValue).flush();
     }
 
     @Override

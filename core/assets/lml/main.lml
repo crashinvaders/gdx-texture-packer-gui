@@ -10,7 +10,7 @@
     <vistable grow="true">
 
         <container growy="true" fill="true" width="320">
-            <vissplitpane vertical="true" min="0.2" max="0.7">
+            <vissplitpane id="packListSplitPane" vertical="true" min="0.2" max="0.7" value="0.2">
 
                 <container fill="true">
                     <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">

@@ -1,10 +1,10 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
@@ -16,16 +16,16 @@ import com.kotcrab.vis.ui.widget.Tooltip;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
+class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
 
     private final LmlParser lmlParser;
 
-    public SourceFileSetAdapter(LmlParser lmlParser) {
+    public InputFileListAdapter(LmlParser lmlParser) {
         super(new Array<InputFile>());
         this.lmlParser = lmlParser;
 
         setSelectionMode(SelectionMode.MULTIPLE);
-        setItemsSorter(new SourceFileComparator());
+        setItemsSorter(new InputFileComparator());
     }
 
     public InputFile getSelected() {
@@ -68,6 +68,10 @@ class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
     @Override
     protected void prepareViewBeforeAddingToTable(InputFile item, VisTable view) {
         super.prepareViewBeforeAddingToTable(item, view);
+
+//        // Seems like this is the only way to extract adapter's internal click listener
+//        ClickListener itemClickListener = (ClickListener) view.getListeners().peek();
+//        itemClickListener.setButton(0);
     }
 
     @Override

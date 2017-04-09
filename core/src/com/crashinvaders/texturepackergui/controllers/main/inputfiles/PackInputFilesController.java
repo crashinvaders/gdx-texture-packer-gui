@@ -2,23 +2,22 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
-import com.github.czyzby.autumn.annotation.Component;
-import com.github.czyzby.autumn.annotation.Initiate;
-import com.github.czyzby.autumn.annotation.Inject;
-import com.github.czyzby.autumn.annotation.OnEvent;
+import com.github.czyzby.autumn.annotation.*;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -34,10 +33,14 @@ public class PackInputFilesController implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
-    @Inject InputFileDialogController inputFileDialog;
+    @Inject InputFilePropertiesDialogController inputFileDialog;
 
+    @LmlActor("btnPfAddInput") VisImageButton btnAddInput;
+    @LmlActor("btnPfAddIgnore") VisImageButton btnAddIgnore;
+    @LmlActor("btnPfRemove") VisImageButton btnRemove;
+    @LmlActor("btnPfProperties") VisImageButton btnProperties;
     @LmlActor("lvInputFiles") ListView.ListViewTable<InputFile> listTable;
-    private SourceFileSetAdapter listAdapter;
+    private InputFileListAdapter listAdapter;
 
     private Stage stage;
     private boolean initialized;
@@ -49,72 +52,75 @@ public class PackInputFilesController implements ActionContainer {
     public void onViewCreated(Stage stage) {
         this.stage = stage;
 
-        listAdapter = ((SourceFileSetAdapter) listTable.getListView().getAdapter());
+        listAdapter = ((InputFileListAdapter) listTable.getListView().getAdapter());
+        listAdapter.getSelectionManager().setListener(new AbstractListAdapter.ListSelectionListener<InputFile, VisTable>() {
+            @Override
+            public void selected(InputFile item, VisTable view) {
+                updateButtonsState();
+            }
+            @Override
+            public void deselected(InputFile item, VisTable view) {
+                updateButtonsState();
+            }
+        });
 
         initialized = true;
 
         reloadListContent();
+        updateButtonsState();
+    }
+
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        if (initialized) {
+            reloadListContent();
+            updateButtonsState();
+        }
     }
 
     @OnEvent(ProjectPropertyChangedEvent.class) void onEvent(ProjectPropertyChangedEvent event) {
         if (event.getProperty() == ProjectPropertyChangedEvent.Property.SELECTED_PACK) {
             reloadListContent();
+            updateButtonsState();
         }
     }
 
     @OnEvent(PackPropertyChangedEvent.class) void onEvent(PackPropertyChangedEvent event) {
-        if (modelService.getProject().getSelectedPack() != event.getPack()) return;
+        if (getSelectedPack() != event.getPack()) return;
         switch (event.getProperty()) {
             case INPUT_FILE_ADDED:
                 listAdapter.add(event.getInputFile());
+                updateButtonsState();
                 break;
             case INPUT_FILE_REMOVED:
                 listAdapter.removeValue(event.getInputFile(), true);
+                updateButtonsState();
                 break;
         }
     }
 
     @OnEvent(InputFilePropertyChangedEvent.class) void onEvent(InputFilePropertyChangedEvent event) {
         InputFile inputFile = event.getInputFile();
-        SourceFileSetAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(inputFile);
+        InputFileListAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(inputFile);
         if (viewHolder != null) {
             viewHolder.remapData();
         }
     }
 
-    @LmlAction("createAdapter") SourceFileSetAdapter createAdapter() {
-        return new SourceFileSetAdapter(interfaceService.getParser());
+    @LmlAction("createAdapter") InputFileListAdapter createAdapter() {
+        return new InputFileListAdapter(interfaceService.getParser());
     }
 
     @LmlAction("showContextMenu") void showContextMenu(OnRightClickLmlAttribute.Params params) {
+        AbstractListAdapter.ListSelection<InputFile, VisTable> sm = listAdapter.getSelectionManager();
+
         // Make sure that target item is selected
-        SourceFileSetAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(params.actor);
+        InputFileListAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(params.actor);
         boolean selected = listAdapter.isSelected(viewHolder);
         if (!selected) {
-            AbstractListAdapter.ListSelection<InputFile, VisTable> sm = listAdapter.getSelectionManager();
             sm.select(viewHolder.getInputFile());
         }
 
         PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, "IGNORE", this, Gdx.files.internal("lml/inputFileListMenu.lml"));
-
-//        MenuItem menuItem;
-//        menuItem = popupMenu.findActor("miRename");
-//        menuItem.setDisabled(pack == null);
-//        menuItem = popupMenu.findActor("miDelete");
-//        menuItem.setDisabled(pack == null);
-//        menuItem = popupMenu.findActor("miCopy");
-//        menuItem.setDisabled(pack == null);
-//        menuItem = popupMenu.findActor("miMoveUp");
-//        menuItem.setDisabled(pack == null);
-//        menuItem = popupMenu.findActor("miMoveDown");
-//        menuItem.setDisabled(pack == null);
-//        menuItem = popupMenu.findActor("miPackSelected");
-//        menuItem.setDisabled(pack == null);
-//        menuItem = popupMenu.findActor("miPackAll");
-//        menuItem.setDisabled(getProject().getPacks().size == 0);
-//        menuItem = popupMenu.findActor("miCopySettingsToAllPacks");
-//        menuItem.setDisabled(pack == null);
-
         popupMenu.showMenu(stage, params.stageX, params.stageY);
     }
 
@@ -134,7 +140,7 @@ public class PackInputFilesController implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
-                PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
+                PackModel pack = getSelectedPack();
                 for (FileHandle file : files) {
                     pack.addInputFile(file, InputFile.Type.Input);
                 }
@@ -153,7 +159,7 @@ public class PackInputFilesController implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
-                PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
+                PackModel pack = getSelectedPack();
                 for (FileHandle file : files) {
                     pack.addInputFile(file, InputFile.Type.Ignore);
                 }
@@ -163,11 +169,23 @@ public class PackInputFilesController implements ActionContainer {
     }
 
     @LmlAction("removeSelected") void removeSelected() {
-        PackModel pack = App.inst().getModelService().getProject().getSelectedPack();
+        PackModel pack = getSelectedPack();
         Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
         for (InputFile selectedNode : selectedNodes) {
             pack.removeInputFile(selectedNode);
         }
+    }
+
+    private void updateButtonsState() {
+        if (!initialized) return;
+
+        PackModel pack = getSelectedPack();
+        Array<InputFile> selection = listAdapter.getSelection();
+
+        btnAddInput.setDisabled(pack == null);
+        btnAddIgnore.setDisabled(pack == null);
+        btnRemove.setDisabled(pack == null || selection.size == 0);
+        btnProperties.setDisabled(pack == null || selection.size == 0);
     }
 
     private void reloadListContent() {
@@ -175,13 +193,21 @@ public class PackInputFilesController implements ActionContainer {
 
         listAdapter.clear();
 
-        PackModel pack = modelService.getProject().getSelectedPack();
+        PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         Array<InputFile> inputFiles = pack.getInputFiles();
         for (InputFile inputFile : inputFiles) {
             listAdapter.add(inputFile);
         }
+    }
+
+    private PackModel getSelectedPack() {
+        ProjectModel project = modelService.getProject();
+        if (project == null) {
+            return null;
+        }
+        return project.getSelectedPack();
     }
 
 }

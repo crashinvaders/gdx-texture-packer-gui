@@ -28,9 +28,9 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
-@ViewDialog(id = "InputFileDialogController", value = "lml/dialogInputFile.lml")
-public class InputFileDialogController implements ActionContainer {
-    private static final String TAG = InputFileDialogController.class.getSimpleName();
+@ViewDialog(id = "InputFilePropertiesDialogController", value = "lml/dialogInputFileProperties.lml")
+public class InputFilePropertiesDialogController implements ActionContainer {
+    private static final String TAG = InputFilePropertiesDialogController.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;

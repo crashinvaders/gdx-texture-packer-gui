@@ -3,16 +3,20 @@
 
 <popupmenu>
     <menuitem
-            text="Properties"
+            id="miProperties"
+            text="@properties"
             onchange="PackInputFilesController.showInputFileDialog"/>
     <menuseparator/>
     <menuitem
-            text="Add source files"
+            id="miAddSourceFiles"
+            text="@addSourceFiles"
             onchange="PackInputFilesController.addSourceFiles"/>
     <menuitem
-            text="Add ignore files"
+            id="miAddIgnoreFiles"
+            text="@addIgnoreFiles"
             onchange="PackInputFilesController.addIgnoreFiles"/>
     <menuitem
-            text="Remove selected"
+            id="miRemoveSelected"
+            text="@removeSelected"
             onchange="PackInputFilesController.removeSelected"/>
 </popupmenu>
