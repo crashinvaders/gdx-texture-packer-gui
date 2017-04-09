@@ -17,7 +17,7 @@ public class EtcCompressingProcessor implements PackProcessor {
         ProjectModel project = node.getProject();
 
         if (project.getEtcCompression() == null || project.getEtcCompression().getType() != EtcCompressionType.KTX) return;
-
+        
         System.out.println("ETC compression started");
 
         EtcCompressionModel compModel = (EtcCompressionModel)project.getEtcCompression();
@@ -31,7 +31,7 @@ public class EtcCompressingProcessor implements PackProcessor {
             for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
 				String fileName = page.textureFile.file().getAbsolutePath();
 				String outFileName = fileName.substring(0, fileName.lastIndexOf('.'))
-						+ (compModel.isCompressed() ? ".ktx" : ".zktx");
+						+ (compModel.isCompressed() ? ".zktx" : ".ktx");
 
 				KTXProcessor.convert(fileName, outFileName, compModel.getEtc1Comp(), compModel.getEtc2Comp());
 			}

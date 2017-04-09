@@ -570,7 +570,7 @@ public class MainController implements ActionContainer, ViewResizer {
         EtcCompressionType compType = actorsGlobalSettings.cboEtcCompression.getSelected().type;
 
         if (compType == null) {
-            project.setPngCompression(null);
+            project.setEtcCompression(null);
             return;
         }
 

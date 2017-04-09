@@ -25,7 +25,6 @@ import java.util.zip.ZipFile;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.LifecycleListener;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglNativesLoader;
 import com.badlogic.gdx.files.FileHandle;
@@ -67,7 +66,7 @@ public class KTXProcessor {
 			opts.add(output);
 			if (ETC1comp != null) opts.add(ETC1comp);
 			if (ETC2comp != null) opts.add(ETC2comp);
-			main(opts.toArray());
+			KTXProcessorListener.init(opts.toArray());
 		}
 
 	public static void convert (String inPx, String inNx, String inPy, String inNy, String inPz, String inNz, String output,
@@ -83,7 +82,7 @@ public class KTXProcessor {
 		if (genMipmaps) opts.add("-mipmaps");
 		if (packETC1 && !genAlphaAtlas) opts.add("-etc1");
 		if (packETC1 && genAlphaAtlas) opts.add("-etc1a");
-		KTXProcessorListener.init(opts.toArray());
+		main(opts.toArray());
 	}
 
 	private final static int DISPOSE_DONT = 0;
@@ -105,6 +104,7 @@ public class KTXProcessor {
 		@Override
 		public void create () {
 			init(args);
+			Gdx.app.exit();
 		}
 		
 		public static void init (String[] args) {
@@ -163,6 +163,18 @@ public class KTXProcessor {
 			}
 
 			File output = new File(args[isCubemap ? 6 : 1]);
+			
+			if (!isPackETC1 && !isGenMipMaps && useEtc2Comp) {
+				File etc2File = executeEtc2Comp(args[0], output.getAbsolutePath(), etc2Format);
+				if (output.getName().toLowerCase().endsWith(".zktx"))
+					if (etc2File != null)
+						try {
+							gzip(etc2File.getAbsolutePath(), etc2File.getAbsolutePath().replace("ktx", "zktx"));
+						} catch (IOException e) {
+							Gdx.app.error("KTXProcessor", "Error zipping file: " + output.getName(), e);
+						}
+				return;
+			}
 
 			// Check if we have a cubemapped ktx file as input
 			int ktxDispose = DISPOSE_DONT;
@@ -390,8 +402,6 @@ public class KTXProcessor {
 			} catch (Exception e) {
 				Gdx.app.error("KTXProcessor", "Error writing to file: " + output.getName(), e);
 			}
-
-			Gdx.app.exit();
 		}
 	}
 	
