@@ -23,6 +23,7 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
@@ -86,8 +87,13 @@ public class PackInputFilesController implements ActionContainer {
     }
 
     @LmlAction("showContextMenu") void showContextMenu(OnRightClickLmlAttribute.Params params) {
+        // Make sure that target item is selected
         SourceFileSetAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(params.actor);
-        InputFile inputFile = viewHolder.getInputFile();
+        boolean selected = listAdapter.isSelected(viewHolder);
+        if (!selected) {
+            AbstractListAdapter.ListSelection<InputFile, VisTable> sm = listAdapter.getSelectionManager();
+            sm.select(viewHolder.getInputFile());
+        }
 
         PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, "IGNORE", this, Gdx.files.internal("lml/inputFileListMenu.lml"));
 

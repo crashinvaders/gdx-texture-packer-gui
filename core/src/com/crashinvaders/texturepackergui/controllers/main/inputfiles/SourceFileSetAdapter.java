@@ -41,7 +41,20 @@ class SourceFileSetAdapter extends ArrayAdapter<InputFile, VisTable> {
     }
 
     public ViewHolder getViewHolder(Actor view) {
-        return (ViewHolder) view.getUserObject();
+        ViewHolder viewHolder = (ViewHolder) view.getUserObject();
+        if (viewHolder == null) {
+            throw new IllegalArgumentException("View has no associated ViewHolder. Probably it's not in adapter yet. View: " + view);
+        }
+        return viewHolder;
+    }
+
+    public boolean isSelected(ViewHolder viewHolder) {
+        for (InputFile inputFile : getSelection()) {
+            if (viewHolder.getInputFile() == inputFile) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
