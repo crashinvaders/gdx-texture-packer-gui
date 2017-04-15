@@ -1,11 +1,13 @@
 package com.crashinvaders.texturepackergui.desktop;
 
 import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import com.crashinvaders.common.awt.ImageTools;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppParams;
+import com.crashinvaders.texturepackergui.DragDropManager;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
@@ -13,9 +15,12 @@ import org.kohsuke.args4j.CmdLineParser;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.List;
 
 public class AwtDesktopLauncher {
 	public static void main(final String[] args) {
@@ -47,14 +52,14 @@ public class AwtDesktopLauncher {
 //				LwjglCanvas canvas = new LwjglCanvas(new WindowParamsPersistingApplicationWrapper(app, configuration), configuration);
 				LwjglCanvas canvas = new LwjglCanvas(app, configuration);
 
-				new MainFrame(canvas);
+				new MainFrame(app, canvas.getCanvas());
 			}
 		});
 	}
 
 	private static class MainFrame extends JFrame {
 
-		public MainFrame(LwjglCanvas lwjglCanvas) {
+		public MainFrame(App app, Canvas canvas) {
 			super("LibGDX Texture Packer GUI");
 
 			setIconImage(ImageTools.loadImage("icon128.png"));
@@ -62,6 +67,7 @@ public class AwtDesktopLauncher {
 			addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowClosed(WindowEvent e) {
+					System.out.println("MainFrame.windowClosed");
 					System.exit(0);
 				}
 			});
@@ -75,7 +81,111 @@ public class AwtDesktopLauncher {
 				setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				setVisible(true);
 
-				getContentPane().add(lwjglCanvas.getCanvas(), BorderLayout.CENTER);
+				getContentPane().add(canvas, BorderLayout.CENTER);
+
+				this.setTransferHandler(new TransferHandler(null));
+				this.setDropTarget(new FileDropTarget(app.getDragDropManager()));
+			}
+		}
+
+		private static class FileDropTarget extends DropTarget {
+			private final DragDropManager dragDropManager;
+			private final DragOverRunnable dragOverRunnable;
+
+			private boolean dragHandling;
+
+			public FileDropTarget(DragDropManager dragDropManager) throws HeadlessException {
+				this.dragDropManager = dragDropManager;
+				this.dragOverRunnable = new DragOverRunnable(dragDropManager);
+			}
+
+			@Override
+            public synchronized void dragEnter(DropTargetDragEvent evt) {
+                super.dragEnter(evt);
+
+                if (!evt.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) { return; }
+
+                dragHandling = true;
+
+				final int x = evt.getLocation().x;
+				final int y = evt.getLocation().y;
+				Gdx.app.postRunnable(new Runnable() {
+					@Override
+					public void run() {
+						dragDropManager.onDragStarted(x, y);
+					}
+				});
+            }
+
+			@Override
+            public synchronized void dragOver(DropTargetDragEvent evt) {
+                super.dragOver(evt);
+
+                if (!dragHandling) return;
+
+				dragOverRunnable.x = evt.getLocation().x;
+				dragOverRunnable.y = evt.getLocation().y;
+				if (!dragOverRunnable.scheduled) {
+					dragOverRunnable.scheduled = true;
+					Gdx.app.postRunnable(dragOverRunnable);
+				}
+            }
+
+			@Override
+            public synchronized void dragExit(DropTargetEvent evt) {
+                super.dragExit(evt);
+
+				if (!dragHandling) return;
+
+				finishDragHandling();
+            }
+
+			public synchronized void drop(DropTargetDropEvent evt) {
+				if (!dragHandling) return;
+
+				finishDragHandling();
+
+                try {
+                    evt.acceptDrop(DnDConstants.ACTION_COPY);
+                    final List<File> droppedFiles = (List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+					final int x = evt.getLocation().x;
+					final int y = evt.getLocation().y;
+					Gdx.app.postRunnable(new Runnable() {
+						@Override public void run() {
+							dragDropManager.handleFileDrop(x, y, droppedFiles);
+						}
+					});
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+
+            private void finishDragHandling() {
+				if (!dragHandling) return;
+
+				dragHandling = false;
+				Gdx.app.postRunnable(new Runnable() {
+					@Override public void run() {
+						dragDropManager.onDragFinished();
+					}
+				});
+			}
+
+            private static class DragOverRunnable implements Runnable {
+				final DragDropManager dragDropManager;
+				int x;
+				int y;
+				boolean scheduled;
+
+				public DragOverRunnable(DragDropManager dragDropManager) {
+					this.dragDropManager = dragDropManager;
+				}
+
+				@Override
+				public void run() {
+					dragDropManager.onDragMoved(x, y);
+					scheduled = false;
+				}
 			}
 		}
 	}

@@ -48,6 +48,7 @@ public class App implements ApplicationListener {
     private final ClassScanner componentScanner;
     private final AppParams params;
     private final PrioritizedInputMultiplexer inputMultiplexer;
+    private final DragDropManager dragDropManager;
 
     private Array<Pair<Class<?>, ClassScanner>> componentScanners;
     private ContextDestroyer contextDestroyer;
@@ -77,6 +78,8 @@ public class App implements ApplicationListener {
         inputMultiplexer = new PrioritizedInputMultiplexer();
         inputMultiplexer.setMaxPointers(1);
 
+        dragDropManager = new DragDropManager();
+
         instance = this;
     }
 
@@ -100,6 +103,29 @@ public class App implements ApplicationListener {
 
         // Uncomment to update project's LML DTD schema
         // LmlUtils.saveDtdSchema(interfaceService.getParser(), Gdx.files.local("../lml.dtd"));
+
+        //TODO remove
+        dragDropManager.addListener(new DragDropManager.Listener() {
+            @Override
+            public void onDragStarted(int screenX, int screenY) {
+                System.out.println("App.onDragStarted screenX = [" + screenX + "], screenY = [" + screenY + "]");
+            }
+
+            @Override
+            public void onDragMoved(int screenX, int screenY) {
+                System.out.println("App.onDragMoved screenX = [" + screenX + "], screenY = [" + screenY + "]");
+            }
+
+            @Override
+            public void onDragFinished() {
+                System.out.println("App.onDragFinished");
+            }
+
+            @Override
+            public void handleFileDrop(Array<FileHandle> files) {
+                System.out.println("App.handleFileDrop files = [" + files + "]");
+            }
+        });
     }
 
     private void initiateContext() {
@@ -187,6 +213,8 @@ public class App implements ApplicationListener {
     }
 
     //region Accessors
+
+    public DragDropManager getDragDropManager() { return dragDropManager; }
     public InterfaceService getInterfaceService() { return interfaceService; }
     public ModelService getModelService() { return modelService; }
     public EventDispatcher getEventDispatcher() { return eventDispatcher; }
