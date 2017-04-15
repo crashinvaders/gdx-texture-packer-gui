@@ -108,8 +108,7 @@ public class PackDialogController implements ActionContainer {
         PackProcessingManager packProcessingManager = new PackProcessingManager(
                 new CompositePackProcessor(
                         new StartTimeMetadataProcessor(),
-//                        new PackingProcessor(),
-                        new PackingProcessorNew(),
+                        new PackingProcessor(),
                         new EtcCompressingProcessor(),
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
@@ -118,7 +117,7 @@ public class PackDialogController implements ActionContainer {
                         new PageAmountMetadataProcessor(),
                         new EndTimeMetadataProcessor(),
                         new TotalTimeMetadataProcessor()),
-//                new TestProcessor(),
+//                        new TestProcessor(),
                 new PackWorkerListener());
 
         for (int i = 0; i < nodes.size; i++) {
