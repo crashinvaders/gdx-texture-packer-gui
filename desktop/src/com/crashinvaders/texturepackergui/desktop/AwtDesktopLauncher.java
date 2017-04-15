@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.desktop;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.crashinvaders.common.awt.ImageTools;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppParams;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
@@ -44,19 +45,19 @@ public class AwtDesktopLauncher {
 
 				App app = new App(new DesktopClassScanner(), appParams);
 //				LwjglCanvas canvas = new LwjglCanvas(new WindowParamsPersistingApplicationWrapper(app, configuration), configuration);
-				LwjglCanvas canvas = new LwjglCanvas(app);
+				LwjglCanvas canvas = new LwjglCanvas(app, configuration);
 
-				MainFrame mainFrame = new MainFrame(canvas);
+				new MainFrame(canvas);
 			}
 		});
 	}
 
 	private static class MainFrame extends JFrame {
 
-		private final LwjglCanvas lwjglCanvas;
-
 		public MainFrame(LwjglCanvas lwjglCanvas) {
-			this.lwjglCanvas = lwjglCanvas;
+			super("LibGDX Texture Packer GUI");
+
+			setIconImage(ImageTools.loadImage("icon128.png"));
 
 			addWindowListener(new WindowAdapter() {
 				@Override
@@ -65,11 +66,7 @@ public class AwtDesktopLauncher {
 				}
 			});
 
-			initializeComponents();
-		}
-
-		private void initializeComponents() {
-			//FRAME PARAMS
+			// Frame layout
 			{
 				setSize(1024, 768);
 				setLocation(0, 0);
@@ -77,6 +74,7 @@ public class AwtDesktopLauncher {
 				setLocationRelativeTo(null);
 				setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				setVisible(true);
+
 				getContentPane().add(lwjglCanvas.getCanvas(), BorderLayout.CENTER);
 			}
 		}
