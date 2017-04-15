@@ -36,7 +36,7 @@ public class PackModel {
 
     public PackModel(PackModel pack) {
         settings = new Settings(pack.settings);
-        //TODO remove this when LibGDX will apply fix for Settings
+        //TODO remove this when LibGDX will merge https://github.com/libgdx/libgdx/pull/4342
         settings.scale = Arrays.copyOf(settings.scale, settings.scale.length);
         settings.scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
 
@@ -105,9 +105,8 @@ public class PackModel {
     }
 
     public void setSettings(Settings settings) {
-        //TODO use Settings#set(Settings) when it will be available in the next version
-        this.settings = new Settings(settings);
-        //TODO remove this when LibGDX will apply fix for Settings
+        this.settings.set(settings);
+        //TODO remove this when LibGDX will merge https://github.com/libgdx/libgdx/pull/4342
         this.settings.scale = Arrays.copyOf(settings.scale, settings.scale.length);
         this.settings.scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
     }

@@ -25,7 +25,7 @@
                         </:titledpane>
 
                         <container growy="true" fill="true">
-                            <:titledpane id="titledPanePackFiles" title="Pack files" icon="custom/ic-title-folder"> <!--TODO localize-->
+                            <:titledpane id="titledPanePackFiles" title="@panelTitlePackFiles" icon="custom/ic-title-folder">
                                 <:import path="lml/panePackFiles.lml"/>
                             </:titledpane>
                         </container>

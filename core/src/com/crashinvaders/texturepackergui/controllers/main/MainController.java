@@ -409,11 +409,6 @@ public class MainController implements ActionContainer, ViewResizer {
         scaleFactorsDialogController.setPackModel(pack);
         interfaceService.showDialog(scaleFactorsDialogController.getClass());
     }
-
-    @LmlAction("changePreviewBackground") void changePreviewBackground() {
-        //TODO implement
-        System.out.println("MainController.changePreviewBackground");
-    }
     //endregion
 
     private void updateViewsFromPack(PackModel pack) {
