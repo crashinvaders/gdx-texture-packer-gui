@@ -122,7 +122,7 @@ public class App implements ApplicationListener {
             }
 
             @Override
-            public void handleFileDrop(Array<FileHandle> files) {
+            public void handleFileDrop(int screenX, int screenY, Array<FileHandle> files) {
                 System.out.println("App.handleFileDrop files = [" + files + "]");
             }
         });
