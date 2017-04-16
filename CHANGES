@@ -1,4 +1,7 @@
 [LATEST]
+- Each pack now consists of list of input/ignore files (no more single source dir)
+- File drag'n'drop support (pack files and project file)
+- ETC(KTX) compression
 - Fixed occasional output image file locking after Pngtastic compression
 
 [4.3.2]
