@@ -61,6 +61,9 @@ public class App implements ApplicationListener {
     private EventDispatcher eventDispatcher;
     private MessageDispatcher messageDispatcher;
 
+    /** Manually set inside {@link #pause()} and {@link #resume()} */
+    private boolean paused;
+
     /** Singleton accessor */
     public static App inst() {
         if (instance == null) {
@@ -167,18 +170,24 @@ public class App implements ApplicationListener {
 
     @Override
     public void render() {
+        if (paused) return;
+
         GdxUtilities.clearScreen();
         interfaceService.render(Gdx.graphics.getDeltaTime());
     }
 
     @Override
     public void resume() {
+        paused = false;
+
         interfaceService.resume();
         Gdx.input.setInputProcessor(inputMultiplexer);
     }
 
     @Override
     public void pause() {
+        paused = true;
+
         interfaceService.pause();
         Gdx.input.setInputProcessor(null);
     }

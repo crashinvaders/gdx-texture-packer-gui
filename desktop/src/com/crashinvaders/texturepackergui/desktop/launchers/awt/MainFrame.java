@@ -1,35 +1,58 @@
 package com.crashinvaders.texturepackergui.desktop.launchers.awt;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import com.crashinvaders.common.awt.ImageTools;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.List;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.*;
 
 class MainFrame extends JFrame {
     private static final Color colorFill = new Color(37, 37, 38);
 
+    private final LwjglCanvas lwjglCanvas;
     private final JLayeredPane pane;
 
-    public MainFrame(App app, Canvas canvas, LwjglCanvasConfiguration config) {
+    public MainFrame(App app, final LwjglCanvas lwjglCanvas, LwjglCanvasConfiguration config) {
         super(config.title);
+        this.lwjglCanvas = lwjglCanvas;
 
         setIconImage(ImageTools.loadImage(config.iconFilePath));
 
         addWindowListener(new WindowAdapter() {
+            boolean iconified = false;
+
             @Override
-            public void windowClosed(WindowEvent e) {
+            public void windowIconified(WindowEvent e) {
+                if (iconified) return;
+                iconified = true;
+                lwjglCanvas.getApplicationListener().pause();
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                if (!iconified) return;
+                iconified = false;
+                lwjglCanvas.getApplicationListener().resume();
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
                 FramePropertiesPersister.saveFrameProperties(MainFrame.this);
-                System.exit(0);
+                lwjglCanvas.stop();
+
+                EventQueue.invokeLater(new Runnable() {
+                    public void run() {
+                        System.exit(0);
+                    }
+                });
             }
         });
 
@@ -40,7 +63,7 @@ class MainFrame extends JFrame {
             setLocation(0, 0);
 //            setExtendedState(JFrame.MAXIMIZED_BOTH);
             setLocationRelativeTo(null);
-            setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
             FramePropertiesPersister.loadFrameProperties(this);
 
@@ -49,7 +72,7 @@ class MainFrame extends JFrame {
             pane = new JLayeredPane();
             pane.setBackground(colorFill);
             pane.setLayout(new BorderLayout());
-            pane.add(canvas, BorderLayout.CENTER, 0);
+            pane.add(lwjglCanvas.getCanvas(), BorderLayout.CENTER, 0);
 
             getContentPane().add(pane, BorderLayout.CENTER);
 
