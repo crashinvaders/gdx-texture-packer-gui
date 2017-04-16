@@ -24,9 +24,9 @@ public class GLSurfaceLauncher {
 
 		final LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
 		configuration.title = "LibGDX Texture Packer GUI";
-		configuration.addIcon("icon128.png", Files.FileType.Internal);
-		configuration.addIcon("icon32.png", Files.FileType.Internal);
-		configuration.addIcon("icon16.png", Files.FileType.Internal);
+		configuration.addIcon("icon128.png", Files.FileType.Classpath);
+		configuration.addIcon("icon32.png", Files.FileType.Classpath);
+		configuration.addIcon("icon16.png", Files.FileType.Classpath);
 		configuration.preferencesDirectory = ".gdxtexturepackergui";
 		configuration.width = 1024;
 		configuration.height = 600;

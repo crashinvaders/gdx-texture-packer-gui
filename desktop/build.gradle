@@ -3,6 +3,7 @@ apply plugin: "edu.sc.seis.macAppBundle"
 
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs += ['resources/']
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
 project.ext.assetsDir = new File("../core/assets");

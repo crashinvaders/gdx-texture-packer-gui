@@ -24,7 +24,7 @@ class MainFrame extends JFrame {
         super(config.title);
         this.lwjglCanvas = lwjglCanvas;
 
-        setIconImage(ImageTools.loadImage(config.iconFilePath));
+        setIconImage(ImageTools.loadImage(MainFrame.class.getClassLoader().getResource(config.iconFilePath).getFile()));
 
         addWindowListener(new WindowAdapter() {
             boolean iconified = false;

@@ -10,13 +10,15 @@ import java.io.IOException;
 public class ImageTools {
     private ImageTools() { }
 
-    @SuppressWarnings("UnnecessaryLocalVariable")
     public static Image loadImage(String imagePath) {
+        return loadImage(new File(imagePath));
+    }
+
+    public static Image loadImage(File file) {
         try {
-            BufferedImage image = ImageIO.read(new File(imagePath));
-            return image;
+            return ImageIO.read(file);
         } catch (IOException ex) {
-            throw new RuntimeException("Can't read image: " + imagePath);
+            throw new RuntimeException("Can't read image: " + file);
         }
     }
 
