@@ -14,12 +14,12 @@
     <table>
         <stack width="300" height="150">
             <button id="btnDragndropInclude" style="dragndrop" hexcolor="ffffff40" />
-            <label text="Include" textalign="center" fontscale="1.5" touchable="disabled"/>
+            <label text="@include" textalign="center" fontscale="1.5" touchable="disabled"/>
         </stack>
         <actor width="24"/>
         <stack width="300" height="150">
             <button id="btnDragndropExclude" style="dragndrop" hexcolor="ffffff40" />
-            <label text="Exclude" textalign="center" fontscale="1.5" touchable="disabled"/>
+            <label text="@exclude" textalign="center" fontscale="1.5" touchable="disabled"/>
         </stack>
     </table>
 </vistable>

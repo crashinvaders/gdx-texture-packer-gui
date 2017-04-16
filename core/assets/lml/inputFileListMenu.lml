@@ -7,6 +7,21 @@
             text="@properties"
             image="custom/ic-input-file-properties"
             onchange="PackInputFilesController.showInputFileDialog"/>
+    <menuitem
+            id="miIncludeSelected"
+            text="@include"
+            image="custom/ic-input-file-include"
+            onchange="PackInputFilesController.includeSelected"/>
+    <menuitem
+            id="miExcludeSelected"
+            text="@exclude"
+            image="custom/ic-input-file-exclude"
+            onchange="PackInputFilesController.excludeSelected"/>
+    <menuitem
+            id="miRemoveSelected"
+            text="@remove"
+            image="custom/ic-input-file-delete"
+            onchange="PackInputFilesController.removeSelected"/>
     <menuseparator/>
     <menuitem
             id="miAddInputFiles"
@@ -18,19 +33,4 @@
             text="@addIgnoreFiles"
             image="custom/ic-input-file-ignore-add"
             onchange="PackInputFilesController.addIgnoreFiles"/>
-    <menuitem
-            id="miRemoveSelected"
-            text="@removeSelected"
-            image="custom/ic-input-file-delete"
-            onchange="PackInputFilesController.removeSelected"/>
-    <menuitem
-            id="miIncludeSelected"
-            text="Include"
-            image="custom/ic-input-file-include"
-            onchange="PackInputFilesController.includeSelected"/>
-    <menuitem
-            id="miExcludeSelected"
-            text="Exclude"
-            image="custom/ic-input-file-exclude"
-            onchange="PackInputFilesController.excludeSelected"/>
 </popupmenu>

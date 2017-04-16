@@ -23,10 +23,17 @@
                      onchange="PackInputFilesController.addInputFiles"/>
         <:sidebutton id="btnPfAddIgnore" icon="custom/ic-input-file-ignore-add" tooltip="@addIgnoreFiles"
                      onchange="PackInputFilesController.addIgnoreFiles"/>
-        <:sidebutton id="btnPfRemove" icon="custom/ic-input-file-delete" tooltip="@removeSelected"
+        <:sidebutton id="btnPfRemove" icon="custom/ic-input-file-delete" tooltip="@remove"
                      onchange="PackInputFilesController.removeSelected"/>
+
+        <separator growy="true" height="0" width="2" padtop="1" padbottom="1"/>
+
         <:sidebutton id="btnPfProperties" icon="custom/ic-input-file-properties" tooltip="@properties"
                      onchange="PackInputFilesController.showInputFileDialog"/>
+        <:sidebutton id="btnPfInclude" icon="custom/ic-input-file-include" tooltip="@include"
+                     onchange="PackInputFilesController.includeSelected"/>
+        <:sidebutton id="btnPfExclude" icon="custom/ic-input-file-exclude" tooltip="@exclude"
+                     onchange="PackInputFilesController.excludeSelected"/>
     </table>
 
     <:row/>

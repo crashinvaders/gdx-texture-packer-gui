@@ -37,6 +37,8 @@ public class PackInputFilesController implements ActionContainer {
     @LmlActor("btnPfAddIgnore") VisImageButton btnAddIgnore;
     @LmlActor("btnPfRemove") VisImageButton btnRemove;
     @LmlActor("btnPfProperties") VisImageButton btnProperties;
+    @LmlActor("btnPfInclude") VisImageButton btnInclude;
+    @LmlActor("btnPfExclude") VisImageButton btnExclude;
     @LmlActor("lvInputFiles") ListView.ListViewTable<InputFile> listTable;
     private InputFileListAdapter listAdapter;
 
@@ -118,7 +120,29 @@ public class PackInputFilesController implements ActionContainer {
             sm.select(viewHolder.getInputFile());
         }
 
+        boolean canBeIncluded = false;
+        for (InputFile inputFile : sm.getSelection()) {
+            if (!inputFile.isDirectory() && inputFile.getType() == InputFile.Type.Ignore) {
+                canBeIncluded = true;
+                break;
+            }
+        }
+        boolean canBeExcluded = false;
+        for (InputFile inputFile : sm.getSelection()) {
+            if (!inputFile.isDirectory() && inputFile.getType() == InputFile.Type.Input) {
+                canBeExcluded = true;
+                break;
+            }
+        }
+
         PopupMenu popupMenu = LmlAutumnUtils.parseLml(interfaceService, "IGNORE", this, Gdx.files.internal("lml/inputFileListMenu.lml"));
+
+        MenuItem menuItem;
+        menuItem = popupMenu.findActor("miIncludeSelected");
+        menuItem.setDisabled(!canBeIncluded);
+        menuItem = popupMenu.findActor("miExcludeSelected");
+        menuItem.setDisabled(!canBeExcluded);
+
         popupMenu.showMenu(stage, params.stageX, params.stageY);
     }
 
@@ -208,10 +232,27 @@ public class PackInputFilesController implements ActionContainer {
         PackModel pack = getSelectedPack();
         Array<InputFile> selection = listAdapter.getSelection();
 
+        boolean canBeIncluded = false;
+        for (InputFile inputFile : selection) {
+            if (!inputFile.isDirectory() && inputFile.getType() == InputFile.Type.Ignore) {
+                canBeIncluded = true;
+                break;
+            }
+        }
+        boolean canBeExcluded = false;
+        for (InputFile inputFile : selection) {
+            if (!inputFile.isDirectory() && inputFile.getType() == InputFile.Type.Input) {
+                canBeExcluded = true;
+                break;
+            }
+        }
+
         btnAddInput.setDisabled(pack == null);
         btnAddIgnore.setDisabled(pack == null);
         btnRemove.setDisabled(pack == null || selection.size == 0);
         btnProperties.setDisabled(pack == null || selection.size == 0);
+        btnInclude.setDisabled(pack == null || selection.size == 0 || !canBeIncluded);
+        btnExclude.setDisabled(pack == null || selection.size == 0 || !canBeExcluded);
     }
 
     private void reloadListContent() {
