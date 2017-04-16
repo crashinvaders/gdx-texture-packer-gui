@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.desktop;
+package com.crashinvaders.texturepackergui.desktop.launchers.glsurface;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglPreferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.desktop.ApplicationListenerWrapper;
 import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 

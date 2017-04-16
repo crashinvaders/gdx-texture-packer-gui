@@ -1,18 +1,16 @@
-package com.crashinvaders.texturepackergui.desktop;
+package com.crashinvaders.texturepackergui.desktop.launchers.glsurface;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppParams;
+import com.crashinvaders.texturepackergui.desktop.Arguments;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
-import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 
-import java.io.File;
-
-public class DesktopLauncher {
+public class GLSurfaceLauncher {
 	public static void main(final String[] args) {
 		Arguments arguments = new Arguments();
 
@@ -39,10 +37,4 @@ public class DesktopLauncher {
 		App app = new App(new DesktopClassScanner(), appParams);
 		new LwjglApplication(new WindowParamsPersistingApplicationWrapper(app, configuration), configuration);
 	}
-
-	private static class Arguments {
-		@Argument
-		File project;
-	}
-
 }
