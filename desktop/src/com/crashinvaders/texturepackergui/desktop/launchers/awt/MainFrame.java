@@ -70,12 +70,14 @@ class MainFrame extends JFrame {
         }
 
         @Override
-public synchronized void dragEnter(DropTargetDragEvent evt) {
-super.dragEnter(evt);
+        public synchronized void dragEnter(DropTargetDragEvent evt) {
+            super.dragEnter(evt);
 
-if (!evt.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) { return; }
+            if (!evt.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                return;
+            }
 
-dragHandling = true;
+            dragHandling = true;
 
             final int x = evt.getLocation().x;
             final int y = evt.getLocation().y;
@@ -85,13 +87,13 @@ dragHandling = true;
                     dragDropManager.onDragStarted(x, y);
                 }
             });
-}
+        }
 
         @Override
-public synchronized void dragOver(DropTargetDragEvent evt) {
-super.dragOver(evt);
+        public synchronized void dragOver(DropTargetDragEvent evt) {
+            super.dragOver(evt);
 
-if (!dragHandling) return;
+            if (!dragHandling) return;
 
             dragOverRunnable.x = evt.getLocation().x;
             dragOverRunnable.y = evt.getLocation().y;
@@ -99,49 +101,51 @@ if (!dragHandling) return;
                 dragOverRunnable.scheduled = true;
                 Gdx.app.postRunnable(dragOverRunnable);
             }
-}
+        }
 
         @Override
-public synchronized void dragExit(DropTargetEvent evt) {
-super.dragExit(evt);
+        public synchronized void dragExit(DropTargetEvent evt) {
+            super.dragExit(evt);
 
             if (!dragHandling) return;
 
             finishDragHandling();
-}
+        }
 
         public synchronized void drop(DropTargetDropEvent evt) {
             if (!dragHandling) return;
 
             finishDragHandling();
 
-try {
-evt.acceptDrop(DnDConstants.ACTION_COPY);
-final java.util.List<File> droppedFiles = (java.util.List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+            try {
+                evt.acceptDrop(DnDConstants.ACTION_COPY);
+                final java.util.List<File> droppedFiles = (java.util.List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                 final int x = evt.getLocation().x;
                 final int y = evt.getLocation().y;
                 Gdx.app.postRunnable(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         dragDropManager.handleFileDrop(x, y, droppedFiles);
                     }
                 });
-} catch (Exception ex) {
-ex.printStackTrace();
-}
-}
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
 
-private void finishDragHandling() {
+        private void finishDragHandling() {
             if (!dragHandling) return;
 
             dragHandling = false;
             Gdx.app.postRunnable(new Runnable() {
-                @Override public void run() {
+                @Override
+                public void run() {
                     dragDropManager.onDragFinished();
                 }
             });
         }
 
-private static class DragOverRunnable implements Runnable {
+        private static class DragOverRunnable implements Runnable {
             final DragDropManager dragDropManager;
             int x;
             int y;
