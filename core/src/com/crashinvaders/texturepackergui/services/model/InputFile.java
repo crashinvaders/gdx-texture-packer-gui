@@ -6,7 +6,7 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 public class InputFile {
     private final Type type;
-    private FileHandle fileHandle;
+    private final FileHandle fileHandle;
 
     private EventDispatcher eventDispatcher;
 
@@ -27,14 +27,6 @@ public class InputFile {
 
     public FileHandle getFileHandle() {
         return fileHandle;
-    }
-
-    public void setFileHandle(FileHandle fileHandle) {
-        this.fileHandle = fileHandle;
-
-        if (eventDispatcher != null) {
-            eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));
-        }
     }
 
     public Type getType() {

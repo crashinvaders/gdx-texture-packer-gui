@@ -1,5 +1,7 @@
 package com.crashinvaders.texturepackergui.services.model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.PackListOrderChangedEvent;
 import com.github.czyzby.autumn.annotation.Component;
@@ -8,6 +10,7 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 @Component
 public class ModelUtils {
+    private static final String TAG = ModelUtils.class.getSimpleName();
 
     @Inject ModelService modelService;
     @Inject EventDispatcher eventDispatcher;
@@ -122,6 +125,73 @@ public class ModelUtils {
         } else {
             selectNextPack(pack);
         }
+    }
+
+    /**
+     * Changes file path for {@link InputFile} instance.
+     * Since all {@link InputFile}'s are unique by file withing {@link PackModel}, the only way to change file reference is to recreate {@link InputFile} properly.
+     * @return Newly created {@link InputFile} instance that has replaced old one. May be null in case {@link InputFile} entry with that file already exist.
+     */
+    public InputFile changeInputFileHandle(PackModel pack, InputFile inputFile, FileHandle file) {
+        ensurePackExists(pack);
+
+        if (file.equals(inputFile.getFileHandle())) return inputFile;
+
+        InputFile newInputFile = new InputFile(file, inputFile.getType());
+        newInputFile.setDirFilePrefix(inputFile.getDirFilePrefix());
+        newInputFile.setRegionName(inputFile.getRegionName());
+
+        if (pack.getInputFiles().contains(newInputFile, false)) {
+            Gdx.app.error(TAG, "Pack: " + pack + " already contains input file entry for " + file);
+            return null;
+        }
+
+        pack.removeInputFile(inputFile);
+        pack.addInputFile(newInputFile);
+
+        return newInputFile;
+    }
+
+    public InputFile includeInputFile(PackModel pack, InputFile inputFile) {
+        ensurePackExists(pack);
+
+        if (inputFile.isDirectory()) {
+            Gdx.app.error(TAG, "Cannot include input pack that is a directory: " + pack);
+            return null;
+        }
+        if (inputFile.getType() != InputFile.Type.Ignore) {
+            Gdx.app.error(TAG, "Input pack " + pack + " should be of InputFile.Type.Ignore type to be able to be included.");
+            return null;
+        }
+
+        pack.removeInputFile(inputFile);
+
+        InputFile newInputFile = new InputFile(inputFile.getFileHandle(), InputFile.Type.Input);
+        newInputFile.setRegionName(inputFile.getRegionName());
+        pack.addInputFile(newInputFile);
+
+        return newInputFile;
+    }
+
+    public InputFile excludeInputFile(PackModel pack, InputFile inputFile) {
+        ensurePackExists(pack);
+
+        if (inputFile.isDirectory()) {
+            Gdx.app.error(TAG, "Cannot exclude input pack that is a directory: " + pack);
+            return null;
+        }
+        if (inputFile.getType() != InputFile.Type.Input) {
+            Gdx.app.error(TAG, "Input pack " + pack + " should be of InputFile.Type.Input type to be able to be excluded.");
+            return null;
+        }
+
+        pack.removeInputFile(inputFile);
+
+        InputFile newInputFile = new InputFile(inputFile.getFileHandle(), InputFile.Type.Ignore);
+        newInputFile.setRegionName(inputFile.getRegionName());
+        pack.addInputFile(newInputFile);
+
+        return newInputFile;
     }
 
 	private void ensurePackExists(PackModel pack) {

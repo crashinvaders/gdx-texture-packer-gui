@@ -11,10 +11,7 @@ import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.InputFile;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.*;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
 import com.github.czyzby.autumn.annotation.*;
@@ -33,6 +30,7 @@ public class PackInputFilesController implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
+    @Inject ModelUtils modelUtils;
     @Inject InputFilePropertiesDialogController inputFileDialog;
 
     @LmlActor("btnPfAddInput") VisImageButton btnAddInput;
@@ -182,13 +180,10 @@ public class PackInputFilesController implements ActionContainer {
 
         for (InputFile node : selectedNodes) {
             if (!node.isDirectory() && node.getType() == InputFile.Type.Ignore) {
-                pack.removeInputFile(node);
-
-                InputFile inputFile = new InputFile(node.getFileHandle(), InputFile.Type.Input);
-                inputFile.setRegionName(node.getRegionName());
-                pack.addInputFile(inputFile);
-
-                listAdapter.getSelectionManager().select(inputFile);
+                InputFile newInputFile = modelUtils.includeInputFile(pack, node);
+                if (newInputFile != null) {
+                    listAdapter.getSelectionManager().select(newInputFile);
+                }
             }
         }
     }
@@ -199,13 +194,10 @@ public class PackInputFilesController implements ActionContainer {
 
         for (InputFile node : selectedNodes) {
             if (!node.isDirectory() && node.getType() == InputFile.Type.Input) {
-                pack.removeInputFile(node);
-
-                InputFile inputFile = new InputFile(node.getFileHandle(), InputFile.Type.Ignore);
-                inputFile.setRegionName(node.getRegionName());
-                pack.addInputFile(inputFile);
-
-                listAdapter.getSelectionManager().select(inputFile);
+                InputFile newInputFile = modelUtils.excludeInputFile(pack, node);
+                if (newInputFile != null) {
+                    listAdapter.getSelectionManager().select(newInputFile);
+                }
             }
         }
     }

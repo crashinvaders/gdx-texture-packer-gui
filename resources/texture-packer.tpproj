@@ -31,6 +31,9 @@ premultiplyAlpha=false
 combineSubdirectories=true
 grid=false
 square=false
+bleed=true
+flattenPaths=false
+limitMemory=true
 
 scaleFactors=[{suffix:"",factor:1}]
 

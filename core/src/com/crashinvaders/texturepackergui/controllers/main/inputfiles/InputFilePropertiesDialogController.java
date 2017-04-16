@@ -10,6 +10,7 @@ import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
@@ -36,6 +37,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
     @Inject ModelService modelService;
+    @Inject ModelUtils modelUtils;
 
     @ViewStage Stage stage;
 
@@ -77,19 +79,14 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> files) {
                 FileHandle file = files.first();
-
                 if (file.equals(inputFile.getFileHandle())) return;
 
-                InputFile newInputFile = new InputFile(file, inputFile.getType());
-                newInputFile.setDirFilePrefix(inputFile.getDirFilePrefix());
-                newInputFile.setRegionName(inputFile.getRegionName());
+                InputFile newInputFile = modelUtils.changeInputFileHandle(modelService.getProject().getSelectedPack(), InputFilePropertiesDialogController.this.inputFile, file);
 
-                PackModel pack = modelService.getProject().getSelectedPack();
-                pack.removeInputFile(inputFile);
-                pack.addInputFile(newInputFile);
-
-                inputFile = newInputFile;
-                mapDataFromModel();
+                if (newInputFile != null) {
+                    InputFilePropertiesDialogController.this.inputFile = newInputFile;
+                    mapDataFromModel();
+                }
             }
         });
         stage.addActor(fileChooser.fadeIn());

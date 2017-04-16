@@ -5,7 +5,7 @@
 <table id="root" padleft="4" padright="4" transform="false"
        rightclick="PackInputFilesController.showContextMenu"
        doubleclick="PackInputFilesController.showInputFileDialog">
-    <image id="imgTypeIndicator" scaling="none"/>
+    <image id="imgTypeIndicator" scaling="none" padleft="-1" padright="-1"/>
     <actor width="6"/>
     <label id="lblName" textalign="left" growx="true" width="270" align="left"/>
 </table>
