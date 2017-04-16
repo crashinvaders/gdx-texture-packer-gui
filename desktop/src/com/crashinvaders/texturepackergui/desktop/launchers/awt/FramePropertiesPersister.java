@@ -11,13 +11,18 @@ class FramePropertiesPersister {
     public static final String PREF_NAME = "window_params.xml";
 
     public static void saveFrameProperties(JFrame frame) {
+        int extendedState = frame.getExtendedState();
+        frame.setExtendedState(Frame.NORMAL);
+
         Preferences prefs = Gdx.app.getPreferences(PREF_NAME);
         prefs.putInteger("x", frame.getX());
         prefs.putInteger("y", frame.getY());
         prefs.putInteger("width", frame.getWidth());
         prefs.putInteger("height", frame.getHeight());
-        prefs.putBoolean("maximized", frame.getExtendedState() == Frame.MAXIMIZED_BOTH);
+        prefs.putBoolean("maximized", extendedState == Frame.MAXIMIZED_BOTH);
         prefs.flush();
+
+        frame.setExtendedState(extendedState);
     }
 
     public static void loadFrameProperties(JFrame frame) {
