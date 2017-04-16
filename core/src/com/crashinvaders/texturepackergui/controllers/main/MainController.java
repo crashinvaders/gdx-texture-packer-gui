@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
+import com.crashinvaders.texturepackergui.controllers.FileDragDropController;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
 import com.crashinvaders.texturepackergui.events.*;
@@ -73,6 +74,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
     @Inject @LmlInject PackInputFilesController packInputFilesController;
+    @Inject @LmlInject FileDragDropController fileDragDropController;
 
     @ViewStage Stage stage;
 

@@ -187,15 +187,21 @@ public class GlobalActions implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> file) {
                 FileHandle chosenFile = file.first();
-                fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, chosenFile.parent());
-
-                ProjectModel loadedProject = projectSerializer.loadProject(chosenFile);
-                if (loadedProject != null) {
-                    modelService.setProject(loadedProject);
-                }
+                loadProject(chosenFile);
             }
         });
         getStage().addActor(fileChooser.fadeIn());
+    }
+
+    public void loadProject(FileHandle projectFile) {
+        if (projectFile == null) { throw new IllegalArgumentException("Project file cannot be null"); }
+
+        fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, projectFile.parent());
+
+        ProjectModel loadedProject = projectSerializer.loadProject(projectFile);
+        if (loadedProject != null) {
+            modelService.setProject(loadedProject);
+        }
     }
 
     @LmlAction("saveProject") public void saveProject() {

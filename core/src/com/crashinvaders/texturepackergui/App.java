@@ -103,29 +103,6 @@ public class App implements ApplicationListener {
 
         // Uncomment to update project's LML DTD schema
         // LmlUtils.saveDtdSchema(interfaceService.getParser(), Gdx.files.local("../lml.dtd"));
-
-        //TODO remove
-        dragDropManager.addListener(new DragDropManager.Listener() {
-            @Override
-            public void onDragStarted(int screenX, int screenY) {
-                System.out.println("App.onDragStarted screenX = [" + screenX + "], screenY = [" + screenY + "]");
-            }
-
-            @Override
-            public void onDragMoved(int screenX, int screenY) {
-                System.out.println("App.onDragMoved screenX = [" + screenX + "], screenY = [" + screenY + "]");
-            }
-
-            @Override
-            public void onDragFinished() {
-                System.out.println("App.onDragFinished");
-            }
-
-            @Override
-            public void handleFileDrop(int screenX, int screenY, Array<FileHandle> files) {
-                System.out.println("App.handleFileDrop files = [" + files + "]");
-            }
-        });
     }
 
     private void initiateContext() {

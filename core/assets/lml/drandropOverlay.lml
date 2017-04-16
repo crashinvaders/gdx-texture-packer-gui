@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<vistable id="dragndropOverlay" background="dragndropDim" onecolumn="true" scale="1.5" padbottom="96" origin="center" transform="true" visible="false" alpha="0">
+    <:assign key="fontScale" value="1.5"/>
+
+    <image style="custom/dragndrop" hexcolor="ffffff40"/>
+    <actor height="16"/>
+    <label text="$FileDragDropController.getProjectFileHint" fontScale="{fontScale}"/>
+    <actor height="8"/>
+    <label text="$FileDragDropController.getImageFilesHint" fontscale="{fontScale}"/>
+</vistable>

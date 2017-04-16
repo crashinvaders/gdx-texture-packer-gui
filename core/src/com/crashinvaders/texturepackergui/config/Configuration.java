@@ -28,6 +28,7 @@ import com.github.czyzby.autumn.mvc.component.ui.action.ActionProvider;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewController;
 import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.autumn.mvc.stereotype.preference.*;
+import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.kiwi.util.gdx.asset.lazy.provider.ObjectProvider;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.LmlSyntax;
@@ -96,7 +97,9 @@ public class Configuration {
         tooltipManager.hideAll();
 
         LmlParser parser = interfaceService.getParser();
-        parser.parseTemplate(Gdx.files.internal("lml/titledPane.lml"));
+        parser.getData().addArgument("projectExt", "."+AppConstants.PROJECT_FILE_EXT);
+        parser.getData().addArgument("imageExt", "."+Strings.join(" .", AppConstants.IMAGE_FILE_EXT));
+
 
         interfaceService.setShowingActionProvider(new ActionProvider() {
             @Override

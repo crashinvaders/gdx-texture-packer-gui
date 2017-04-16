@@ -37,6 +37,7 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	packingItemBg: {name: white, color: dark-grey },
 	canvasInfoPanel: {name: white, color: {hex:252526ff} },
 	noPreviewFill: {name: white, color: {hex:000000aa} },
+	dragndropDim: {name: white, color: {hex:252526e0} },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 	default: {down: button-down, up: button },

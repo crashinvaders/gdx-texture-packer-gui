@@ -32,6 +32,8 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new ImageDrawableLmlAttribute(), "image", "drawable");
         addAttributeProcessor(new TooltipLmlAttribute(), "visTooltip", "tooltip");
         addAttributeProcessor(new KeyboardFocusChangedLmlAttribute(), "keyboardFocus");
+        addAttributeProcessor(new OriginLmlAttribute(), "origin");
+        addAttributeProcessor(new HexColorLmlAttribute(), "hexColor");
     }
 
     @Override
@@ -62,5 +64,12 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerMenuAttributes();
 
         addAttributeProcessor(new ShortcutOnChangeLmlAttribute(), "onchange", "change");
+    }
+
+    @Override
+    protected void registerLabelAttributes() {
+        super.registerLabelAttributes();
+
+        addAttributeProcessor(new LabelFontScaleLmlAttribute(), "fontScale");
     }
 }
