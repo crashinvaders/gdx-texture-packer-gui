@@ -58,6 +58,9 @@ public class AwtDesktopLauncher {
 	}
 
 	private static class MainFrame extends JFrame {
+		private static final Color colorFill = new Color(37, 37, 38);
+
+		private final JLayeredPane pane;
 
 		public MainFrame(App app, Canvas canvas) {
 			super("LibGDX Texture Packer GUI");
@@ -80,11 +83,17 @@ public class AwtDesktopLauncher {
 				setLocationRelativeTo(null);
 				setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 				setVisible(true);
+				setBackground(colorFill);
 
-				getContentPane().add(canvas, BorderLayout.CENTER);
+				pane = new JLayeredPane();
+				pane.setBackground(colorFill);
+				pane.setLayout(new BorderLayout());
+				pane.add(canvas, BorderLayout.CENTER, 0);
 
-				this.setTransferHandler(new TransferHandler(null));
-				this.setDropTarget(new FileDropTarget(app.getDragDropManager()));
+				getContentPane().add(pane, BorderLayout.CENTER);
+
+				pane.setTransferHandler(new TransferHandler(null));
+				pane.setDropTarget(new FileDropTarget(app.getDragDropManager()));
 			}
 		}
 

@@ -1,9 +1,14 @@
 package com.crashinvaders.texturepackergui.controllers;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
@@ -12,6 +17,7 @@ import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Destroy;
@@ -27,6 +33,7 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 @Component
 public class FileDragDropController implements DragDropManager.Listener, ActionContainer {
     private static final String TAG = FileDragDropController.class.getSimpleName();
+    private static final Vector2 tmpVec2 = new Vector2();
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -34,6 +41,10 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
     @Inject ModelService modelService;
 
     @LmlActor("dragndropOverlay") Group overlayRoot;
+    @LmlActor("btnDragndropInclude") Button btnInclude;
+    @LmlActor("btnDragndropExclude") Button btnExclude;
+
+    private Stage stage;
 
     @Initiate void initialize() {
         interfaceService.getParser().getData().addActionContainer(TAG, this);
@@ -43,6 +54,10 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
     @Destroy void destroy() {
         interfaceService.getParser().getData().removeActionContainer(TAG);
         App.inst().getDragDropManager().removeListener(this);
+    }
+
+    public void onViewCreated(Stage stage) {
+        this.stage = stage;
     }
 
     //TODO replace with LML code when issues get resolved https://github.com/czyzby/gdx-lml/issues/36
@@ -82,7 +97,7 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
 
     @Override
     public void onDragMoved(int screenX, int screenY) {
-
+        stage.mouseMoved(screenX, screenY);
     }
 
     @Override
@@ -95,17 +110,47 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
             }
         }
 
-        if (modelService.getProject() != null && modelService.getProject().getSelectedPack() != null) {
-            PackModel pack = modelService.getProject().getSelectedPack();
+        stage.screenToStageCoordinates(tmpVec2.set(screenX, screenY));
+        Actor hit = stage.hit(tmpVec2.x, tmpVec2.y, true);
+        boolean include = hit == btnInclude;
+        boolean exclude = hit == btnExclude;
 
-            // Look for a project file. If found, load first and return.
-            for (FileHandle file : files) {
-                if (file.isDirectory()) {
-                    pack.addInputFile(file, InputFile.Type.Input);
-                } else {
-                    if (CommonUtils.contains(AppConstants.IMAGE_FILE_EXT, file.extension(), false)) {
-                        pack.addInputFile(file, InputFile.Type.Input);
+        // If there is no selected pack, we will either select first or create new one
+        ProjectModel project = modelService.getProject();
+        PackModel pack = project.getSelectedPack();
+        if (pack == null) {
+            if (project.getPacks().size > 0) {
+                pack = project.getPacks().first();
+            } else {
+                pack = new PackModel();
+                project.addPack(pack);
+                project.setSelectedPack(pack);
+            }
+            project.setSelectedPack(pack);
+        }
+
+        // Look for a project file. If found, load first and return.
+        for (FileHandle file : files) {
+            if (file.isDirectory()) {
+                if (include) { pack.addInputFile(file, InputFile.Type.Input); }
+            } else {
+                if (CommonUtils.contains(AppConstants.IMAGE_FILE_EXT, file.extension(), false)) {
+                    InputFile inputFile = null;
+
+                    if (include) { inputFile = new InputFile(file, InputFile.Type.Input); }
+                    if (exclude) { inputFile = new InputFile(file, InputFile.Type.Ignore); }
+
+                    if (inputFile == null) {
+                        Gdx.app.error(TAG, "Can't add input file: " + file);
+                        continue;
                     }
+
+                    // If there is any record with same file handle, we will replace it
+                    if (pack.getInputFiles().contains(inputFile, false)) {
+                        pack.removeInputFile(inputFile);
+                    }
+
+                    pack.addInputFile(inputFile);
                 }
             }
         }

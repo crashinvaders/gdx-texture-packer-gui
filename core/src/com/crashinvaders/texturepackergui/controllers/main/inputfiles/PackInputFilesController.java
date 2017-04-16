@@ -130,7 +130,7 @@ public class PackInputFilesController implements ActionContainer {
         inputFileDialog.show(inputFile);
     }
 
-    @LmlAction("addInputFiles") void addSourceFiles() {
+    @LmlAction("addInputFiles") void addInputFiles() {
         final FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES_AND_DIRECTORIES);
@@ -173,6 +173,40 @@ public class PackInputFilesController implements ActionContainer {
         Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
         for (InputFile selectedNode : selectedNodes) {
             pack.removeInputFile(selectedNode);
+        }
+    }
+
+    @LmlAction("includeSelected") void includeSelected() {
+        PackModel pack = getSelectedPack();
+        Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
+
+        for (InputFile node : selectedNodes) {
+            if (!node.isDirectory() && node.getType() == InputFile.Type.Ignore) {
+                pack.removeInputFile(node);
+
+                InputFile inputFile = new InputFile(node.getFileHandle(), InputFile.Type.Input);
+                inputFile.setRegionName(node.getRegionName());
+                pack.addInputFile(inputFile);
+
+                listAdapter.getSelectionManager().select(inputFile);
+            }
+        }
+    }
+
+    @LmlAction("excludeSelected") void excludeSelected() {
+        PackModel pack = getSelectedPack();
+        Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
+
+        for (InputFile node : selectedNodes) {
+            if (!node.isDirectory() && node.getType() == InputFile.Type.Input) {
+                pack.removeInputFile(node);
+
+                InputFile inputFile = new InputFile(node.getFileHandle(), InputFile.Type.Ignore);
+                inputFile.setRegionName(node.getRegionName());
+                pack.addInputFile(inputFile);
+
+                listAdapter.getSelectionManager().select(inputFile);
+            }
         }
     }
 

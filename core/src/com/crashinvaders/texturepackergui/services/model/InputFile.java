@@ -83,16 +83,13 @@ public class InputFile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        InputFile that = (InputFile) o;
+        InputFile inputFile = (InputFile) o;
 
-        if (type != that.type) return false;
-        return fileHandle != null ? fileHandle.equals(that.fileHandle) : that.fileHandle == null;
+        return fileHandle.equals(inputFile.fileHandle);
     }
 
     @Override
     public int hashCode() {
-        int result = type.hashCode();
-        result = 31 * result + (fileHandle != null ? fileHandle.hashCode() : 0);
-        return result;
+        return fileHandle.hashCode();
     }
 }

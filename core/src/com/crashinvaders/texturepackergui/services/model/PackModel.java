@@ -180,16 +180,21 @@ public class PackModel {
         removeInputFile(new InputFile(fileHandle, type));
     }
     public void removeInputFile(InputFile inputFile) {
-        if (!inputFiles.contains(inputFile, false)) {
+        // Since we use equals and not == operator to compare InputFile values,
+        // we have to find real value and don't use reference from parameter.
+        int index = inputFiles.indexOf(inputFile, false);
+        InputFile actualInputFile = index >= 0 ? inputFiles.get(index) : null;
+
+        if (actualInputFile == null) {
             Gdx.app.error(TAG, "File: " + inputFile + " wasn't added");
             return;
         }
-        inputFiles.removeValue(inputFile, false);
-        inputFile.setEventDispatcher(null);
+        inputFiles.removeValue(actualInputFile, false);
+        actualInputFile.setEventDispatcher(null);
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new PackPropertyChangedEvent(PackModel.this, Property.INPUT_FILE_REMOVED)
-                    .setInputFile(inputFile));
+                    .setInputFile(actualInputFile));
         }
     }
 

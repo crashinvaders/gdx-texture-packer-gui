@@ -119,6 +119,7 @@ public class MainController implements ActionContainer, ViewResizer {
 
         canvasController.initialize(canvas);
         packInputFilesController.onViewCreated(stage);
+        fileDragDropController.onViewCreated(stage);
 
         // Load pack list split value
         {

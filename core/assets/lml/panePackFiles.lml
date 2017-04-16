@@ -19,7 +19,7 @@
                     height="25"/>
         </:macro>
 
-        <:sidebutton id="btnPfAddInput" icon="custom/ic-input-file-add" tooltip="@addSourceFiles"
+        <:sidebutton id="btnPfAddInput" icon="custom/ic-input-file-add" tooltip="@addInputFiles"
                      onchange="PackInputFilesController.addInputFiles"/>
         <:sidebutton id="btnPfAddIgnore" icon="custom/ic-input-file-ignore-add" tooltip="@addIgnoreFiles"
                      onchange="PackInputFilesController.addIgnoreFiles"/>

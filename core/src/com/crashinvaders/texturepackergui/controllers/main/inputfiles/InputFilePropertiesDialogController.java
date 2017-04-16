@@ -10,6 +10,7 @@ import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -75,7 +76,20 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> files) {
-                inputFile.setFileHandle(files.first());
+                FileHandle file = files.first();
+
+                if (file.equals(inputFile.getFileHandle())) return;
+
+                InputFile newInputFile = new InputFile(file, inputFile.getType());
+                newInputFile.setDirFilePrefix(inputFile.getDirFilePrefix());
+                newInputFile.setRegionName(inputFile.getRegionName());
+
+                PackModel pack = modelService.getProject().getSelectedPack();
+                pack.removeInputFile(inputFile);
+                pack.addInputFile(newInputFile);
+
+                inputFile = newInputFile;
+                mapDataFromModel();
             }
         });
         stage.addActor(fileChooser.fadeIn());
