@@ -4,7 +4,7 @@ apply plugin: "edu.sc.seis.macAppBundle"
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 
-project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.DesktopLauncher"
+project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
 project.ext.assetsDir = new File("../core/assets");
 project.ext.distOutputDir = "../distribution/output"
 project.ext.distFileName = "$project.ext.appName-$project.ext.version"
