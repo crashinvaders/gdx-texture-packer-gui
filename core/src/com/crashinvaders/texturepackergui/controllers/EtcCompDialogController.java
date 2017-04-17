@@ -32,15 +32,20 @@ public class EtcCompDialogController implements ActionContainer {
 
     @LmlAfter
     public void initialize() {
+        compressionModel = null;
+        cboEtc1Compression.setItems();
+        cboEtc1Compression.setItems(etc1Options);
+        cboEtc2Compression.setItems(etc2Attr);
+
         compressionModel = obtainCompressionModel();
         if (compressionModel == null) return;
 
-        cboEtc1Compression.setItems(etc1Options);
-        cboEtc2Compression.setItems(etc2Attr);
         updateValuesFromModel();
     }
 
     @LmlAction("onEtc1CboChanged") void onEtc1CboChanged(VisSelectBox<String> selectBox) {
+        if (compressionModel == null) { return; }
+
     	String value = selectBox.getSelected();
     	if(value.equalsIgnoreCase("None"))
     		compressionModel.setEtc1Comp(null);
@@ -48,6 +53,8 @@ public class EtcCompDialogController implements ActionContainer {
     }
     
     @LmlAction("onEtc2CboChanged") void onEtc2CboChanged(VisSelectBox<String> selectBox) {
+        if (compressionModel == null) { return; }
+
     	String value = (String) selectBox.getSelected();
     	if(value.equalsIgnoreCase("None"))
     		compressionModel.setEtc2Comp(null);
@@ -55,6 +62,8 @@ public class EtcCompDialogController implements ActionContainer {
     }
 
     @LmlAction("onUseCompressionChanged") void onUseCompressionChanged() {
+        if (compressionModel == null) { return; }
+
         boolean useCompression = chbUseCompression.isChecked();
         compressionModel.setCompressed(useCompression);
     }
