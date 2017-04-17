@@ -2,10 +2,10 @@ package com.crashinvaders.texturepackergui.desktop.launchers.awt;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
-import com.crashinvaders.common.awt.ImageTools;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -24,7 +24,11 @@ class MainFrame extends JFrame {
         super(config.title);
         this.lwjglCanvas = lwjglCanvas;
 
-        setIconImage(ImageTools.loadImage(MainFrame.class.getClassLoader().getResource(config.iconFilePath).getFile()));
+        try {
+            setIconImage(ImageIO.read((MainFrame.class.getClassLoader().getResourceAsStream(config.iconFilePath))));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         addWindowListener(new WindowAdapter() {
             boolean iconified = false;
