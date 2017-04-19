@@ -3,6 +3,7 @@ package com.badlogic.gdx.tools.ktx;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -19,24 +20,25 @@ import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 import java.io.*;
 import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.ByteBuffer;
-import java.security.CodeSource;
-import java.security.ProtectionDomain;
 import java.util.zip.GZIPOutputStream;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
-
 
 public class KTXProcessor {
-
-    final static byte[] HEADER_MAGIC = {(byte) 0x0AB, (byte) 0x04B, (byte) 0x054, (byte) 0x058, (byte) 0x020, (byte) 0x031,
+    private final static byte[] HEADER_MAGIC = {(byte) 0x0AB, (byte) 0x04B, (byte) 0x054, (byte) 0x058, (byte) 0x020, (byte) 0x031,
             (byte) 0x031, (byte) 0x0BB, (byte) 0x00D, (byte) 0x00A, (byte) 0x01A, (byte) 0x00A};
 
-    public static void convert(String input, String output, String ETC1comp, String ETC2comp)
-            throws Exception {
+    private final static int DISPOSE_DONT = 0;
+    private final static int DISPOSE_PACK = 1;
+    private final static int DISPOSE_FACE = 2;
+    private final static int DISPOSE_LEVEL = 4;
+
+    private static final TempFileAccessor fileAccessorEtcTools = new TempFileAccessor(
+            SharedLibraryLoader.isWindows ? "etctool/etctool.exe" :
+            SharedLibraryLoader.isLinux ? "etctool/etctool-linux" :
+            SharedLibraryLoader.isMac ? "etctool/etctool-mac" : null
+            , 0);
+
+    public static void convert(String input, String output, String ETC1comp, String ETC2comp) throws Exception {
         Array<String> opts = new Array<String>(String.class);
         opts.add(input);
         opts.add(output);
@@ -44,11 +46,6 @@ public class KTXProcessor {
         if (ETC2comp != null) opts.add(ETC2comp);
         KTXProcessorListener.init(opts.toArray());
     }
-
-    private final static int DISPOSE_DONT = 0;
-    private final static int DISPOSE_PACK = 1;
-    private final static int DISPOSE_FACE = 2;
-    private final static int DISPOSE_LEVEL = 4;
 
     public static class KTXProcessorListener extends ApplicationAdapter {
         String[] args;
@@ -364,21 +361,7 @@ public class KTXProcessor {
 
     public static File executeEtc2Comp(String filePath, String outputPath, String etc2Format) {
         try {
-            final URI uri;
-            final URI exe;
-
-            final String libName;
-            if (SharedLibraryLoader.isWindows) {
-                libName = "etctool.exe";
-            } else if (SharedLibraryLoader.isLinux) {
-                libName = "etctool-linux";
-            } else if (SharedLibraryLoader.isMac) {
-                libName = "etctool-mac";
-            } else
-                return null;
-
-            uri = Extractor.getJarURI();
-			exe = Extractor.getFile(uri, libName, "etctool");   //FIXME this wont work if this program will run directly from JAR. We need to extract executable first.
+            final URI exe = fileAccessorEtcTools.getExecutableFile().toURI();
 
             int index = outputPath.lastIndexOf(".");
             if (index >= 0) outputPath = outputPath.substring(0, index) + etc2Format + ".ktx";
@@ -403,8 +386,8 @@ public class KTXProcessor {
             Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
         } catch (InterruptedException e) {
             Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
-        } catch (URISyntaxException e) {
-            Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
+//        } catch (URISyntaxException e) {
+//            Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
         }
         return null;
     }
@@ -450,95 +433,109 @@ public class KTXProcessor {
 
     }
 
-    private static class Extractor {
+    /** Extracts and stores internal resource file reference. */
+    private static class TempFileAccessor {
+        private static final String PREFERENCES_FILE = "ktx_processor.xml";
+        private static final String PREF_REVISION_SUFFIX = "-revision";
 
-        static URI getJarURI() throws URISyntaxException {
-            final ProtectionDomain domain;
-            final CodeSource source;
-            final URL url;
-            final URI uri;
+        private final String fileClassPath;
+        private final int fileRevision;
 
-            domain = KTXProcessor.class.getProtectionDomain();
-            source = domain.getCodeSource();
-            url = source.getLocation();
-            uri = url.toURI();
+        private final String prefKeyFilePath;
+        private final String prefKeyFileRevision;
 
-            return (uri);
+        private File tempFile = null;
+
+        /**
+         *  @param fileClassPath Target file's class path.
+         *  @param fileRevision Number that is stored inside preferences and indicates revision of extracted file.
+         *                      This is useful when resource file was changed and needs to be overwritten.
+         */
+        public TempFileAccessor(String fileClassPath, int fileRevision) {
+            this.fileClassPath = fileClassPath;
+            this.fileRevision = fileRevision;
+
+            prefKeyFilePath = fileClassPath;
+            prefKeyFileRevision = fileClassPath + PREF_REVISION_SUFFIX;
         }
 
-        static URI getFile(final URI where, final String fileName, final String newName) throws ZipException, IOException {
-            final File location;
-            final URI fileURI;
+        public synchronized File getExecutableFile() {
+            // Check if file previously was extracted and ready to be reused
+            if (tempFile != null && tempFile.exists()) return tempFile;
 
-            location = new File(where);
+            tempFile = loadTempFilePath();
+            if (tempFile != null && tempFile.exists()) return tempFile;
 
-            // not in a JAR, just return the path on disk
-            if (location.isDirectory()) {
-                fileURI = URI.create(where.toString() + fileName);
-            } else {
-                final ZipFile zipFile;
-
-                zipFile = new ZipFile(location);
-
-                try {
-                    fileURI = extract(zipFile, fileName, newName);
-                } finally {
-                    zipFile.close();
-                }
+            tempFile = copyToTempFile(fileClassPath);
+            if (tempFile != null) {
+                System.out.println("File " + fileClassPath + " temporary extracted to " + tempFile);
+                saveTempFilePath(tempFile);
+                return tempFile;
             }
 
-            return (fileURI);
+            throw new IllegalStateException("Can't access/extract file: " + fileClassPath);
         }
 
-        static URI extract(final ZipFile zipFile, final String fileName, final String newName) throws IOException {
-            final File tempFile;
-            final ZipEntry entry;
-            final InputStream zipStream;
-            OutputStream fileStream;
-
-            tempFile = File.createTempFile(newName, Long.toString(System.currentTimeMillis()));
-            tempFile.deleteOnExit();
-            tempFile.setReadable(true);
-            tempFile.setWritable(true);
-            tempFile.setExecutable(true);
-            entry = zipFile.getEntry(fileName);
-
-            if (entry == null) {
-                throw new FileNotFoundException("cannot find file: " + fileName + " in archive: " + zipFile.getName());
-            }
-
-            zipStream = zipFile.getInputStream(entry);
-            fileStream = null;
-
+        private void saveTempFilePath(File file) {
             try {
-                final byte[] buf;
-                int i;
-
-                fileStream = new FileOutputStream(tempFile);
-                buf = new byte[1024];
-                i = 0;
-
-                while ((i = zipStream.read(buf)) != -1) {
-                    fileStream.write(buf, 0, i);
-                }
-            } finally {
-                close(zipStream);
-                close(fileStream);
+                Preferences preferences = Gdx.app.getPreferences(PREFERENCES_FILE);
+                preferences
+                        .putString(prefKeyFilePath, file.getAbsolutePath())
+                        .putInteger(prefKeyFileRevision, fileRevision)
+                        .flush();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
-            return (tempFile.toURI());
         }
 
-        static void close(final Closeable stream) {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (final IOException ex) {
-                    ex.printStackTrace();
+        private File loadTempFilePath() {
+            try {
+                Preferences preferences = Gdx.app.getPreferences(PREFERENCES_FILE);
+                int revision = preferences.getInteger(prefKeyFileRevision, -1);
+                // Check if the revisions are the same
+                if (this.fileRevision != revision) return null;
+
+                String absolutePath = preferences.getString(prefKeyFilePath, null);
+                if (absolutePath != null) {
+                    return new File(absolutePath);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        private static File copyToTempFile(String resourcePath) {
+            File temp;
+            InputStream in = null;
+            FileOutputStream fos = null;
+            try {
+                in = ClassLoader.getSystemClassLoader().getResourceAsStream(resourcePath);
+                byte[] buffer = new byte[1024];
+                int read;
+                temp = File.createTempFile(resourcePath, "");
+                fos = new FileOutputStream(temp);
+
+                while ((read = in.read(buffer)) != -1) {
+                    fos.write(buffer, 0, read);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            } finally {
+                if (fos != null) {
+                    try {
+                        fos.close();
+                    } catch (IOException ignored) {
+                    }
+                }
+                if (in != null) {
+                    try {
+                        in.close();
+                    } catch (IOException ignored) {
+                    }
                 }
             }
+            return temp;
         }
     }
-
-
 }
