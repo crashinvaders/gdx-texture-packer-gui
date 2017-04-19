@@ -624,86 +624,6 @@ public class TexturePacker {
 		}
 	}
 
-	/** Packs using defaults settings.
-	 * @see TexturePacker#process(Settings, String, String, String) */
-	static public void process (String input, String output, String packFileName) {
-		process(new Settings(), input, output, packFileName);
-	}
-
-	/** @param input Directory containing individual images to be packed.
-	 * @param output Directory where the pack file and page images will be written.
-	 * @param packFileName The name of the pack file. Also used to name the page images. */
-	static public void process (Settings settings, String input, String output, String packFileName) {
-		try {
-			TexturePackerFileProcessor processor = new TexturePackerFileProcessor(settings, packFileName);
-			// Sort input files by name to avoid platform-dependent atlas output changes.
-			processor.setComparator(new Comparator<File>() {
-				public int compare (File file1, File file2) {
-					return file1.getName().compareTo(file2.getName());
-				}
-			});
-			processor.process(new File(input), new File(output));
-		} catch (Exception ex) {
-			throw new RuntimeException("Error packing images.", ex);
-		}
-	}
-
-	/** @return true if the output file does not yet exist or its last modification date is before the last modification date of
-	 *         the input file */
-	static public boolean isModified (String input, String output, String packFileName, Settings settings) {
-		String packFullFileName = output;
-
-		if (!packFullFileName.endsWith("/")) {
-			packFullFileName += "/";
-		}
-
-		// Check against the only file we know for sure will exist and will be changed if any asset changes:
-		// the atlas file
-		packFullFileName += packFileName;
-		packFullFileName += settings.atlasExtension;
-		File outputFile = new File(packFullFileName);
-
-		if (!outputFile.exists()) {
-			return true;
-		}
-
-		File inputFile = new File(input);
-		if (!inputFile.exists()) {
-			throw new IllegalArgumentException("Input file does not exist: " + inputFile.getAbsolutePath());
-		}
-
-		return isModified(inputFile, outputFile.lastModified());
-	}
-
-	static private boolean isModified (File file, long lastModified) {
-		if (file.lastModified() > lastModified) return true;
-		File[] children = file.listFiles();
-		if (children != null) {
-			for (File child : children)
-				if (isModified(child, lastModified)) return true;
-		}
-		return false;
-	}
-
-	static public boolean processIfModified (String input, String output, String packFileName) {
-		// Default settings (Needed to access the default atlas extension string)
-		Settings settings = new Settings();
-
-		if (isModified(input, output, packFileName, settings)) {
-			process(settings, input, output, packFileName);
-			return true;
-		}
-		return false;
-	}
-
-	static public boolean processIfModified (Settings settings, String input, String output, String packFileName) {
-		if (isModified(input, output, packFileName, settings)) {
-			process(settings, input, output, packFileName);
-			return true;
-		}
-		return false;
-	}
-
 	static public interface Packer {
 		public Array<Page> pack(Array<Rect> inputRects);
 	}
@@ -712,33 +632,5 @@ public class TexturePacker {
 		File file;
 		String name;
 		BufferedImage image;
-	}
-
-	static public void main (String[] args) throws Exception {
-		Settings settings = null;
-		String input = null, output = null, packFileName = "pack.atlas";
-
-		switch (args.length) {
-		case 4:
-			settings = new Json().fromJson(Settings.class, new FileReader(args[3]));
-		case 3:
-			packFileName = args[2];
-		case 2:
-			output = args[1];
-		case 1:
-			input = args[0];
-			break;
-		default:
-			System.out.println("Usage: inputDir [outputDir] [packFileName] [settingsFileName]");
-			System.exit(0);
-		}
-
-		if (output == null) {
-			File inputFile = new File(input);
-			output = new File(inputFile.getParentFile(), inputFile.getName() + "-packed").getAbsolutePath();
-		}
-		if (settings == null) settings = new Settings();
-
-		process(settings, input, output, packFileName);
 	}
 }
