@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.glutils.ETC1.ETC1Data;
 import com.badlogic.gdx.graphics.glutils.KTXTextureData;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 
@@ -368,14 +369,35 @@ public class KTXProcessor {
 
             String[] cmd = {exe.getPath(), filePath, "-format", etc2Format.replace("-", ""), "-output", outputPath};
 
-            ProcessBuilder pb = new ProcessBuilder(cmd);
+            // Change access permission for temp file
+            if (SharedLibraryLoader.isLinux || SharedLibraryLoader.isMac) {
+                System.out.println("Call \"chmod\" for a temp file");
+                Process process = Runtime.getRuntime().exec("chmod +x " + exe.getPath());
+
+                InputStream is = process.getInputStream();
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    System.out.println(line);
+                }
+                int result = process.waitFor(); // Let the process finish.
+
+                if (result != 0) {
+                    throw new IllegalStateException("\"chmod\" call finished with error");
+                }
+            }
+
             System.out.println("Starting etc2comp");
-            Process p = pb.start();
+            Process p = Runtime.getRuntime().exec(cmd);
+
+//            ProcessBuilder pb = new ProcessBuilder(cmd);
+//            System.out.println("Starting etc2comp");
+//            Process p = pb.start();
             InputStream is = p.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = null;
             while ((line = br.readLine()) != null) {
-                System.out.println("Etc2Comp output: " + line);
+                System.out.println(line);
             }
             int r = p.waitFor(); // Let the process finish.
             if (r == 0) {
