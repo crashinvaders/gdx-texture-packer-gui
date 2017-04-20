@@ -33,7 +33,7 @@ public class KTXProcessor {
     private final static int DISPOSE_FACE = 2;
     private final static int DISPOSE_LEVEL = 4;
 
-    private static final TempFileAccessor fileAccessorEtcTools = new TempFileAccessor(
+    private static final TempFileAccessor fileAccessorEtcTools = new TempExecutableFileAccessor(
             SharedLibraryLoader.isWindows ? "etctool/etctool.exe" :
             SharedLibraryLoader.isLinux ? "etctool/etctool-linux" :
             SharedLibraryLoader.isMac ? "etctool/etctool-mac" : null
@@ -367,51 +367,25 @@ public class KTXProcessor {
             int index = outputPath.lastIndexOf(".");
             if (index >= 0) outputPath = outputPath.substring(0, index) + etc2Format + ".ktx";
 
-            String[] cmd = {exe.getPath(), filePath, "-format", etc2Format.replace("-", ""), "-output", outputPath};
-
-            // Change access permission for temp file
-            if (SharedLibraryLoader.isLinux || SharedLibraryLoader.isMac) {
-                System.out.println("Call \"chmod\" for a temp file");
-                Process process = Runtime.getRuntime().exec("chmod +x " + exe.getPath());
-
-                InputStream is = process.getInputStream();
-                BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    System.out.println(line);
-                }
-                int result = process.waitFor(); // Let the process finish.
-
-                if (result != 0) {
-                    throw new IllegalStateException("\"chmod\" call finished with error");
-                }
-            }
-
             System.out.println("Starting etc2comp");
-            Process p = Runtime.getRuntime().exec(cmd);
-
-//            ProcessBuilder pb = new ProcessBuilder(cmd);
-//            System.out.println("Starting etc2comp");
-//            Process p = pb.start();
-            InputStream is = p.getInputStream();
+            String[] cmd = {exe.getPath(), filePath, "-format", etc2Format.replace("-", ""), "-output", outputPath};
+            Process process = Runtime.getRuntime().exec(cmd);
+            InputStream is = process.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             String line = null;
             while ((line = br.readLine()) != null) {
                 System.out.println(line);
             }
-            int r = p.waitFor(); // Let the process finish.
-            if (r == 0) {
+            int result = process.waitFor(); // Let the process finish.
+            if (result == 0) {
                 System.out.println("etc2comp finished");
                 return new File(outputPath);
+            } else {
+                throw new RuntimeException("Error executing etc2comp command, result code: " + result);
             }
-        } catch (IOException e) {
-            Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
-        } catch (InterruptedException e) {
-            Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
-//        } catch (URISyntaxException e) {
-//            Gdx.app.error("KTXProcessor", "Error executing etc2 command: ", e);
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error executing etc2comp command: ", e);
         }
-        return null;
     }
 
     public static void gzip(String inFile, String outFile) throws FileNotFoundException, IOException {
@@ -452,21 +426,20 @@ public class KTXProcessor {
             }
             throw new GdxRuntimeException("Unsupported output format, try adding '-etc1' as argument");
         }
-
     }
 
     /** Extracts and stores internal resource file reference. */
     private static class TempFileAccessor {
-        private static final String PREFERENCES_FILE = "ktx_processor.xml";
-        private static final String PREF_REVISION_SUFFIX = "-revision";
+        protected static final String PREFERENCES_FILE = "ktx_processor.xml";
+        protected static final String PREF_REVISION_SUFFIX = "-revision";
 
-        private final String fileClassPath;
-        private final int fileRevision;
+        protected final String fileClassPath;
+        protected final int fileRevision;
 
-        private final String prefKeyFilePath;
-        private final String prefKeyFileRevision;
+        protected final String prefKeyFilePath;
+        protected final String prefKeyFileRevision;
 
-        private File tempFile = null;
+        protected File tempFile = null;
 
         /**
          *  @param fileClassPath Target file's class path.
@@ -498,7 +471,7 @@ public class KTXProcessor {
             throw new IllegalStateException("Can't access/extract file: " + fileClassPath);
         }
 
-        private void saveTempFilePath(File file) {
+        protected void saveTempFilePath(File file) {
             try {
                 Preferences preferences = Gdx.app.getPreferences(PREFERENCES_FILE);
                 preferences
@@ -510,7 +483,7 @@ public class KTXProcessor {
             }
         }
 
-        private File loadTempFilePath() {
+        protected File loadTempFilePath() {
             try {
                 Preferences preferences = Gdx.app.getPreferences(PREFERENCES_FILE);
                 int revision = preferences.getInteger(prefKeyFileRevision, -1);
@@ -527,7 +500,7 @@ public class KTXProcessor {
             return null;
         }
 
-        private static File copyToTempFile(String resourcePath) {
+        protected File copyToTempFile(String resourcePath) {
             File temp;
             InputStream in = null;
             FileOutputStream fos = null;
@@ -558,6 +531,42 @@ public class KTXProcessor {
                 }
             }
             return temp;
+        }
+    }
+
+    private static class TempExecutableFileAccessor extends TempFileAccessor {
+        /** @see TempFileAccessor#TempFileAccessor(String, int) */
+        public TempExecutableFileAccessor(String fileClassPath, int fileRevision) {
+            super(fileClassPath, fileRevision);
+        }
+
+        @Override
+        protected File copyToTempFile(String resourcePath) {
+            File file = super.copyToTempFile(resourcePath);
+            if (file == null) return null;
+
+            if (SharedLibraryLoader.isLinux || SharedLibraryLoader.isMac) {
+                try {
+                    // Change access permission for temp file
+                    System.out.println("Call \"chmod\" for a temp file");
+                    Process process = Runtime.getRuntime().exec("chmod +x " + file.getAbsolutePath());
+
+                    InputStream is = process.getInputStream();
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        System.out.println(line);
+                    }
+                    int result = process.waitFor(); // Let the process finish.
+
+                    if (result != 0) {
+                        throw new RuntimeException("\"chmod\" call finished with error");
+                    }
+                } catch (IOException | InterruptedException e) {
+                    throw new RuntimeException("Error executing \"chmod\": ", e);
+                }
+            }
+            return file;
         }
     }
 }
