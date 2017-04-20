@@ -13,7 +13,7 @@ public class EtcCompressionModel {
 	private final EtcCompressionType type;
 	
 	private boolean compressed = false;
-	private String etc1Comp = "-etc1";
+	private String etc1Comp = null;
 	private String etc2Comp = null;
 
 	public EtcCompressionModel(EtcCompressionType type) {
@@ -68,7 +68,7 @@ public class EtcCompressionModel {
         if (data == null) return;
 
         JsonValue jsonValue = new JsonReader().parse(data);
-        etc1Comp = jsonValue.getString("etc1Comp", "-etc1");
+        etc1Comp = jsonValue.getString("etc1Comp", etc1Comp);
         etc2Comp = jsonValue.getString("etc2Comp", etc2Comp);
         compressed = jsonValue.getBoolean("etcCompressed", compressed);
     }

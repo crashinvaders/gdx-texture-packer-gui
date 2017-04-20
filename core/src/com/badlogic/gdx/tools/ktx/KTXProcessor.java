@@ -125,7 +125,7 @@ public class KTXProcessor {
                         try {
                             gzip(etc2File.getAbsolutePath(), etc2File.getAbsolutePath().replace("ktx", "zktx"));
                         } catch (IOException e) {
-                            Gdx.app.error("KTXProcessor", "Error zipping file: " + output.getName(), e);
+                            throw new RuntimeException("Error zipping file: " + output.getName(), e);
                         }
                 return;
             }
@@ -355,7 +355,7 @@ public class KTXProcessor {
                 out.close();
                 System.out.println("Finished");
             } catch (Exception e) {
-                Gdx.app.error("KTXProcessor", "Error writing to file: " + output.getName(), e);
+                throw new RuntimeException("Error writing to file: " + output.getName(), e);
             }
         }
     }
@@ -389,19 +389,24 @@ public class KTXProcessor {
     }
 
     public static void gzip(String inFile, String outFile) throws FileNotFoundException, IOException {
-        File in = new File(inFile), out = new File(outFile);
-        int writtenBytes = 0, length = (int) in.length();
-        byte[] buffer = new byte[10 * 1024];
-        FileInputStream read = new FileInputStream(in);
-        DataOutputStream write = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(out)));
-        write.writeInt(length);
-        while (writtenBytes != length) {
-            int nBytesRead = read.read(buffer);
-            write.write(buffer, 0, nBytesRead);
-            writtenBytes += nBytesRead;
+        FileInputStream read = null;
+        DataOutputStream write = null;
+        try {
+            File in = new File(inFile), out = new File(outFile);
+            int writtenBytes = 0, length = (int) in.length();
+            byte[] buffer = new byte[10 * 1024];
+            read = new FileInputStream(in);
+            write = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(out)));
+            write.writeInt(length);
+            while (writtenBytes != length) {
+                int nBytesRead = read.read(buffer);
+                write.write(buffer, 0, nBytesRead);
+                writtenBytes += nBytesRead;
+            }
+        } finally {
+            if (write != null) write.close();
+            if (read != null) read.close();
         }
-        write.close();
-        read.close();
     }
 
     private static class Image {
@@ -563,7 +568,7 @@ public class KTXProcessor {
                         throw new RuntimeException("\"chmod\" call finished with error");
                     }
                 } catch (IOException | InterruptedException e) {
-                    throw new RuntimeException("Error executing \"chmod\": ", e);
+                    throw new RuntimeException("Error changing file access permission for: " + file.getAbsolutePath(), e);
                 }
             }
             return file;
