@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Colors;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -79,8 +80,9 @@ public class Configuration {
         VisUI.load("skin/uiskin.json");
         Skin skin = VisUI.getSkin();
         skinService.addSkin("default", skin);
-        skin.getFont("default-font").getData().markupEnabled = true;
-        skin.getFont("small-font").getData().markupEnabled = true;
+        for (BitmapFont font : skin.getAll(BitmapFont.class).values()) {
+            font.getData().markupEnabled = true;
+        }
 
         // Extracting all colors from the skin and importing them into global color collection
         for (ObjectMap.Entry<String, Color> entry : skinService.getSkin().getAll(Color.class)) {

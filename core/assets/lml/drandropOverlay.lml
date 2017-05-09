@@ -5,21 +5,21 @@
 
     <image style="custom/dragndrop" hexcolor="ffffff40"/>
     <actor height="16"/>
-    <label text="$FileDragDropController.getProjectFileHint" fontscale="{fontScale}"/>
+    <label style="big" text="$FileDragDropController.getProjectFileHint"/>
     <actor height="8"/>
-    <label text="$FileDragDropController.getImageFilesHint" fontscale="{fontScale}"/>
+    <label style="big" text="$FileDragDropController.getImageFilesHint"/>
 
     <actor height="16"/>
 
     <table>
         <stack width="300" height="150">
             <button id="btnDragndropInclude" style="dragndrop" hexcolor="ffffff40" />
-            <label text="@include" textalign="center" fontscale="1.5" touchable="disabled"/>
+            <label style="big" text="@include" textalign="center" touchable="disabled"/>
         </stack>
         <actor width="24"/>
         <stack width="300" height="150">
             <button id="btnDragndropExclude" style="dragndrop" hexcolor="ffffff40" />
-            <label text="@exclude" textalign="center" fontscale="1.5" touchable="disabled"/>
+            <label style="big" text="@exclude" textalign="center" touchable="disabled"/>
         </stack>
     </table>
 </vistable>
