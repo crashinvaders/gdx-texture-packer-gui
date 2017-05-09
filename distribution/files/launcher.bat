@@ -1,1 +1,2 @@
-start javaw -jar gdx-texturepacker.jar
+cd /d %~dp0
+start javaw -jar gdx-texturepacker.jar %*

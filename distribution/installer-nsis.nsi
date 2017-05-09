@@ -9,6 +9,7 @@
 ;Other DLLs
 
   !include "ZipDLL.nsh"
+  !include "FileAssoc.nsh"
 
 ;--------------------------------
 ;General
@@ -65,6 +66,9 @@ SectionIn RO
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
+  ;Create files association (http://nsis.sourceforge.net/FileAssoc)
+  !insertmacro APP_ASSOCIATE "tpproj" "GdxTexturePacker.Project" "GDX Texture Packer project" "$INSTDIR\icon.ico,0" "Open with GDX Texture Packer" "$INSTDIR\launcher.bat $\"%1$\""
+
 SectionEnd
 
 Section "Start Menu shortcuts" StartMenuShortcuts
@@ -82,6 +86,24 @@ Section "Desktop shortcuts" DesktopShortcuts
 SectionEnd
 
 ;--------------------------------
+;Uninstaller Section
+
+Section "Uninstall"
+
+  RMDir /r "$INSTDIR"
+  RMDir /r "$PROFILE\.gdxtexturepackergui"
+
+  Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
+  Delete "$DESKTOP\GdxTexturePacker.lnk"
+
+  DeleteRegKey /ifempty HKCU "Software\GdxTexturePacker"
+
+  ;Unregister file extension
+  !insertmacro APP_UNASSOCIATE "tpproj" "GdxTexturePacker.Project"
+
+SectionEnd
+
+;--------------------------------
 ;Descriptions
 
   ;Language strings
@@ -95,18 +117,3 @@ SectionEnd
     !insertmacro MUI_DESCRIPTION_TEXT ${StartMenuShortcuts} $(DESC_StartMenuShortcuts)
     !insertmacro MUI_DESCRIPTION_TEXT ${DesktopShortcuts} $(DESC_DesktopShortcuts)
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
-
-;--------------------------------
-;Uninstaller Section
-
-Section "Uninstall"
-
-  RMDir /r "$INSTDIR"
-  RMDir /r "$PROFILE\.gdxtexturepackergui"
-
-  Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
-  Delete "$DESKTOP\GdxTexturePacker.lnk"
-
-  DeleteRegKey /ifempty HKCU "Software\GdxTexturePacker"
-
-SectionEnd
