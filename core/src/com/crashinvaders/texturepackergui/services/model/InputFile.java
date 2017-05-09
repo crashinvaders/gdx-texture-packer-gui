@@ -7,6 +7,7 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 public class InputFile {
     private final Type type;
     private final FileHandle fileHandle;
+    private final boolean directory;
 
     private EventDispatcher eventDispatcher;
 
@@ -19,6 +20,7 @@ public class InputFile {
     public InputFile(FileHandle fileHandle, Type type) {
         this.fileHandle = fileHandle;
         this.type = type;
+        this.directory = fileHandle.isDirectory();
     }
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
@@ -34,7 +36,7 @@ public class InputFile {
     }
 
     public boolean isDirectory() {
-        return fileHandle.isDirectory();
+        return directory;
     }
 
     public String getDirFilePrefix() {
