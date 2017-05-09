@@ -22,7 +22,7 @@
 
     <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
         <table>
-            <label text="File prefix" padright="8"/>
+            <label text="@dInputFileRegionsPrefix" padright="8"/>
             <textfield id="edtFilePrefix"
                        growx="true"
                        keyboardFocus="InputFilePropertiesDialogController.onFilePrefixFocusChanged"/>
@@ -31,7 +31,7 @@
 
     <shrinkContainer id="shrinkInputFile" growx="true" fillx="true">
         <table>
-            <label text="Region name" padright="8"/>
+            <label text="@dInputFileRegionName" padright="8"/>
             <textfield id="edtRegionName"
                        growx="true"
                        keyboardFocus="InputFilePropertiesDialogController.onRegionNameFocusChanged"/>
