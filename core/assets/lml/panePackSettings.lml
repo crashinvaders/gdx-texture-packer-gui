@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE stack SYSTEM "../../../lml.dtd">
 
-<vistable growx="true" onecolumn="true">
+<stack grow="true">
 
-    <visscrollpane style="list" disabledx="true" grow="true" fadescrollbars="false" flickscroll="false">
+    <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false">
 
         <vistable tablealign="top" tablepad="8" onecolumn="true">
 
@@ -209,4 +209,6 @@
         </vistable>
     </visscrollpane>
 
-</vistable>
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockSettings</:import>
+
+</stack>

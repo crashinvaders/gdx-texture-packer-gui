@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "../../../lml.dtd">
+
+<stack grow="true">
+    <canvas id="canvas"/>
+
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockPreview</:import>
+</stack>

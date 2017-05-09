@@ -40,7 +40,7 @@
 
             <separator growy="true"/>
 
-            <vistable align="topleft" onecolumn="true">
+            <vistable align="topleft" onecolumn="true" growy="true">
                 <container growy="false" fill="true">
                     <:titledpane id="titledPaneGlobalSettings" title="@panelTitleGlobalSettings" icon="custom/ic-title-global-settings">
                         <:import path="lml/paneGlobalSettings.lml"/>
@@ -58,9 +58,7 @@
 
             <container grow="true" fill="true" rightclick="onCanvasRightClick">
                 <:titledpane id="titledPaneAtlasPreview" title="@panelTitleAtlasPreview" icon="custom/ic-title-atlas">
-                    <container id="canvasContainer" grow="true" fill="true">
-                        <canvas id="canvas"/>
-                    </container>
+                    <:import path="lml/panePreviewCanvas.lml"/>
                 </:titledpane>
             </container>
 

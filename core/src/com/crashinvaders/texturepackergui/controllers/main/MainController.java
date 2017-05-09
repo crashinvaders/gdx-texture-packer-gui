@@ -80,6 +80,14 @@ public class MainController implements ActionContainer, ViewResizer {
 
     @LmlActor("canvas") Canvas canvas;
     @LmlActor("packListSplitPane") VisSplitPane packListSplitPane;
+
+    @LmlActor({"paneLockGlobalSettings",
+            "paneLockSettings",
+            "paneLockPreview",
+            "paneLockPackFiles",
+            "paneLockPackGeneral"})
+    Array<Actor> packPaneLockers;
+
     @LmlInject PackListActors actorsPacks;
     @LmlInject PackSettingsActors actorsPackSettings;
     @LmlInject GlobalSettingsActors actorsGlobalSettings;
@@ -487,6 +495,11 @@ public class MainController implements ActionContainer, ViewResizer {
                 }
                 actorsPackSettings.eetbScaleFactors.setText(sb.toString());
             }
+        }
+
+        // Update pane lockers
+        for (Actor locker : packPaneLockers) {
+            locker.setVisible(pack == null);
         }
     }
 

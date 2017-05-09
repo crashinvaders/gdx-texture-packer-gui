@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE stack SYSTEM "../../../lml.dtd">
 
-<vistable grow="true" onecolumn="true">
+<stack grow="true">
 
-    <vistable tablealign="topleft" grow="true" onecolumn="true" tablepad="0">
+    <vistable tablealign="topleft" onecolumn="true" tablepad="0">
 
         <vistable growx="true" tablealign="left" defaultpadright="4" background="button" >
             <:column column="0"/>
@@ -54,4 +54,4 @@
 
     </vistable>
 
-</vistable>
+</stack>

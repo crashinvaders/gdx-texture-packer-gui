@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE table SYSTEM "../../../lml.dtd">
+<!DOCTYPE stack SYSTEM "../../../lml.dtd">
 
-<table growx="true" growy="true" onecolumn="true" tablealign="top">
+<stack growx="true" growy="true">
 
-    <table align="top" grow="true" pad="8" defaultpadbottom="4" defaultpadright="4" row="true">
+    <table tablealign="top" tablepad="8" defaultpadbottom="4" defaultpadright="4">
 
         <label align="left">@packGeneralOutputDir</label>
         <textfield
@@ -59,4 +59,6 @@
 
     </table>
 
-</table>
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockPackGeneral</:import>
+
+</stack>

@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE stack SYSTEM "../../../lml.dtd">
 
-<vistable growx="true" onecolumn="true">
+<stack growx="true">
 
-    <vistable align="top" growx="true" tablepad="8" defaultpadbottom="4">
+    <vistable tablealign="top" tablepad="8" defaultpadbottom="4">
 
         <label align="left" padright="4">@gsPngCompression</label>
         <selectbox
@@ -41,4 +41,5 @@
 
     </vistable>
 
-</vistable>
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockGlobalSettings</:import>
+</stack>
