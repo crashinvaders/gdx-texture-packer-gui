@@ -514,7 +514,7 @@ public class MainController implements ActionContainer, ViewResizer {
         actorsGlobalSettings.cboPngCompression.setSelected(compValue);
         actorsGlobalSettings.containerPngCompSettings.setVisible(compValue.hasSettings);
     }
-	
+
 	private void updateEtcCompression () {
 		EtcCompressionModel compModel = getProject().getEtcCompression();
 		WidgetData.CompressionEtc compValue = WidgetData.CompressionEtc.valueOf(compModel == null ? null : compModel.getType());
@@ -581,7 +581,7 @@ public class MainController implements ActionContainer, ViewResizer {
             }
         }
     }
-    
+
     private void onEtcCompressionTypeChanged() {
         if (!initialized) return;
 

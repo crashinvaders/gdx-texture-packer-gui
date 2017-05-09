@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
@@ -137,6 +138,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         // Show tooltip only if displayed file name was shortened
         tooltip.setTarget(fileShortened ? lblFilePath : null);
         tooltip.setText(Scene2dUtils.colorizeFilePath(origFilePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white"));
+        tooltip.setTouchable(Touchable.disabled);
 
         shrinkInputDir.setVisible(false);
         shrinkInputFile.setVisible(false);
