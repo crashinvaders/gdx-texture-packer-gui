@@ -3,7 +3,7 @@
 
 <stack growx="true">
 
-    <vistable tablealign="top" tablepad="8" defaultpadbottom="4">
+    <vistable tablealign="top" tablepad="8">
 
         <label align="left" padright="4">@gsPngCompression</label>
         <selectbox
@@ -20,23 +20,44 @@
                     focusborder="false"
                     change="showPngCompSettings"/>
         </shrinkcontainer>
-        
-        <:row/>
-        
-        <label align="left" padright="4">@gsEtcCompression</label>
-        <selectbox
-                id="cboEtcCompression"
-                change="onSettingsCboChanged"
-                growx="true"/>
-        <shrinkcontainer
-                id="containerEtcCompSettings"
-                visible="true"
-                padleft="4">
-            <imagebutton
-                    image="custom/ic-settings"
-                    scaling="none"
-                    focusborder="false"
-                    change="showEtcCompSettings"/>
+
+        <!-- Uncomment this to show ETC1/ETC2 compression combo box -->
+        <!--<:row padtop="4"/>-->
+        <!---->
+        <!--<label align="left" padright="4">@gsEtcCompression</label>-->
+        <!--<selectbox-->
+                <!--id="cboEtcCompression"-->
+                <!--change="onSettingsCboChanged"-->
+                <!--growx="true"/>-->
+        <!--<shrinkcontainer-->
+                <!--id="containerEtcCompSettings"-->
+                <!--visible="true"-->
+                <!--padleft="4">-->
+            <!--<imagebutton-->
+                    <!--image="custom/ic-settings"-->
+                    <!--scaling="none"-->
+                    <!--focusborder="false"-->
+                    <!--change="showEtcCompSettings"/>-->
+        <!--</shrinkcontainer>-->
+
+        <!-- Temporary solution, just to easily hide ETC1/ETC2 compression without controller code modification -->
+        <shrinkcontainer visible="false">
+            <table transform="false">
+                <selectbox
+                        id="cboEtcCompression"
+                        change="onSettingsCboChanged"
+                        growx="true"/>
+                <shrinkcontainer
+                        id="containerEtcCompSettings"
+                        visible="true"
+                        padleft="4">
+                    <imagebutton
+                            image="custom/ic-settings"
+                            scaling="none"
+                            focusborder="false"
+                            change="showEtcCompSettings"/>
+                </shrinkcontainer>
+            </table>
         </shrinkcontainer>
 
     </vistable>

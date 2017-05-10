@@ -2,7 +2,7 @@
 <!DOCTYPE shrinkcontainer SYSTEM "../../../lml.dtd">
 
 <shrinkcontainer id="{id}" fill="true">
-    <vistable background="paneLockBg" touchable="enabled" visible="true" pad="8" padtop="16">
+    <vistable background="paneLockBg" touchable="enabled" visible="true" pad="16">
         <image style="custom/logo16-bw" size="72" hexcolor="ffffff40"/>
         <!--<:row/>-->
         <!--<label text="@paneLockPack" hexcolor="505050ff" visible="false"/>-->
