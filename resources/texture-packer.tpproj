@@ -1,6 +1,5 @@
 name=uiskin
 filename=
-input=uiskin/images
 output=../core/assets/skin
 
 alias=true
@@ -36,7 +35,10 @@ flattenPaths=false
 limitMemory=true
 
 scaleFactors=[{suffix:"",factor:1}]
+inputFiles=[{path:uiskin/images,type:Input,dirFilePrefix:null,regionName:null},{path:uiskin/images/custom,type:Input,dirFilePrefix:custom/,regionName:null}]
+
 
 -PROJ-
 
+version=4.4.0
 previewBackgroundColor=808080ff
