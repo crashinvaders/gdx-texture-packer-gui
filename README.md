@@ -1,4 +1,4 @@
-![](http://i.imgur.com/h0CUJ3B.png)
+![](http://i.imgur.com/xoVAHZy.png)
 
 Simple utility to help you pack and manage texture atlases for [LibGDX game framework](https://github.com/libgdx/libgdx).
 It's mostly just visual wrapper over [LibGDX TexturePacker classes](https://github.com/libgdx/libgdx/wiki/Texture-packer)
@@ -6,7 +6,7 @@ and offers more convenient way of using it.
 
 This project is a successor of [Aurelien Ribon's project](http://www.aurelienribon.com/blog/2012/06/texturepacker-gui-support-for-multiple-packs/) with whole new GUI and features.
 
-![](http://i.imgur.com/xCpv0DN.png)
+![](http://i.imgur.com/tEFWr68.png)
 
 ### Backlog
 See what features are currently planned from project's [Trello board](https://trello.com/b/mugauAoC)
