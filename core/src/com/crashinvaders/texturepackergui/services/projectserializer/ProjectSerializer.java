@@ -162,6 +162,7 @@ public class ProjectSerializer {
         sb.append("bleed=").append(settings.bleed).append("\n");
         sb.append("flattenPaths=").append(settings.flattenPaths).append("\n");
         sb.append("limitMemory=").append(settings.limitMemory).append("\n");
+        sb.append("useIndexes=").append(settings.useIndexes).append("\n");
 
         sb.append("\n");
 
@@ -313,6 +314,7 @@ public class ProjectSerializer {
         settings.bleed = find(lines, "bleed=", defaultSettings.bleed);
         settings.flattenPaths = find(lines, "flattenPaths=", defaultSettings.flattenPaths);  //TODO remove this property
         settings.limitMemory = find(lines, "limitMemory=", defaultSettings.limitMemory);
+        settings.useIndexes = find(lines, "useIndexes=", defaultSettings.useIndexes);
 
         String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
         if (scaleFactorsSerialized != null) {
