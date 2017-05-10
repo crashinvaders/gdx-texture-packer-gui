@@ -3,7 +3,7 @@
 
 [4.4.0]
 - Each pack now consists of list of input/ignore files (no more single source dir)
-- File drag'n'drop support (pack files and project file)
+- File drag'n'drop support (image files and project file)
 - Fixed occasional output image file locking after Pngtastic compression
 - .tpproj file extension association for Windows (if program installed through installer)
 
