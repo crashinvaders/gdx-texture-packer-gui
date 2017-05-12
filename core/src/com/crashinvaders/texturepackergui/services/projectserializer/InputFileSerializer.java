@@ -22,6 +22,24 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         json.writeValue("type", model.getType().name());
         json.writeValue("dirFilePrefix", model.getDirFilePrefix());
         json.writeValue("regionName", model.getRegionName());
+        // Ninepatch
+        if (model.isNinePatch()) {
+            InputFile.NinePatchProps npp = model.getNinePatchProps();
+            json.writeObjectStart("ninepatch");
+            json.writeArrayStart("splits");
+            json.writeValue(npp.left);
+            json.writeValue(npp.right);
+            json.writeValue(npp.top);
+            json.writeValue(npp.bottom);
+            json.writeArrayEnd();
+            json.writeArrayStart("pads");
+            json.writeValue(npp.padLeft);
+            json.writeValue(npp.padRight);
+            json.writeValue(npp.padTop);
+            json.writeValue(npp.padBottom);
+            json.writeArrayEnd();
+            json.writeObjectEnd();
+        }
         json.writeObjectEnd();
     }
 
@@ -42,6 +60,24 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         InputFile inputFile = new InputFile(fileHandle, type);
         inputFile.setDirFilePrefix(dirFilePrefix);
         inputFile.setRegionName(regionName);
+
+        // Ninepatch
+        JsonValue ninepatch = jsonData.get("ninepatch");
+        if (ninepatch != null) {
+            InputFile.NinePatchProps npp = inputFile.getNinePatchProps();
+            int[] splits = ninepatch.get("splits").asIntArray();
+            int[] pads = ninepatch.get("pads").asIntArray();
+            npp.left = splits[0];
+            npp.right = splits[1];
+            npp.top = splits[2];
+            npp.bottom = splits[3];
+            npp.padLeft = pads[0];
+            npp.padRight = pads[1];
+            npp.padTop = pads[2];
+            npp.padBottom = pads[3];
+            inputFile.setNinePatch(true);
+        }
+
         return inputFile;
     }
 
