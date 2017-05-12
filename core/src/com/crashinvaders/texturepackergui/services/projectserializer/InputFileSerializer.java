@@ -20,25 +20,38 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         json.writeObjectStart();
         json.writeValue("path", path);
         json.writeValue("type", model.getType().name());
-        json.writeValue("dirFilePrefix", model.getDirFilePrefix());
-        json.writeValue("regionName", model.getRegionName());
-        // Ninepatch
-        if (model.isNinePatch()) {
-            InputFile.NinePatchProps npp = model.getNinePatchProps();
-            json.writeObjectStart("ninepatch");
-            json.writeArrayStart("splits");
-            json.writeValue(npp.left);
-            json.writeValue(npp.right);
-            json.writeValue(npp.top);
-            json.writeValue(npp.bottom);
-            json.writeArrayEnd();
-            json.writeArrayStart("pads");
-            json.writeValue(npp.padLeft);
-            json.writeValue(npp.padRight);
-            json.writeValue(npp.padTop);
-            json.writeValue(npp.padBottom);
-            json.writeArrayEnd();
-            json.writeObjectEnd();
+
+        switch (model.getType()) {
+            case Input:
+                if (model.isDirectory()) {
+                    //### Input directory properties
+                    json.writeValue("dirFilePrefix", model.getDirFilePrefix());
+                } else {
+                    //### Input file properties
+                    json.writeValue("regionName", model.getRegionName());
+                    // Ninepatch
+                    if (model.isNinePatch()) {
+                        InputFile.NinePatchProps npp = model.getNinePatchProps();
+                        json.writeObjectStart("ninepatch");
+                        json.writeArrayStart("splits");
+                        json.writeValue(npp.left);
+                        json.writeValue(npp.right);
+                        json.writeValue(npp.top);
+                        json.writeValue(npp.bottom);
+                        json.writeArrayEnd();
+                        json.writeArrayStart("pads");
+                        json.writeValue(npp.padLeft);
+                        json.writeValue(npp.padRight);
+                        json.writeValue(npp.padTop);
+                        json.writeValue(npp.padBottom);
+                        json.writeArrayEnd();
+                        json.writeObjectEnd();
+                    }
+                }
+                break;
+            case Ignore:
+                //### Ignore file properties
+                break;
         }
         json.writeObjectEnd();
     }
