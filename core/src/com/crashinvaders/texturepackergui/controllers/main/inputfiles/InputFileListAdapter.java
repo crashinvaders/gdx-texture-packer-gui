@@ -120,11 +120,14 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
         public void updateViewData() {
             processPathText();
 
-            String imgName = "custom/ic-fileset-";
+            String imgName = "custom/ic-fileset";
             if (inputFile.isDirectory()) {
-                imgName += "dir";
+                imgName += "-dir";
             } else {
-                imgName += "file";
+                imgName += "-file";
+                if (inputFile.isNinePatch()) {
+                    imgName += "-ninepatch";
+                }
             }
             switch (inputFile.getType()) {
                 case Input:

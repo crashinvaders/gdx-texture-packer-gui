@@ -51,6 +51,10 @@ public class PackModel {
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
         this.eventDispatcher = eventDispatcher;
+
+        for (InputFile inputFile : inputFiles) {
+            inputFile.setEventDispatcher(eventDispatcher);
+        }
     }
 
     public void setName(String name) {

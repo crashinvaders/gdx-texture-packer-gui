@@ -3,6 +3,8 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
@@ -25,9 +27,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.Tooltip;
-import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
@@ -44,12 +44,16 @@ public class InputFilePropertiesDialogController implements ActionContainer {
 
     @LmlActor("window") VisDialog dialog;
     @LmlActor("lblFilePath") Label lblFilePath;
-    @LmlActor("edtFilePrefix") VisTextField edtFilePrefix;
-    @LmlActor("edtRegionName") VisTextField edtRegionName;
     @LmlActor("shrinkInputDir") ShrinkContainer shrinkInputDir;
     @LmlActor("shrinkInputFile") ShrinkContainer shrinkInputFile;
-    private Tooltip tooltip;
+    // Directory properties
+    @LmlActor("edtFilePrefix") VisTextField edtFilePrefix;
+    // File properties
+    @LmlActor("edtRegionName") VisTextField edtRegionName;
+    @LmlActor("chbNinePatch") VisCheckBox chbNinePatch;
+    @LmlActor("btnEditNinePatch") Button btnEditNinePatch;
 
+    private Tooltip tooltip;
     private InputFile inputFile;
 
     @LmlAfter void init() {
@@ -113,6 +117,17 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         }
     }
 
+    @LmlAction("onNinePatchChecked") void onNinePatchChecked() {
+        boolean checked = chbNinePatch.isChecked();
+        inputFile.setNinePatch(checked);
+        btnEditNinePatch.setVisible(checked);
+    }
+
+    @LmlAction("navigateToNinePatchEditor") void navigateToNinePatchEditor() {
+        //TODO navigate to ninepatch editor
+        System.out.println("InputFilePropertiesDialogController.navigateToNinePatchEditor");
+    }
+
     public void show(InputFile inputFile) {
         setInputFile(inputFile);
         interfaceService.showDialog(this.getClass());
@@ -156,6 +171,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             shrinkInputFile.setVisible(true);
             edtRegionName.setMessageText(inputFile.getFileHandle().nameWithoutExtension());
             edtRegionName.setText(inputFile.getRegionName());
+            chbNinePatch.setChecked(inputFile.isNinePatch());
         }
 
         // Ignored file data

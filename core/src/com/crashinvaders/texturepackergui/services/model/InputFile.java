@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.services.model;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
@@ -17,7 +18,7 @@ public class InputFile {
 
     // Input file fields
     private String regionName;
-    private NinePatchProps ninePatchProps;  // If input file has this field set, it will be treated as predefined ninepatch
+    private final NinePatchProps ninePatchProps = new NinePatchProps();
 
     public InputFile(FileHandle fileHandle, Type type) {
         this.fileHandle = fileHandle;
@@ -69,12 +70,18 @@ public class InputFile {
         return ninePatchProps;
     }
 
-    public void setNinePatchProps(NinePatchProps ninePatchProps) {
-        this.ninePatchProps = ninePatchProps;
+    public void setNinePatch(boolean ninePatch) {
+        if (this.ninePatchProps.active == ninePatch) return;
+
+        this.ninePatchProps.active = ninePatch;
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));
         }
+    }
+
+    public boolean isNinePatch() {
+        return ninePatchProps.active;
     }
 
     @Override
@@ -104,5 +111,7 @@ public class InputFile {
     public static class NinePatchProps {
         public int left, right, top, bottom;
         public int padLeft = -1, padRight = -1, padTop = -1, padBottom = -1;
+
+        boolean active = false;  // If true, this file will be treated as predefined ninepatch
     }
 }

@@ -30,11 +30,24 @@
     </shrinkContainer>
 
     <shrinkContainer id="shrinkInputFile" growx="true" fillx="true">
-        <table>
+        <table defaultalign="right">
             <label text="@dInputFileRegionName" padright="8"/>
             <textfield id="edtRegionName"
                        growx="true"
                        keyboardFocus="InputFilePropertiesDialogController.onRegionNameFocusChanged"/>
+            <:row padtop="4"/>
+            <label text="Nine patch" padright="8"/>  <!--TODO localize-->
+            <table growx="true" tablealign="left">
+                <checkbox id="chbNinePatch" padright="4" change="onNinePatchChecked"/>
+                <visimagetextbutton
+                        id="btnEditNinePatch"
+                        image="custom/ic-ninepatch"
+                        text="Edit patch"
+                        tablepadright="8"
+                        visible="false"
+                        focusborder="false"
+                        change="navigateToNinePatchEditor"/>    <!--TODO localize-->
+            </table>
         </table>
     </shrinkContainer>
 
