@@ -60,15 +60,15 @@ public class ImageProcessor {
 	}
 
 	/** @see #addImage(File, String) */
-	public void addImage (File file) {
-		addImage(file, null);
+	public Rect addImage (File file) {
+		return addImage(file, null);
 	}
 
 	/**
 	 * The image won't be kept in-memory during packing if {@link Settings#limitMemory} is true.
 	 * @param name will overwrite real file name (pass null to keep original name of a file).
 	 */
-	public void addImage (File file, String name) {
+	public Rect addImage (File file, String name) {
 		BufferedImage image;
 		try {
 			image = ImageIO.read(file);
@@ -94,6 +94,8 @@ public class ImageProcessor {
 
 		Rect rect = addImage(image, name);
 		if (rect != null && settings.limitMemory) rect.unloadImage(file);
+
+		return rect;
 	}
 
 	/** The image will be kept in-memory during packing.
@@ -118,6 +120,17 @@ public class ImageProcessor {
 		}
 
 		rects.add(rect);
+		return rect;
+	}
+
+	/** Precomputed ninepatch */
+	public Rect addImageNinePatch (File file, String name, int[] splits, int[] pads) {
+		//TODO Add sanity checks. Probably do not allow "*.9" filenames.
+		Rect rect = addImage(file, name);
+		rect.programmaticPatch = true;
+		rect.canRotate = false;
+		rect.splits = splits;
+		rect.pads = pads;
 		return rect;
 	}
 

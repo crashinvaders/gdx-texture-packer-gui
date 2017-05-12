@@ -46,7 +46,11 @@ public class PackingProcessor implements PackProcessor {
 
         TexturePacker packer = new TexturePacker(packModel.getSettings());
         for (ImageEntry image : imageEntries) {
-            packer.addImage(image.fileHandle.file(), image.name);
+            if (image.ninePatch) {
+                packer.addImage(image.fileHandle.file(), image.name, image.splits, image.pads);
+            } else {
+                packer.addImage(image.fileHandle.file(), image.name);
+            }
         }
         packer.pack(new File(packModel.getOutputDir()), filename);
     }
@@ -82,8 +86,11 @@ public class PackingProcessor implements PackProcessor {
                 }
 
                 ImageEntry imageEntry = new ImageEntry(fileHandle, name);
+                if (inputFile.getNinePatchProps() != null) {
+                    imageEntry.setNinePatch(inputFile.getNinePatchProps());
+                }
+                // Overwrite existing record (in case it was previously added from a directory)
                 if (images.contains(imageEntry)) {
-                    // Overwrite existing record (in case it was previously added from a directory)
                     images.remove(imageEntry);
                 }
                 images.add(imageEntry);
@@ -163,12 +170,25 @@ public class PackingProcessor implements PackProcessor {
     }
 
     private static class ImageEntry {
-        private final FileHandle fileHandle;
-        private final String name;
+        final FileHandle fileHandle;
+        final String name;
+
+        // Nine patch related fields
+        boolean ninePatch = false;
+        int[] splits, pads;
 
         public ImageEntry(FileHandle fileHandle, String name) {
             this.fileHandle = fileHandle;
             this.name = name;
+        }
+
+        public void setNinePatch(InputFile.NinePatchProps npp) {
+            setNinePatch(npp.left, npp.right, npp.top, npp.bottom, npp.padLeft, npp.padRight, npp.padTop, npp.padBottom);
+        }
+        public void setNinePatch(int left, int right, int top, int bottom, int padLeft, int padRight, int padTop, int padBottom) {
+            ninePatch = true;
+            splits = new int[]{left, right, top, bottom};
+            pads = new int[]{padLeft, padRight, padTop, padBottom};
         }
 
         @Override
@@ -184,6 +204,11 @@ public class PackingProcessor implements PackProcessor {
         @Override
         public int hashCode() {
             return fileHandle.hashCode();
+        }
+
+        public static class NinePatchProps {
+            public int[] splits;
+            public int[] pads;
         }
     }
 }

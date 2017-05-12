@@ -89,6 +89,17 @@ public class TexturePacker {
 		inputImages.add(inputImage);
 	}
 
+	/** Predefined ninepatch */
+	public void addImage (File file, String name, int[] splits, int[] pads) {
+		InputImage inputImage = new InputImage();
+		inputImage.file = file;
+		inputImage.name = name;
+		inputImage.ninePatchProps = new InputImage.NinePatchProps();
+		inputImage.ninePatchProps.splits = splits;
+		inputImage.ninePatchProps.pads = pads;
+		inputImages.add(inputImage);
+	}
+
 	public void pack (File outputDir, String packFileName) {
 		if (packFileName.endsWith(settings.atlasExtension))
 			packFileName = packFileName.substring(0, packFileName.length() - settings.atlasExtension.length());
@@ -97,10 +108,16 @@ public class TexturePacker {
 		for (int i = 0, n = settings.scale.length; i < n; i++) {
 			imageProcessor.setScale(settings.scale[i]);
 			for (InputImage inputImage : inputImages) {
-				if (inputImage.file != null)
-					imageProcessor.addImage(inputImage.file, inputImage.name);
-				else
+				if (inputImage.file != null) {
+					if (inputImage.ninePatchProps != null) {
+						imageProcessor.addImageNinePatch(inputImage.file, inputImage.name,
+								inputImage.ninePatchProps.splits, inputImage.ninePatchProps.pads);
+					} else {
+						imageProcessor.addImage(inputImage.file, inputImage.name);
+					}
+				} else {
 					imageProcessor.addImage(inputImage.image, inputImage.name);
+				}
 			}
 
 			Array<Page> pages = packer.pack(imageProcessor.getImages());
@@ -426,6 +443,9 @@ public class TexturePacker {
 		private File file;
 		int score1, score2;
 
+		//TODO probably redundant
+		boolean programmaticPatch = false;
+
 		Rect (BufferedImage source, int left, int top, int newWidth, int newHeight, boolean isPatch) {
 			image = new BufferedImage(source.getColorModel(),
 				source.getRaster().createWritableChild(left, top, newWidth, newHeight, 0, 0, null),
@@ -632,5 +652,11 @@ public class TexturePacker {
 		File file;
 		String name;
 		BufferedImage image;
+		NinePatchProps ninePatchProps;
+
+		public static class NinePatchProps {
+			public int[] splits;
+			public int[] pads;
+		}
 	}
 }

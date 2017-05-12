@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.services.model;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
@@ -16,6 +17,7 @@ public class InputFile {
 
     // Input file fields
     private String regionName;
+    private NinePatchProps ninePatchProps;  // If input file has this field set, it will be treated as predefined ninepatch
 
     public InputFile(FileHandle fileHandle, Type type) {
         this.fileHandle = fileHandle;
@@ -63,8 +65,16 @@ public class InputFile {
         }
     }
 
-    public enum Type {
-        Input, Ignore
+    public NinePatchProps getNinePatchProps() {
+        return ninePatchProps;
+    }
+
+    public void setNinePatchProps(NinePatchProps ninePatchProps) {
+        this.ninePatchProps = ninePatchProps;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));
+        }
     }
 
     @Override
@@ -85,5 +95,14 @@ public class InputFile {
     @Override
     public int hashCode() {
         return fileHandle.hashCode();
+    }
+
+    public enum Type {
+        Input, Ignore
+    }
+
+    public static class NinePatchProps {
+        public int left, right, top, bottom;
+        public int padLeft = -1, padRight = -1, padTop = -1, padBottom = -1;
     }
 }
