@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        id="dialog"
+        title="Nine patch editor"
+        closebutton="true"
+        closeonescape="true"
+        resizable="true">
+    <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
+        <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
+            <stack id="canvasStack">
+                <image id="imgBackground"/>
+            </stack>
+        </container>
+        <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
+            <textbutton text="Save"/>
+            <textbutton text="Cancel"/>
+        </table>
+    </table>
+</visdialog>
