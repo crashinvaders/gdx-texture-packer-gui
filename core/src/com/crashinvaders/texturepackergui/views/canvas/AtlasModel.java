@@ -30,14 +30,14 @@ public class AtlasModel implements Disposable {
 
         // We could use simple atlas.getTextures(), but it returns them in random order...
         for (TextureRegion region : atlas.getRegions()) {
-            if (!textures.contains(region.getTexture(), true))
+            if (!textures.contains(region.getTexture(), true)) {
                 textures.add(region.getTexture());
+            }
         }
         pages.clear();
         for (int i = 0; i < textures.size; i++) {
             Page page = new Page(this, textures.get(i), i);
             pages.add(page);
-
         }
     }
 

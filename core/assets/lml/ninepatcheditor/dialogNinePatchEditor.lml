@@ -10,7 +10,6 @@
     <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
         <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
             <stack id="canvasStack">
-                <image id="imgBackground"/>
             </stack>
         </container>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">

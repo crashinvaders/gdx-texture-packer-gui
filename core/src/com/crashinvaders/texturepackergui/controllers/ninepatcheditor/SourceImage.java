@@ -4,19 +4,56 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Scaling;
 
-class SourceImage extends Group {
+class SourceImage extends Stack {
 
     private final Pixmap pixmap;
+    private final Image image;
     private Texture texture;
 
     private boolean initialized = false;
     private float scale = 1f;
 
+    private ScaleListener scaleListener;
+
     public SourceImage(Pixmap pixmap) {
         this.pixmap = pixmap;
+        image = new Image();
+        image.setScaling(Scaling.stretch);
+        addActor(image);
+    }
+
+    public void setScaleListener(ScaleListener scaleListener) {
+        this.scaleListener = scaleListener;
+    }
+
+    public void setScale(float scale) {
+        if (this.scale == scale) return;
+        this.scale = scale;
+        invalidate();
+
+        if (scaleListener != null) {
+            scaleListener.onScaleChanged(scale);
+        }
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public int getImageWidth() {
+        return pixmap.getWidth();
+    }
+
+    public int getImageHeight() {
+        return pixmap.getHeight();
     }
 
     @Override
@@ -26,11 +63,13 @@ class SourceImage extends Group {
         if (!initialized && stage != null) {
             initialized = true;
             texture = new Texture(pixmap);
+            image.setDrawable(new TextureRegionDrawable(new TextureRegion(texture)));
         }
         if (initialized && stage == null) {
             initialized = false;
             texture.dispose();
             texture = null;
+            image.setDrawable(null);
         }
     }
 
@@ -44,19 +83,7 @@ class SourceImage extends Group {
         return pixmap.getHeight() * scale;
     }
 
-    public void setScale(float scale) {
-        if (this.scale == scale) return;
-
-        this.scale = scale;
-    }
-
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
-
-        Color col = getColor();
-        batch.setColor(col.r, col.g, col.b, col.a * parentAlpha);
-
-        batch.draw(texture, getX(), getY(), getWidth(), getHeight());
+    public interface ScaleListener {
+        void onScaleChanged(float scale);
     }
 }

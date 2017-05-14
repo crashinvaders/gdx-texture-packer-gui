@@ -18,17 +18,18 @@ public class NinePatchEditorDialog implements ActionContainer {
     @Inject InterfaceService interfaceService;
 
     @LmlActor("canvasStack") Stack canvasStack;
-    @LmlActor("imgBackground") Image imgBackground;
     CompositionHolder compositionHolder;
 
     @LmlAfter void initView() {
         Skin skin = interfaceService.getSkin();
-        imgBackground.setDrawable(skin.getTiledDrawable("custom/transparent-light"));
+
+        Image imgBackground = new Image(skin.getTiledDrawable("custom/transparent-light"));
+        canvasStack.addActor(imgBackground);
 
         Pixmap pixmap = new Pixmap(Gdx.files.absolute("D:/chest0.png"));
         SourceImage sourceImage = new SourceImage(pixmap);
 
-        compositionHolder = new CompositionHolder(sourceImage);
+        compositionHolder = new CompositionHolder(skin, sourceImage);
         canvasStack.addActor(compositionHolder);
     }
 }
