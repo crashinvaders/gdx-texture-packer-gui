@@ -9,9 +9,15 @@
         resizable="true">
     <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
         <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
-            <stack id="canvasStack">
-            </stack>
+            <stack id="canvasStack"/>
         </container>
+        <table>
+            <buttongroup>
+                <!--TODO localize-->
+                <visradiobutton text="Patches" change="editPatchGrid"/>
+                <visradiobutton text="Content area" change="editContentGrid"/>
+            </buttongroup>
+        </table>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
             <textbutton text="Save"/>
             <textbutton text="Cancel"/>

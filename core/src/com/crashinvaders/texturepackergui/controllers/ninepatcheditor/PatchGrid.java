@@ -14,28 +14,36 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.MutableInt;
 
 public class PatchGrid extends WidgetGroup {
-    private static final float EXTRA_TOUCH_SPACE = 16f;
-    private static final Color colorFill = new Color(0x99e55040);
+    protected static final float EXTRA_TOUCH_SPACE = 16f;
+    protected static final float FILL_COLOR_ALPHA = 0.25f;
+//    private static final Color colorFill = new Color(0x99e55040);
     private static final Color tmpColor = new Color();
     private static final Vector2 tmpVec2 = new Vector2();
 
-    private final Drawable white;
-    private final PatchLine left, right, top, bottom;
-    private final Array<PatchLine> patchLines = new Array<>();
-    private final LineDragListener lineDragListener;
+    protected final Array<PatchLine> patchLines = new Array<>();
+    protected final Values values = new Values();
+    protected final Drawable white;
+    protected final PatchLine left, right, top, bottom;
+    protected final LineDragListener lineDragListener;
+    protected final Color primaryColor;
     private float pixelSize = 1f;
     private int imageWidth, imageHeight;
 
-    public PatchGrid(Skin skin) {
-        white = skin.getDrawable("white");
+    private boolean disabled;
+
+    public PatchGrid(Skin skin, Color primaryColor) {
+        this.primaryColor = new Color(primaryColor);
         setTouchable(Touchable.enabled);
 
-        left = new PatchLine(white);
-        right = new PatchLine(white);
-        top = new PatchLine(white);
-        bottom = new PatchLine(white);
+        white = skin.getDrawable("white");
+
+        left = new PatchLine(values.left, white, primaryColor);
+        right = new PatchLine(values.right, white, primaryColor);
+        top = new PatchLine(values.top, white, primaryColor);
+        bottom = new PatchLine(values.bottom, white, primaryColor);
         patchLines.addAll(left, right, top, bottom);
 
         addActor(left);
@@ -45,6 +53,17 @@ public class PatchGrid extends WidgetGroup {
 
         lineDragListener = new LineDragListener();
         addListener(lineDragListener);
+
+        values.setListener(new Values.ChangeListener() {
+            @Override
+            public void onValuesChanged(Values values) {
+                //TODO notify outer listeners
+            }
+        });
+    }
+
+    public Values getValues() {
+        return values;
     }
 
     public void setImageSize(int width, int height) {
@@ -64,6 +83,18 @@ public class PatchGrid extends WidgetGroup {
         this.bottom.setValue(bottom);
     }
 
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+        setTouchable(disabled ? Touchable.disabled : Touchable.enabled);
+
+        for (int i = 0; i < patchLines.size; i++) {
+            patchLines.get(i).setDisabled(disabled);
+        }
+
+        // Forcefully remove hover from all lines
+        updateLinesHover(-1f, -1f);
+    }
+
     @Override
     public void layout() {
         left.setBounds(left.getValue() * pixelSize, 0f, 0f, getHeight());
@@ -74,19 +105,30 @@ public class PatchGrid extends WidgetGroup {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if (lineDragListener.isHovered()) {
+        if (!disabled && lineDragListener.isHovered() && !lineDragListener.isDragging()) {
             int screenX = Gdx.input.getX();
             int screenY = Gdx.input.getY();
             Vector2 localCoord = screenToLocalCoordinates(tmpVec2.set(screenX, screenY));
             updateLinesHover(localCoord.x, localCoord.y);
         }
 
-        batch.setColor(tmpColor.set(colorFill).mul(getColor()).mul(1f,1f,1f,parentAlpha));
-        white.draw(batch, getX(), getY() + bottom.getY(), getWidth(), top.getY() - bottom.getY());
-        white.draw(batch, getX() + left.getX(), getY(), right.getX() - left.getX(), getHeight());
-//        white.draw(batch, getX() + left.getX(), getY() + bottom.getY(), right.getX() - left.getX(), top.getY() - bottom.getY());
+        if (!disabled) drawAreaGraphics(batch, parentAlpha);
 
         super.draw(batch, parentAlpha);
+    }
+
+    protected void drawAreaGraphics(Batch batch, float parentAlpha) {
+        batch.setColor(tmpColor.set(primaryColor.r, primaryColor.g, primaryColor.b, FILL_COLOR_ALPHA)
+                .mul(getColor())
+                .mul(1f, 1f, 1f, parentAlpha));
+        if (!disabled) {
+            // Fill both height and width rectangles
+            white.draw(batch, getX(), getY() + bottom.getY(), getWidth(), top.getY() - bottom.getY());
+            white.draw(batch, getX() + left.getX(), getY(), right.getX() - left.getX(), getHeight());
+        } else {
+            // Fill only central rectangle
+            white.draw(batch, getX() + left.getX(), getY() + bottom.getY(), right.getX() - left.getX(), top.getY() - bottom.getY());
+        }
     }
 
     @Override
@@ -112,16 +154,16 @@ public class PatchGrid extends WidgetGroup {
     }
 
     private void validateLinePositions() {
-        if (top.dragging && top.getY() < bottom.getY()) {
+        if (top.dragging && top.getY() < bottom.getY() + pixelSize) {
             top.setY(bottom.getY() + pixelSize);
         }
-        if (bottom.dragging && bottom.getY() > top.getY()) {
+        if (bottom.dragging && bottom.getY() > top.getY() - pixelSize) {
             bottom.setY(top.getY() - pixelSize);
         }
-        if (right.dragging && right.getX() < left.getX()) {
+        if (right.dragging && right.getX() < left.getX() + pixelSize) {
             right.setX(left.getX() + pixelSize);
         }
-        if (left.dragging && left.getX() > right.getX()) {
+        if (left.dragging && left.getX() > right.getX() - pixelSize) {
             left.setX(right.getX() - pixelSize);
         }
 
@@ -140,11 +182,14 @@ public class PatchGrid extends WidgetGroup {
     private class LineDragListener extends InputListener {
         private final Array<PatchLine> draggingLines = new Array<>();
         private boolean hovered;
-        private boolean dragging;
         private boolean ignoreNextExitEvent;
 
         public boolean isHovered() {
             return hovered;
+        }
+
+        public boolean isDragging() {
+            return draggingLines.size > 0;
         }
 
         @Override
@@ -215,34 +260,51 @@ public class PatchGrid extends WidgetGroup {
         }
     }
 
-    private static class PatchLine extends Actor {
-        private static final Color colorRegular = new Color(0x99e550ff);
-        private static final Color colorInteracting = new Color(0xffffffff);
+    protected static class PatchLine extends Actor {
         private static final Rectangle tmpRect = new Rectangle();
 
+        private final MutableInt value;
         private final Drawable drawable;
-        private boolean interacting = false;
-        private int value = 0;
+        private final Color primaryColor;
+        private float thickness = 3f;
 
-        public PatchLine(Drawable drawable) {
+        /** Determines whether line is horizontal or vertical */
+        private boolean horizontal;
+
+        private boolean disabled;
+        private boolean hovered;
+
+        public PatchLine(MutableInt value, Drawable drawable, Color primaryColor) {
+            this.value = value;
             this.drawable = drawable;
+            this.primaryColor = primaryColor;
             setTouchable(Touchable.disabled);
+
+            updateVisualState();
         }
 
         public int getValue() {
-            return value;
+            return value.get();
         }
 
         public void setValue(int value) {
-            this.value = value;
+            this.value.set(value);
+        }
+
+        public boolean isDisabled() {
+            return disabled;
+        }
+
+        public void setDisabled(boolean disabled) {
+            this.disabled = disabled;
+
+            updateVisualState();
         }
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            float thickness = 3f;
-
-            batch.setColor(tmpColor.set(interacting ? colorInteracting : colorRegular).mul(getColor()).mul(1f,1f,1f,parentAlpha));
-            if (getWidth() > getHeight()) {
+            batch.setColor(tmpColor.set(getColor()).mul(1f,1f,1f,parentAlpha));
+            if (horizontal) {
                 // Horizontal line
                 drawable.draw(batch, getX()-thickness*0.5f, getY()-thickness*0.5f, getWidth()+thickness, thickness);
             } else {
@@ -251,20 +313,46 @@ public class PatchGrid extends WidgetGroup {
             }
         }
 
+        @Override
+        protected void sizeChanged() {
+            horizontal = getWidth() > getHeight();
+            updateVisualState();
+        }
+
         /** Position in parent's coordinates */
         public void updateHover(float x, float y) {
-            interacting = checkHit(x, y);
-            return;
+            if (disabled) return;
+
+            boolean hit = checkHit(x, y);
+            if (hovered != hit) {
+                hovered = hit;
+                updateVisualState();
+            }
         }
 
         /** Position in parent's coordinates */
         public boolean checkHit(float x, float y) {
+            if (disabled) return false;
+
             return tmpRect.set(
                     getX() - EXTRA_TOUCH_SPACE,
                     getY() - EXTRA_TOUCH_SPACE,
                     getWidth() + EXTRA_TOUCH_SPACE *2f,
                     getHeight() + EXTRA_TOUCH_SPACE *2f)
                     .contains(x, y);
+        }
+
+        private void updateVisualState() {
+            if (disabled) {
+                this.setColor(primaryColor);
+                thickness = 2f;
+            } else if (hovered || dragging) {
+                this.setColor(Color.WHITE);
+                thickness = 4f;
+            } else {
+                this.setColor(primaryColor);
+                thickness = 4f;
+            }
         }
 
         //region Dragging
@@ -275,6 +363,8 @@ public class PatchGrid extends WidgetGroup {
             dragOffsetX = getX() - x;
             dragOffsetY = getY() - y;
             dragging = true;
+
+            updateVisualState();
         }
 
         public void drag(float x, float y) {
@@ -283,7 +373,40 @@ public class PatchGrid extends WidgetGroup {
 
         public void endDragging(float x, float y) {
             dragging = false;
+
+            updateVisualState();
         }
         //endregion
+    }
+
+    public static class Values implements MutableInt.ChangeListener {
+        public final MutableInt left = new MutableInt();
+        public final MutableInt right = new MutableInt();
+        public final MutableInt top = new MutableInt();
+        public final MutableInt bottom = new MutableInt();
+
+        private ChangeListener listener;
+
+        public Values() {
+            left.setListener(this);
+            right.setListener(this);
+            top.setListener(this);
+            bottom.setListener(this);
+        }
+
+        public void setListener(ChangeListener listener) {
+            this.listener = listener;
+        }
+
+        @Override
+        public void onValueChanged(MutableInt value) {
+            if (value != null) {
+                listener.onValuesChanged(this);
+            }
+        }
+
+        public interface ChangeListener {
+            void onValuesChanged(Values values);
+        }
     }
 }

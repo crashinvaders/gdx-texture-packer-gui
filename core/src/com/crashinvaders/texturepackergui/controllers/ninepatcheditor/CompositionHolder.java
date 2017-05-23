@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 
@@ -13,7 +14,9 @@ class CompositionHolder extends WidgetGroup {
 
     private final SourceImage sourceImage;
     private final PixelGrid pixelGrid;
+    private final Stack patchGridGroup;
     private final PatchGrid patchGrid;
+    private final PatchGrid contentGrid;
     private final BorderAreaDim borderAreaDim;
 
     private boolean firstLayout = true;
@@ -30,21 +33,45 @@ class CompositionHolder extends WidgetGroup {
         pixelGrid.setPixelSize(sourceImage.getScale());
         sourceImage.addActor(pixelGrid);
 
-        patchGrid = new PatchGrid(skin);
+        patchGridGroup = new Stack();
+
+        patchGrid = new PatchGrid(skin, skin.getColor("nine-patch-lines-patch"));
         patchGrid.setImageSize(sourceImage.getImageWidth(), sourceImage.getImageHeight());
         patchGrid.setPixelSize(sourceImage.getScale());
-        sourceImage.addActor(patchGrid);
+        patchGridGroup.addActor(patchGrid);
+
+        contentGrid = new ContentGrid(skin, skin.getColor("nine-patch-lines-content"));
+        contentGrid.setImageSize(sourceImage.getImageWidth(), sourceImage.getImageHeight());
+        contentGrid.setPixelSize(sourceImage.getScale());
+        patchGridGroup.addActor(contentGrid);
+
+        sourceImage.add(patchGridGroup);
 
         sourceImage.setScaleListener(new SourceImage.ScaleListener() {
             @Override
             public void onScaleChanged(float scale) {
                 pixelGrid.setPixelSize(scale);
                 patchGrid.setPixelSize(scale);
+                contentGrid.setPixelSize(scale);
             }
         });
 
         addListener(new PanListener());
         addListener(new ZoomListener());
+
+        editPatchGrid();
+    }
+
+    public void editPatchGrid() {
+        contentGrid.setDisabled(true);
+        patchGrid.setDisabled(false);
+        patchGrid.toFront();
+    }
+
+    public void editContentGird() {
+        patchGrid.setDisabled(true);
+        contentGrid.setDisabled(false);
+        contentGrid.toFront();
     }
 
     @Override
@@ -87,11 +114,14 @@ class CompositionHolder extends WidgetGroup {
 
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            if (button != 0) return false;
-            dragging = true;
-            lastX = x;
-            lastY = y;
-            return true;
+            // Dragging is only allowed for left and middle mouse buttons
+            if (button == 0 || button == 2) {
+                dragging = true;
+                lastX = x;
+                lastY = y;
+                return true;
+            }
+            return false;
         }
 
         @Override

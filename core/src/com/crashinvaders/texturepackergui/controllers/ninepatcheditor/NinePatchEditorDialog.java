@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
+import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
@@ -31,5 +32,13 @@ public class NinePatchEditorDialog implements ActionContainer {
 
         compositionHolder = new CompositionHolder(skin, sourceImage);
         canvasStack.addActor(compositionHolder);
+    }
+
+    @LmlAction("editPatchGrid") void editPatchGrid() {
+        compositionHolder.editPatchGrid();
+    }
+
+    @LmlAction("editContentGrid") void editContentGrid() {
+        compositionHolder.editContentGird();
     }
 }

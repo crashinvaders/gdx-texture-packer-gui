@@ -26,6 +26,9 @@ com.badlogic.gdx.graphics.Color: {
 	output-green: { hex: 79e053ff },
 	output-red: { hex: ff846bff }
 	output-yellow: { hex: f5e35fff }
+
+	nine-patch-lines-patch: { hex: 99e550ff }
+	nine-patch-lines-content: { hex: ffb000ff }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	dialogDim: {name: white, color: {r: 0, g: 0, b: 0, a: 0.45} },
