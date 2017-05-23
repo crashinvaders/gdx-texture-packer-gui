@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 
 public class PatchGrid extends WidgetGroup {
+    private static final float EXTRA_TOUCH_SPACE = 16f;
     private static final Color colorFill = new Color(0x99e55040);
     private static final Color tmpColor = new Color();
     private static final Vector2 tmpVec2 = new Vector2();
@@ -77,9 +78,7 @@ public class PatchGrid extends WidgetGroup {
             int screenX = Gdx.input.getX();
             int screenY = Gdx.input.getY();
             Vector2 localCoord = screenToLocalCoordinates(tmpVec2.set(screenX, screenY));
-            for (int i = 0; i < patchLines.size; i++) {
-                patchLines.get(i).updateHover(localCoord.x, localCoord.y);
-            }
+            updateLinesHover(localCoord.x, localCoord.y);
         }
 
         batch.setColor(tmpColor.set(colorFill).mul(getColor()).mul(1f,1f,1f,parentAlpha));
@@ -88,6 +87,28 @@ public class PatchGrid extends WidgetGroup {
 //        white.draw(batch, getX() + left.getX(), getY() + bottom.getY(), right.getX() - left.getX(), top.getY() - bottom.getY());
 
         super.draw(batch, parentAlpha);
+    }
+
+    @Override
+    public Actor hit(float x, float y, boolean touchable) {
+        if (touchable && getTouchable() == Touchable.disabled) return null;
+        Vector2 point = tmpVec2;
+        Actor[] childrenArray = getChildren().items;
+        for (int i = getChildren().size - 1; i >= 0; i--) {
+            Actor child = childrenArray[i];
+            if (!child.isVisible()) continue;
+            child.parentToLocalCoordinates(point.set(x, y));
+            Actor hit = child.hit(point.x, point.y, touchable);
+            if (hit != null) return hit;
+        }
+
+        // Extend regular touch area by EXTRA_TOUCH_SPACE (to allow line snap beyond PatchGrid borders)
+        if (touchable && this.getTouchable() != Touchable.enabled) return null;
+        return x >= -EXTRA_TOUCH_SPACE &&
+                x < getWidth() + EXTRA_TOUCH_SPACE *2f &&
+                y >= -EXTRA_TOUCH_SPACE &&
+                y < getHeight() + EXTRA_TOUCH_SPACE *2f ?
+                this : null;
     }
 
     private void validateLinePositions() {
@@ -110,10 +131,17 @@ public class PatchGrid extends WidgetGroup {
         bottom.setPosition(0f, MathUtils.clamp(MathUtils.round(bottom.getY()/pixelSize)*pixelSize, 0f, getHeight()));
     }
 
+    private void updateLinesHover(float x, float y) {
+        for (int i = 0; i < patchLines.size; i++) {
+            patchLines.get(i).updateHover(x, y);
+        }
+    }
+
     private class LineDragListener extends InputListener {
+        private final Array<PatchLine> draggingLines = new Array<>();
         private boolean hovered;
         private boolean dragging;
-        private final Array<PatchLine> draggingLines = new Array<>();
+        private boolean ignoreNextExitEvent;
 
         public boolean isHovered() {
             return hovered;
@@ -157,6 +185,10 @@ public class PatchGrid extends WidgetGroup {
                 updateLineValuesFromPosition();
                 validateLinePositions();
             }
+
+            // Stage fires "exit" event upon touchUp() even if pointer is still over the actor.
+            // This is simple workaround.
+            if (hovered) ignoreNextExitEvent = true;
         }
 
         private void updateLineValuesFromPosition() {
@@ -173,7 +205,13 @@ public class PatchGrid extends WidgetGroup {
 
         @Override
         public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+            if (ignoreNextExitEvent) {
+                ignoreNextExitEvent = false;
+                return;
+            }
+
             hovered = false;
+            updateLinesHover(x, y);
         }
     }
 
@@ -181,7 +219,6 @@ public class PatchGrid extends WidgetGroup {
         private static final Color colorRegular = new Color(0x99e550ff);
         private static final Color colorInteracting = new Color(0xffffffff);
         private static final Rectangle tmpRect = new Rectangle();
-        private static final float touchRadius = 8f;
 
         private final Drawable drawable;
         private boolean interacting = false;
@@ -189,6 +226,7 @@ public class PatchGrid extends WidgetGroup {
 
         public PatchLine(Drawable drawable) {
             this.drawable = drawable;
+            setTouchable(Touchable.disabled);
         }
 
         public int getValue() {
@@ -213,17 +251,19 @@ public class PatchGrid extends WidgetGroup {
             }
         }
 
+        /** Position in parent's coordinates */
         public void updateHover(float x, float y) {
             interacting = checkHit(x, y);
             return;
         }
 
+        /** Position in parent's coordinates */
         public boolean checkHit(float x, float y) {
             return tmpRect.set(
-                    getX() - touchRadius,
-                    getY() - touchRadius,
-                    getWidth() + touchRadius*2f,
-                    getHeight() + touchRadius*2f)
+                    getX() - EXTRA_TOUCH_SPACE,
+                    getY() - EXTRA_TOUCH_SPACE,
+                    getWidth() + EXTRA_TOUCH_SPACE *2f,
+                    getHeight() + EXTRA_TOUCH_SPACE *2f)
                     .contains(x, y);
         }
 
