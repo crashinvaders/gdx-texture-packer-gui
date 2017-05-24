@@ -29,7 +29,7 @@ public class PatchGrid extends WidgetGroup {
     protected final PatchLine left, right, top, bottom;
     protected final LineDragListener lineDragListener;
     protected final Color primaryColor;
-    private float pixelSize = 1f;
+    protected float pixelSize = 1f;
     private int imageWidth, imageHeight;
 
     private boolean disabled;
@@ -101,6 +101,8 @@ public class PatchGrid extends WidgetGroup {
         right.setBounds(right.getValue() * pixelSize, 0f, 0f, getHeight());
         top.setBounds(0f, top.getValue() * pixelSize, getWidth(), 0f);
         bottom.setBounds(0f, bottom.getValue() * pixelSize, getWidth(), 0f);
+
+        validateLinePositions();
     }
 
     @Override
@@ -153,7 +155,7 @@ public class PatchGrid extends WidgetGroup {
                 this : null;
     }
 
-    private void validateLinePositions() {
+    protected void validateLinePositions() {
         if (top.dragging && top.getY() < bottom.getY() + pixelSize) {
             top.setY(bottom.getY() + pixelSize);
         }
@@ -263,16 +265,16 @@ public class PatchGrid extends WidgetGroup {
     protected static class PatchLine extends Actor {
         private static final Rectangle tmpRect = new Rectangle();
 
-        private final MutableInt value;
-        private final Drawable drawable;
+        protected final MutableInt value;
+        protected final Drawable drawable;
         private final Color primaryColor;
         private float thickness = 3f;
 
         /** Determines whether line is horizontal or vertical */
-        private boolean horizontal;
+        protected boolean horizontal;
 
-        private boolean disabled;
-        private boolean hovered;
+        protected boolean disabled;
+        protected boolean hovered;
 
         public PatchLine(MutableInt value, Drawable drawable, Color primaryColor) {
             this.value = value;
@@ -356,8 +358,8 @@ public class PatchGrid extends WidgetGroup {
         }
 
         //region Dragging
-        private float dragOffsetX, dragOffsetY;
-        private boolean dragging = false;
+        protected float dragOffsetX, dragOffsetY;
+        protected boolean dragging = false;
 
         public void startDragging(float x, float y) {
             dragOffsetX = getX() - x;
