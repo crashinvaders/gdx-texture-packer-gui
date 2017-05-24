@@ -1,15 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 
 class SourceImage extends Stack {
@@ -37,7 +34,8 @@ class SourceImage extends Stack {
     public void setScale(float scale) {
         if (this.scale == scale) return;
         this.scale = scale;
-        invalidate();
+
+        invalidateHierarchy();
 
         if (scaleListener != null) {
             scaleListener.onScaleChanged(scale);
@@ -74,12 +72,12 @@ class SourceImage extends Stack {
     }
 
     @Override
-    public float getWidth() {
+    public float getPrefWidth() {
         return pixmap.getWidth() * scale;
     }
 
     @Override
-    public float getHeight() {
+    public float getPrefHeight() {
         return pixmap.getHeight() * scale;
     }
 

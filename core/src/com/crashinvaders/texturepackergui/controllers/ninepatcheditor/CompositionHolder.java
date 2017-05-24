@@ -13,6 +13,7 @@ class CompositionHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;
 
     private final SourceImage sourceImage;
+    private final ZoomModel zoomModel;
     private final PixelGrid pixelGrid;
     private final Stack patchGridGroup;
     private final PatchGrid patchGrid;
@@ -21,7 +22,8 @@ class CompositionHolder extends WidgetGroup {
 
     private boolean firstLayout = true;
 
-    public CompositionHolder(Skin skin, SourceImage sourceImage) {
+    public CompositionHolder(Skin skin, final SourceImage sourceImage, ZoomModel zoomModel) {
+        this.zoomModel = zoomModel;
         borderAreaDim = new BorderAreaDim(skin, sourceImage);
         borderAreaDim.setColor(new Color(0x00000080));
         this.addActor(borderAreaDim);
@@ -60,6 +62,13 @@ class CompositionHolder extends WidgetGroup {
         addListener(new ZoomListener());
 
         editPatchGrid();
+
+        zoomModel.addListener(new ZoomModel.ChangeListener() {
+            @Override
+            public void onZoomIndexChanged(int zoomIndex, float scale) {
+                sourceImage.setScale(scale);
+            }
+        });
     }
 
     public void editPatchGrid() {
@@ -78,10 +87,13 @@ class CompositionHolder extends WidgetGroup {
     public void layout() {
         super.layout();
 
-        sourceImage.setSize(sourceImage.getWidth(), sourceImage.getHeight());
+        sourceImage.setSize(sourceImage.getPrefWidth(), sourceImage.getPrefHeight());
         if (firstLayout) {
             firstLayout = false;
-            sourceImage.setPosition(getWidth() * 0.5f, getHeight() * 0.5f, Align.center);
+            setupOptimalZoom();
+            sourceImage.setSize(sourceImage.getPrefWidth(), sourceImage.getPrefHeight());
+            sourceImage.setPosition(getWidth()*0.5f, getHeight()*0.5f, Align.center);
+
         }
         validateImagePosition();
 
@@ -92,6 +104,22 @@ class CompositionHolder extends WidgetGroup {
     protected void sizeChanged() {
         super.sizeChanged();
         validateImagePosition();
+    }
+
+    private void setupOptimalZoom() {
+        float[] zoomScales = zoomModel.getScales();
+
+        for (int i = zoomScales.length - 1; i >= 0; i--) {
+            float zoomScale = zoomScales[i];
+            float width = sourceImage.getImageWidth() * zoomScale;
+            float height = sourceImage.getImageHeight() * zoomScale;
+
+            if (width <= getWidth() && height <= getHeight()) {
+                zoomModel.setIndex(i);
+                sourceImage.setScale(zoomScale);
+                break;
+            }
+        }
     }
 
     private void validateImagePosition() {
@@ -143,8 +171,6 @@ class CompositionHolder extends WidgetGroup {
     }
 
     private class ZoomListener extends InputListener {
-        private final float[] zoomScales = new float[]{0.25f, 0.5f, 1f, 1.25f, 1.5f, 2f, 3f, 5f, 10f, 20f};
-        private int zoomIndex = 3;
 
         @Override
         public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -154,21 +180,20 @@ class CompositionHolder extends WidgetGroup {
         @Override
         public boolean scrolled(InputEvent event, float x, float y, int amount) {
 
-            float preWidth = sourceImage.getWidth() * sourceImage.getScaleX();
-            float preHeight = sourceImage.getHeight() * sourceImage.getScaleY();
+            float preWidth = sourceImage.getPrefWidth();
+            float preHeight = sourceImage.getPrefHeight();
             float xNormalized = x < sourceImage.getX() ? 0f : x > sourceImage.getX()+preWidth ? 1f : (x- sourceImage.getX())/preWidth;
             float yNormalized = y < sourceImage.getY() ? 0f : y > sourceImage.getY()+preHeight ? 1f : (y- sourceImage.getY())/preHeight;
 
-            zoomIndex = (Math.max(0, Math.min(zoomScales.length-1, zoomIndex - amount)));
-            sourceImage.setScale(zoomScales[zoomIndex]);
+            int zoomIndex = zoomModel.getIndex();
+            zoomModel.setIndex(zoomIndex - amount);
 
-            float postWidth = sourceImage.getWidth() * sourceImage.getScaleX();
-            float postHeight = sourceImage.getHeight() * sourceImage.getScaleY();
+            float postWidth = sourceImage.getPrefWidth();
+            float postHeight = sourceImage.getPrefHeight();
             sourceImage.setPosition(
                     sourceImage.getX() + (preWidth - postWidth) * xNormalized,
                     sourceImage.getY() + (preHeight - postHeight) * yNormalized);
 
-            validateImagePosition();
             return true;
         }
     }

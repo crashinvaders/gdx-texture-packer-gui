@@ -21,8 +21,11 @@ public class NinePatchEditorDialog implements ActionContainer {
     @LmlActor("canvasStack") Stack canvasStack;
     CompositionHolder compositionHolder;
 
+    private final ZoomModel zoomModel = new ZoomModel();
+
     @LmlAfter void initView() {
         Skin skin = interfaceService.getSkin();
+        zoomModel.reset();
 
         Image imgBackground = new Image(skin.getTiledDrawable("custom/transparent-light"));
         canvasStack.addActor(imgBackground);
@@ -30,7 +33,7 @@ public class NinePatchEditorDialog implements ActionContainer {
         Pixmap pixmap = new Pixmap(Gdx.files.absolute("D:/chest0.png"));
         SourceImage sourceImage = new SourceImage(pixmap);
 
-        compositionHolder = new CompositionHolder(skin, sourceImage);
+        compositionHolder = new CompositionHolder(skin, sourceImage, zoomModel);
         canvasStack.addActor(compositionHolder);
     }
 

@@ -110,6 +110,22 @@ public class PreviewHolder extends WidgetGroup {
                 .contains(x, y);
     }
 
+    private void fixPagePosition() {
+        if (pageGroup == null) return;
+
+        float x = pageGroup.getX();
+        float y = pageGroup.getY();
+        float width = pageGroup.getWidth() * pageGroup.getScaleX();
+        float height = pageGroup.getHeight() * pageGroup.getScaleY();
+        float availableWidth = getWidth();
+        float availableHeight = getHeight();
+
+        if (x < -width + SAVE_PADDING) pageGroup.setX(-width + SAVE_PADDING);
+        if (x > availableWidth - SAVE_PADDING) pageGroup.setX(availableWidth - SAVE_PADDING);
+        if (y < -height + SAVE_PADDING) pageGroup.setY(-height + SAVE_PADDING);
+        if (y > availableHeight - SAVE_PADDING) pageGroup.setY(availableHeight - SAVE_PADDING);
+    }
+
     private void fitPageAtCenter() {
         if (pageGroup == null) return;
         if (getWidth() <= 0f || getHeight() <= 0f) return;
@@ -128,22 +144,6 @@ public class PreviewHolder extends WidgetGroup {
         pageGroup.setPosition(
                 (getWidth() - pageGroup.getWidth() * pageGroup.getScaleX()) * 0.5f,
                 (getHeight() - pageGroup.getHeight() * pageGroup.getScaleY()) * 0.5f);
-    }
-
-    private void fixPagePosition() {
-        if (pageGroup == null) return;
-
-        float x = pageGroup.getX();
-        float y = pageGroup.getY();
-        float width = pageGroup.getWidth() * pageGroup.getScaleX();
-        float height = pageGroup.getHeight() * pageGroup.getScaleY();
-        float availableWidth = getWidth();
-        float availableHeight = getHeight();
-
-        if (x < -width + SAVE_PADDING) pageGroup.setX(-width + SAVE_PADDING);
-        if (x > availableWidth - SAVE_PADDING) pageGroup.setX(availableWidth - SAVE_PADDING);
-        if (y < -height + SAVE_PADDING) pageGroup.setY(-height + SAVE_PADDING);
-        if (y > availableHeight - SAVE_PADDING) pageGroup.setY(availableHeight - SAVE_PADDING);
     }
 
     public interface Listener {
