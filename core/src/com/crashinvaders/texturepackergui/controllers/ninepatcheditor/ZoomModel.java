@@ -5,8 +5,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class ZoomModel implements Pool.Poolable {
-    private final float[] scales = new float[]{0.25f, 0.5f, 1f, 1.25f, 1.5f, 2f, 3f, 5f, 10f, 20f};
-    private int index = 3;
+    private final float[] scales = new float[]{0.75f, 1f, 1.25f, 1.5f, 2f, 3f, 5f, 10f, 20f};
+    private int index;
 
     private final Array<ChangeListener> listeners = new Array<>();
 
@@ -40,7 +40,7 @@ public class ZoomModel implements Pool.Poolable {
 
     @Override
     public void reset() {
-        index = 3;
+        index = 0;
         listeners.clear();
     }
 

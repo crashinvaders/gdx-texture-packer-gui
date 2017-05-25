@@ -25,7 +25,8 @@ public class PatchGrid extends WidgetGroup {
 
     protected final Array<PatchLine> patchLines = new Array<>();
     protected final Values values = new Values();
-    protected final Drawable white;
+    protected final Drawable whiteDrawable;
+    protected final Drawable gridNodeDrawable;
     protected final PatchLine left, right, top, bottom;
     protected final LineDragListener lineDragListener;
     protected final Color primaryColor;
@@ -38,12 +39,13 @@ public class PatchGrid extends WidgetGroup {
         this.primaryColor = new Color(primaryColor);
         setTouchable(Touchable.enabled);
 
-        white = skin.getDrawable("white");
+        whiteDrawable = skin.getDrawable("white");
+        gridNodeDrawable = skin.getDrawable("custom/nine-patch-gird-node");
 
-        left = new PatchLine(values.left, white, primaryColor);
-        right = new PatchLine(values.right, white, primaryColor);
-        top = new PatchLine(values.top, white, primaryColor);
-        bottom = new PatchLine(values.bottom, white, primaryColor);
+        left = new PatchLine(values.left, whiteDrawable, primaryColor);
+        right = new PatchLine(values.right, whiteDrawable, primaryColor);
+        top = new PatchLine(values.top, whiteDrawable, primaryColor);
+        bottom = new PatchLine(values.bottom, whiteDrawable, primaryColor);
         patchLines.addAll(left, right, top, bottom);
 
         addActor(left);
@@ -117,6 +119,8 @@ public class PatchGrid extends WidgetGroup {
         if (!disabled) drawAreaGraphics(batch, parentAlpha);
 
         super.draw(batch, parentAlpha);
+
+        drawGridNodes(batch, parentAlpha);
     }
 
     protected void drawAreaGraphics(Batch batch, float parentAlpha) {
@@ -125,12 +129,27 @@ public class PatchGrid extends WidgetGroup {
                 .mul(1f, 1f, 1f, parentAlpha));
         if (!disabled) {
             // Fill both height and width rectangles
-            white.draw(batch, getX(), getY() + bottom.getY(), getWidth(), top.getY() - bottom.getY());
-            white.draw(batch, getX() + left.getX(), getY(), right.getX() - left.getX(), getHeight());
+            whiteDrawable.draw(batch, getX(), getY() + bottom.getY(), getWidth(), top.getY() - bottom.getY());
+            whiteDrawable.draw(batch, getX() + left.getX(), getY(), right.getX() - left.getX(), getHeight());
         } else {
             // Fill only central rectangle
-            white.draw(batch, getX() + left.getX(), getY() + bottom.getY(), right.getX() - left.getX(), top.getY() - bottom.getY());
+            whiteDrawable.draw(batch, getX() + left.getX(), getY() + bottom.getY(), right.getX() - left.getX(), top.getY() - bottom.getY());
         }
+    }
+
+    protected void drawGridNodes(Batch batch, float parentAlpha) {
+        if (disabled) return;
+
+        batch.setColor(tmpColor.set(getColor()).mul(1f, 1f, 1f, parentAlpha));
+
+        float width = gridNodeDrawable.getMinWidth();
+        float height = gridNodeDrawable.getMinHeight();
+        float halfWidth = width * 0.5f;
+        float halfHeight = height * 0.5f;
+        gridNodeDrawable.draw(batch, getX() + left.getX() - halfWidth, getY() + bottom.getY() - halfHeight, width, height);
+        gridNodeDrawable.draw(batch, getX() + right.getX() - halfWidth, getY() + bottom.getY() - halfHeight, width, height);
+        gridNodeDrawable.draw(batch, getX() + left.getX() - halfWidth, getY() + top.getY() - halfHeight, width, height);
+        gridNodeDrawable.draw(batch, getX() + right.getX() - halfWidth, getY() + top.getY() - halfHeight, width, height);
     }
 
     @Override

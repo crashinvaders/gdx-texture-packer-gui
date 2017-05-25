@@ -15,6 +15,7 @@
             <buttongroup>
                 <!--TODO localize-->
                 <visradiobutton text="Patches" change="editPatchGrid"/>
+                <actor width="16"/>
                 <visradiobutton text="Content area" change="editContentGrid"/>
             </buttongroup>
         </table>
