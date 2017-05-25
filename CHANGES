@@ -1,5 +1,6 @@
 [LATEST]
 - ETC(KTX) compression
+- Fixed "Use aliases" flag is missing in save file
 
 [4.4.0]
 - Each pack now consists of list of input/ignore files (no more single source dir)

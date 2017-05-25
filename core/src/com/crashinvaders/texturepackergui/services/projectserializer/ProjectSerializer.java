@@ -283,7 +283,7 @@ public class ProjectSerializer {
         TexturePacker.Settings settings = pack.getSettings();
         TexturePacker.Settings defaultSettings = new TexturePacker.Settings();
 
-        settings.alias = find(lines, "atlas=", defaultSettings.alias);
+        settings.alias = find(lines, "alias=", defaultSettings.alias);
         settings.alphaThreshold = find(lines, "alphaThreshold=", defaultSettings.alphaThreshold);
         settings.debug = find(lines, "debug=", defaultSettings.debug);
         settings.duplicatePadding = find(lines, "duplicatePadding=", defaultSettings.duplicatePadding);
