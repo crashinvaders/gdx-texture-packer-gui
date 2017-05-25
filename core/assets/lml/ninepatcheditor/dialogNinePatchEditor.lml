@@ -20,8 +20,8 @@
             </buttongroup>
         </table>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
-            <textbutton text="Save"/>
-            <textbutton text="Cancel"/>
+            <textbutton text="Save" change="confirmResult"/>
+            <textbutton text="Cancel" change="hide"/>
         </table>
     </table>
 </visdialog>

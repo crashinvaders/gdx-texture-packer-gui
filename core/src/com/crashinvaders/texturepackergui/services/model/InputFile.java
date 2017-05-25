@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.services.model;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 

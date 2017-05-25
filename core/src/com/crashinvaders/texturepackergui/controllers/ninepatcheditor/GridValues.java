@@ -49,6 +49,16 @@ public class GridValues implements MutableInt.ChangeListener, Pool.Poolable {
         bottom.setListener(this);
     }
 
+    @Override
+    public String toString() {
+        return "[" +
+                "left=" + left +
+                ", right=" + right +
+                ", top=" + top +
+                ", bottom=" + bottom +
+                ']';
+    }
+
     public interface ChangeListener {
         void onValuesChanged(GridValues values);
 

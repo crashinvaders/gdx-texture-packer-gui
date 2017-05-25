@@ -60,8 +60,8 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
     public InputFile read(Json json, JsonValue jsonData, Class clazz) {
         String path = jsonData.getString("path");
         InputFile.Type type = InputFile.Type.valueOf(jsonData.getString("type"));
-        String dirFilePrefix = jsonData.getString("dirFilePrefix");
-        String regionName = jsonData.getString("regionName");
+        String dirFilePrefix = jsonData.getString("dirFilePrefix", null);
+        String regionName = jsonData.getString("regionName", null);
 
         FileHandle fileHandle;
         if (new File(path).isAbsolute()) {

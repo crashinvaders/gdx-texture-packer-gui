@@ -30,6 +30,11 @@ public class MutableInt implements Pool.Poolable {
         listener = null;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
     public interface ChangeListener {
         void onValueChanged(MutableInt value);
     }

@@ -64,7 +64,7 @@ public class PatchGrid extends WidgetGroup {
     public void setImageSize(int width, int height) {
         imageWidth = width;
         imageHeight = height;
-        setValues(0, width, height, 0);
+//        setValues(0, width, height, 0);
     }
 
     public void setPixelSize(float pixelSize) {

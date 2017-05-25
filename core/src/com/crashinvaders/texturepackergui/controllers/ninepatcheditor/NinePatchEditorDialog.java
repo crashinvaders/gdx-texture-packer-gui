@@ -1,19 +1,27 @@
 package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
+import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
+import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisDialog;
+
+import java.util.Arrays;
 
 @ViewDialog("lml/ninepatcheditor/dialogNinePatchEditor.lml")
 public class NinePatchEditorDialog implements ActionContainer {
@@ -27,6 +35,7 @@ public class NinePatchEditorDialog implements ActionContainer {
     CompositionHolder compositionHolder;
 
     private NinePatchEditorModel model;
+    private ResultListener resultListener;
 
     @LmlAfter void initView() {
         if (model == null) {
@@ -45,12 +54,39 @@ public class NinePatchEditorDialog implements ActionContainer {
         canvasStack.addActor(compositionHolder);
     }
 
+    @Destroy void destroy() {
+        if (model != null) {
+            model.dispose();
+            model = null;
+        }
+    }
+
     @LmlAction("editPatchGrid") void editPatchGrid() {
         compositionHolder.editPatchGrid();
     }
 
     @LmlAction("editContentGrid") void editContentGrid() {
         compositionHolder.editContentGird();
+    }
+
+    @LmlAction("hide") void hide() {
+        if (dialog != null) {
+            dialog.hide();
+        }
+    }
+
+    @LmlAction("confirmResult") void confirmResult() {
+        if (resultListener != null) {
+            resultListener.onResult(model);
+        }
+
+        model.dispose();
+        model = null;
+        hide();
+    }
+
+    public NinePatchEditorModel getModel() {
+        return model;
     }
 
     public void setImageFile(FileHandle imageFile) {
@@ -68,6 +104,10 @@ public class NinePatchEditorDialog implements ActionContainer {
         }
     }
 
+    public void setResultListener(ResultListener resultListener) {
+        this.resultListener = resultListener;
+    }
+
     private void showErrorAndHide(final Exception exception) {
         Gdx.app.error(TAG, "", exception);
         Gdx.app.postRunnable(new Runnable() {
@@ -81,5 +121,10 @@ public class NinePatchEditorDialog implements ActionContainer {
                 interfaceService.showDialog(errorDialogController.getClass());
             }
         });
+    }
+
+    public interface ResultListener {
+        /** Called only if user confirmed changes (closed dialog through "OK" button) */
+        void onResult(NinePatchEditorModel model);
     }
 }
