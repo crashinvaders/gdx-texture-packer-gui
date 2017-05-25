@@ -13,7 +13,7 @@ class CompositionHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;
 
     private final SourceImage sourceImage;
-    private final ZoomModel zoomModel;
+    private final NinePatchEditorModel model;
     private final PixelGrid pixelGrid;
     private final Stack patchGridGroup;
     private final PatchGrid patchGrid;
@@ -21,9 +21,10 @@ class CompositionHolder extends WidgetGroup {
     private final BorderAreaDim borderAreaDim;
 
     private boolean firstLayout = true;
+    private float prevWidth = -1f, prevHeight = -1f;
 
-    public CompositionHolder(Skin skin, final SourceImage sourceImage, ZoomModel zoomModel) {
-        this.zoomModel = zoomModel;
+    public CompositionHolder(Skin skin, final SourceImage sourceImage, NinePatchEditorModel model) {
+        this.model = model;
         borderAreaDim = new BorderAreaDim(skin, sourceImage);
         borderAreaDim.setColor(new Color(0x00000080));
         this.addActor(borderAreaDim);
@@ -37,12 +38,12 @@ class CompositionHolder extends WidgetGroup {
 
         patchGridGroup = new Stack();
 
-        patchGrid = new PatchGrid(skin, skin.getColor("nine-patch-lines-patch"));
+        patchGrid = new PatchGrid(skin, skin.getColor("nine-patch-lines-patch"), model.patchValues);
         patchGrid.setImageSize(sourceImage.getImageWidth(), sourceImage.getImageHeight());
         patchGrid.setPixelSize(sourceImage.getScale());
         patchGridGroup.addActor(patchGrid);
 
-        contentGrid = new ContentGrid(skin, skin.getColor("nine-patch-lines-content"));
+        contentGrid = new ContentGrid(skin, skin.getColor("nine-patch-lines-content"), model.contentValues);
         contentGrid.setImageSize(sourceImage.getImageWidth(), sourceImage.getImageHeight());
         contentGrid.setPixelSize(sourceImage.getScale());
         patchGridGroup.addActor(contentGrid);
@@ -58,17 +59,18 @@ class CompositionHolder extends WidgetGroup {
             }
         });
 
+        model.zoomModel.addListener(new ZoomModel.ChangeListener() {
+            @Override
+            public void onZoomIndexChanged(int zoomIndex, float scale) {
+                sourceImage.setScale(scale);
+                pixelGrid.setVisible(scale > 5f);
+            }
+        });
+
         addListener(new PanListener());
         addListener(new ZoomListener());
 
         editPatchGrid();
-
-        zoomModel.addListener(new ZoomModel.ChangeListener() {
-            @Override
-            public void onZoomIndexChanged(int zoomIndex, float scale) {
-                sourceImage.setScale(scale);
-            }
-        });
     }
 
     public void editPatchGrid() {
@@ -103,11 +105,24 @@ class CompositionHolder extends WidgetGroup {
     @Override
     protected void sizeChanged() {
         super.sizeChanged();
+
+        // Position source image while keeping location ratio
+        {
+            if (prevWidth > 0f && prevHeight > 0f) {
+                float xFactor = sourceImage.getX(Align.center) / prevWidth;
+                float yFactor = sourceImage.getY(Align.center) / prevHeight;
+                sourceImage.getY(Align.center);
+                sourceImage.setPosition(getWidth() * xFactor, getHeight() * yFactor, Align.center);
+            }
+            prevWidth = getWidth();
+            prevHeight = getHeight();
+        }
+
         validateImagePosition();
     }
 
     private void setupOptimalZoom() {
-        float[] zoomScales = zoomModel.getScales();
+        float[] zoomScales = model.zoomModel.getScales();
 
         for (int i = zoomScales.length - 1; i >= 0; i--) {
             float zoomScale = zoomScales[i];
@@ -115,7 +130,7 @@ class CompositionHolder extends WidgetGroup {
             float height = sourceImage.getImageHeight() * zoomScale;
 
             if (width <= getWidth() && height <= getHeight()) {
-                zoomModel.setIndex(i);
+                model.zoomModel.setIndex(i);
                 sourceImage.setScale(zoomScale);
                 break;
             }
@@ -185,8 +200,8 @@ class CompositionHolder extends WidgetGroup {
             float xNormalized = x < sourceImage.getX() ? 0f : x > sourceImage.getX()+preWidth ? 1f : (x- sourceImage.getX())/preWidth;
             float yNormalized = y < sourceImage.getY() ? 0f : y > sourceImage.getY()+preHeight ? 1f : (y- sourceImage.getY())/preHeight;
 
-            int zoomIndex = zoomModel.getIndex();
-            zoomModel.setIndex(zoomIndex - amount);
+            int zoomIndex = model.zoomModel.getIndex();
+            model.zoomModel.setIndex(zoomIndex - amount);
 
             float postWidth = sourceImage.getPrefWidth();
             float postHeight = sourceImage.getPrefHeight();

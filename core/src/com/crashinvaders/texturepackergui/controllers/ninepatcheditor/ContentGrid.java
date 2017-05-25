@@ -10,8 +10,8 @@ public class ContentGrid extends PatchGrid {
 
     private final Drawable contentAreaDrawable;
 
-    public ContentGrid(Skin skin, Color primaryColor) {
-        super(skin, primaryColor);
+    public ContentGrid(Skin skin, Color primaryColor, GridValues values) {
+        super(skin, primaryColor, values);
         contentAreaDrawable = ((TextureRegionDrawable)skin.getDrawable("white"))
                 .tint(new Color(primaryColor.r, primaryColor.g, primaryColor.b, 0.25f));
     }

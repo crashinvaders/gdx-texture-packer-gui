@@ -1,6 +1,8 @@
 package com.crashinvaders.common;
 
-public class MutableInt {
+import com.badlogic.gdx.utils.Pool;
+
+public class MutableInt implements Pool.Poolable {
     private int value;
     private ChangeListener listener;
 
@@ -20,6 +22,12 @@ public class MutableInt {
 
     public void setListener(ChangeListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public void reset() {
+        value = 0;
+        listener = null;
     }
 
     public interface ChangeListener {

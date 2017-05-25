@@ -19,24 +19,24 @@ import com.crashinvaders.common.MutableInt;
 public class PatchGrid extends WidgetGroup {
     protected static final float EXTRA_TOUCH_SPACE = 16f;
     protected static final float FILL_COLOR_ALPHA = 0.25f;
-//    private static final Color colorFill = new Color(0x99e55040);
     private static final Color tmpColor = new Color();
     private static final Vector2 tmpVec2 = new Vector2();
 
     protected final Array<PatchLine> patchLines = new Array<>();
-    protected final Values values = new Values();
+    protected final Color primaryColor;
+    protected final GridValues values;
     protected final Drawable whiteDrawable;
     protected final Drawable gridNodeDrawable;
     protected final PatchLine left, right, top, bottom;
     protected final LineDragListener lineDragListener;
-    protected final Color primaryColor;
+
     protected float pixelSize = 1f;
     private int imageWidth, imageHeight;
-
     private boolean disabled;
 
-    public PatchGrid(Skin skin, Color primaryColor) {
+    public PatchGrid(Skin skin, Color primaryColor, GridValues values) {
         this.primaryColor = new Color(primaryColor);
+        this.values = values;
         setTouchable(Touchable.enabled);
 
         whiteDrawable = skin.getDrawable("white");
@@ -55,16 +55,9 @@ public class PatchGrid extends WidgetGroup {
 
         lineDragListener = new LineDragListener();
         addListener(lineDragListener);
-
-        values.setListener(new Values.ChangeListener() {
-            @Override
-            public void onValuesChanged(Values values) {
-                //TODO notify outer listeners
-            }
-        });
     }
 
-    public Values getValues() {
+    public GridValues getValues() {
         return values;
     }
 
@@ -105,6 +98,14 @@ public class PatchGrid extends WidgetGroup {
         bottom.setBounds(0f, bottom.getValue() * pixelSize, getWidth(), 0f);
 
         validateLinePositions();
+
+        // Manually update hover state
+        {
+            int screenX = Gdx.input.getX();
+            int screenY = Gdx.input.getY();
+            Vector2 localCoord = screenToLocalCoordinates(tmpVec2.set(screenX, screenY));
+            updateLinesHover(localCoord.x, localCoord.y);
+        }
     }
 
     @Override
@@ -398,36 +399,5 @@ public class PatchGrid extends WidgetGroup {
             updateVisualState();
         }
         //endregion
-    }
-
-    public static class Values implements MutableInt.ChangeListener {
-        public final MutableInt left = new MutableInt();
-        public final MutableInt right = new MutableInt();
-        public final MutableInt top = new MutableInt();
-        public final MutableInt bottom = new MutableInt();
-
-        private ChangeListener listener;
-
-        public Values() {
-            left.setListener(this);
-            right.setListener(this);
-            top.setListener(this);
-            bottom.setListener(this);
-        }
-
-        public void setListener(ChangeListener listener) {
-            this.listener = listener;
-        }
-
-        @Override
-        public void onValueChanged(MutableInt value) {
-            if (value != null) {
-                listener.onValuesChanged(this);
-            }
-        }
-
-        public interface ChangeListener {
-            void onValuesChanged(Values values);
-        }
     }
 }

@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -15,25 +15,29 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 
 @ViewDialog("lml/ninepatcheditor/dialogNinePatchEditor.lml")
 public class NinePatchEditorDialog implements ActionContainer {
+    private static final String TAG = NinePatchEditorDialog.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
 
     @LmlActor("canvasStack") Stack canvasStack;
     CompositionHolder compositionHolder;
 
-    private final ZoomModel zoomModel = new ZoomModel();
+    private NinePatchEditorModel model;
 
     @LmlAfter void initView() {
+        if (model == null) {
+            Gdx.app.error(TAG, "Model is not initialized. Have you properly called setImageFile() before showing dialog?");
+            return;
+        }
+
         Skin skin = interfaceService.getSkin();
-        zoomModel.reset();
 
         Image imgBackground = new Image(skin.getTiledDrawable("custom/transparent-light"));
         canvasStack.addActor(imgBackground);
 
-        Pixmap pixmap = new Pixmap(Gdx.files.absolute("D:/chest0.png"));
-        SourceImage sourceImage = new SourceImage(pixmap);
+        SourceImage sourceImage = new SourceImage(model.imagePixmap);
 
-        compositionHolder = new CompositionHolder(skin, sourceImage, zoomModel);
+        compositionHolder = new CompositionHolder(skin, sourceImage, model);
         canvasStack.addActor(compositionHolder);
     }
 
@@ -43,5 +47,15 @@ public class NinePatchEditorDialog implements ActionContainer {
 
     @LmlAction("editContentGrid") void editContentGrid() {
         compositionHolder.editContentGird();
+    }
+
+    public void setImageFile(FileHandle imageFile) {
+        if (model != null) {
+            model.dispose();
+            model = null;
+        }
+
+        if (imageFile.exists());
+        model = new NinePatchEditorModel(imageFile);
     }
 }
