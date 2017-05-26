@@ -19,6 +19,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisDialog;
 
 import java.util.Arrays;
@@ -32,6 +33,7 @@ public class NinePatchEditorDialog implements ActionContainer {
 
     @LmlActor("dialog") VisDialog dialog;
     @LmlActor("canvasStack") Stack canvasStack;
+    @LmlActor("chbMatchContent") VisCheckBox chbMatchContent;
     CompositionHolder compositionHolder;
 
     private NinePatchEditorModel model;
@@ -42,6 +44,26 @@ public class NinePatchEditorDialog implements ActionContainer {
             showErrorAndHide(new IllegalStateException("Model is not initialized. Have you properly called setImageFile() before showing dialog?"));
             return;
         }
+
+        if (model.patchValues.equals(model.contentValues)) {
+            chbMatchContent.setChecked(true);
+        }
+        model.patchValues.addListener(new GridValues.ChangeListener() {
+            @Override
+            public void onValuesChanged(GridValues values) {
+                if (chbMatchContent.isChecked()) {
+                    model.contentValues.set(model.patchValues);
+                }
+            }
+        });
+        model.contentValues.addListener(new GridValues.ChangeListener() {
+            @Override
+            public void onValuesChanged(GridValues values) {
+                if (chbMatchContent.isChecked() && !model.contentValues.equals(model.patchValues)) {
+                    chbMatchContent.setChecked(false);
+                }
+            }
+        });
 
         Skin skin = interfaceService.getSkin();
 
@@ -83,6 +105,14 @@ public class NinePatchEditorDialog implements ActionContainer {
         model.dispose();
         model = null;
         hide();
+    }
+
+    @LmlAction("onMatchContentChanged") void onMatchContentChanged() {
+        boolean checked = chbMatchContent.isChecked();
+
+        if (checked) {
+            model.contentValues.set(model.patchValues);
+        }
     }
 
     public NinePatchEditorModel getModel() {

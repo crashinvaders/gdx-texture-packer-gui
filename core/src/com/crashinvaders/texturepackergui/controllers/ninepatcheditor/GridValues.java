@@ -10,6 +10,8 @@ public class GridValues implements MutableInt.ChangeListener, Pool.Poolable {
     public final MutableInt top = new MutableInt();
     public final MutableInt bottom = new MutableInt();
 
+    private boolean programmaticChangeEvents = true;
+
     private final Array<ChangeListener> listeners = new Array<>();
 
     public GridValues() {
@@ -27,9 +29,29 @@ public class GridValues implements MutableInt.ChangeListener, Pool.Poolable {
         this.listeners.removeValue(listener, true);
     }
 
+    public boolean hasValues() {
+        return left.get() > 0 || right.get() > 0 || bottom.get() > 0 || top.get() > 0;
+    }
+
+    public void set(GridValues values) {
+        if (this.equals(values)) return;
+
+        programmaticChangeEvents = false;
+        left.set(values.left.get());
+        right.set(values.right.get());
+        top.set(values.top.get());
+        bottom.set(values.bottom.get());
+        programmaticChangeEvents = true;
+
+        // Notify listeners
+        for (int i = 0; i < listeners.size; i++) {
+            listeners.get(i).onValuesChanged(this);
+        }
+    }
+
     @Override
     public void onValueChanged(MutableInt value) {
-        if (listeners.size > 0) {
+        if (programmaticChangeEvents && listeners.size > 0) {
             for (int i = 0; i < listeners.size; i++) {
                 listeners.get(i).onValuesChanged(this);
             }
@@ -57,6 +79,28 @@ public class GridValues implements MutableInt.ChangeListener, Pool.Poolable {
                 ", top=" + top +
                 ", bottom=" + bottom +
                 ']';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GridValues that = (GridValues) o;
+
+        if (!left.equals(that.left)) return false;
+        if (!right.equals(that.right)) return false;
+        if (!top.equals(that.top)) return false;
+        return bottom.equals(that.bottom);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = left.hashCode();
+        result = 31 * result + right.hashCode();
+        result = 31 * result + top.hashCode();
+        result = 31 * result + bottom.hashCode();
+        return result;
     }
 
     public interface ChangeListener {

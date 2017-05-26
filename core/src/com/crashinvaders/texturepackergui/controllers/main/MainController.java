@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.badlogic.gdx.scenes.scene2d.ui.SplitPane;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
@@ -19,15 +18,12 @@ import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttri
 import com.crashinvaders.texturepackergui.controllers.FileDragDropController;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.*;
-import com.crashinvaders.texturepackergui.services.model.compression.EtcCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.compression.*;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
@@ -73,6 +69,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
+    @Inject NinePatchEditorDialog ninePatchEditorDialog;
     @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
@@ -143,6 +140,15 @@ public class MainController implements ActionContainer, ViewResizer {
         updateRecentProjects();
         updatePngCompression();
         updateEtcCompression();
+
+//        //TODO remove
+//        Gdx.app.postRunnable(new Runnable() {
+//            @Override
+//            public void run() {
+//                ninePatchEditorDialog.setImageFile(Gdx.files.absolute("D:/chest0.png"));
+//                interfaceService.showDialog(ninePatchEditorDialog.getClass());
+//            }
+//        });
     }
 
     @Destroy

@@ -126,14 +126,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
 
     @LmlAction("navigateToNinePatchEditor") void navigateToNinePatchEditor() {
         ninePatchEditorDialog.setImageFile(inputFile.getFileHandle());
-        ninePatchEditorDialog.getModel().patchValues.left.set(4);
-        ninePatchEditorDialog.getModel().patchValues.right.set(5);
-        ninePatchEditorDialog.getModel().patchValues.top.set(3);
-        ninePatchEditorDialog.getModel().patchValues.bottom.set(4);
-        ninePatchEditorDialog.getModel().contentValues.left.set(3);
-        ninePatchEditorDialog.getModel().contentValues.right.set(7);
-        ninePatchEditorDialog.getModel().contentValues.top.set(6);
-        ninePatchEditorDialog.getModel().contentValues.bottom.set(4);
+        ninePatchEditorDialog.getModel().loadFromInputFile(inputFile);
         ninePatchEditorDialog.setResultListener(new NinePatchEditorDialog.ResultListener() {
             @Override
             public void onResult(NinePatchEditorModel model) {

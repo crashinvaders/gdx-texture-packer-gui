@@ -35,6 +35,21 @@ public class MutableInt implements Pool.Poolable {
         return String.valueOf(value);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MutableInt that = (MutableInt) o;
+
+        return value == that.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return value;
+    }
+
     public interface ChangeListener {
         void onValueChanged(MutableInt value);
     }

@@ -11,13 +11,15 @@
         <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
             <stack id="canvasStack"/>
         </container>
-        <table>
+        <table onecolumn="true">
             <buttongroup>
                 <!--TODO localize-->
                 <visradiobutton text="Patches" change="editPatchGrid"/>
                 <actor width="16"/>
                 <visradiobutton text="Content area" change="editContentGrid"/>
             </buttongroup>
+
+            <checkbox id="chbMatchContent" text="Keep content within" padtop="4" change="onMatchContentChanged"/>
         </table>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
             <textbutton text="Save" change="confirmResult"/>

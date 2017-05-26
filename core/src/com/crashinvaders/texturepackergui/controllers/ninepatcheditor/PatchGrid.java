@@ -29,6 +29,7 @@ public class PatchGrid extends WidgetGroup {
     protected final Drawable gridNodeDrawable;
     protected final PatchLine left, right, top, bottom;
     protected final LineDragListener lineDragListener;
+    protected final ModelChangeListener modelListener;
 
     protected float pixelSize = 1f;
     private int imageWidth, imageHeight;
@@ -42,10 +43,10 @@ public class PatchGrid extends WidgetGroup {
         whiteDrawable = skin.getDrawable("white");
         gridNodeDrawable = skin.getDrawable("custom/nine-patch-gird-node");
 
-        left = new PatchLine(values.left, whiteDrawable, primaryColor);
-        right = new PatchLine(values.right, whiteDrawable, primaryColor);
-        top = new PatchLine(values.top, whiteDrawable, primaryColor);
-        bottom = new PatchLine(values.bottom, whiteDrawable, primaryColor);
+        left = new PatchLine(whiteDrawable, primaryColor);
+        right = new PatchLine(whiteDrawable, primaryColor);
+        top = new PatchLine(whiteDrawable, primaryColor);
+        bottom = new PatchLine(whiteDrawable, primaryColor);
         patchLines.addAll(left, right, top, bottom);
 
         addActor(left);
@@ -55,6 +56,8 @@ public class PatchGrid extends WidgetGroup {
 
         lineDragListener = new LineDragListener();
         addListener(lineDragListener);
+
+        values.addListener(modelListener = new ModelChangeListener());
     }
 
     public GridValues getValues() {
@@ -64,18 +67,10 @@ public class PatchGrid extends WidgetGroup {
     public void setImageSize(int width, int height) {
         imageWidth = width;
         imageHeight = height;
-//        setValues(0, width, height, 0);
     }
 
     public void setPixelSize(float pixelSize) {
         this.pixelSize = pixelSize;
-    }
-
-    public void setValues(int left, int right, int top, int bottom) {
-        this.left.setValue(left);
-        this.right.setValue(right);
-        this.top.setValue(top);
-        this.bottom.setValue(bottom);
     }
 
     public void setDisabled(boolean disabled) {
@@ -92,12 +87,7 @@ public class PatchGrid extends WidgetGroup {
 
     @Override
     public void layout() {
-        left.setBounds(left.getValue() * pixelSize, 0f, 0f, getHeight());
-        right.setBounds(right.getValue() * pixelSize, 0f, 0f, getHeight());
-        top.setBounds(0f, top.getValue() * pixelSize, getWidth(), 0f);
-        bottom.setBounds(0f, bottom.getValue() * pixelSize, getWidth(), 0f);
-
-        validateLinePositions();
+        updateLinesFromModel();
 
         // Manually update hover state
         {
@@ -201,6 +191,34 @@ public class PatchGrid extends WidgetGroup {
         }
     }
 
+    private void updateLinesFromModel() {
+        left.setBounds(values.left.get() * pixelSize, 0f, 0f, getHeight());
+        right.setBounds(getWidth() - values.right.get() * pixelSize, 0f, 0f, getHeight());
+        top.setBounds(0f, getHeight() - values.top.get() * pixelSize, getWidth(), 0f);
+        bottom.setBounds(0f, values.bottom.get() * pixelSize, getWidth(), 0f);
+        validateLinePositions();
+    }
+
+    private void updateModelFromLines() {
+        modelListener.ignoreModelChanges = true;
+        values.left.set(MathUtils.round(left.getX()/pixelSize));
+        values.right.set(MathUtils.round((getWidth() - right.getX())/pixelSize));
+        values.top.set(MathUtils.round((getHeight() - top.getY())/pixelSize));
+        values.bottom.set(MathUtils.round(bottom.getY()/pixelSize));
+        modelListener.ignoreModelChanges = false;
+    }
+
+    private class ModelChangeListener implements GridValues.ChangeListener {
+        boolean ignoreModelChanges;
+
+        @Override
+        public void onValuesChanged(GridValues values) {
+            if (!ignoreModelChanges) {
+                updateLinesFromModel();
+            }
+        }
+    }
+
     private class LineDragListener extends InputListener {
         private final Array<PatchLine> draggingLines = new Array<>();
         private boolean hovered;
@@ -249,20 +267,13 @@ public class PatchGrid extends WidgetGroup {
                     patchLine.endDragging(x, y);
                 }
                 draggingLines.clear();
-                updateLineValuesFromPosition();
                 validateLinePositions();
+                updateModelFromLines();
             }
 
             // Stage fires "exit" event upon touchUp() even if pointer is still over the actor.
             // This is simple workaround.
             if (hovered) ignoreNextExitEvent = true;
-        }
-
-        private void updateLineValuesFromPosition() {
-            left.setValue(MathUtils.round(left.getX()/pixelSize));
-            right.setValue(MathUtils.round(right.getX()/pixelSize));
-            top.setValue(MathUtils.round(top.getY()/pixelSize));
-            bottom.setValue(MathUtils.round(bottom.getY()/pixelSize));
         }
 
         @Override
@@ -285,7 +296,6 @@ public class PatchGrid extends WidgetGroup {
     protected static class PatchLine extends Actor {
         private static final Rectangle tmpRect = new Rectangle();
 
-        protected final MutableInt value;
         protected final Drawable drawable;
         private final Color primaryColor;
         private float thickness = 3f;
@@ -296,21 +306,12 @@ public class PatchGrid extends WidgetGroup {
         protected boolean disabled;
         protected boolean hovered;
 
-        public PatchLine(MutableInt value, Drawable drawable, Color primaryColor) {
-            this.value = value;
+        public PatchLine(Drawable drawable, Color primaryColor) {
             this.drawable = drawable;
             this.primaryColor = primaryColor;
             setTouchable(Touchable.disabled);
 
             updateVisualState();
-        }
-
-        public int getValue() {
-            return value.get();
-        }
-
-        public void setValue(int value) {
-            this.value.set(value);
         }
 
         public boolean isDisabled() {
