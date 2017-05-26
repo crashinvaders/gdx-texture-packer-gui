@@ -17,7 +17,7 @@
             <label id="lblFilePath" text="D:/test/test.png" textalign="left"/>
         </container>
         <actor width="4"/>
-        <visimagebutton image="custom/ic-folder-pick" change="InputFilePropertiesDialogController.showFilePicker"/>
+        <visimagebutton image="custom/ic-folder-pick" change="InputFilePropertiesDialogController.showFilePicker" fill="true"/>
     </table>
 
     <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
@@ -25,7 +25,8 @@
             <label text="@dInputFileRegionsPrefix" padright="8"/>
             <textfield id="edtFilePrefix"
                        growx="true"
-                       keyboardFocus="InputFilePropertiesDialogController.onFilePrefixFocusChanged"/>
+                       delayedchange="InputFilePropertiesDialogController.onFilePrefixTextChanged"
+                       keyboardfocus="InputFilePropertiesDialogController.onFilePrefixTextChanged"/>
         </table>
     </shrinkContainer>
 
@@ -34,7 +35,8 @@
             <label text="@dInputFileRegionName" padright="8"/>
             <textfield id="edtRegionName"
                        growx="true"
-                       keyboardFocus="InputFilePropertiesDialogController.onRegionNameFocusChanged"/>
+                       delayedchange="InputFilePropertiesDialogController.onRegionNameTextChanged"
+                       keyboardfocus="InputFilePropertiesDialogController.onRegionNameTextChanged"/>
             <:row padtop="4"/>
             <label text="Nine patch" padright="8"/>  <!--TODO localize-->
             <table growx="true" tablealign="left">
@@ -46,7 +48,8 @@
                         tablepadright="8"
                         visible="false"
                         focusborder="false"
-                        change="navigateToNinePatchEditor"/>    <!--TODO localize-->
+                        change="navigateToNinePatchEditor"
+                        padright="4"/>    <!--TODO localize-->
             </table>
         </table>
     </shrinkContainer>

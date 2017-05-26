@@ -140,15 +140,6 @@ public class MainController implements ActionContainer, ViewResizer {
         updateRecentProjects();
         updatePngCompression();
         updateEtcCompression();
-
-//        //TODO remove
-//        Gdx.app.postRunnable(new Runnable() {
-//            @Override
-//            public void run() {
-//                ninePatchEditorDialog.setImageFile(Gdx.files.absolute("D:/chest0.png"));
-//                interfaceService.showDialog(ninePatchEditorDialog.getClass());
-//            }
-//        });
     }
 
     @Destroy

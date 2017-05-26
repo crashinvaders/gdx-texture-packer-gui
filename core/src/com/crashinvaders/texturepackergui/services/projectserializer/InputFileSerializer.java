@@ -30,7 +30,7 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
                     //### Input file properties
                     json.writeValue("regionName", model.getRegionName());
                     // Ninepatch
-                    if (model.isNinePatch()) {
+                    if (model.isProgrammaticNinePatch()) {
                         InputFile.NinePatchProps npp = model.getNinePatchProps();
                         json.writeObjectStart("ninepatch");
                         json.writeArrayStart("splits");
@@ -88,7 +88,7 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
             npp.padRight = pads[1];
             npp.padTop = pads[2];
             npp.padBottom = pads[3];
-            inputFile.setNinePatch(true);
+            inputFile.setProgrammaticNinePatch(true);
         }
 
         return inputFile;

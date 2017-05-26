@@ -1,12 +1,15 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
+import com.crashinvaders.common.scene2d.TimeThresholdChangeListenerAction;
 import com.crashinvaders.texturepackergui.config.attributes.KeyboardFocusChangedLmlAttribute;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
@@ -57,6 +60,8 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     private Tooltip tooltip;
     private InputFile inputFile;
 
+    private boolean ignoreInputFileUpdateEvents = false;
+
     @LmlAfter void init() {
         tooltip = new Tooltip();
         tooltip.setAppearDelayTime(0.25f);
@@ -65,7 +70,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     }
 
     @OnEvent(InputFilePropertyChangedEvent.class) void onEvent(InputFilePropertyChangedEvent event) {
-        if (event.getInputFile() != inputFile) return;
+        if (event.getInputFile() != inputFile || ignoreInputFileUpdateEvents) return;
 
         mapDataFromModel();
     }
@@ -104,27 +109,25 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         dialog.hide();
     }
 
-    @LmlAction("onFilePrefixFocusChanged")
-    void onFilePrefixFocusChanged(KeyboardFocusChangedLmlAttribute.Params params) {
-        if (!params.focused) {
-            inputFile.setDirFilePrefix(edtFilePrefix.getText().trim());
-        }
+    @LmlAction("onFilePrefixTextChanged")
+    void onFilePrefixFocusChanged() {
+        inputFile.setDirFilePrefix(edtFilePrefix.getText().trim());
     }
 
-    @LmlAction("onRegionNameFocusChanged")
-    void onRegionNameFocusChanged(KeyboardFocusChangedLmlAttribute.Params params) {
-        if (!params.focused) {
-            inputFile.setRegionName(edtRegionName.getText().trim());
-        }
+    @LmlAction("onRegionNameTextChanged")
+    void onRegionNameTextChanged() {
+        inputFile.setRegionName(edtRegionName.getText().trim());
     }
 
     @LmlAction("onNinePatchChecked") void onNinePatchChecked() {
         boolean checked = chbNinePatch.isChecked();
-        inputFile.setNinePatch(checked);
+        inputFile.setProgrammaticNinePatch(checked);
         btnEditNinePatch.setVisible(checked);
     }
 
     @LmlAction("navigateToNinePatchEditor") void navigateToNinePatchEditor() {
+        if (!inputFile.isProgrammaticNinePatch()) return;
+
         ninePatchEditorDialog.setImageFile(inputFile.getFileHandle());
         ninePatchEditorDialog.getModel().loadFromInputFile(inputFile);
         ninePatchEditorDialog.setResultListener(new NinePatchEditorDialog.ResultListener() {
@@ -179,13 +182,20 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             shrinkInputFile.setVisible(true);
             edtRegionName.setMessageText(inputFile.getFileHandle().nameWithoutExtension());
             edtRegionName.setText(inputFile.getRegionName());
-            chbNinePatch.setChecked(inputFile.isNinePatch());
+
+            if (inputFile.isFileBasedNinePatch()) {
+                chbNinePatch.setDisabled(true);
+                // Delay checkbox change for one frame to not provoke update event twice in a same frame
+                Gdx.app.postRunnable(new Runnable() { @Override public void run() { chbNinePatch.setChecked(false); } });
+            } else {
+                chbNinePatch.setDisabled(false);
+                chbNinePatch.setChecked(inputFile.isProgrammaticNinePatch());
+            }
         }
 
         // Ignored file data
         if (inputFile.getType() == InputFile.Type.Ignore) {
             dialog.getTitleLabel().setText(localeService.getI18nBundle().get("dInputFileTitleFileIgnore"));
         }
-
     }
 }

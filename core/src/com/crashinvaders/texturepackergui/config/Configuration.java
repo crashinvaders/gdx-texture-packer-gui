@@ -42,6 +42,7 @@ import java.util.Locale;
 @SuppressWarnings("unused")
 @Component
 public class Configuration {
+    private static final String TAG = Configuration.class.getSimpleName();
 
     @LmlParserSyntax LmlSyntax syntax = new AppLmlSyntax();
 
@@ -140,7 +141,10 @@ public class Configuration {
         if (params.startupProject == null) return;
 
         FileHandle projectFile = FileUtils.toFileHandle(params.startupProject);
-        if (!projectFile.exists()) return;
+        if (!projectFile.exists()) {
+            Gdx.app.error(TAG, "Project file: " + projectFile + " doesn't exists.");
+            return;
+        }
 
         ProjectModel project = projectSerializer.loadProject(projectFile);
         project.setProjectFile(projectFile);

@@ -5,7 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
@@ -125,7 +124,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
                 imgName += "-dir";
             } else {
                 imgName += "-file";
-                if (inputFile.isNinePatch()) {
+                if (inputFile.isProgrammaticNinePatch() || inputFile.isFileBasedNinePatch()) {
                     imgName += "-ninepatch";
                 }
             }

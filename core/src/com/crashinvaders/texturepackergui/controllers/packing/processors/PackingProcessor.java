@@ -86,7 +86,7 @@ public class PackingProcessor implements PackProcessor {
                 }
 
                 ImageEntry imageEntry = new ImageEntry(fileHandle, name);
-                if (inputFile.isNinePatch()) {
+                if (inputFile.isProgrammaticNinePatch()) {
                     imageEntry.setNinePatch(inputFile.getNinePatchProps());
                 }
                 // Overwrite existing record (in case it was previously added from a directory)

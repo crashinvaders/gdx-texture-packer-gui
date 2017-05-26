@@ -6,6 +6,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.kiwi.util.common.Strings;
 
 public class InputFile {
     private final Type type;
@@ -71,7 +72,7 @@ public class InputFile {
         return ninePatchProps;
     }
 
-    public void setNinePatch(boolean ninePatch) {
+    public void setProgrammaticNinePatch(boolean ninePatch) {
         if (this.ninePatchProps.active == ninePatch) return;
 
         this.ninePatchProps.active = ninePatch;
@@ -81,8 +82,16 @@ public class InputFile {
         }
     }
 
-    public boolean isNinePatch() {
+    public boolean isProgrammaticNinePatch() {
         return ninePatchProps.active;
+    }
+
+    public boolean isFileBasedNinePatch() {
+        if (Strings.isNotEmpty(regionName)) {
+            return regionName.endsWith(".9");
+        } else {
+            return fileHandle.nameWithoutExtension().endsWith(".9");
+        }
     }
 
     @Override
