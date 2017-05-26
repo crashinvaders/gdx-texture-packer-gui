@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
@@ -46,13 +47,13 @@ class PixelGrid extends Widget {
             batch.setColor(tmpColor.set(i%MAJOR_LINE_STEP==0 ? majorColor : minorColor)
                     .mul(getColor())
                     .mul(1f, 1f, 1f, parentAlpha));
-            white.draw(batch, getX() + i * pixelSize - lineThickness*0.5f, getY(), lineThickness, getHeight());
+            white.draw(batch, MathUtils.round(getX() + i * pixelSize - lineThickness*0.5f), getY(), lineThickness, getHeight());
         }
         for (int i = 0; i < yLines; i++) {
             batch.setColor(tmpColor.set(i%MAJOR_LINE_STEP==0 ? majorColor : minorColor)
                     .mul(getColor())
                     .mul(1f, 1f, 1f, parentAlpha));
-            white.draw(batch, getX(), getY() + i * pixelSize - lineThickness*0.5f, getWidth(), lineThickness);
+            white.draw(batch, getX(), MathUtils.round(getY() + i * pixelSize - lineThickness*0.5f), getWidth(), lineThickness);
         }
     }
 }
