@@ -38,7 +38,7 @@
                        delayedchange="InputFilePropertiesDialogController.onRegionNameTextChanged"
                        keyboardfocus="InputFilePropertiesDialogController.onRegionNameTextChanged"/>
             <:row padtop="4"/>
-            <label text="Nine patch" padright="8"/>  <!--TODO localize-->
+            <label text="9-Patch" padright="8"/>  <!--TODO localize-->
             <table growx="true" tablealign="left">
                 <checkbox id="chbNinePatch" padright="4" change="onNinePatchChecked"/>
                 <visimagetextbutton

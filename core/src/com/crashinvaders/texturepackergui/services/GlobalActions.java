@@ -7,11 +7,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -56,6 +56,7 @@ public class GlobalActions implements ActionContainer {
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject PackDialogController packDialogController;
+    @Inject NinePatchToolController ninePatchToolController;
     @Inject CommonDialogs commonDialogs;
 
     /** Common preferences */
@@ -331,6 +332,10 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("launchTextureUnpacker") public void launchTextureUnpacker() {
         interfaceService.showDialog(TextureUnpackerDialogController.class);
+    }
+
+    @LmlAction("launchNinePatchTool") public void launchNinePatchTool() {
+        ninePatchToolController.initiateFromFilePicker();
     }
 
     @LmlAction("changePreviewBackground") public void changePreviewBackground() {

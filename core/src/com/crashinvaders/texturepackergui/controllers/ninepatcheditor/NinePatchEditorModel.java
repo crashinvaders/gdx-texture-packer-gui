@@ -13,18 +13,79 @@ public class NinePatchEditorModel implements Disposable {
     private static final int TOP = 2;
     private static final int BOTTOM = 3;
 
-    public final Pixmap imagePixmap;
+    public final Pixmap pixmap;
     public final ZoomModel zoomModel = new ZoomModel();
     public final GridValues patchValues = new GridValues();
     public final GridValues contentValues = new GridValues();
 
     public NinePatchEditorModel(FileHandle imageFile) {
-        this.imagePixmap = new Pixmap(imageFile);
+        if (imageFile.nameWithoutExtension().endsWith(".9")) {
+            this.pixmap = parseDataFromNinePatch(imageFile);
+        } else {
+            this.pixmap = new Pixmap(imageFile);
+        }
     }
 
     @Override
     public void dispose() {
-        imagePixmap.dispose();
+        pixmap.dispose();
+    }
+
+    private Pixmap parseDataFromNinePatch(FileHandle imageFile) {
+        Pixmap pixmap = new Pixmap(imageFile);
+
+        if (pixmap.getWidth() < 2 || pixmap.getHeight() < 2) return pixmap;
+
+        boolean patchLeftFound = false;
+        for (int x = 1; x < pixmap.getWidth()-1; x++) {
+            int color = pixmap.getPixel(x, 0);
+            if (!patchLeftFound && color != 0) {
+                patchValues.left.set(x - 1);
+                patchLeftFound = true;
+            } else if (patchLeftFound && color == 0) {
+                patchValues.right.set(pixmap.getWidth() - x - 1);
+                break;
+            }
+        }
+        boolean patchTopFound = false;
+        for (int y = 1; y < pixmap.getHeight()-1; y++) {
+            int color = pixmap.getPixel(0, y);
+            if (!patchTopFound && color != 0) {
+                patchValues.top.set(y - 1);
+                patchTopFound = true;
+            } else if (patchTopFound && color == 0) {
+                patchValues.bottom.set(pixmap.getHeight() - y - 1);
+                break;
+            }
+        }
+        boolean padLeftFound = false;
+        for (int x = 1; x < pixmap.getWidth()-1; x++) {
+            int color = pixmap.getPixel(x, pixmap.getHeight()-1);
+            if (!padLeftFound && color != 0) {
+                contentValues.left.set(x - 1);
+                padLeftFound = true;
+            } else if (padLeftFound && color == 0) {
+                contentValues.right.set(pixmap.getWidth() - x - 1);
+                break;
+            }
+        }
+        boolean padTopFound = false;
+        for (int y = 1; y < pixmap.getHeight()-1; y++) {
+            int color = pixmap.getPixel(pixmap.getWidth()-1, y);
+            if (!padTopFound && color != 0) {
+                contentValues.top.set(y - 1);
+                padTopFound = true;
+            } else if (padTopFound && color == 0) {
+                contentValues.bottom.set(pixmap.getHeight() - y - 1);
+                break;
+            }
+        }
+
+        // Cut off 1-pixel border markup
+        Pixmap contentPixmap = new Pixmap(pixmap.getWidth() - 2, pixmap.getHeight() - 2, pixmap.getFormat());
+        contentPixmap.drawPixmap(pixmap, 0, 0, 1, 1, contentPixmap.getWidth(), contentPixmap.getHeight());
+        pixmap.dispose();
+        return contentPixmap;
     }
 
     //region Utility methods
@@ -52,14 +113,14 @@ public class NinePatchEditorModel implements Disposable {
 
         if (values.left.get() == 0 && values.right.get() == 0) {
             out[LEFT] = 0;
-            out[RIGHT] = imagePixmap.getWidth();
+            out[RIGHT] = pixmap.getWidth();
         } else {
             out[LEFT] = values.left.get();
             out[RIGHT] = values.right.get();
         }
         if (values.bottom.get() == 0 && values.top.get() == 0) {
             out[TOP] = 0;
-            out[BOTTOM] = imagePixmap.getHeight();
+            out[BOTTOM] = pixmap.getHeight();
         } else {
             out[TOP] = values.top.get();
             out[BOTTOM] = values.bottom.get();
@@ -80,30 +141,6 @@ public class NinePatchEditorModel implements Disposable {
         if (out.length != 4) throw new IllegalArgumentException("\"out\" must be an 4-component int array!");
 
         GridValues values = this.contentValues;
-
-//        if (!values.hasValues()) {
-//            out[LEFT] = 0;
-//            out[RIGHT] = 0;
-//            out[TOP] = 0;
-//            out[BOTTOM] = 0;
-//            return out;
-//        }
-//
-//        if (values.left.get() == 0 && values.right.get() == 0) {
-//            out[LEFT] = -1;
-//            out[RIGHT] = -1;
-//        } else {
-//            out[LEFT] = values.left.get();
-//            out[RIGHT] = values.right.get();
-//        }
-//        if (values.bottom.get() == 0 && values.top.get() == 0) {
-//            out[TOP] = -1;
-//            out[BOTTOM] = -1;
-//        } else {
-//            out[TOP] = values.top.get();
-//            out[BOTTOM] = values.bottom.get();
-//        }
-
         out[LEFT] = values.left.get();
         out[RIGHT] = values.right.get();
         out[TOP] = values.top.get();
@@ -130,18 +167,47 @@ public class NinePatchEditorModel implements Disposable {
     public void loadFromInputFile(InputFile inputFile) {
         InputFile.NinePatchProps ninePatchProps = inputFile.getNinePatchProps();
 
-        patchValues.left.set(MathUtils.clamp(ninePatchProps.left, 0, imagePixmap.getWidth()));
-        patchValues.right.set(MathUtils.clamp(ninePatchProps.right, 0, imagePixmap.getWidth()));
-        patchValues.top.set(MathUtils.clamp(ninePatchProps.top, 0, imagePixmap.getHeight()));
-        patchValues.bottom.set(MathUtils.clamp(ninePatchProps.bottom, 0, imagePixmap.getHeight()));
+        patchValues.left.set(MathUtils.clamp(ninePatchProps.left, 0, pixmap.getWidth()));
+        patchValues.right.set(MathUtils.clamp(ninePatchProps.right, 0, pixmap.getWidth()));
+        patchValues.top.set(MathUtils.clamp(ninePatchProps.top, 0, pixmap.getHeight()));
+        patchValues.bottom.set(MathUtils.clamp(ninePatchProps.bottom, 0, pixmap.getHeight()));
 
-        if (patchValues.right.get() == imagePixmap.getWidth()) patchValues.right.set(0);
-        if (patchValues.bottom.get() == imagePixmap.getHeight()) patchValues.bottom.set(0);
+        if (patchValues.right.get() == pixmap.getWidth()) patchValues.right.set(0);
+        if (patchValues.bottom.get() == pixmap.getHeight()) patchValues.bottom.set(0);
 
-        contentValues.left.set(MathUtils.clamp(ninePatchProps.padLeft, 0, imagePixmap.getWidth()));
-        contentValues.right.set(MathUtils.clamp(ninePatchProps.padRight, 0, imagePixmap.getWidth()));
-        contentValues.top.set(MathUtils.clamp(ninePatchProps.padTop, 0, imagePixmap.getHeight()));
-        contentValues.bottom.set(MathUtils.clamp(ninePatchProps.padBottom, 0, imagePixmap.getHeight()));
+        contentValues.left.set(MathUtils.clamp(ninePatchProps.padLeft, 0, pixmap.getWidth()));
+        contentValues.right.set(MathUtils.clamp(ninePatchProps.padRight, 0, pixmap.getWidth()));
+        contentValues.top.set(MathUtils.clamp(ninePatchProps.padTop, 0, pixmap.getHeight()));
+        contentValues.bottom.set(MathUtils.clamp(ninePatchProps.padBottom, 0, pixmap.getHeight()));
+    }
+
+    /** @return original image pixmap with 1-pixel border 9-patch markup. */
+    public Pixmap prepareNinePatchPixmap() {
+        Pixmap patchPixmap = new Pixmap(this.pixmap.getWidth() + 2, this.pixmap.getHeight() + 2, this.pixmap.getFormat());
+        patchPixmap.drawPixmap(pixmap, 1, 1);
+
+        patchPixmap.setColor(0x000000ff);
+        if (patchValues.left.get() != 0 && patchValues.right.get() != 0) {
+            for (int x = patchValues.left.get(); x < (pixmap.getWidth() - patchValues.right.get()); x++) {
+                patchPixmap.drawPixel(x+1, 0);
+            }
+        }
+        if (patchValues.top.get() != 0 && patchValues.bottom.get() != 0) {
+            for (int y = patchValues.top.get(); y < (pixmap.getHeight() - patchValues.bottom.get()); y++) {
+                patchPixmap.drawPixel(0, y+1);
+            }
+        }
+        if (contentValues.left.get() != 0 && contentValues.right.get() != 0) {
+            for (int x = contentValues.left.get(); x < (pixmap.getWidth() - contentValues.right.get()); x++) {
+                patchPixmap.drawPixel(x+1, pixmap.getHeight()+1);
+            }
+        }
+        if (contentValues.top.get() != 0 && contentValues.bottom.get() != 0) {
+            for (int y = contentValues.top.get(); y < (pixmap.getHeight() - contentValues.bottom.get()); y++) {
+                patchPixmap.drawPixel(pixmap.getWidth()+1, y+1);
+            }
+        }
+        return patchPixmap;
     }
     //endregion
 }

@@ -1,11 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -14,15 +10,12 @@ import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
-import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisDialog;
-
-import java.util.Arrays;
 
 @ViewDialog("lml/ninepatcheditor/dialogNinePatchEditor.lml")
 public class NinePatchEditorDialog implements ActionContainer {
@@ -70,7 +63,7 @@ public class NinePatchEditorDialog implements ActionContainer {
         Image imgBackground = new Image(skin.getTiledDrawable("custom/transparent-light"));
         canvasStack.addActor(imgBackground);
 
-        SourceImage sourceImage = new SourceImage(model.imagePixmap);
+        SourceImage sourceImage = new SourceImage(model.pixmap);
 
         compositionHolder = new CompositionHolder(skin, sourceImage, model);
         canvasStack.addActor(compositionHolder);

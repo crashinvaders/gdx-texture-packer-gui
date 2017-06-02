@@ -3,10 +3,11 @@
 
 <visdialog
         id="dialog"
-        title="Nine patch editor"
+        title="9-Patch editor"
         closebutton="true"
         closeonescape="true"
         resizable="true">
+        <!--TODO localize-->
     <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
         <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
             <stack id="canvasStack"/>
