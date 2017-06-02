@@ -1,9 +1,6 @@
 package com.crashinvaders.texturepackergui.services.model;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
@@ -17,6 +14,8 @@ public class InputFile {
 
     // Input directory fields
     private String dirFilePrefix;
+    private boolean recursive;
+    private boolean flattenPaths;
 
     // Input file fields
     private String regionName;
@@ -50,6 +49,34 @@ public class InputFile {
 
     public void setDirFilePrefix(String dirFilePrefix) {
         this.dirFilePrefix = dirFilePrefix;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));
+        }
+    }
+
+    public boolean isRecursive() {
+        return recursive;
+    }
+
+    public void setRecursive(boolean recursive) {
+        if (this.recursive == recursive) return;
+
+        this.recursive = recursive;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));
+        }
+    }
+
+    public boolean isFlattenPaths() {
+        return flattenPaths;
+    }
+
+    public void setFlattenPaths(boolean flattenPaths) {
+        if (this.flattenPaths == flattenPaths) return;
+
+        this.flattenPaths = flattenPaths;
 
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new InputFilePropertyChangedEvent(this));

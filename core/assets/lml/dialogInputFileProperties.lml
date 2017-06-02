@@ -22,11 +22,20 @@
 
     <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
         <table>
-            <label text="@dInputFileRegionsPrefix" padright="8"/>
+            <label text="@dInputFileRegionsPrefix" padright="8" align="right"/>
             <textfield id="edtFilePrefix"
                        growx="true"
                        delayedchange="InputFilePropertiesDialogController.onFilePrefixTextChanged"
                        keyboardfocus="InputFilePropertiesDialogController.onFilePrefixTextChanged"/>
+            <:row padtop="4"/>
+            <label text="Recursive" padright="8" align="right"/>  <!--TODO localize-->
+            <table growx="true" tablealign="left">
+                <checkbox id="chbRecursive" change="onRecursiveChecked" padright="4"/>
+                <table id="flattenPathContainer" visible="false">
+                    <label text="Flatten paths" padright="8"/>  <!--TODO localize-->
+                    <checkbox id="chbFlattenPaths" change="onFlattenPathsChecked"/>
+                </table>
+            </table>
         </table>
     </shrinkContainer>
 

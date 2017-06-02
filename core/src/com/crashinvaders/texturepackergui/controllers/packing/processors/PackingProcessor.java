@@ -10,6 +10,7 @@ import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.github.czyzby.kiwi.util.common.Strings;
+import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.Comparator;
 import java.util.regex.Pattern;
 
 public class PackingProcessor implements PackProcessor {
@@ -56,21 +58,53 @@ public class PackingProcessor implements PackProcessor {
     }
 
     private static Array<ImageEntry> collectImageFiles(PackModel packModel) {
-        ObjectSet<ImageEntry> images = new ObjectSet<>();
-        Array<InputFile> inputFiles = packModel.getInputFiles();
+        final ObjectSet<ImageEntry> images = new ObjectSet<>();
+        Array<InputFile> inputFiles = new Array<>(packModel.getInputFiles());
+        inputFiles.sort(new Comparator<InputFile>() {
+            @Override
+            public int compare(InputFile l, InputFile r) {
+                int comparison;
+
+                comparison = l.getType().compareTo(r.getType());
+                if (comparison != 0) return comparison;
+
+                comparison = Boolean.compare(l.isRecursive(), r.isRecursive());
+                if (comparison != 0) return comparison;
+
+                comparison = Boolean.compare(l.isFlattenPaths(), r.isFlattenPaths());
+                if (comparison != 0) return comparison;
+
+                return 0;
+            }
+        });
 
         // Collect input images from directories
         for (InputFile inputFile : inputFiles) {
             if (inputFile.getType() == InputFile.Type.Input && inputFile.isDirectory()) {
-                FileHandle fileHandle = inputFile.getFileHandle();
-                FileHandle[] children = fileHandle.list((FileFilter) new SuffixFileFilter(new String[]{".png", ".jpg", "jpeg"}));
-                for (FileHandle child : children) {
-                    String name = child.nameWithoutExtension();
-                    if (Strings.isNotEmpty(inputFile.getDirFilePrefix())) {
-                        name = inputFile.getDirFilePrefix() + name;
+                final String dirPrefix = inputFile.getDirFilePrefix() != null ? inputFile.getDirFilePrefix() : "";
+
+                class RecursiveCollector {
+                    void collectImages(FileHandle fileHandle, String prefix, boolean recursive, boolean flattenPath) {
+                        FileHandle[] children = fileHandle.list((FileFilter) new SuffixFileFilter(new String[]{".png", ".jpg", "jpeg"}));
+                        for (FileHandle child : children) {
+                            String name = child.nameWithoutExtension();
+                            name = prefix + name;
+                            images.add(new ImageEntry(child, name));
+                        }
+
+                        if (recursive) {
+                            FileHandle[] subDirs = fileHandle.list((FileFilter) DirectoryFileFilter.DIRECTORY);
+                            for (FileHandle subDir : subDirs) {
+                                String nextPrefix = prefix;
+                                if (!flattenPath) {
+                                    nextPrefix += subDir.name() + "/";
+                                }
+                                collectImages(subDir, nextPrefix, recursive, flattenPath);
+                            }
+                        }
                     }
-                    images.add(new ImageEntry(child, name));
                 }
+                new RecursiveCollector().collectImages(inputFile.getFileHandle(), dirPrefix, inputFile.isRecursive(), inputFile.isFlattenPaths());
             }
         }
 

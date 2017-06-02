@@ -5,6 +5,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -56,6 +57,9 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     @LmlActor("shrinkInputFile") ShrinkContainer shrinkInputFile;
     // Directory properties
     @LmlActor("edtFilePrefix") VisTextField edtFilePrefix;
+    @LmlActor("flattenPathContainer") Group flattenPathContainer;
+    @LmlActor("chbRecursive") VisCheckBox chbRecursive;
+    @LmlActor("chbFlattenPaths") VisCheckBox chbFlattenPaths;
     // File properties
     @LmlActor("edtRegionName") VisTextField edtRegionName;
     @LmlActor("chbNinePatch") VisCheckBox chbNinePatch;
@@ -116,6 +120,17 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     @LmlAction("onFilePrefixTextChanged")
     void onFilePrefixFocusChanged() {
         inputFile.setDirFilePrefix(edtFilePrefix.getText().trim());
+    }
+
+    @LmlAction("onRecursiveChecked") void onRecursiveChecked() {
+        boolean checked = chbRecursive.isChecked();
+        inputFile.setRecursive(checked);
+        flattenPathContainer.setVisible(checked);
+    }
+
+    @LmlAction("onFlattenPathsChecked") void onFlattenPathsChecked() {
+        boolean checked = chbFlattenPaths.isChecked();
+        inputFile.setFlattenPaths(checked);
     }
 
     @LmlAction("onRegionNameTextChanged")
@@ -205,6 +220,9 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             dialog.getTitleLabel().setText(localeService.getI18nBundle().get("dInputFileTitleDir"));
             shrinkInputDir.setVisible(true);
             edtFilePrefix.setText(inputFile.getDirFilePrefix());
+
+            chbRecursive.setChecked(inputFile.isRecursive());
+            chbFlattenPaths.setChecked(inputFile.isFlattenPaths());
         }
 
         // Input file data
