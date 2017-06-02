@@ -2,6 +2,8 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -12,6 +14,7 @@ import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.common.scene2d.TimeThresholdChangeListenerAction;
 import com.crashinvaders.texturepackergui.config.attributes.KeyboardFocusChangedLmlAttribute;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
+import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
@@ -43,6 +46,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
     @Inject NinePatchEditorDialog ninePatchEditorDialog;
+    @Inject ErrorDialogController errorDialogController;
 
     @ViewStage Stage stage;
 
@@ -121,21 +125,48 @@ public class InputFilePropertiesDialogController implements ActionContainer {
 
     @LmlAction("onNinePatchChecked") void onNinePatchChecked() {
         boolean checked = chbNinePatch.isChecked();
-        inputFile.setProgrammaticNinePatch(checked);
         btnEditNinePatch.setVisible(checked);
+
+        // Ignore model logic for a file based nine patch
+        if (inputFile.isFileBasedNinePatch()) return;
+
+        inputFile.setProgrammaticNinePatch(checked);
     }
 
     @LmlAction("navigateToNinePatchEditor") void navigateToNinePatchEditor() {
-        if (!inputFile.isProgrammaticNinePatch()) return;
-
         ninePatchEditorDialog.setImageFile(inputFile.getFileHandle());
-        ninePatchEditorDialog.getModel().loadFromInputFile(inputFile);
-        ninePatchEditorDialog.setResultListener(new NinePatchEditorDialog.ResultListener() {
-            @Override
-            public void onResult(NinePatchEditorModel model) {
-                model.saveToInputFile(inputFile);
-            }
-        });
+
+        if (inputFile.isProgrammaticNinePatch()) {
+            ninePatchEditorDialog.getModel().loadFromInputFile(inputFile);
+            ninePatchEditorDialog.setResultListener(
+                    new NinePatchEditorDialog.ResultListener() {
+                        @Override
+                        public void onResult(NinePatchEditorModel model) {
+                            // Update input file model
+                            model.saveToInputFile(inputFile);
+                        }
+                    }
+            );
+        }
+
+        if (inputFile.isFileBasedNinePatch()) {
+            ninePatchEditorDialog.setResultListener(new NinePatchEditorDialog.ResultListener() {
+                @Override
+                public void onResult(NinePatchEditorModel model) {
+                    // Rewrite image file
+                    Pixmap pixmap = model.prepareNinePatchPixmap();
+                    try {
+                        PixmapIO.writePNG(inputFile.getFileHandle(), pixmap);
+                    } catch (Exception e) {
+                        errorDialogController.setError(e);
+                        interfaceService.showDialog(errorDialogController.getClass());
+                    } finally {
+                        pixmap.dispose();
+                    }
+                }
+            });
+        }
+
         interfaceService.showDialog(ninePatchEditorDialog.getClass());
     }
 
@@ -186,7 +217,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             if (inputFile.isFileBasedNinePatch()) {
                 chbNinePatch.setDisabled(true);
                 // Delay checkbox change for one frame to not provoke update event twice in a same frame
-                Gdx.app.postRunnable(new Runnable() { @Override public void run() { chbNinePatch.setChecked(false); } });
+                Gdx.app.postRunnable(new Runnable() { @Override public void run() { chbNinePatch.setChecked(true); } });
             } else {
                 chbNinePatch.setDisabled(false);
                 chbNinePatch.setChecked(inputFile.isProgrammaticNinePatch());
