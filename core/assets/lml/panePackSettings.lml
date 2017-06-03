@@ -171,7 +171,7 @@
 
                     <vischeckbox id="cbAllowRotation" onchange="onSettingsCbChecked" tooltip="@psTtRotation">@psAllowRotation</vischeckbox>
 
-                    <vischeckbox id="cbIncludeSubdirs" onchange="onSettingsCbChecked" tooltip="@psTtCombineSubdirectories">@psIncludeSubdirs</vischeckbox>
+                    <!--<vischeckbox id="cbIncludeSubdirs" onchange="onSettingsCbChecked" tooltip="@psTtCombineSubdirectories">@psIncludeSubdirs</vischeckbox>-->
 
                     <vischeckbox id="cbBleeding" onchange="onSettingsCbChecked" tooltip="@psTtBleed">@psBleeding</vischeckbox>
 
@@ -195,7 +195,7 @@
 
                     <vischeckbox id="cbDebug" onchange="onSettingsCbChecked" tooltip="@psTtDebug">@psDebug</vischeckbox>
 
-                    <vischeckbox id="cbFlattenPaths" onchange="onSettingsCbChecked" tooltip="@psTtFlattenPaths">@psFlattenPaths</vischeckbox>
+                    <!--<vischeckbox id="cbFlattenPaths" onchange="onSettingsCbChecked" tooltip="@psTtFlattenPaths">@psFlattenPaths</vischeckbox>-->
 
                     <vischeckbox id="cbUseIndices" onchange="onSettingsCbChecked" tooltip="@psTtUseIndexes">@psUseIndices</vischeckbox>
 

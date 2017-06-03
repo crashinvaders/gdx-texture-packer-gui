@@ -156,11 +156,9 @@ public class ProjectSerializer {
         sb.append("wrapX=").append(settings.wrapX).append("\n");
         sb.append("wrapY=").append(settings.wrapY).append("\n");
         sb.append("premultiplyAlpha=").append(settings.premultiplyAlpha).append("\n");
-        sb.append("combineSubdirectories=").append(settings.combineSubdirectories).append("\n");
         sb.append("grid=").append(settings.grid).append("\n");
         sb.append("square=").append(settings.square).append("\n");
         sb.append("bleed=").append(settings.bleed).append("\n");
-        sb.append("flattenPaths=").append(settings.flattenPaths).append("\n");
         sb.append("limitMemory=").append(settings.limitMemory).append("\n");
         sb.append("useIndexes=").append(settings.useIndexes).append("\n");
 
@@ -308,11 +306,9 @@ public class ProjectSerializer {
         settings.wrapX = Texture.TextureWrap.valueOf(find(lines, "wrapX=", defaultSettings.wrapX.toString()));
         settings.wrapY = Texture.TextureWrap.valueOf(find(lines, "wrapY=", defaultSettings.wrapY.toString()));
         settings.premultiplyAlpha = find(lines, "premultiplyAlpha=", defaultSettings.premultiplyAlpha);
-        settings.combineSubdirectories = find(lines, "combineSubdirectories=", defaultSettings.combineSubdirectories);  //TODO remove this property
         settings.grid = find(lines, "grid=", defaultSettings.grid);
         settings.square = find(lines, "square=", defaultSettings.square);
         settings.bleed = find(lines, "bleed=", defaultSettings.bleed);
-        settings.flattenPaths = find(lines, "flattenPaths=", defaultSettings.flattenPaths);  //TODO remove this property
         settings.limitMemory = find(lines, "limitMemory=", defaultSettings.limitMemory);
         settings.useIndexes = find(lines, "useIndexes=", defaultSettings.useIndexes);
 

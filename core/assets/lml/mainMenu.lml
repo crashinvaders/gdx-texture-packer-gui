@@ -81,10 +81,9 @@
                 icon="custom/ic-texture-unpacker"/>
         <menuitem
                 id="miNinePatchTool"
-                text="9-Patch tool"
+                text="@ninePatchTool"
                 onchange="launchNinePatchTool"
                 icon="custom/ic-ninepatch"/>
-                <!--TODO localize-->
     </menu>
     <menu text="@help" style="main-menu">
         <menuitem

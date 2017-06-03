@@ -28,12 +28,12 @@
                        delayedchange="InputFilePropertiesDialogController.onFilePrefixTextChanged"
                        keyboardfocus="InputFilePropertiesDialogController.onFilePrefixTextChanged"/>
             <:row padtop="4"/>
-            <label text="Recursive" padright="8" align="right"/>  <!--TODO localize-->
+            <label text="@dInputFileRecursive" vistooltip="@dInputFileTtRecursive" padright="8" align="right"/>
             <table growx="true" tablealign="left">
-                <checkbox id="chbRecursive" change="onRecursiveChecked" padright="4"/>
+                <checkbox id="chbRecursive" vistooltip="@dInputFileTtRecursive" change="onRecursiveChecked" padright="4"/>
                 <table id="flattenPathContainer" visible="false">
-                    <label text="Flatten paths" padright="8"/>  <!--TODO localize-->
-                    <checkbox id="chbFlattenPaths" change="onFlattenPathsChecked"/>
+                    <label text="@dInputFileFlattenPaths" vistooltip="@dInputFileTtFlattenPaths" padright="8"/>
+                    <checkbox id="chbFlattenPaths" vistooltip="@dInputFileTtFlattenPaths" change="onFlattenPathsChecked"/>
                 </table>
             </table>
         </table>
@@ -47,18 +47,18 @@
                        delayedchange="InputFilePropertiesDialogController.onRegionNameTextChanged"
                        keyboardfocus="InputFilePropertiesDialogController.onRegionNameTextChanged"/>
             <:row padtop="4"/>
-            <label text="9-Patch" padright="8"/>  <!--TODO localize-->
+            <label text="@ninePatch" padright="8"/>
             <table growx="true" tablealign="left">
                 <checkbox id="chbNinePatch" padright="4" change="onNinePatchChecked"/>
                 <visimagetextbutton
                         id="btnEditNinePatch"
                         image="custom/ic-ninepatch"
-                        text="Edit patch"
+                        text="@edit"
                         tablepadright="8"
                         visible="false"
                         focusborder="false"
                         change="navigateToNinePatchEditor"
-                        padright="4"/>    <!--TODO localize-->
+                        padright="4"/>
             </table>
         </table>
     </shrinkContainer>

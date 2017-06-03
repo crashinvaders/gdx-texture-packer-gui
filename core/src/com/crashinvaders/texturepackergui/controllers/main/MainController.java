@@ -344,8 +344,6 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cbStripWhitespaceX": settings.stripWhitespaceX = checkBox.isChecked(); break;
             case "cbStripWhitespaceY": settings.stripWhitespaceY = checkBox.isChecked(); break;
             case "cbAllowRotation": settings.rotation = checkBox.isChecked(); break;
-            case "cbIncludeSubdirs": settings.combineSubdirectories = checkBox.isChecked(); break;
-            case "cbFlattenPaths": settings.flattenPaths = checkBox.isChecked(); break;
             case "cbBleeding": settings.bleed = checkBox.isChecked(); break;
             case "cbDuplicatePadding": settings.duplicatePadding = checkBox.isChecked(); break;
             case "cbForcePot": settings.pot = checkBox.isChecked(); break;
@@ -450,8 +448,6 @@ public class MainController implements ActionContainer, ViewResizer {
             actorsPackSettings.cbStripWhitespaceX.setChecked(settings.stripWhitespaceX);
             actorsPackSettings.cbStripWhitespaceY.setChecked(settings.stripWhitespaceY);
             actorsPackSettings.cbAllowRotation.setChecked(settings.rotation);
-            actorsPackSettings.cbIncludeSubdirs.setChecked(settings.combineSubdirectories);
-            actorsPackSettings.cbFlattenPaths.setChecked(settings.flattenPaths);
             actorsPackSettings.cbBleeding.setChecked(settings.bleed);
             actorsPackSettings.cbDuplicatePadding.setChecked(settings.duplicatePadding);
             actorsPackSettings.cbForcePot.setChecked(settings.pot);

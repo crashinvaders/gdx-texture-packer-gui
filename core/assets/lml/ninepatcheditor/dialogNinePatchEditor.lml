@@ -3,28 +3,26 @@
 
 <visdialog
         id="dialog"
-        title="9-Patch editor"
+        title="@ninePatchTool"
         closebutton="true"
         closeonescape="true"
         resizable="true">
-        <!--TODO localize-->
     <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
         <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
             <stack id="canvasStack"/>
         </container>
         <table onecolumn="true">
             <buttongroup>
-                <!--TODO localize-->
-                <visradiobutton text="Patches" change="editPatchGrid"/>
+                <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
                 <actor width="16"/>
-                <visradiobutton text="Content area" change="editContentGrid"/>
+                <visradiobutton text="@ninePatchContent" change="editContentGrid"/>
             </buttongroup>
 
-            <checkbox id="chbMatchContent" text="Keep content within" padtop="4" change="onMatchContentChanged"/>
+            <checkbox id="chbMatchContent" text="@ninePatchKeepContentWithin" padtop="4" change="onMatchContentChanged"/>
         </table>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
-            <textbutton text="Save" change="confirmResult"/>
-            <textbutton text="Cancel" change="hide"/>
+            <textbutton text="@save" change="confirmResult"/>
+            <textbutton text="@cancel" change="hide"/>
         </table>
     </table>
 </visdialog>

@@ -31,8 +31,6 @@ public class PackSettingsActors {
     @LmlActor("cbStripWhitespaceX") VisCheckBox cbStripWhitespaceX;
     @LmlActor("cbStripWhitespaceY") VisCheckBox cbStripWhitespaceY;
     @LmlActor("cbAllowRotation") VisCheckBox cbAllowRotation;
-    @LmlActor("cbIncludeSubdirs") VisCheckBox cbIncludeSubdirs;
-    @LmlActor("cbFlattenPaths") VisCheckBox cbFlattenPaths;
     @LmlActor("cbBleeding") VisCheckBox cbBleeding;
     @LmlActor("cbDuplicatePadding") VisCheckBox cbDuplicatePadding;
     @LmlActor("cbForcePot") VisCheckBox cbForcePot;
