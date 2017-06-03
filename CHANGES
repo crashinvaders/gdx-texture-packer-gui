@@ -1,6 +1,8 @@
 [LATEST]
 - ETC(KTX) compression
-- Fixed "Use aliases" flag is missing in save file
+- Fixed "Use aliases" flag is missing in a save file
+- Nine patch editor. Nine patches can be created from a plain images on the fly.
+- Recursive and flatten paths flags for an input directory
 
 [4.4.0]
 - Each pack now consists of list of input/ignore files (no more single source dir)
