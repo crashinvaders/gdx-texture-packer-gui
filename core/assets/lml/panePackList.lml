@@ -8,7 +8,7 @@
         <vistable growx="true" tablealign="left" defaultpadright="4" background="button" >
             <:column column="0"/>
 
-            <:macro alias="sidebutton" replace="ignored" id icon onchange tooltip>
+            <:macro alias="sidebutton" replace="ignored" id icon onchange tooltip style="default">
                 <visimagebutton
                         id="{id}"
                         icon="{icon}"
@@ -18,7 +18,8 @@
                         focusborder="false"
                         tooltip="{tooltip}"
                         width="25"
-                        height="25"/>
+                        height="25"
+                        style="{style}"/>
             </:macro>
 
             <:sidebutton id="btnSpNew" icon="custom/ic-file-new" onchange="newPack" tooltip="@newPack"/>
@@ -35,8 +36,8 @@
             <separator growy="true" height="0" width="2" padtop="1" padbottom="1"/>
             <!--<actor growx="true"/>-->
 
-            <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected" tooltip="@packSelected"/>
-            <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll" tooltip="@packAll"/>
+            <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected" tooltip="@packSelected" style="accent"/>
+            <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll" tooltip="@packAll" style="accent"/>
 
         </vistable>
 

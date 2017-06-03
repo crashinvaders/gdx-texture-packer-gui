@@ -147,7 +147,8 @@ com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
 	close: {down: button-down, up: button, over: button-over, imageUp: icon-close, disabled: button },
 	close-active-tab: {down: button-down, imageUp: icon-close, up: button-blue, over: button-blue-over, disabled: button-blue },
 	close-window: {up: button-window-bg, down: button-down, over: button-over, imageUp: icon-close, disabled: button },
-	pack-log: {down: button-down, over: button-over}
+	pack-log: {down: button-down, over: button-over},
+	accent: {down: button-down, up: button-accent, over: button-accent-over, disabled: button, focusBorder: border },
 },
 com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle: {
 	default: {down: button-down, up: button, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey, focusBorder: border },
