@@ -58,7 +58,7 @@ public class PackingProcessor implements PackProcessor {
     }
 
     private static Array<ImageEntry> collectImageFiles(PackModel packModel) {
-        final ObjectSet<ImageEntry> images = new ObjectSet<>();
+        final ImageEntryList images = new ImageEntryList();
         Array<InputFile> inputFiles = new Array<>(packModel.getInputFiles());
         inputFiles.sort(new Comparator<InputFile>() {
             @Override
@@ -123,10 +123,6 @@ public class PackingProcessor implements PackProcessor {
                 if (inputFile.isProgrammaticNinePatch()) {
                     imageEntry.setNinePatch(inputFile.getNinePatchProps());
                 }
-                // Overwrite existing record (in case it was previously added from a directory)
-                if (images.contains(imageEntry)) {
-                    images.remove(imageEntry);
-                }
                 images.add(imageEntry);
             }
         }
@@ -137,12 +133,7 @@ public class PackingProcessor implements PackProcessor {
             images.remove(new ImageEntry(inputFile.getFileHandle(), null));
         }
 
-        // Return result
-        Array<ImageEntry> result = new Array<>();
-        for (ImageEntry image : images) {
-            result.add(image);
-        }
-        return result;
+        return images.getAsArray();
     }
 
     private static void deleteOldFiles(PackModel packModel) throws Exception {
@@ -239,10 +230,33 @@ public class PackingProcessor implements PackProcessor {
         public int hashCode() {
             return fileHandle.hashCode();
         }
+    }
 
-        public static class NinePatchProps {
-            public int[] splits;
-            public int[] pads;
+    private static class ImageEntryList {
+        private final ObjectSet<ImageEntry> imageSet = new ObjectSet<>();
+
+        public boolean add(ImageEntry image) {
+            if (imageSet.contains(image)) {
+                imageSet.remove(image);
+                System.out.println("File: " + image.fileHandle + " is listed twice (last added configuration will be used)");
+            }
+            return imageSet.add(image);
+        }
+
+        public boolean remove(ImageEntry image) {
+            return imageSet.remove(image);
+        }
+
+        public boolean contains(ImageEntry image) {
+            return imageSet.contains(image);
+        }
+
+        public Array<ImageEntry> getAsArray() {
+            Array<ImageEntry> result = new Array<>();
+            for (ImageEntry image : imageSet) {
+                result.add(image);
+            }
+            return result;
         }
     }
 }

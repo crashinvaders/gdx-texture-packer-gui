@@ -21,7 +21,7 @@
     </table>
 
     <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
-        <table>
+        <table padtop="2">
             <label text="@dInputFileRegionsPrefix" padright="8" align="right"/>
             <textfield id="edtFilePrefix"
                        growx="true"
