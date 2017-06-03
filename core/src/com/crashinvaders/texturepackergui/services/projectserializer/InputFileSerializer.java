@@ -26,6 +26,8 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
                 if (model.isDirectory()) {
                     //### Input directory properties
                     json.writeValue("dirFilePrefix", model.getDirFilePrefix());
+                    json.writeValue("recursive", model.isRecursive());
+                    json.writeValue("flattenPaths", model.isFlattenPaths());
                 } else {
                     //### Input file properties
                     json.writeValue("regionName", model.getRegionName());
@@ -62,6 +64,8 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         InputFile.Type type = InputFile.Type.valueOf(jsonData.getString("type"));
         String dirFilePrefix = jsonData.getString("dirFilePrefix", null);
         String regionName = jsonData.getString("regionName", null);
+        boolean recursive = jsonData.getBoolean("recursive", false);
+        boolean flattenPaths = jsonData.getBoolean("flattenPaths", false);
 
         FileHandle fileHandle;
         if (new File(path).isAbsolute()) {
@@ -73,6 +77,8 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         InputFile inputFile = new InputFile(fileHandle, type);
         inputFile.setDirFilePrefix(dirFilePrefix);
         inputFile.setRegionName(regionName);
+        inputFile.setRecursive(recursive);
+        inputFile.setFlattenPaths(flattenPaths);
 
         // Ninepatch
         JsonValue ninepatch = jsonData.get("ninepatch");
