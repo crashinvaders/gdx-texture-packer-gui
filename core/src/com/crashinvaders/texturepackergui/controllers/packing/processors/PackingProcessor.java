@@ -44,7 +44,7 @@ public class PackingProcessor implements PackProcessor {
         }
 
         deleteOldFiles(packModel);
-        String filename = getFilename(packModel);
+        String filename = obtainFilename(packModel);
 
         TexturePacker packer = new TexturePacker(packModel.getSettings());
         for (ImageEntry image : imageEntries) {
@@ -137,11 +137,11 @@ public class PackingProcessor implements PackProcessor {
     }
 
     private static void deleteOldFiles(PackModel packModel) throws Exception {
+        String filename = obtainFilename(packModel);
+
         TexturePacker.Settings settings = packModel.getSettings();
         String atlasExtension = settings.atlasExtension == null ? "" : settings.atlasExtension;
         atlasExtension = Pattern.quote(atlasExtension);
-
-        String filename = getFilename(packModel);
 
         for (int i = 0, n = settings.scale.length; i < n; i++) {
             FileProcessor deleteProcessor = new FileProcessor() {
@@ -169,7 +169,7 @@ public class PackingProcessor implements PackProcessor {
         }
     }
 
-    private static String getFilename(PackModel packModel) {
+    private static String obtainFilename(PackModel packModel) {
         String filename = packModel.getCanonicalFilename();
         if (filename.lastIndexOf(".") > -1) {
             String extension = filename.substring(filename.lastIndexOf("."));
