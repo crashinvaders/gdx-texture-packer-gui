@@ -33,7 +33,7 @@ public class PathUtils {
 		String normalizedTargetPath = FilenameUtils.normalizeNoEndSeparator(targetPath);
 		String normalizedBasePath = FilenameUtils.normalizeNoEndSeparator(basePath);
 
-		if (basePath.equals(targetPath)) return ".";
+		if (normalizedBasePath.equals(normalizedTargetPath)) return ".";
 
 		// Undo the changes to the separators made by normalization
 		if (pathSeparator.equals("/")) {
@@ -61,7 +61,7 @@ public class PathUtils {
 		}
 
 		if (commonIndex == 0) {
-			return targetPath;
+			return normalizedTargetPath;
 		}
 
 		// The number of directories we have to backtrack depends on whether the base is a file or a dir

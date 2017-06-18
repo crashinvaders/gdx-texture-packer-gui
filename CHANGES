@@ -4,6 +4,7 @@
 - Recursive and flatten paths flags for an input directory
 - Fixed "Use aliases" flag is missing in a save file
 - Fixed old pack data file does not get replaced with a new one properly, when custom extension is being used.
+- Fixed crash when project contains input dir that is a parent of the project save file itself
 
 [4.4.0]
 - Each pack now consists of list of input/ignore files (no more single source dir)
