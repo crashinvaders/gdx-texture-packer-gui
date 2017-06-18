@@ -38,10 +38,8 @@ import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
-import com.github.czyzby.lml.annotation.LmlAction;
-import com.github.czyzby.lml.annotation.LmlActor;
-import com.github.czyzby.lml.annotation.LmlAfter;
-import com.github.czyzby.lml.annotation.LmlInject;
+import com.github.czyzby.lml.annotation.*;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.ToastManager;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
@@ -73,6 +71,8 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
+    @Inject @LmlInject PngFileTypeController pngFileTypeController;
+
     @ViewStage Stage stage;
 
     @LmlActor("canvas") Canvas canvas;
@@ -96,6 +96,12 @@ public class MainController implements ActionContainer, ViewResizer {
 
     /** Indicates that view is shown and ready to be used in code */
     private boolean initialized;
+
+    @LmlBefore
+    void beforeViewCreated() {
+        LmlParser parser = interfaceService.getParser();
+        parser.getData().addActionContainer(pngFileTypeController.getActionContainerName(), pngFileTypeController);
+    }
 
     @SuppressWarnings("unchecked")
     @LmlAfter

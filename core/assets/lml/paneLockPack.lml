@@ -1,10 +1,9 @@
 <?xml version="1.0"?>
 <!DOCTYPE shrinkcontainer SYSTEM "../../../lml.dtd">
 
+<!--Common locking overlay snippet for main screen panels-->
 <shrinkcontainer id="{id}" fill="true">
     <vistable background="paneLockBg" touchable="enabled" visible="true" pad="16">
         <image style="custom/logo16-bw" size="72" hexcolor="ffffff40"/>
-        <!--<:row/>-->
-        <!--<label text="@paneLockPack" hexcolor="505050ff" visible="false"/>-->
     </vistable>
 </shrinkcontainer>

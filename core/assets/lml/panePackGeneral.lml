@@ -5,7 +5,7 @@
 
     <table tablealign="top" tablepad="8" defaultpadbottom="4" defaultpadright="4">
 
-        <label align="left">@packGeneralOutputDir</label>
+        <label align="right">@packGeneralOutputDir</label>
         <textfield
                 id="edtOutputDir"
                 minwidth="24"
@@ -23,7 +23,7 @@
 
         <:row/>
 
-        <label align="left">@packGeneralFileName</label>
+        <label align="right">@packGeneralFileName</label>
         <textfield
                 id="edtFileName"
                 minwidth="24"

@@ -3,6 +3,93 @@
 
 <stack growx="true">
 
+    <vistable tablealign="top" tablepad="8" defaultpadbottom="4">
+
+        <label align="right" padright="4">File type</label>
+        <selectbox id="cboFileType" growx="true">
+            PNG
+            JPEG
+            KTX
+        </selectbox>
+
+        <:row/>
+
+        <!--############################-->
+
+        <!--<label align="right" padright="4">Encoding</label>-->
+        <!--<selectbox growx="true">-->
+            <!--RGBA8888-->
+            <!--RGBA4444-->
+            <!--RGB565-->
+            <!--RGB888-->
+            <!--Alpha-->
+        <!--</selectbox>-->
+
+        <!--<:row/>-->
+
+        <!--<label align="right" padright="4">Quality</label>-->
+        <!--<floatspinner growx="true" min="0.1" max="1.0" step="0.1" value="0.9"/>-->
+
+        <!--############################-->
+
+        <label align="right" padright="4">Encoding</label>
+        <selectbox id="cboPngTextureEncoding" growx="true" change="PngFileTypeController.onEncodingChanged">
+            RGBA8888
+            RGBA4444
+            RGB565
+            RGB888
+            Alpha
+        </selectbox>
+
+        <:row/>
+
+        <label align="right" padright="4">Compression</label>
+        <vistable growx="true">
+        <selectbox growx="true">
+            None
+            Pngtastic
+            TinyPNG
+        </selectbox>
+        <shrinkcontainer
+                visible="true"
+                padleft="4">
+            <imagebutton
+                    image="custom/ic-settings"
+                    scaling="none"
+                    focusborder="false"/>
+        </shrinkcontainer>
+        </vistable>
+
+        <!--############################-->
+
+        <!--<label align="right" padright="4">Texture format</label>-->
+        <!--<selectbox growx="true">-->
+            <!--ETC1-->
+            <!--ETC2-->
+        <!--</selectbox>-->
+
+        <!--<:row/>-->
+
+        <!--<label align="right" padright="4">Encoding</label>-->
+        <!--<selectbox growx="true">-->
+            <!--RGB8-->
+            <!--SRGB8-->
+            <!--RGBA8-->
+            <!--SRGBA8-->
+            <!--RGB8A1-->
+            <!--SRGB8A1-->
+            <!--R11-->
+            <!--RG11-->
+        <!--</selectbox>-->
+
+        <!--<:row/>-->
+
+        <!--<label align="right" padright="4">ZKTX (zipping)</label>-->
+        <!--<vischeckbox align="left"/>-->
+
+    </vistable>
+
+    <shrinkcontainer visible="false">
     <vistable tablealign="top" tablepad="8">
 
         <label align="left" padright="4">@gsPngCompression</label>
@@ -61,6 +148,7 @@
         </shrinkcontainer>
 
     </vistable>
+    </shrinkcontainer>
 
     <:import path="lml/paneLockPack.lml" replace="id">paneLockGlobalSettings</:import>
 </stack>
