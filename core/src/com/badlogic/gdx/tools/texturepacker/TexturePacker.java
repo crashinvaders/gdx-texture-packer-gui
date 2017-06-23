@@ -59,7 +59,7 @@ public class TexturePacker {
 		}
 
 		if (settings.grid)
-			packer = new GridPacker(settings);
+			packer = new OrderedGridPacker(settings);
 		else
 			packer = new MaxRectsPacker(settings);
 		imageProcessor = new ImageProcessor(rootDir, settings);

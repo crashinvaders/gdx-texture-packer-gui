@@ -226,7 +226,7 @@ public class ImageProcessor {
 		final byte[] a = new byte[1];
 		int top = 0;
 		int bottom = source.getHeight();
-		if (settings.stripWhitespaceX) {
+		if (settings.stripWhitespaceY) {
 			outer:
 			for (int y = 0; y < source.getHeight(); y++) {
 				for (int x = 0; x < source.getWidth(); x++) {
@@ -250,7 +250,7 @@ public class ImageProcessor {
 		}
 		int left = 0;
 		int right = source.getWidth();
-		if (settings.stripWhitespaceY) {
+		if (settings.stripWhitespaceX) {
 			outer:
 			for (int x = 0; x < source.getWidth(); x++) {
 				for (int y = top; y < bottom; y++) {
