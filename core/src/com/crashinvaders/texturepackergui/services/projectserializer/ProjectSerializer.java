@@ -18,6 +18,10 @@ import com.crashinvaders.texturepackergui.services.model.compression.PngCompress
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.TinyPngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.JpegFileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -104,18 +108,9 @@ public class ProjectSerializer {
 
         sb.append("version=").append(AppConstants.version.toString()).append("\n");
 
-        //TODO serialize file type
-//        PngCompressionModel pngCompression = projectModel.getPngCompression();
-//        if (pngCompression != null) {
-//            sb.append("pngCompressionType=").append(pngCompression.getType().key).append("\n");
-//            sb.append("pngCompressionData=").append(pngCompression.serializeState()).append("\n");
-//        }
-//
-//        EtcCompressionModel etcCompression = projectModel.getEtcCompression();
-//        if (etcCompression != null) {
-//            sb.append("etcCompressionType=").append(etcCompression.getType().key).append("\n");
-//            sb.append("etcCompressionData=").append(etcCompression.serializeState()).append("\n");
-//        }
+        FileTypeModel fileType = projectModel.getFileType();
+        sb.append("fileTypeType=").append(fileType.getType().key).append("\n");
+        sb.append("fileTypeData=").append(fileType.serializeState()).append("\n");
 
         sb.append("previewBackgroundColor=").append(projectModel.getPreviewBackgroundColor().toString()).append("\n");
     }
@@ -205,6 +200,28 @@ public class ProjectSerializer {
         Array<String> lines = splitAndTrim(projectSection);
 
         //TODO deserialize file type
+        FileTypeType fileTypeType = FileTypeType.findByKey(find(lines, "fileTypeType=", null));
+        if (fileTypeType != null) {
+            FileTypeModel fileTypeModel = null;
+            switch (fileTypeType) {
+                case PNG:
+                    fileTypeModel = new PngFileTypeModel();
+                    break;
+                case JPEG:
+                    fileTypeModel = new JpegFileTypeModel();
+                    break;
+                case KTX:
+                    fileTypeModel = new KtxFileTypeModel();
+                    break;
+                default:
+                    Gdx.app.error(TAG, "Unexpected FileTypeType: " + fileTypeType);
+            }
+            if (fileTypeModel != null) {
+                String fileTypeData = find(lines, "fileTypeData=", null);
+                fileTypeModel.deserializeState(fileTypeData);
+            }
+            project.setFileType(fileTypeModel);
+        }
 
 //        PngCompressionType pngCompType = PngCompressionType.findByKey(find(lines, "pngCompressionType=", null));
 //        if (pngCompType != null) {

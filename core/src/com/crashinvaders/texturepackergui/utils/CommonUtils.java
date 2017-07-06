@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -137,5 +138,14 @@ public class CommonUtils {
                 if (value.equals(array[i--])) return true;
         }
         return false;
+    }
+
+    public static <T extends Enum<T>> T findEnumConstantSafe(Class<T> enumeration, String name, T defaultValue) {
+        try {
+            T value = Enum.valueOf(enumeration, name);
+            return value;
+        } catch (Exception e) {
+            return defaultValue;
+        }
     }
 }

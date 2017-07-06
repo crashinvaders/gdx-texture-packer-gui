@@ -5,6 +5,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.filetype.JpegFileTypeModel;
 import com.github.czyzby.autumn.annotation.Component;
@@ -51,6 +52,11 @@ public class JpegFileTypeController implements FileTypeController {
     public void deactivate() {
         model = null;
         container.setVisible(false);
+    }
+
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        updateEncoding();
+        updateQuality();
     }
 
     @OnEvent(FileTypePropertyChangedEvent.class) void onEvent(FileTypePropertyChangedEvent event) {

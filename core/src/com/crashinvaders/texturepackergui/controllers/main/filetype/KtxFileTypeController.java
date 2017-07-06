@@ -4,6 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
 import com.github.czyzby.autumn.annotation.Component;
@@ -38,7 +39,7 @@ public class KtxFileTypeController implements FileTypeController {
 
     @Override
     public void activate() {
-        model = ((KtxFileTypeModel) modelService.getProject().getFileType());
+        model = modelService.getProject().getFileType();
         container.setVisible(true);
 
         updateFormat();
@@ -50,6 +51,12 @@ public class KtxFileTypeController implements FileTypeController {
     public void deactivate() {
         model = null;
         container.setVisible(false);
+    }
+
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        updateFormat();
+        updateEncoding();
+        updateZipping();
     }
 
     @OnEvent(FileTypePropertyChangedEvent.class) void onEvent(FileTypePropertyChangedEvent event) {

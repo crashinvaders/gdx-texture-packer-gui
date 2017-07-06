@@ -11,6 +11,7 @@ import com.crashinvaders.texturepackergui.controllers.TinifyCompDialogController
 import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.WidgetData;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
@@ -50,7 +51,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @Override
     public void activate() {
-        model = ((PngFileTypeModel) modelService.getProject().getFileType());
+        model = modelService.getProject().getFileType();
         container.setVisible(true);
 
         updateEncoding();
@@ -61,6 +62,11 @@ public class PngFileTypeController implements FileTypeController {
     public void deactivate() {
         model = null;
         container.setVisible(false);
+    }
+
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        updateEncoding();
+        updateCompression();
     }
 
     @OnEvent(FileTypePropertyChangedEvent.class) void onEvent(FileTypePropertyChangedEvent event) {

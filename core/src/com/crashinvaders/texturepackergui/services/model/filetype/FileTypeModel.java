@@ -11,4 +11,6 @@ public abstract class FileTypeModel {
     }
 
     public abstract FileTypeType getType();
+    public abstract String serializeState();
+    public abstract void deserializeState(String data);
 }
