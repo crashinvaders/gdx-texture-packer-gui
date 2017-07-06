@@ -6,6 +6,8 @@ import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.googlecode.pngtastic.core.PngImage;
@@ -22,12 +24,15 @@ public class PngtasticCompressingProcessor implements PackProcessor {
         PackModel pack = node.getPack();
         ProjectModel project = node.getProject();
 
-        if (!pack.getSettings().outputFormat.equals("png")) return;
-        if (project.getPngCompression() == null || project.getPngCompression().getType() != PngCompressionType.PNGTASTIC) return;
+        if (project.getFileType().getClass() != PngFileTypeModel.class) return;
+
+        PngFileTypeModel fileType = (PngFileTypeModel) project.getFileType();
+
+        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.PNGTASTIC) return;
 
         System.out.println("Pngtastic compression started");
 
-        PngtasticCompressionModel compModel = (PngtasticCompressionModel)project.getPngCompression();
+        PngtasticCompressionModel compModel = fileType.getCompression();
         PngOptimizer pngOptimizer = new PngOptimizer(LOG_LEVEL);
 
         // Compression section

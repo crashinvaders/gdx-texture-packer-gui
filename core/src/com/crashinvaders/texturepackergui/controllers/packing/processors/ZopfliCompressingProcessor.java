@@ -6,6 +6,7 @@ import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.googlecode.pngtastic.core.PngImage;
@@ -19,12 +20,15 @@ public class ZopfliCompressingProcessor implements PackProcessor {
         PackModel pack = node.getPack();
         ProjectModel project = node.getProject();
 
-        if (!pack.getSettings().outputFormat.equals("png")) return;
-        if (project.getPngCompression() == null || project.getPngCompression().getType() != PngCompressionType.ZOPFLI) return;
+        if (project.getFileType().getClass() != PngFileTypeModel.class) return;
+
+        PngFileTypeModel fileType = (PngFileTypeModel) project.getFileType();
+
+        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.ZOPFLI) return;
 
         System.out.println("Zopfli compression started");
 
-        ZopfliCompressionModel compModel = (ZopfliCompressionModel)project.getPngCompression();
+        ZopfliCompressionModel compModel = fileType.getCompression();
         PngOptimizer pngOptimizer = new PngOptimizer(LOG_LEVEL);
         pngOptimizer.setCompressor("zopfli", compModel.getIterations());
 

@@ -15,6 +15,7 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 
+//TODO remove
 @ViewDialog(id = "dialog_comp_etc", value = "lml/compression/dialogEtc.lml")
 public class EtcCompDialogController implements ActionContainer {
     private static final String TAG = EtcCompDialogController.class.getSimpleName();
@@ -75,13 +76,15 @@ public class EtcCompDialogController implements ActionContainer {
 	}
 
     private EtcCompressionModel obtainCompressionModel() {
-        ProjectModel project = modelService.getProject();
-        EtcCompressionModel etcCompression = project.getEtcCompression();
+//        ProjectModel project = modelService.getProject();
+//        EtcCompressionModel etcCompression = project.getEtcCompression();
+//
+//        if (etcCompression == null || etcCompression.getType() != EtcCompressionType.KTX) {
+//            Gdx.app.error(TAG, "Dialog was created while model holds different compression type");
+//            return null;
+//        }
+//        return project.getEtcCompression();
 
-        if (etcCompression == null || etcCompression.getType() != EtcCompressionType.KTX) {
-            Gdx.app.error(TAG, "Dialog was created while model holds different compression type");
-            return null;
-        }
-        return project.getEtcCompression();
+        return null;
     }
 }

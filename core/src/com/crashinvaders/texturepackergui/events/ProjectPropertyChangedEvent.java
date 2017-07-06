@@ -24,8 +24,6 @@ public class ProjectPropertyChangedEvent {
         SELECTED_PACK,
         PACKS,
         FILE_TYPE,
-        PNG_COMPRESSION, //TODO remove
-        ETC_COMPRESSION, //TODO remove
         PREVIEW_BG_COLOR,
     }
 }

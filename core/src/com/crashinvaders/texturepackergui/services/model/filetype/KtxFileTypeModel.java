@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.services.model.filetype;
 
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent.Property;
+import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 
 //TODO add .ktx and .zktx extensions to old file cleaner list
 public class KtxFileTypeModel extends FileTypeModel {
@@ -9,6 +10,11 @@ public class KtxFileTypeModel extends FileTypeModel {
     private EncodingETC1 encodingEtc1 = EncodingETC1.RGB;
     private EncodingETC2 encodingEtc2 = EncodingETC2.RGBA8;
     private boolean zipping = true;
+
+    @Override
+    public FileTypeType getType() {
+        return FileTypeType.KTX;
+    }
 
     public Format getFormat() {
         return format;

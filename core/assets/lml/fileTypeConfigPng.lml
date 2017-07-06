@@ -15,7 +15,7 @@
         <selectbox id="cboPngCompression1" growx="true" change="ftcPng.onCompressionChanged"/>
         <shrinkcontainer
                 id="containerPngCompSettings"
-                visible="true"
+                visible="false"
                 padleft="4">
             <imagebutton
                     image="custom/ic-settings"

@@ -18,8 +18,6 @@ public class ProjectModel {
     private PackModel selectedPack;
     private FileHandle projectFile;
     private EventDispatcher eventDispatcher;
-    private PngCompressionModel pngCompression; //TODO remove
-    private EtcCompressionModel etcCompression; //TODO remove
     private FileTypeModel fileType = new PngFileTypeModel(); // Png file type by default
 
     public ProjectModel() {
@@ -84,34 +82,8 @@ public class ProjectModel {
         }
     }
 
-    public PngCompressionModel getPngCompression() {
-        return pngCompression;
-    }
-    
-    public EtcCompressionModel getEtcCompression() {
-        return etcCompression;
-    }
-
-    public void setPngCompression(PngCompressionModel pngCompression) {
-        if (this.pngCompression == pngCompression) return;
-        this.pngCompression = pngCompression;
-
-        if (eventDispatcher != null) {
-            eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, Property.PNG_COMPRESSION));
-        }
-    }
-    
-    public void setEtcCompression(EtcCompressionModel etcCompression) {
-        if (this.etcCompression == etcCompression) return;
-        this.etcCompression = etcCompression;
-
-        if (eventDispatcher != null) {
-            eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, Property.ETC_COMPRESSION));
-        }
-    }
-
-    public FileTypeModel getFileType() {
-        return fileType;
+    public <T extends FileTypeModel> T getFileType() {
+        return (T)fileType;
     }
 
     public void setFileType(FileTypeModel fileType) {

@@ -8,12 +8,5 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 //TODO remove
 @SuppressWarnings("WeakerAccess")
 public class GlobalSettingsActors {
-
-    @LmlActor("containerPngCompSettings") ShrinkContainer containerPngCompSettings;
-    @LmlActor("cboPngCompression") SelectBox<WidgetData.PngCompression> cboPngCompression;
-    
-    @LmlActor("containerEtcCompSettings") ShrinkContainer containerEtcCompSettings;
-    @LmlActor("cboEtcCompression") SelectBox<WidgetData.CompressionEtc> cboEtcCompression;
-
     @LmlActor("cboFileType") VisSelectBox<WidgetData.FileType> cboFileType;
 }

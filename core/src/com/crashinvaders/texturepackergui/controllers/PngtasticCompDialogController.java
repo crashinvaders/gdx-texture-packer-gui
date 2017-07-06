@@ -6,6 +6,9 @@ import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -52,12 +55,19 @@ public class PngtasticCompDialogController implements ActionContainer {
 
     private PngtasticCompressionModel obtainCompressionModel() {
         ProjectModel project = modelService.getProject();
-        PngCompressionModel pngCompression = project.getPngCompression();
+        FileTypeModel fileType = project.getFileType();
 
-        if (pngCompression == null || pngCompression.getType() != PngCompressionType.PNGTASTIC) {
-            Gdx.app.error(TAG, "Dialog was created while model holds different compression type");
+        if (!(fileType instanceof PngFileTypeModel)) {
+            Gdx.app.error(TAG, "Project isn't set to PNG file type");
             return null;
         }
-        return (PngtasticCompressionModel) project.getPngCompression();
+
+        PngCompressionModel compression = ((PngFileTypeModel) project.getFileType()).getCompression();
+        if (!(compression instanceof PngtasticCompressionModel)) {
+            Gdx.app.error(TAG, "Project isn't set to Pngtastic compression");
+            return null;
+        }
+
+        return (PngtasticCompressionModel) compression;
     }
 }

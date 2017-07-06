@@ -6,6 +6,8 @@ import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.compression.ZopfliCompressionModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -51,12 +53,19 @@ public class ZopfliCompDialogController implements ActionContainer {
 
     private ZopfliCompressionModel obtainCompressionModel() {
         ProjectModel project = modelService.getProject();
-        PngCompressionModel pngCompression = project.getPngCompression();
+        FileTypeModel fileType = project.getFileType();
 
-        if (pngCompression == null || pngCompression.getType() != PngCompressionType.ZOPFLI) {
-            Gdx.app.error(TAG, "Dialog was created while model holds different compression type");
+        if (!(fileType instanceof PngFileTypeModel)) {
+            Gdx.app.error(TAG, "Project isn't set to PNG file type");
             return null;
         }
-        return (ZopfliCompressionModel) project.getPngCompression();
+
+        PngCompressionModel compression = ((PngFileTypeModel) project.getFileType()).getCompression();
+        if (!(compression instanceof ZopfliCompressionModel)) {
+            Gdx.app.error(TAG, "Project isn't set to Pngtastic compression");
+            return null;
+        }
+
+        return (ZopfliCompressionModel) compression;
     }
 }

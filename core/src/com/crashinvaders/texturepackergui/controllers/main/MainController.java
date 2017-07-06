@@ -28,8 +28,10 @@ import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.*;
-import com.crashinvaders.texturepackergui.services.model.compression.*;
 import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.JpegFileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
@@ -155,8 +157,7 @@ public class MainController implements ActionContainer, ViewResizer {
         updatePackList();
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
-//        updatePngCompression();
-        updateEtcCompression();
+        updateFileType();
     }
 
     @Destroy
@@ -181,8 +182,7 @@ public class MainController implements ActionContainer, ViewResizer {
             updatePackList();
             updateViewsFromPack(event.getProject().getSelectedPack());
             updateRecentProjects();
-//            updatePngCompression();
-            updateEtcCompression();
+            updateFileType();
         }
     }
 
@@ -197,12 +197,6 @@ public class MainController implements ActionContainer, ViewResizer {
                     break;
                 case FILE_TYPE:
                     updateFileType();
-                    break;
-//                case PNG_COMPRESSION:
-//                    updatePngCompression();
-//                    break;
-                case ETC_COMPRESSION:
-                	updateEtcCompression();
                     break;
             }
         }
@@ -421,8 +415,6 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cboWrapX": settings.wrapX = (Texture.TextureWrap) value; break;
             case "cboWrapY": settings.wrapY = (Texture.TextureWrap) value; break;
             case "cboOutputFormat": settings.outputFormat = (String) value; break;
-//            case "cboPngCompression": onPngCompressionTypeChanged(); break;
-            case "cboEtcCompression": onEtcCompressionTypeChanged(); break;
         }
     }
 
@@ -431,9 +423,18 @@ public class MainController implements ActionContainer, ViewResizer {
         ProjectModel project = getProject();
         FileTypeModel currentFtModel = project.getFileType();
 
-        if (fileType.modelClass != currentFtModel.getClass()) {
-            FileTypeModel newFtModel = fileType.createModel();
-            project.setFileType(newFtModel);
+        if (fileType.modelType != currentFtModel.getType()) {
+            switch (fileType.modelType) {
+                case PNG:
+                    project.setFileType(new PngFileTypeModel());
+                    break;
+                case JPEG:
+                    project.setFileType(new JpegFileTypeModel());
+                    break;
+                case KTX:
+                    project.setFileType(new KtxFileTypeModel());
+                    break;
+            }
         }
 
         // Switch active file type controller
@@ -570,22 +571,6 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-    //TODO remove
-//	private void updatePngCompression () {
-//		PngCompressionModel compModel = getProject().getPngCompression();
-//		WidgetData.PngCompression compValue = WidgetData.PngCompression.valueOf(compModel == null ? null : compModel.getType());
-//        actorsGlobalSettings.cboPngCompression.setSelected(compValue);
-//        actorsGlobalSettings.containerPngCompSettings.setVisible(compValue.hasSettings);
-//    }
-
-    //TODO remove
-	private void updateEtcCompression () {
-		EtcCompressionModel compModel = getProject().getEtcCompression();
-		WidgetData.CompressionEtc compValue = WidgetData.CompressionEtc.valueOf(compModel == null ? null : compModel.getType());
-        actorsGlobalSettings.cboEtcCompression.setSelected(compValue);
-        actorsGlobalSettings.containerEtcCompSettings.setVisible(compValue.hasSettings);
-    }
-
     private void updateRecentProjects() {
         Array<FileHandle> recentProjects = this.recentProjects.getRecentProjects();
         actorsFileMenu.miOpenRecent.setDisabled(recentProjects.size == 0);
@@ -614,56 +599,6 @@ public class MainController implements ActionContainer, ViewResizer {
                 }
             });
             actorsFileMenu.pmOpenRecent.addItem(menuItem);
-        }
-    }
-
-//    private void onPngCompressionTypeChanged() {
-//        if (!initialized) return;
-//
-//        ProjectModel project = getProject();
-//        PngCompressionType compType = actorsGlobalSettings.cboPngCompression.getSelected().type;
-//
-//        if (compType == null) {
-//            project.setPngCompression(null);
-//            return;
-//        }
-//
-//        if (project.getPngCompression() == null || compType != project.getPngCompression().getType()) {
-//            switch (compType) {
-//                case PNGTASTIC:
-//                    project.setPngCompression(new PngtasticCompressionModel());
-//                    break;
-//                case ZOPFLI:
-//                    project.setPngCompression(new ZopfliCompressionModel());
-//                    break;
-//                case TINY_PNG:
-//                    project.setPngCompression(new TinyPngCompressionModel());
-//                    break;
-//                default:
-//                    project.setPngCompression(null);
-//            }
-//        }
-//    }
-
-    private void onEtcCompressionTypeChanged() {
-        if (!initialized) return;
-
-        ProjectModel project = getProject();
-        EtcCompressionType compType = actorsGlobalSettings.cboEtcCompression.getSelected().type;
-
-        if (compType == null) {
-            project.setEtcCompression(null);
-            return;
-        }
-
-        if (project.getEtcCompression() == null || compType != project.getEtcCompression().getType()) {
-            switch (compType) {
-                case KTX:
-                    project.setEtcCompression(new EtcCompressionModel(EtcCompressionType.KTX));
-                    break;
-                default:
-                    project.setEtcCompression(null);
-            }
         }
     }
 

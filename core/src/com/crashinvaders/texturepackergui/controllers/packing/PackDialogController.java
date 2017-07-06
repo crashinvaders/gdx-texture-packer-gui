@@ -107,16 +107,31 @@ public class PackDialogController implements ActionContainer {
 
         PackProcessingManager packProcessingManager = new PackProcessingManager(
                 new CompositePackProcessor(
+                        // Startup metadata
                         new StartTimeMetadataProcessor(),
+
+                        // File type (pre processors)
+                        new PngFileTypeProcessor(),
+                        new JpegFileTypeProcessor(),
+                        new KtxFileTypeProcessor.Pre(),
+
+                        // Packing
                         new PackingProcessor(),
-                        new EtcCompressingProcessor(),
+
+                        // Png compressors
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
                         new TinifyCompressingProcessor(tinifyService),
+
+                        // File type (post processors)
+                        new KtxFileTypeProcessor.Post(),
+
+                        // Trailing metadata
                         new FileSizeMetadataProcessor(),
                         new PageAmountMetadataProcessor(),
                         new EndTimeMetadataProcessor(),
                         new TotalTimeMetadataProcessor()),
+
 //                        new TestProcessor(),
                 new PackWorkerListener());
 

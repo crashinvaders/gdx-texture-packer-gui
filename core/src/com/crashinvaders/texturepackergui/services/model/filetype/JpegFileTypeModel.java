@@ -2,10 +2,16 @@ package com.crashinvaders.texturepackergui.services.model.filetype;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 
 public class JpegFileTypeModel extends FileTypeModel {
     private Pixmap.Format encoding = Pixmap.Format.RGBA8888;
     private float quality = 0.9f;
+
+    @Override
+    public FileTypeType getType() {
+        return FileTypeType.JPEG;
+    }
 
     public Pixmap.Format getEncoding() {
         return encoding;

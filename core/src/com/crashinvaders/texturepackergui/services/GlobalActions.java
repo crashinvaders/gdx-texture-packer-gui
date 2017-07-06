@@ -298,40 +298,6 @@ public class GlobalActions implements ActionContainer {
         return AppConstants.version.toString();
     }
 
-    //TODO remove
-    @LmlAction("showPngCompSettings") public void showPngCompSettings() {
-        PngCompressionModel compression = getProject().getPngCompression();
-        if (compression == null) return;
-
-        switch (compression.getType()) {
-            case PNGTASTIC:
-                interfaceService.showDialog(PngtasticCompDialogController.class);
-                break;
-            case ZOPFLI:
-                interfaceService.showDialog(ZopfliCompDialogController.class);
-                break;
-            case TINY_PNG:
-                interfaceService.showDialog(TinifyCompDialogController.class);
-                break;
-            default:
-                Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
-        }
-    }
-
-    //TODO remove
-    @LmlAction("showEtcCompSettings") public void showEtcCompSettings() {
-        EtcCompressionModel compression = getProject().getEtcCompression();
-        if (compression == null) return;
-
-        switch (compression.getType()) {
-            case KTX:
-                interfaceService.showDialog(EtcCompDialogController.class);
-                break;
-            default:
-                Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
-        }
-    }
-
     @LmlAction("launchTextureUnpacker") public void launchTextureUnpacker() {
         interfaceService.showDialog(TextureUnpackerDialogController.class);
     }

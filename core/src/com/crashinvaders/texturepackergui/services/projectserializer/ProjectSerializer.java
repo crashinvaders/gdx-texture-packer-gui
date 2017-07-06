@@ -104,17 +104,18 @@ public class ProjectSerializer {
 
         sb.append("version=").append(AppConstants.version.toString()).append("\n");
 
-        PngCompressionModel pngCompression = projectModel.getPngCompression();
-        if (pngCompression != null) {
-            sb.append("pngCompressionType=").append(pngCompression.getType().key).append("\n");
-            sb.append("pngCompressionData=").append(pngCompression.serializeState()).append("\n");
-        }
-        
-        EtcCompressionModel etcCompression = projectModel.getEtcCompression();
-        if (etcCompression != null) {
-            sb.append("etcCompressionType=").append(etcCompression.getType().key).append("\n");
-            sb.append("etcCompressionData=").append(etcCompression.serializeState()).append("\n");
-        }
+        //TODO serialize file type
+//        PngCompressionModel pngCompression = projectModel.getPngCompression();
+//        if (pngCompression != null) {
+//            sb.append("pngCompressionType=").append(pngCompression.getType().key).append("\n");
+//            sb.append("pngCompressionData=").append(pngCompression.serializeState()).append("\n");
+//        }
+//
+//        EtcCompressionModel etcCompression = projectModel.getEtcCompression();
+//        if (etcCompression != null) {
+//            sb.append("etcCompressionType=").append(etcCompression.getType().key).append("\n");
+//            sb.append("etcCompressionData=").append(etcCompression.serializeState()).append("\n");
+//        }
 
         sb.append("previewBackgroundColor=").append(projectModel.getPreviewBackgroundColor().toString()).append("\n");
     }
@@ -203,45 +204,47 @@ public class ProjectSerializer {
     private Version deserializeProjectSection(ProjectModel project, String projectSection) {
         Array<String> lines = splitAndTrim(projectSection);
 
-        PngCompressionType pngCompType = PngCompressionType.findByKey(find(lines, "pngCompressionType=", null));
-        if (pngCompType != null) {
-            PngCompressionModel pngCompModel = null;
-            switch (pngCompType) {
-                case PNGTASTIC:
-                    pngCompModel = new PngtasticCompressionModel();
-                    break;
-                case ZOPFLI:
-                    pngCompModel = new ZopfliCompressionModel();
-                    break;
-                case TINY_PNG:
-                    pngCompModel = new TinyPngCompressionModel();
-                    break;
-                default:
-                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + pngCompType);
-            }
-            if (pngCompModel != null) {
-                String pngCompData = find(lines, "pngCompressionData=", null);
-                pngCompModel.deserializeState(pngCompData);
-            }
-            project.setPngCompression(pngCompModel);
-        }
+        //TODO deserialize file type
+
+//        PngCompressionType pngCompType = PngCompressionType.findByKey(find(lines, "pngCompressionType=", null));
+//        if (pngCompType != null) {
+//            PngCompressionModel pngCompModel = null;
+//            switch (pngCompType) {
+//                case PNGTASTIC:
+//                    pngCompModel = new PngtasticCompressionModel();
+//                    break;
+//                case ZOPFLI:
+//                    pngCompModel = new ZopfliCompressionModel();
+//                    break;
+//                case TINY_PNG:
+//                    pngCompModel = new TinyPngCompressionModel();
+//                    break;
+//                default:
+//                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + pngCompType);
+//            }
+//            if (pngCompModel != null) {
+//                String pngCompData = find(lines, "pngCompressionData=", null);
+//                pngCompModel.deserializeState(pngCompData);
+//            }
+//            project.setPngCompression(pngCompModel);
+//        }
         
-        EtcCompressionType etcCompType = EtcCompressionType.findByKey(find(lines, "etcCompressionType=", null));
-        if (etcCompType != null) {
-            EtcCompressionModel etcCompModel = null;
-            switch (etcCompType) {
-                case KTX:
-                	etcCompModel = new EtcCompressionModel(etcCompType);
-                    break;
-                default:
-                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + etcCompType);
-            }
-            if (etcCompModel != null) {
-                String etcCompData = find(lines, "etcCompressionData=", null);
-                etcCompModel.deserializeState(etcCompData);
-            }
-            project.setEtcCompression(etcCompModel);
-        }
+//        EtcCompressionType etcCompType = EtcCompressionType.findByKey(find(lines, "etcCompressionType=", null));
+//        if (etcCompType != null) {
+//            EtcCompressionModel etcCompModel = null;
+//            switch (etcCompType) {
+//                case KTX:
+//                	etcCompModel = new EtcCompressionModel(etcCompType);
+//                    break;
+//                default:
+//                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + etcCompType);
+//            }
+//            if (etcCompModel != null) {
+//                String etcCompData = find(lines, "etcCompressionData=", null);
+//                etcCompModel.deserializeState(etcCompData);
+//            }
+//            project.setEtcCompression(etcCompModel);
+//        }
 
         String previewBgColorHex = find(lines, "previewBackgroundColor=", null);
         if (previewBgColorHex != null) {

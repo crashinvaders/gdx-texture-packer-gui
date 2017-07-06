@@ -3,6 +3,8 @@
 
 <stack grow="true">
 
+    <!--TODO remove jpeg quality and page file type-->
+
     <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false">
 
         <vistable tablealign="top" tablepad="8" onecolumn="true">

@@ -6,6 +6,7 @@ import com.crashinvaders.texturepackergui.services.TinifyService;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
@@ -24,9 +25,11 @@ public class TinifyCompressingProcessor implements PackProcessor {
         PackModel pack = node.getPack();
         ProjectModel project = node.getProject();
 
-        //TODO it should support jpg, right?
-        if (!pack.getSettings().outputFormat.equals("png")) return;
-        if (project.getPngCompression() == null || project.getPngCompression().getType() != PngCompressionType.TINY_PNG) return;
+        if (project.getFileType().getClass() != PngFileTypeModel.class) return;
+
+        PngFileTypeModel fileType = (PngFileTypeModel) project.getFileType();
+
+        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.TINY_PNG) return;
 
         System.out.println("Tinify compression started");
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.StreamUtils;
 import com.crashinvaders.texturepackergui.services.model.EtcCompressionType;
 
+//TODO remove
 public class EtcCompressionModel {
 	private final EtcCompressionType type;
 	

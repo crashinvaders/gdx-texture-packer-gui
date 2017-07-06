@@ -5,11 +5,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.services.model.EtcCompressionType;
+import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.JpegFileTypeModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.github.czyzby.kiwi.util.gdx.reflection.Reflection;
 
 public class WidgetData {
@@ -103,32 +101,27 @@ public class WidgetData {
     }
 
     public enum FileType {
-        PNG("fileTypePng", PngFileTypeModel.class),
-        JPEG("fileTypeJpeg", JpegFileTypeModel.class),
-        KTX("fileTypeKtx", KtxFileTypeModel.class),
+        PNG("fileTypePng", FileTypeType.PNG),
+        JPEG("fileTypeJpeg", FileTypeType.JPEG),
+        KTX("fileTypeKtx", FileTypeType.KTX),
         ;
 
         public final String nameKey;
-        public final Class<? extends FileTypeModel> modelClass;
+        public final FileTypeType modelType;
 
-        FileType(String nameKey, Class<? extends FileTypeModel> modelClass) {
+        FileType(String nameKey, FileTypeType modelType) {
             this.nameKey = nameKey;
-            this.modelClass = modelClass;
-        }
-
-        public <T extends FileTypeModel> T createModel() {
-            return (T)Reflection.newInstance(modelClass);
+            this.modelType = modelType;
         }
 
         public static FileType valueOf(FileTypeModel model) {
-            Class<? extends FileTypeModel> modelClass = model.getClass();
             for (int i = 0; i < values().length; i++) {
                 FileType value = values()[i];
-                if (value.modelClass == modelClass) {
+                if (value.modelType == model.getType()) {
                     return value;
                 }
             }
-            throw new IllegalArgumentException("Can't find constant for " + modelClass.getSimpleName());
+            throw new IllegalArgumentException("Can't find constant for " + model);
         }
 
         @Override
@@ -136,19 +129,4 @@ public class WidgetData {
             return App.inst().getI18n().get(nameKey);
         }
     }
-
-//    public enum PngEncoding {
-//        RGBA8888("RGBA8888"),
-//        RGB888("RGB888"),
-//        RGBA4444("RGBA4444"),
-//        RGB565("RGB565"),
-//        Alpha("Alpha"),
-//        ;
-//
-//        private final String key;
-//
-//        PngEncoding(String key) {
-//            this.key = key;
-//        }
-//    }
 }
