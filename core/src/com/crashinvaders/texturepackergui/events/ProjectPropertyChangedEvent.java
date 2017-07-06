@@ -23,8 +23,9 @@ public class ProjectPropertyChangedEvent {
     public enum Property {
         SELECTED_PACK,
         PACKS,
-        PNG_COMPRESSION,
-        ETC_COMPRESSION,
+        FILE_TYPE,
+        PNG_COMPRESSION, //TODO remove
+        ETC_COMPRESSION, //TODO remove
         PREVIEW_BG_COLOR,
     }
 }

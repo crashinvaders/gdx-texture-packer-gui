@@ -12,11 +12,16 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.controllers.FileDragDropController;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
+import com.crashinvaders.texturepackergui.controllers.main.filetype.FileTypeController;
+import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileTypeController;
+import com.crashinvaders.texturepackergui.controllers.main.filetype.KtxFileTypeController;
+import com.crashinvaders.texturepackergui.controllers.main.filetype.PngFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.events.*;
@@ -24,6 +29,7 @@ import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.*;
 import com.crashinvaders.texturepackergui.services.model.compression.*;
+import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
@@ -39,7 +45,6 @@ import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.*;
-import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.ToastManager;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
@@ -55,7 +60,7 @@ import java.util.Locale;
 @View(id = MainController.VIEW_ID, value = "lml/main.lml", first = true)
 public class MainController implements ActionContainer, ViewResizer {
     public static final String VIEW_ID = "main";
-    public static final String LOG = MainController.class.getSimpleName();
+    public static final String TAG = MainController.class.getSimpleName();
     public static final String PREF_KEY_PACK_LIST_SPLIT = "pack_list_split";
 
     @Inject InterfaceService interfaceService;
@@ -71,7 +76,9 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
-    @Inject @LmlInject PngFileTypeController pngFileTypeController;
+    @Inject @LmlInject PngFileTypeController ftPngController;
+    @Inject @LmlInject JpegFileTypeController ftJpegController;
+    @Inject @LmlInject KtxFileTypeController ftKtxController;
 
     @ViewStage Stage stage;
 
@@ -92,28 +99,32 @@ public class MainController implements ActionContainer, ViewResizer {
     @LmlInject PackMenuActors actorsPackMenu;
     @LmlInject HelpMenuActors actorsHelpMenu;
 
+    private final ArrayMap<WidgetData.FileType, FileTypeController> fileTypeControllers = new ArrayMap<>();
+    private FileTypeController activeFileTypeController;
+
     private ToastManager toastManager;
 
     /** Indicates that view is shown and ready to be used in code */
     private boolean initialized;
 
-    @LmlBefore
-    void beforeViewCreated() {
-        LmlParser parser = interfaceService.getParser();
-        parser.getData().addActionContainer(pngFileTypeController.getActionContainerName(), pngFileTypeController);
-    }
-
     @SuppressWarnings("unchecked")
     @LmlAfter
     void initialize() {
+        fileTypeControllers.put(WidgetData.FileType.PNG, ftPngController);
+        fileTypeControllers.put(WidgetData.FileType.JPEG, ftJpegController);
+        fileTypeControllers.put(WidgetData.FileType.KTX, ftKtxController);
+        for (int i = 0; i < fileTypeControllers.size; i++) {
+            FileTypeController ftc = fileTypeControllers.getValueAt(i);
+            ftc.onViewCreated(stage);
+        }
+
         actorsPackSettings.cboEncodingFormat.setItems(WidgetData.textureFormats);
         actorsPackSettings.cboOutputFormat.setItems(WidgetData.outputFormats);
         actorsPackSettings.cboMinFilter.setItems(WidgetData.textureFilters);
         actorsPackSettings.cboMagFilter.setItems(WidgetData.textureFilters);
         actorsPackSettings.cboWrapX.setItems(WidgetData.textureWraps);
         actorsPackSettings.cboWrapY.setItems(WidgetData.textureWraps);
-        actorsGlobalSettings.cboPngCompression.setItems(WidgetData.CompressionPng.values());
-        actorsGlobalSettings.cboEtcCompression.setItems(WidgetData.CompressionEtc.values());
+        actorsGlobalSettings.cboFileType.setItems(WidgetData.FileType.values());
 
         actorsPacks.packList = actorsPacks.packListTable.getListView();
         actorsPacks.packListAdapter = ((PackListAdapter) actorsPacks.packList.getAdapter());
@@ -144,7 +155,7 @@ public class MainController implements ActionContainer, ViewResizer {
         updatePackList();
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
-        updatePngCompression();
+//        updatePngCompression();
         updateEtcCompression();
     }
 
@@ -170,7 +181,7 @@ public class MainController implements ActionContainer, ViewResizer {
             updatePackList();
             updateViewsFromPack(event.getProject().getSelectedPack());
             updateRecentProjects();
-            updatePngCompression();
+//            updatePngCompression();
             updateEtcCompression();
         }
     }
@@ -184,9 +195,12 @@ public class MainController implements ActionContainer, ViewResizer {
                 case PACKS:
                     updatePackList();
                     break;
-                case PNG_COMPRESSION:
-                    updatePngCompression();
+                case FILE_TYPE:
+                    updateFileType();
                     break;
+//                case PNG_COMPRESSION:
+//                    updatePngCompression();
+//                    break;
                 case ETC_COMPRESSION:
                 	updateEtcCompression();
                     break;
@@ -407,8 +421,35 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cboWrapX": settings.wrapX = (Texture.TextureWrap) value; break;
             case "cboWrapY": settings.wrapY = (Texture.TextureWrap) value; break;
             case "cboOutputFormat": settings.outputFormat = (String) value; break;
-            case "cboPngCompression": onPngCompressionTypeChanged(); break;
+//            case "cboPngCompression": onPngCompressionTypeChanged(); break;
             case "cboEtcCompression": onEtcCompressionTypeChanged(); break;
+        }
+    }
+
+    @LmlAction("onFileTypeChanged") void onFileTypeChanged() {
+        WidgetData.FileType fileType = actorsGlobalSettings.cboFileType.getSelected();
+        ProjectModel project = getProject();
+        FileTypeModel currentFtModel = project.getFileType();
+
+        if (fileType.modelClass != currentFtModel.getClass()) {
+            FileTypeModel newFtModel = fileType.createModel();
+            project.setFileType(newFtModel);
+        }
+
+        // Switch active file type controller
+        {
+            if (activeFileTypeController != null) {
+                activeFileTypeController.deactivate();
+                activeFileTypeController = null;
+            }
+
+            FileTypeController ftc = fileTypeControllers.get(fileType);
+            if (ftc != null) {
+                activeFileTypeController = ftc;
+                activeFileTypeController.activate();
+            } else {
+                Gdx.app.error(TAG, "Can't find controller for " + fileType);
+            }
         }
     }
 
@@ -520,20 +561,30 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-	private void updatePngCompression () {
-		PngCompressionModel compModel = getProject().getPngCompression();
-		WidgetData.CompressionPng compValue = WidgetData.CompressionPng.valueOf(compModel == null ? null : compModel.getType());
-        actorsGlobalSettings.cboPngCompression.setSelected(compValue);
-        actorsGlobalSettings.containerPngCompSettings.setVisible(compValue.hasSettings);
+    private void updateFileType() {
+        FileTypeModel model = getProject().getFileType();
+        WidgetData.FileType fileType = WidgetData.FileType.valueOf(model);
+
+        if (fileType != actorsGlobalSettings.cboFileType.getSelected()) {
+            actorsGlobalSettings.cboFileType.setSelected(fileType);
+        }
     }
 
+    //TODO remove
+//	private void updatePngCompression () {
+//		PngCompressionModel compModel = getProject().getPngCompression();
+//		WidgetData.PngCompression compValue = WidgetData.PngCompression.valueOf(compModel == null ? null : compModel.getType());
+//        actorsGlobalSettings.cboPngCompression.setSelected(compValue);
+//        actorsGlobalSettings.containerPngCompSettings.setVisible(compValue.hasSettings);
+//    }
+
+    //TODO remove
 	private void updateEtcCompression () {
 		EtcCompressionModel compModel = getProject().getEtcCompression();
 		WidgetData.CompressionEtc compValue = WidgetData.CompressionEtc.valueOf(compModel == null ? null : compModel.getType());
         actorsGlobalSettings.cboEtcCompression.setSelected(compValue);
         actorsGlobalSettings.containerEtcCompSettings.setVisible(compValue.hasSettings);
     }
-
 
     private void updateRecentProjects() {
         Array<FileHandle> recentProjects = this.recentProjects.getRecentProjects();
@@ -566,33 +617,33 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-    private void onPngCompressionTypeChanged() {
-        if (!initialized) return;
-
-        ProjectModel project = getProject();
-        PngCompressionType compType = actorsGlobalSettings.cboPngCompression.getSelected().type;
-
-        if (compType == null) {
-            project.setPngCompression(null);
-            return;
-        }
-
-        if (project.getPngCompression() == null || compType != project.getPngCompression().getType()) {
-            switch (compType) {
-                case PNGTASTIC:
-                    project.setPngCompression(new PngtasticCompressionModel());
-                    break;
-                case ZOPFLI:
-                    project.setPngCompression(new ZopfliCompressionModel());
-                    break;
-                case TINY_PNG:
-                    project.setPngCompression(new TinyPngCompressionModel());
-                    break;
-                default:
-                    project.setPngCompression(null);
-            }
-        }
-    }
+//    private void onPngCompressionTypeChanged() {
+//        if (!initialized) return;
+//
+//        ProjectModel project = getProject();
+//        PngCompressionType compType = actorsGlobalSettings.cboPngCompression.getSelected().type;
+//
+//        if (compType == null) {
+//            project.setPngCompression(null);
+//            return;
+//        }
+//
+//        if (project.getPngCompression() == null || compType != project.getPngCompression().getType()) {
+//            switch (compType) {
+//                case PNGTASTIC:
+//                    project.setPngCompression(new PngtasticCompressionModel());
+//                    break;
+//                case ZOPFLI:
+//                    project.setPngCompression(new ZopfliCompressionModel());
+//                    break;
+//                case TINY_PNG:
+//                    project.setPngCompression(new TinyPngCompressionModel());
+//                    break;
+//                default:
+//                    project.setPngCompression(null);
+//            }
+//        }
+//    }
 
     private void onEtcCompressionTypeChanged() {
         if (!initialized) return;

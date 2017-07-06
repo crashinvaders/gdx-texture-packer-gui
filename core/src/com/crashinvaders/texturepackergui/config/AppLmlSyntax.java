@@ -48,16 +48,11 @@ public class AppLmlSyntax extends VisLmlSyntax {
     protected void registerContainerAttributes() {
         super.registerContainerAttributes();
 
-//        addAttributeProcessor(new ContainerPadLeftLmlAttribute(), "padLeft");
-//        addAttributeProcessor(new ContainerPadRightLmlAttribute(), "padRight");
-//        addAttributeProcessor(new ContainerPadTopLmlAttribute(), "padTop");
-//        addAttributeProcessor(new ContainerPadBottomLmlAttribute(), "padBottom");
-
-        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Top(), "padTop");
-        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Left(), "padLeft");
-        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Bottom(), "padBottom");
-        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.Right(), "padRight");
-        addAttributeProcessor(new ShrinkContainerPadLmlAttribute.All(), "pad");
+        addAttributeProcessor(new ContainerPadLmlAttribute.Top(), "containerPadTop");
+        addAttributeProcessor(new ContainerPadLmlAttribute.Left(), "containerPadLeft");
+        addAttributeProcessor(new ContainerPadLmlAttribute.Bottom(), "containerPadBottom");
+        addAttributeProcessor(new ContainerPadLmlAttribute.Right(), "containerPadRight");
+        addAttributeProcessor(new ContainerPadLmlAttribute.All(), "containerPad");
     }
 
     @Override

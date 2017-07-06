@@ -42,7 +42,7 @@ import java.util.Locale;
 
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
-    private static final String LOG = GlobalActions.class.getSimpleName();
+    private static final String TAG = GlobalActions.class.getSimpleName();
     private static final Locale LOCALE_EN = Locale.ENGLISH;
     private static final Locale LOCALE_DE = Locale.GERMAN;
     private static final Locale LOCALE_RU = new Locale("ru", "");
@@ -298,6 +298,7 @@ public class GlobalActions implements ActionContainer {
         return AppConstants.version.toString();
     }
 
+    //TODO remove
     @LmlAction("showPngCompSettings") public void showPngCompSettings() {
         PngCompressionModel compression = getProject().getPngCompression();
         if (compression == null) return;
@@ -313,10 +314,11 @@ public class GlobalActions implements ActionContainer {
                 interfaceService.showDialog(TinifyCompDialogController.class);
                 break;
             default:
-                Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
+                Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
         }
     }
-    
+
+    //TODO remove
     @LmlAction("showEtcCompSettings") public void showEtcCompSettings() {
         EtcCompressionModel compression = getProject().getEtcCompression();
         if (compression == null) return;
@@ -326,7 +328,7 @@ public class GlobalActions implements ActionContainer {
                 interfaceService.showDialog(EtcCompDialogController.class);
                 break;
             default:
-                Gdx.app.error(LOG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
+                Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
         }
     }
 

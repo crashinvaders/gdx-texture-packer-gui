@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable tablealign="top" pad="4">
+    <!--TODO localize-->
+    <label align="right" padright="4">Encoding</label>
+    <selectbox id="cboPngEncoding" growx="true" change="ftcPng.onEncodingChanged"/>
+
+    <:row padtop="4"/>
+
+    <!--TODO localize-->
+    <label align="right" padright="4">Compression</label>
+    <vistable growx="true">
+        <!--TODO fix ID-->
+        <selectbox id="cboPngCompression1" growx="true" change="ftcPng.onCompressionChanged"/>
+        <shrinkcontainer
+                id="containerPngCompSettings"
+                visible="true"
+                padleft="4">
+            <imagebutton
+                    image="custom/ic-settings"
+                    scaling="none"
+                    focusborder="false"
+                    change="ftcPng.showPngCompSettings"/>
+        </shrinkcontainer>
+    </vistable>
+</vistable>

@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable tablealign="top" pad="4">
+    <!--TODO localize-->
+    <label align="right" padright="4">Texture format</label>
+    <selectbox id="cboKtxFormat" growx="true" change="ftcKtx.onFormatChanged"/>
+
+    <:row padtop="4"/>
+
+    <!--TODO localize-->
+    <label align="right" padright="4">Encoding</label>
+    <selectbox id="cboKtxEncoding" growx="true" change="ftcKtx.onEncodingChanged"/>
+
+    <:row padtop="4"/>
+
+    <!--TODO localize-->
+    <label align="right" padright="4">ZKTX (zipping)</label>
+    <vischeckbox id="chbKtxZipping" align="left" change="ftcKtx.onZippingChanged"/>
+</vistable>

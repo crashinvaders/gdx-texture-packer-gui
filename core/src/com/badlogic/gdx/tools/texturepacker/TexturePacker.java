@@ -17,6 +17,7 @@
 package com.badlogic.gdx.tools.texturepacker;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
@@ -40,6 +41,14 @@ import java.util.Set;
 
 /** @author Nathan Sweet */
 public class TexturePacker {
+	public static final Array<Pixmap.Format> availableEncodings = Array.with(
+			Pixmap.Format.RGBA8888,
+			Pixmap.Format.RGB888,
+			Pixmap.Format.RGBA4444,
+			Pixmap.Format.RGB565,
+			Pixmap.Format.Alpha
+	);
+
 	private final Settings settings;
 	private final Packer packer;
 	private final ImageProcessor imageProcessor;
