@@ -5,8 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent.Property;
-import com.crashinvaders.texturepackergui.services.model.compression.EtcCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
 import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;

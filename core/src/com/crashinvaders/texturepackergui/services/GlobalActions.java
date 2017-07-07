@@ -18,8 +18,6 @@ import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
-import com.crashinvaders.texturepackergui.services.model.compression.EtcCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -346,11 +344,6 @@ public class GlobalActions implements ActionContainer {
 
         Locales.setLocale(locale);
         localeService.setCurrentLocale(locale);
-
-        { // Prevent stage from tooltip appearing //TODO remove when VisUI will be updated to 1.2.6+
-            getStage().getRoot().findActor("root").setTouchable(Touchable.disabled);
-            Timer.instance().clear();
-        }
     }
 
     /** Stores last used dir for specific actions */

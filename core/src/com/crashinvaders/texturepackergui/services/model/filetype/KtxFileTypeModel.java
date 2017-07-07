@@ -8,7 +8,6 @@ import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
 import java.io.StringWriter;
 
-//TODO add .ktx and .zktx extensions to old file cleaner list
 public class KtxFileTypeModel extends FileTypeModel {
     private Format format = Format.ETC2;
     private EncodingETC1 encodingEtc1 = EncodingETC1.RGB;
