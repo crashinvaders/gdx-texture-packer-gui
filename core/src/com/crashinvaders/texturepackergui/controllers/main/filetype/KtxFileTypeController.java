@@ -78,21 +78,6 @@ public class KtxFileTypeController implements FileTypeController {
 
         KtxFileTypeModel.Format format = cboFormat.getSelected();
         model.setFormat(format);
-
-        // Update encoding spinner values
-        {
-            muteEncodingChangeEvent = true;
-            switch (format) {
-                case ETC1:
-                    cboEncoding.setItems(KtxFileTypeModel.EncodingETC1.values());
-                    break;
-                case ETC2:
-                    cboEncoding.setItems(KtxFileTypeModel.EncodingETC2.values());
-                    break;
-            }
-            updateEncoding();
-            muteEncodingChangeEvent = false;
-        }
     }
 
     @LmlAction("onEncodingChanged") void onEncodingChanged() {
@@ -122,11 +107,25 @@ public class KtxFileTypeController implements FileTypeController {
 
         KtxFileTypeModel.Format format = model.getFormat();
         cboFormat.setSelected(format);
+
+        muteEncodingChangeEvent = true;
+        switch (format) {
+            case ETC1:
+                cboEncoding.setItems(KtxFileTypeModel.EncodingETC1.values());
+                cboEncoding.setSelected(model.getEncodingEtc1());
+                break;
+            case ETC2:
+                cboEncoding.setItems(KtxFileTypeModel.EncodingETC2.values());
+                cboEncoding.setSelected(model.getEncodingEtc2());
+                break;
+        }
+        muteEncodingChangeEvent = false;
     }
 
     private void updateEncoding() {
         if (model == null) return;
 
+        muteEncodingChangeEvent = true;
         switch (model.getFormat()) {
             case ETC1:
                 cboEncoding.setSelected(model.getEncodingEtc1());
@@ -135,6 +134,7 @@ public class KtxFileTypeController implements FileTypeController {
                 cboEncoding.setSelected(model.getEncodingEtc2());
                 break;
         }
+        muteEncodingChangeEvent = false;
     }
 
     private void updateZipping() {

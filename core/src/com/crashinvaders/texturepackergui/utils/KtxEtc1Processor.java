@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.Pixmap.Filter;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.glutils.ETC1;
 import com.badlogic.gdx.graphics.glutils.ETC1.ETC1Data;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
@@ -83,8 +82,8 @@ public class KtxEtc1Processor {
             out.writeInt(0); // glFormat
             out.writeInt(ETC1.ETC1_RGB8_OES); // glInternalFormat
             out.writeInt(GL20.GL_RGB); // glBaseInternalFormat
-            out.writeInt(width);
-            out.writeInt(alphaChanel ? (2 * height) : height);
+            out.writeInt(width); // width
+            out.writeInt(alphaChanel ? (2 * height) : height); // height
             out.writeInt(0); // depth (not supported)
             out.writeInt(0); // n array elements (not supported)
             out.writeInt(1); // faces
@@ -105,10 +104,7 @@ public class KtxEtc1Processor {
             throw new RuntimeException("Error writing to file: " + output.path(), e);
         } finally {
             if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException ignored) {
-                }
+                try { out.close(); } catch (IOException ignored) { }
             }
         }
     }
