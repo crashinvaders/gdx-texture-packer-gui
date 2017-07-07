@@ -38,7 +38,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlActor("ftcPng") ShrinkContainer container;
     @LmlActor("cboPngEncoding") VisSelectBox<Pixmap.Format> cboEncoding;
-    @LmlActor("cboPngCompression1") VisSelectBox<WidgetData.PngCompression> cboCompression;
+    @LmlActor("cboPngCompression") VisSelectBox<WidgetData.PngCompression> cboCompression;
     @LmlActor("containerPngCompSettings") Actor containerPngCompSettings;
 
     private PngFileTypeModel model;

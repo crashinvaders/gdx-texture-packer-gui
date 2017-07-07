@@ -23,11 +23,12 @@ import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileType
 import com.crashinvaders.texturepackergui.controllers.main.filetype.KtxFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.PngFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
-import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.events.*;
-import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
-import com.crashinvaders.texturepackergui.services.model.*;
+import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.services.model.ScaleFactorModel;
 import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
 import com.crashinvaders.texturepackergui.services.model.filetype.JpegFileTypeModel;
 import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
@@ -45,8 +46,10 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
-import com.github.czyzby.autumn.processor.event.EventDispatcher;
-import com.github.czyzby.lml.annotation.*;
+import com.github.czyzby.lml.annotation.LmlAction;
+import com.github.czyzby.lml.annotation.LmlActor;
+import com.github.czyzby.lml.annotation.LmlAfter;
+import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.ToastManager;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
@@ -55,7 +58,6 @@ import com.kotcrab.vis.ui.widget.spinner.FloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
-import java.math.BigDecimal;
 import java.util.Locale;
 
 @SuppressWarnings("WeakerAccess")
@@ -68,13 +70,10 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
     @Inject LocaleService localeService;
-    @Inject EventDispatcher eventDispatcher;
-    @Inject GlobalActions globalActions;
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
-    @Inject NinePatchEditorDialog ninePatchEditorDialog;
     @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
@@ -120,8 +119,6 @@ public class MainController implements ActionContainer, ViewResizer {
             ftc.onViewCreated(stage);
         }
 
-        actorsPackSettings.cboEncodingFormat.setItems(WidgetData.textureFormats);
-        actorsPackSettings.cboOutputFormat.setItems(WidgetData.outputFormats);
         actorsPackSettings.cboMinFilter.setItems(WidgetData.textureFilters);
         actorsPackSettings.cboMagFilter.setItems(WidgetData.textureFilters);
         actorsPackSettings.cboWrapX.setItems(WidgetData.textureWraps);
@@ -419,6 +416,8 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @LmlAction("onFileTypeChanged") void onFileTypeChanged() {
+        if (!initialized) return;
+
         WidgetData.FileType fileType = actorsGlobalSettings.cboFileType.getSelected();
         ProjectModel project = getProject();
         FileTypeModel currentFtModel = project.getFileType();
@@ -434,22 +433,6 @@ public class MainController implements ActionContainer, ViewResizer {
                 case KTX:
                     project.setFileType(new KtxFileTypeModel());
                     break;
-            }
-        }
-
-        // Switch active file type controller
-        {
-            if (activeFileTypeController != null) {
-                activeFileTypeController.deactivate();
-                activeFileTypeController = null;
-            }
-
-            FileTypeController ftc = fileTypeControllers.get(fileType);
-            if (ftc != null) {
-                activeFileTypeController = ftc;
-                activeFileTypeController.activate();
-            } else {
-                Gdx.app.error(TAG, "Can't find controller for " + fileType);
             }
         }
     }
@@ -516,10 +499,6 @@ public class MainController implements ActionContainer, ViewResizer {
             ((IntSpinnerModel) actorsPackSettings.spnPaddingX.getModel()).setValue(settings.paddingX, false);
             ((IntSpinnerModel) actorsPackSettings.spnPaddingY.getModel()).setValue(settings.paddingY, false);
 
-            ((FloatSpinnerModel) actorsPackSettings.spnJpegQuality.getModel()).setValue(BigDecimal.valueOf(settings.jpegQuality), false);
-
-            actorsPackSettings.cboEncodingFormat.setSelected(settings.format);
-            actorsPackSettings.cboOutputFormat.setSelected(settings.outputFormat);
             actorsPackSettings.cboMinFilter.setSelected(settings.filterMin);
             actorsPackSettings.cboMagFilter.setSelected(settings.filterMag);
             actorsPackSettings.cboWrapX.setSelected(settings.wrapX);
@@ -568,6 +547,22 @@ public class MainController implements ActionContainer, ViewResizer {
 
         if (fileType != actorsGlobalSettings.cboFileType.getSelected()) {
             actorsGlobalSettings.cboFileType.setSelected(fileType);
+        }
+
+        // Switch active file type controller
+        {
+            if (activeFileTypeController != null) {
+                activeFileTypeController.deactivate();
+                activeFileTypeController = null;
+            }
+
+            FileTypeController ftc = fileTypeControllers.get(fileType);
+            if (ftc != null) {
+                activeFileTypeController = ftc;
+                activeFileTypeController.activate();
+            } else {
+                Gdx.app.error(TAG, "Can't find controller for " + fileType);
+            }
         }
     }
 

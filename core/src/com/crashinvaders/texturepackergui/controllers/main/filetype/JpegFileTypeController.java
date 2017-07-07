@@ -30,7 +30,7 @@ public class JpegFileTypeController implements FileTypeController {
 
     @LmlActor("ftcJpeg") ShrinkContainer container;
     @LmlActor("cboJpegEncoding") VisSelectBox<Pixmap.Format> cboEncoding;
-    @LmlActor("spnJpegQuality1") Spinner spnQuality;
+    @LmlActor("spnJpegQuality") Spinner spnQuality;
 
     private JpegFileTypeModel model;
 

@@ -2,21 +2,18 @@
 <!DOCTYPE vistable SYSTEM "../../../lml.dtd">
 
 <vistable tablealign="top" pad="4">
-    <!--TODO localize-->
-    <label align="right" padright="4">Encoding</label>
+    <label align="right" padright="4">@gsEncoding</label>
     <selectbox id="cboPngEncoding" growx="true" change="ftcPng.onEncodingChanged"/>
 
     <:row padtop="4"/>
 
-    <!--TODO localize-->
-    <label align="right" padright="4">Compression</label>
+    <label align="right" padright="4">@gsCompression</label>
     <vistable growx="true">
-        <!--TODO fix ID-->
-        <selectbox id="cboPngCompression1" growx="true" change="ftcPng.onCompressionChanged"/>
+        <selectbox id="cboPngCompression" growx="true" change="ftcPng.onCompressionChanged"/>
         <shrinkcontainer
                 id="containerPngCompSettings"
                 visible="false"
-                padleft="4">
+                containerpadleft="4">
             <imagebutton
                     image="custom/ic-settings"
                     scaling="none"

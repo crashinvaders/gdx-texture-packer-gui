@@ -35,6 +35,7 @@ import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -570,7 +571,7 @@ public class TexturePacker {
 		public boolean duplicatePadding = false;
 		public boolean rotation;
 		public int minWidth = 16, minHeight = 16;
-		public int maxWidth = 1024, maxHeight = 1024;
+		public int maxWidth = 2048, maxHeight = 2048;
 		public boolean square = false;
 		public boolean stripWhitespaceX, stripWhitespaceY;
 		public int alphaThreshold;
@@ -642,8 +643,8 @@ public class TexturePacker {
 			bleedIterations = settings.bleedIterations;
 			limitMemory = settings.limitMemory;
 			grid = settings.grid;
-			scale = settings.scale;
-			scaleSuffix = settings.scaleSuffix;
+			scale = Arrays.copyOf(settings.scale, settings.scale.length);
+			scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
 			atlasExtension = settings.atlasExtension;
 		}
 

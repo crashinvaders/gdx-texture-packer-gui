@@ -7,21 +7,21 @@
 
         <vistable tablealign="top" tablepad="8" tablepadbottom="0" defaultpadbottom="4">
 
-            <label align="right" padright="4">File type</label>
+            <label align="right" padright="4">@gsFileType</label>
             <selectbox id="cboFileType" growx="true" change="onFileTypeChanged"/>
 
         </vistable>
 
-        <shrinkcontainer id="ftcPng" pad="4" padtop="0" padbottom="4" background="listBorder" fillx="true" visible="false">
+        <shrinkcontainer id="ftcPng" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
             <:import path="lml/fileTypeConfigPng.lml"/>
         </shrinkcontainer>
 
-        <shrinkcontainer id="ftcKtx" pad="4" padtop="0" padbottom="4" background="listBorder" fillx="true" visible="false">
-            <:import path="lml/fileTypeConfigKtx.lml"/>
+        <shrinkcontainer id="ftcJpeg" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
+            <:import path="lml/fileTypeConfigJpeg.lml"/>
         </shrinkcontainer>
 
-        <shrinkcontainer id="ftcJpeg" pad="4" padtop="0" padbottom="4" background="listBorder" fillx="true" visible="false">
-            <:import path="lml/fileTypeConfigJpeg.lml"/>
+        <shrinkcontainer id="ftcKtx" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
+            <:import path="lml/fileTypeConfigKtx.lml"/>
         </shrinkcontainer>
 
     </vistable>

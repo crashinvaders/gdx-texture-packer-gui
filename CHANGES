@@ -1,5 +1,5 @@
 [LATEST]
-- ETC(KTX) compression
+- New atlas file type configuration. ETC(KTX) file format support.
 - Nine patch editor. Nine patches can be created from a plain images on the fly.
 - Recursive and flatten paths flags for an input directory
 - "Grid layout" algorithm now sorts regions and packs them in a name/index order

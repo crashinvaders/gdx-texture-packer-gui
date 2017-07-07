@@ -3,8 +3,6 @@
 
 <stack grow="true">
 
-    <!--TODO remove jpeg quality and page file type-->
-
     <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false">
 
         <vistable tablealign="top" tablepad="8" onecolumn="true">
@@ -23,31 +21,31 @@
                 <vistable growx="true" defaultpad="2" defaultminwidth="0">
                     <:column column="1" prefwidth="150"/>
 
-                    <:item title="@psEncodingFormat">
-                        <visselectbox
-                                id="cboEncodingFormat"
-                                onchange="onSettingsCboChanged"
-                                tooltip="@psTtFormat"/>
-                    </:item>
+                    <!--<:item title="@psEncodingFormat">-->
+                        <!--<visselectbox-->
+                                <!--id="cboEncodingFormat"-->
+                                <!--onchange="onSettingsCboChanged"-->
+                                <!--tooltip="@psTtFormat"/>-->
+                    <!--</:item>-->
 
-                    <:item title="@psOutputFormat">
-                        <visselectbox
-                                id="cboOutputFormat"
-                                onchange="onSettingsCboChanged"
-                                tooltip="@psTtOutputFormat"/>
-                    </:item>
+                    <!--<:item title="@psOutputFormat">-->
+                        <!--<visselectbox-->
+                                <!--id="cboOutputFormat"-->
+                                <!--onchange="onSettingsCboChanged"-->
+                                <!--tooltip="@psTtOutputFormat"/>-->
+                    <!--</:item>-->
 
-                    <:item title="@psJpegQuality">
-                        <floatspinner
-                                id="spnJpegQuality"
-                                onchange="onSettingsFloatSpinnerChanged"
-                                tooltip="@psTtJpegQuality"
-                                min="0.1"
-                                max="1.0"
-                                step="0.1"/>
-                    </:item>
+                    <!--<:item title="@psJpegQuality">-->
+                        <!--<floatspinner-->
+                                <!--id="spnJpegQuality"-->
+                                <!--onchange="onSettingsFloatSpinnerChanged"-->
+                                <!--tooltip="@psTtJpegQuality"-->
+                                <!--min="0.1"-->
+                                <!--max="1.0"-->
+                                <!--step="0.1"/>-->
+                    <!--</:item>-->
 
-                    <:separator/>
+                    <!--<:separator/>-->
 
                     <:item title="@psMinPageWidth">
                         <intspinner

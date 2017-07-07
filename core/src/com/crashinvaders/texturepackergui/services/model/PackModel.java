@@ -11,15 +11,13 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
 
 import java.io.File;
-import java.util.Arrays;
 
 public class PackModel {
     private static final String TAG = PackModel.class.getSimpleName();
 
-//    private final SourceFileSet sourceFileSet = new SourceFileSet();
     private final Array<ScaleFactorModel> scaleFactors = new Array<>();
     private final Array<InputFile> inputFiles = new Array<>();
-    private Settings settings;
+    private final Settings settings = new Settings();
     private String name = "";
     private String filename = "";
     private String outputDir = "";
@@ -27,18 +25,11 @@ public class PackModel {
     private EventDispatcher eventDispatcher;
 
     public PackModel() {
-        settings = new Settings();
-        settings.maxWidth = 2048; // Default settings.maxWidth value (1024) is outdated and 2048 is recommended
-        settings.maxHeight = 2048; // Default settings.maxHeight value (1024) is outdated and 2048 is recommended
-
         scaleFactors.add(new ScaleFactorModel("", 1f));
     }
 
     public PackModel(PackModel pack) {
-        settings = new Settings(pack.settings);
-        //TODO remove this when LibGDX will merge https://github.com/libgdx/libgdx/pull/4342
-        settings.scale = Arrays.copyOf(settings.scale, settings.scale.length);
-        settings.scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
+        settings.set(pack.settings);
 
         this.name = pack.name;
         this.filename = pack.filename;
@@ -96,10 +87,6 @@ public class PackModel {
         return outputDir;
     }
 
-//    public SourceFileSet getSourceFileSet() {
-//        return sourceFileSet;
-//    }
-
     public Array<InputFile> getInputFiles() {
         return inputFiles;
     }
@@ -110,9 +97,6 @@ public class PackModel {
 
     public void setSettings(Settings settings) {
         this.settings.set(settings);
-        //TODO remove this when LibGDX will merge https://github.com/libgdx/libgdx/pull/4342
-        this.settings.scale = Arrays.copyOf(settings.scale, settings.scale.length);
-        this.settings.scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
     }
 
     public String getCanonicalName() {

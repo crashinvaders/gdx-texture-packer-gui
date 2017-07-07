@@ -10,9 +10,6 @@ import com.kotcrab.vis.ui.widget.spinner.Spinner;
 @SuppressWarnings("WeakerAccess")
 public class PackSettingsActors {
 
-    @LmlActor("btnCopySettings") Button btnCopySettings;
-    @LmlActor("cboEncodingFormat") VisSelectBox cboEncodingFormat;
-    @LmlActor("cboOutputFormat") VisSelectBox cboOutputFormat;
     @LmlActor("spnMinPageWidth") Spinner spnMinPageWidth;
     @LmlActor("spnMinPageHeight") Spinner spnMinPageHeight;
     @LmlActor("spnMaxPageWidth") Spinner spnMaxPageWidth;
@@ -24,7 +21,6 @@ public class PackSettingsActors {
     @LmlActor("spnPaddingY") Spinner spnPaddingY;
     @LmlActor("cboWrapX") VisSelectBox cboWrapX;
     @LmlActor("cboWrapY") VisSelectBox cboWrapY;
-    @LmlActor("spnJpegQuality") Spinner spnJpegQuality;
     @LmlActor("eetbScaleFactors") ExpandEditTextButton eetbScaleFactors;
     @LmlActor("cbUseFastAlgorithm") VisCheckBox cbUseFastAlgorithm;
     @LmlActor("cbEdgePadding") VisCheckBox cbEdgePadding;

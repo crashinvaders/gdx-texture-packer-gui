@@ -199,69 +199,31 @@ public class ProjectSerializer {
     private Version deserializeProjectSection(ProjectModel project, String projectSection) {
         Array<String> lines = splitAndTrim(projectSection);
 
-        //TODO deserialize file type
-        FileTypeType fileTypeType = FileTypeType.findByKey(find(lines, "fileTypeType=", null));
-        if (fileTypeType != null) {
-            FileTypeModel fileTypeModel = null;
-            switch (fileTypeType) {
-                case PNG:
-                    fileTypeModel = new PngFileTypeModel();
-                    break;
-                case JPEG:
-                    fileTypeModel = new JpegFileTypeModel();
-                    break;
-                case KTX:
-                    fileTypeModel = new KtxFileTypeModel();
-                    break;
-                default:
-                    Gdx.app.error(TAG, "Unexpected FileTypeType: " + fileTypeType);
+        // File type section
+        {
+            FileTypeType fileTypeType = FileTypeType.findByKey(find(lines, "fileTypeType=", null));
+            if (fileTypeType != null) {
+                FileTypeModel fileTypeModel = null;
+                switch (fileTypeType) {
+                    case PNG:
+                        fileTypeModel = new PngFileTypeModel();
+                        break;
+                    case JPEG:
+                        fileTypeModel = new JpegFileTypeModel();
+                        break;
+                    case KTX:
+                        fileTypeModel = new KtxFileTypeModel();
+                        break;
+                    default:
+                        Gdx.app.error(TAG, "Unexpected FileTypeType: " + fileTypeType);
+                }
+                if (fileTypeModel != null) {
+                    String fileTypeData = find(lines, "fileTypeData=", null);
+                    fileTypeModel.deserializeState(fileTypeData);
+                }
+                project.setFileType(fileTypeModel);
             }
-            if (fileTypeModel != null) {
-                String fileTypeData = find(lines, "fileTypeData=", null);
-                fileTypeModel.deserializeState(fileTypeData);
-            }
-            project.setFileType(fileTypeModel);
         }
-
-//        PngCompressionType pngCompType = PngCompressionType.findByKey(find(lines, "pngCompressionType=", null));
-//        if (pngCompType != null) {
-//            PngCompressionModel pngCompModel = null;
-//            switch (pngCompType) {
-//                case PNGTASTIC:
-//                    pngCompModel = new PngtasticCompressionModel();
-//                    break;
-//                case ZOPFLI:
-//                    pngCompModel = new ZopfliCompressionModel();
-//                    break;
-//                case TINY_PNG:
-//                    pngCompModel = new TinyPngCompressionModel();
-//                    break;
-//                default:
-//                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + pngCompType);
-//            }
-//            if (pngCompModel != null) {
-//                String pngCompData = find(lines, "pngCompressionData=", null);
-//                pngCompModel.deserializeState(pngCompData);
-//            }
-//            project.setPngCompression(pngCompModel);
-//        }
-        
-//        EtcCompressionType etcCompType = EtcCompressionType.findByKey(find(lines, "etcCompressionType=", null));
-//        if (etcCompType != null) {
-//            EtcCompressionModel etcCompModel = null;
-//            switch (etcCompType) {
-//                case KTX:
-//                	etcCompModel = new EtcCompressionModel(etcCompType);
-//                    break;
-//                default:
-//                    Gdx.app.error(TAG, "Unexpected PngCompressionType: " + etcCompType);
-//            }
-//            if (etcCompModel != null) {
-//                String etcCompData = find(lines, "etcCompressionData=", null);
-//                etcCompModel.deserializeState(etcCompData);
-//            }
-//            project.setEtcCompression(etcCompModel);
-//        }
 
         String previewBgColorHex = find(lines, "previewBackgroundColor=", null);
         if (previewBgColorHex != null) {
@@ -312,8 +274,8 @@ public class ProjectSerializer {
         settings.format = Pixmap.Format.valueOf(find(lines, "format=", defaultSettings.format.toString()));
         settings.ignoreBlankImages = find(lines, "ignoreBlankImages=", defaultSettings.ignoreBlankImages);
         settings.jpegQuality = find(lines, "jpegQuality=", defaultSettings.jpegQuality);
-        settings.maxHeight = find(lines, "maxHeight=", 2048); // defaultSettings.maxHeight value (1024) is outdated and 2048 is recommended
-        settings.maxWidth = find(lines, "maxWidth=", 2048); // defaultSettings.maxWidth value (1024) is outdated and 2048 is recommended
+        settings.maxHeight = find(lines, "maxHeight=", defaultSettings.maxHeight);
+        settings.maxWidth = find(lines, "maxWidth=", defaultSettings.maxWidth);
         settings.minHeight = find(lines, "minHeight=", defaultSettings.minHeight);
         settings.minWidth = find(lines, "minWidth=", defaultSettings.minWidth);
         settings.outputFormat = find(lines, "outputFormat=", defaultSettings.outputFormat);
