@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.FileProcessor;
+import com.badlogic.gdx.tools.texturepacker.PageFileWriter;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -26,18 +27,22 @@ public class PackingProcessor implements PackProcessor {
     @Override
     public void processPackage(PackProcessingNode node) throws Exception {
         PackModel pack = node.getPack();
-        String settingsOrigExtension = pack.getSettings().atlasExtension;
+        PageFileWriter pageFileWriter = node.getPageFileWriter();
+
+        if (pageFileWriter == null) {
+            throw new IllegalStateException("PageFileWriter is not set. Looks like something is wrong with file type processor setup.");
+        }
 
         System.out.println("Packing is started");
 
-        performPacking(pack);
-
+        String settingsOrigExtension = pack.getSettings().atlasExtension;
+        performPacking(pack, pageFileWriter);
         pack.getSettings().atlasExtension = settingsOrigExtension;
 
         System.out.println("Packing is done");
     }
     
-    private void performPacking(PackModel packModel) throws Exception {
+    private void performPacking(PackModel packModel, PageFileWriter pageFileWriter) throws Exception {
         Array<ImageEntry> imageEntries = collectImageFiles(packModel);
         if (imageEntries.size == 0) {
             throw new IllegalStateException("No images to pack");
@@ -46,7 +51,7 @@ public class PackingProcessor implements PackProcessor {
         deleteOldFiles(packModel);
         String filename = obtainFilename(packModel);
 
-        TexturePacker packer = new TexturePacker(packModel.getSettings());
+        TexturePacker packer = new TexturePacker(packModel.getSettings(), pageFileWriter);
         for (ImageEntry image : imageEntries) {
             if (image.ninePatch) {
                 packer.addImage(image.fileHandle.file(), image.name, image.splits, image.pads);

@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
+import com.badlogic.gdx.tools.texturepacker.JpegPageFileWriter;
 import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -19,8 +20,8 @@ public class JpegFileTypeProcessor implements PackProcessor {
 
         JpegFileTypeModel fileType = project.getFileType();
 
-        pack.getSettings().outputFormat = "jpeg";
         pack.getSettings().format = fileType.getEncoding();
-        pack.getSettings().jpegQuality = fileType.getQuality();
+
+        node.setPageFileWriter(new JpegPageFileWriter(fileType.getQuality()));
     }
 }

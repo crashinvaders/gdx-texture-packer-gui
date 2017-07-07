@@ -50,14 +50,17 @@ public class TexturePacker {
 			Pixmap.Format.Alpha
 	);
 
+	private final PageFileWriter pageFileWriter;
 	private final Settings settings;
 	private final Packer packer;
 	private final ImageProcessor imageProcessor;
 	private final Array<InputImage> inputImages = new Array();
 	private File rootDir;
 
-	/** @param rootDir Used to strip the root directory prefix from image file names, can be null. */
-	public TexturePacker(File rootDir, Settings settings) {
+	/**
+	 * @param rootDir Used to strip the root directory prefix from image file names, can be null.  */
+	public TexturePacker(Settings settings, PageFileWriter pageFileWriter, File rootDir) {
+		this.pageFileWriter = pageFileWriter;
 		this.rootDir = rootDir;
 		this.settings = settings;
 
@@ -75,8 +78,8 @@ public class TexturePacker {
 		imageProcessor = new ImageProcessor(rootDir, settings);
 	}
 
-	public TexturePacker(Settings settings) {
-		this(null, settings);
+	public TexturePacker(Settings settings, PageFileWriter pageFileWriter) {
+		this(settings, pageFileWriter, null);
 	}
 
 	public void addImage (File file) {
@@ -185,7 +188,7 @@ public class TexturePacker {
 
 			File outputFile;
 			while (true) {
-				outputFile = new File(packDir, imageName + (fileIndex++ == 0 ? "" : fileIndex) + "." + settings.outputFormat);
+				outputFile = new File(packDir, imageName + (fileIndex++ == 0 ? "" : fileIndex) + "." + pageFileWriter.getFileExtension());
 				if (!outputFile.exists()) break;
 			}
 			new FileHandle(outputFile).parent().mkdirs();
@@ -255,8 +258,7 @@ public class TexturePacker {
 				}
 			}
 
-			if (settings.bleed && !settings.premultiplyAlpha
-				&& !(settings.outputFormat.equalsIgnoreCase("jpg") || settings.outputFormat.equalsIgnoreCase("jpeg"))) {
+			if (settings.bleed && !settings.premultiplyAlpha && pageFileWriter.isBleedingSupported()) {
 				canvas = new ColorBleedEffect().processImage(canvas, settings.bleedIterations);
 				g = (Graphics2D)canvas.getGraphics();
 			}
@@ -266,34 +268,10 @@ public class TexturePacker {
 				g.drawRect(0, 0, width - 1, height - 1);
 			}
 
-			ImageOutputStream ios = null;
 			try {
-				if (settings.outputFormat.equalsIgnoreCase("jpg") || settings.outputFormat.equalsIgnoreCase("jpeg")) {
-					BufferedImage newImage = new BufferedImage(canvas.getWidth(), canvas.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-					newImage.getGraphics().drawImage(canvas, 0, 0, null);
-					canvas = newImage;
-
-					Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");
-					ImageWriter writer = writers.next();
-					ImageWriteParam param = writer.getDefaultWriteParam();
-					param.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-					param.setCompressionQuality(settings.jpegQuality);
-					ios = ImageIO.createImageOutputStream(outputFile);
-					writer.setOutput(ios);
-					writer.write(null, new IIOImage(canvas, null, null), param);
-				} else {
-					if (settings.premultiplyAlpha) canvas.getColorModel().coerceData(canvas.getRaster(), true);
-					ImageIO.write(canvas, "png", outputFile);
-				}
+				pageFileWriter.saveToFile(settings, canvas, outputFile);
 			} catch (IOException ex) {
 				throw new RuntimeException("Error writing file: " + outputFile, ex);
-			} finally {
-				if (ios != null) {
-					try {
-						ios.close();
-					} catch (Exception ignored) {
-					}
-				}
 			}
 		}
 	}
@@ -579,8 +557,6 @@ public class TexturePacker {
 		public TextureWrap wrapX = TextureWrap.ClampToEdge, wrapY = TextureWrap.ClampToEdge;
 		public Format format = Format.RGBA8888;
 		public boolean alias = true;
-		public String outputFormat = "png";
-		public float jpegQuality = 0.9f;
 		public boolean ignoreBlankImages = true;
 		public boolean fast;
 		public boolean debug;
@@ -625,8 +601,6 @@ public class TexturePacker {
 			stripWhitespaceY = settings.stripWhitespaceY;
 			alias = settings.alias;
 			format = settings.format;
-			jpegQuality = settings.jpegQuality;
-			outputFormat = settings.outputFormat;
 			filterMin = settings.filterMin;
 			filterMag = settings.filterMag;
 			wrapX = settings.wrapX;

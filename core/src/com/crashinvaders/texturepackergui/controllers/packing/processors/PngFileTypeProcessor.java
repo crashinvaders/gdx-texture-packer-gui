@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
+import com.badlogic.gdx.tools.texturepacker.PngPageFileWriter;
 import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -19,7 +20,8 @@ public class PngFileTypeProcessor implements PackProcessor {
 
         PngFileTypeModel fileType = project.getFileType();
 
-        pack.getSettings().outputFormat = "png";
         pack.getSettings().format = fileType.getEncoding();
+
+        node.setPageFileWriter(new PngPageFileWriter());
     }
 }

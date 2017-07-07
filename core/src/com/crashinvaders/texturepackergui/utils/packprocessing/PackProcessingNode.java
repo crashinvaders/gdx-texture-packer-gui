@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.utils.packprocessing;
 
+import com.badlogic.gdx.tools.texturepacker.PageFileWriter;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -22,6 +23,7 @@ public class PackProcessingNode {
     private final ProjectModel project;
     private final PackModel pack;
     private PackModel origPack;
+    private PageFileWriter pageFileWriter;  // Should be set by other processors before PackingProcessor gets to the work
     private String log = "";
 
     public PackProcessingNode(ProjectModel project, PackModel pack) {
@@ -52,6 +54,14 @@ public class PackProcessingNode {
 
     void setLog(String log) {
         this.log = log;
+    }
+
+    public PageFileWriter getPageFileWriter() {
+        return pageFileWriter;
+    }
+
+    public void setPageFileWriter(PageFileWriter pageFileWriter) {
+        this.pageFileWriter = pageFileWriter;
     }
 
     public void addMetadata(String key, Object value) {

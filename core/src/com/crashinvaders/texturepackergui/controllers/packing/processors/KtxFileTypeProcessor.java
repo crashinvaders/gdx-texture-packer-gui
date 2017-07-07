@@ -1,9 +1,9 @@
 package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.tools.texturepacker.PngPageFileWriter;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -14,80 +14,93 @@ import com.crashinvaders.texturepackergui.utils.KtxEtc2Processor;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
-public class KtxFileTypeProcessor {
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
-    private KtxFileTypeProcessor() { }
+public class KtxFileTypeProcessor implements PackProcessor {
 
-    private static boolean checkCondition(PackProcessingNode node) {
+    @Override
+    public void processPackage(PackProcessingNode node) throws Exception {
+        PackModel pack = node.getPack();
         ProjectModel project = node.getProject();
 
-        if (project.getFileType().getType() != FileTypeType.KTX) return false;
+        if (project.getFileType().getType() != FileTypeType.KTX) return;
 
-        return true;
-    }
+        KtxFileTypeModel fileType = project.getFileType();
 
-    /** Preparation phase. We should configure packer to pack pages as plain PNGs here. */
-    public static class Pre implements PackProcessor {
-        @Override
-        public void processPackage(PackProcessingNode node) throws Exception {
-            if (!checkCondition(node)) return;
+        pack.getSettings().format = Pixmap.Format.RGBA8888;
 
-            PackModel pack = node.getPack();
-            pack.getSettings().outputFormat = "png";
-            pack.getSettings().format = Pixmap.Format.RGBA8888;
+        switch (fileType.getFormat()) {
+            case ETC1:
+                boolean alphaChanel = fileType.getEncodingEtc1() == KtxFileTypeModel.EncodingETC1.RGBA;
+                node.setPageFileWriter(new KtxEtc1PageFileWriter(alphaChanel, fileType.isZipping()));
+                break;
+            case ETC2:
+                node.setPageFileWriter(new KtxEtc2PageFileWriter(fileType.getEncodingEtc2().format, fileType.isZipping()));
+                break;
         }
     }
 
-    /** Processing phase. Here we should take page PNG images and convert them into KTX images. */
-    public static class Post implements PackProcessor {
+    public static class KtxEtc1PageFileWriter extends PngPageFileWriter {
+
+        private final boolean alphaChannel;
+        private final boolean zipping;
+
+        public KtxEtc1PageFileWriter(boolean alphaChannel, boolean zipping) {
+            this.zipping = zipping;
+            this.alphaChannel = alphaChannel;
+        }
+
         @Override
-        public void processPackage(PackProcessingNode node) throws Exception {
-            if (!checkCondition(node)) return;
+        public String getFileExtension() {
+            return zipping ? "zktx" : "ktx";
+        }
 
-            System.out.println("ETC compression started");
+        @Override
+        public void saveToFile(TexturePacker.Settings settings, BufferedImage image, File file) throws IOException {
+            FileHandle tmpPngFile = new FileHandle(File.createTempFile(file.getName(), null));
+            FileHandle output = new FileHandle(file);
 
-            PackModel pack = node.getPack();
-            ProjectModel project = node.getProject();
-            KtxFileTypeModel fileType = project.getFileType();
+            super.saveToFile(settings, image, tmpPngFile.file());
 
-            // Compression section
-            {
-                TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(
-                                Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()),
-                                Gdx.files.absolute(pack.getOutputDir()), false);
+            KtxEtc1Processor.process(tmpPngFile, output, alphaChannel);
+            tmpPngFile.delete();
 
-                for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
-	    			FileHandle input = page.textureFile;
-	    			FileHandle output = Gdx.files.getFileHandle(input.path().substring(0, input.path().lastIndexOf('.'))
-                            + (fileType.isZipping() ? ".zktx" : ".ktx"), input.type());
-
-                    switch (fileType.getFormat()) {
-                        case ETC1:
-                            boolean alphaChanel = fileType.getEncodingEtc1() == KtxFileTypeModel.EncodingETC1.RGBA;
-                            KtxEtc1Processor.process(input, output, alphaChanel);
-                            break;
-                        case ETC2:
-                            KtxEtc2Processor.process(input, output, fileType.getEncodingEtc2().format);
-                            break;
-                    }
-                    input.delete();
-                    if (fileType.isZipping()) {
-                        FileUtils.gzip(output);
-                    }
-	    		}
-
-	    		// Replace page image names in atlas markup file with new ktx/zktx files
-                {
-                    String atlasText = Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()).readString();
-                    for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
-                        atlasText = atlasText.replace(page.textureFile.name(),
-                                page.textureFile.nameWithoutExtension() + (fileType.isZipping() ? ".zktx" : ".ktx"));
-                    }
-                    Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()).writeString(atlasText, false);
-                }
+            if (zipping) {
+                FileUtils.gzip(output);
             }
+        }
+    }
 
-            System.out.println("ETC compression finished");
+    public static class KtxEtc2PageFileWriter extends PngPageFileWriter {
+
+        private final KtxEtc2Processor.PixelFormat pixelFormat;
+        private final boolean zipping;
+
+        public KtxEtc2PageFileWriter(KtxEtc2Processor.PixelFormat pixelFormat, boolean zipping) {
+            this.zipping = zipping;
+            this.pixelFormat = pixelFormat;
+        }
+
+        @Override
+        public String getFileExtension() {
+            return zipping ? "zktx" : "ktx";
+        }
+
+        @Override
+        public void saveToFile(TexturePacker.Settings settings, BufferedImage image, File file) throws IOException {
+            FileHandle tmpPngFile = new FileHandle(File.createTempFile(file.getName(), null));
+            FileHandle output = new FileHandle(file);
+
+            super.saveToFile(settings, image, tmpPngFile.file());
+
+            KtxEtc2Processor.process(tmpPngFile, output, pixelFormat);
+            tmpPngFile.delete();
+
+            if (zipping) {
+                FileUtils.gzip(output);
+            }
         }
     }
 }

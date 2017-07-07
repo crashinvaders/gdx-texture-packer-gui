@@ -110,10 +110,10 @@ public class PackDialogController implements ActionContainer {
                         // Startup metadata
                         new StartTimeMetadataProcessor(),
 
-                        // File type (pre processors)
+                        // File type
                         new PngFileTypeProcessor(),
                         new JpegFileTypeProcessor(),
-                        new KtxFileTypeProcessor.Pre(),
+                        new KtxFileTypeProcessor(),
 
                         // Packing
                         new PackingProcessor(),
@@ -122,9 +122,6 @@ public class PackDialogController implements ActionContainer {
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
                         new TinifyCompressingProcessor(tinifyService),
-
-                        // File type (post processors)
-                        new KtxFileTypeProcessor.Post(),
 
                         // Trailing metadata
                         new FileSizeMetadataProcessor(),

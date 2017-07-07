@@ -386,16 +386,16 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-    @LmlAction("onSettingsFloatSpinnerChanged") void onSettingsFloatSpinnerChanged(Spinner spinner) {
-        PackModel pack = getSelectedPack();
-        if (pack == null) return;
-
-        TexturePacker.Settings settings = pack.getSettings();
-        FloatSpinnerModel model = (FloatSpinnerModel) spinner.getModel();
-        switch (spinner.getName()) {
-            case "spnJpegQuality": settings.jpegQuality = model.getValue().floatValue(); break;
-        }
-    }
+//    @LmlAction("onSettingsFloatSpinnerChanged") void onSettingsFloatSpinnerChanged(Spinner spinner) {
+//        PackModel pack = getSelectedPack();
+//        if (pack == null) return;
+//
+//        TexturePacker.Settings settings = pack.getSettings();
+//        FloatSpinnerModel model = (FloatSpinnerModel) spinner.getModel();
+//        switch (spinner.getName()) {
+//            case "spnJpegQuality": settings.jpegQuality = model.getValue().floatValue(); break;
+//        }
+//    }
 
     @LmlAction("onSettingsCboChanged") void onSettingsCboChanged(VisSelectBox selectBox) {
         if (!initialized) return;
@@ -411,7 +411,7 @@ public class MainController implements ActionContainer, ViewResizer {
             case "cboMagFilter": settings.filterMag = (Texture.TextureFilter) value; break;
             case "cboWrapX": settings.wrapX = (Texture.TextureWrap) value; break;
             case "cboWrapY": settings.wrapY = (Texture.TextureWrap) value; break;
-            case "cboOutputFormat": settings.outputFormat = (String) value; break;
+//            case "cboOutputFormat": settings.outputFormat = (String) value; break;
         }
     }
 
