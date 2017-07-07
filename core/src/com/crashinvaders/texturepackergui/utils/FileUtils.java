@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.zip.GZIPOutputStream;
 
 public class FileUtils {
 
@@ -62,5 +60,43 @@ public class FileUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void gzip(FileHandle file) throws IOException {
+        gzip(file, file);
+    }
+
+    public static void gzip(FileHandle input, FileHandle output) throws IOException {
+        FileInputStream read = null;
+        DataOutputStream write = null;
+        FileHandle tempFile = null;
+
+        // In case input and output files are the same, we have to remove input file and place it in temporal storage
+        if (input.equals(output)) {
+            tempFile = new FileHandle(File.createTempFile(input.nameWithoutExtension(), null));
+            input.copyTo(tempFile);
+            input.delete();
+            input = tempFile;
+        }
+
+        try {
+            File in = input.file(), out = output.file();
+            int writtenBytes = 0, length = (int) in.length();
+            byte[] buffer = new byte[10 * 1024];
+            read = new FileInputStream(in);
+            write = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(out)));
+            write.writeInt(length);
+            while (writtenBytes != length) {
+                int nBytesRead = read.read(buffer);
+                write.write(buffer, 0, nBytesRead);
+                writtenBytes += nBytesRead;
+            }
+        } finally {
+            if (write != null) write.close();
+            if (read != null) read.close();
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
+        }
     }
 }

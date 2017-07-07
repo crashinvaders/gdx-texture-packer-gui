@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.services.model.filetype;
 
+import com.crashinvaders.texturepackergui.utils.KtxEtc2Processor;
 import com.badlogic.gdx.utils.*;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent.Property;
@@ -118,13 +119,19 @@ public class KtxFileTypeModel extends FileTypeModel {
     }
 
     public enum EncodingETC2 {
-        RGB8,
-        SRGB8,
-        RGBA8,
-        SRGBA8,
-        RGB8A1,
-        SRGB8A1,
-        R11,
-        RG11
+        RGB8(KtxEtc2Processor.PixelFormat.RGB8),
+        SRGB8(KtxEtc2Processor.PixelFormat.SRGB8),
+        RGBA8(KtxEtc2Processor.PixelFormat.RGBA8),
+        SRGBA8(KtxEtc2Processor.PixelFormat.SRGBA8),
+        RGB8A1(KtxEtc2Processor.PixelFormat.RGB8A1),
+        SRGB8A1(KtxEtc2Processor.PixelFormat.SRGB8A1),
+        R11(KtxEtc2Processor.PixelFormat.R11),
+        RG11(KtxEtc2Processor.PixelFormat.RG11);
+
+        public final KtxEtc2Processor.PixelFormat format;
+
+        EncodingETC2(KtxEtc2Processor.PixelFormat format) {
+            this.format = format;
+        }
     }
 }
