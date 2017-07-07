@@ -67,6 +67,7 @@ public class InfoPanel extends Container {
 
     private void setFileSize(long bytes) {
         double megabytes = bytes / 1048576D;
+        megabytes = Math.max(megabytes, 0.01); // To avoid cases when few KB displays as 0.00
         lblFileSize.setText(String.format(Locale.US, "%.2f", megabytes));
     }
 

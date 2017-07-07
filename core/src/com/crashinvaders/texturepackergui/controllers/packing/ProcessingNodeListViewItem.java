@@ -125,8 +125,10 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
             tableMetadata.add(viewHolder.root);
         }
         if (node.hasMetadata(PackProcessingNode.META_FILE_SIZE)) {
-            long size = node.getMetadata(PackProcessingNode.META_FILE_SIZE);
-            String  sizeMb = String.format(Locale.US, "%.2f%s", size / 1048576.0, i18nBundle.get("mb")); // 1024 x 1024
+            long bytes = node.getMetadata(PackProcessingNode.META_FILE_SIZE);
+            double megabytes = bytes / 1048576.0;  // 1024 x 1024
+            megabytes = Math.max(megabytes, 0.01); // To avoid cases when few KB displays as 0.00
+            String  sizeMb = String.format(Locale.US, "%.2f%s", megabytes, i18nBundle.get("mb"));
 
             RegularMetadataItemViewHolder viewHolder = new RegularMetadataItemViewHolder(parser);
             viewHolder.lblContent.setText(sizeMb);
