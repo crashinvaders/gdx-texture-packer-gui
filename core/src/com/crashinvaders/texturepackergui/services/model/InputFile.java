@@ -121,6 +121,10 @@ public class InputFile {
         }
     }
 
+    public boolean isNinePatch() {
+        return isProgrammaticNinePatch() || isFileBasedNinePatch();
+    }
+
     @Override
     public String toString() {
         return fileHandle.toString();

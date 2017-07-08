@@ -124,7 +124,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
                 imgName += "-dir";
             } else {
                 imgName += "-file";
-                if (inputFile.isProgrammaticNinePatch() || inputFile.isFileBasedNinePatch()) {
+                if (inputFile.isNinePatch() && inputFile.getType() == InputFile.Type.Input) {
                     imgName += "-ninepatch";
                 }
             }
