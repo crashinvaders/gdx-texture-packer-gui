@@ -31,7 +31,8 @@ com.badlogic.gdx.graphics.Color: {
 	nine-patch-lines-content: { hex: ffb000ff }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
-	dialogDim: {name: white, color: {r: 0, g: 0, b: 0, a: 0.45} },
+	dialogDim: {name: white, color: {hex:252526a0} },
+	dragndropDim: {name: white, color: {hex:252526e0} },
 	settingsInternalPanel: {name: white, color: {hex:202020ff} },
 	mainMenuBg: {name: white, color: dark-grey },
 	darkBorder: {name: custom/white_frame, color: grey },
@@ -41,7 +42,6 @@ com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 	packingItemBg: {name: white, color: dark-grey },
 	canvasInfoPanel: {name: white, color: {hex:252526ff} },
 	noPreviewFill: {name: white, color: {hex:000000aa} },
-	dragndropDim: {name: white, color: {hex:252526e0} },
 	paneLockBg: {name: white, color: {hex:333333ff} },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
@@ -80,10 +80,10 @@ com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
 	default-horizontal: {handle: splitpane }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
-	default: {titleFont: default-font, background: window, titleFontColor: white },
-	resizable: {background: window-resizable, titleFont: default-font, titleFontColor: white },
-	noborder: {background: window-noborder, titleFont: default-font, titleFontColor: white },
-	dialog: {stageBackground: dialogDim, titleFont: default-font, background: window, titleFontColor: white }
+	default: {stageBackground: dialogDim, titleFont: default-font, titleFontColor: white, background: window},
+	resizable: {stageBackground: dialogDim, titleFont: default-font, titleFontColor: white, background: window-resizable},
+	noborder: {stageBackground: dialogDim, titleFont: default-font, titleFontColor: white, background: window-noborder},
+	dialog: {stageBackground: dialogDim, titleFont: default-font, titleFontColor: white, background: window}
 },
 com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: {background: progressbar, knob: progressbar-filled, knobBefore: progressbar-filled },
