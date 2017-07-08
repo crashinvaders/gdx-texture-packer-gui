@@ -5,7 +5,6 @@ import com.crashinvaders.texturepackergui.services.model.FileTypeType;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
 import com.crashinvaders.texturepackergui.services.model.filetype.JpegFileTypeModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 

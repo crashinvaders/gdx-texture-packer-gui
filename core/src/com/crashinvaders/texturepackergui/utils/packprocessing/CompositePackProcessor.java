@@ -15,9 +15,9 @@ public class CompositePackProcessor implements PackProcessor {
     }
 
     @Override
-    public void processPackage(PackProcessingNode processingNode) throws Exception {
+    public void processPackage(PackProcessingNode node) throws Exception {
         for (int i = 0; i < processors.size; i++) {
-            processors.get(i).processPackage(processingNode);
+            processors.get(i).processPackage(node);
         }
     }
 }

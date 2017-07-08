@@ -110,6 +110,9 @@ public class PackDialogController implements ActionContainer {
                         // Startup metadata
                         new StartTimeMetadataProcessor(),
 
+                        // Validation
+                        new DataValidationProcessor(),
+
                         // File type
                         new PngFileTypeProcessor(),
                         new JpegFileTypeProcessor(),
@@ -282,7 +285,7 @@ public class PackDialogController implements ActionContainer {
 
     private static class TestProcessor implements PackProcessor {
         @Override
-        public void processPackage(PackProcessingNode processingNode) {
+        public void processPackage(PackProcessingNode node) {
             try {
                 System.out.println("start processing");
                 Thread.sleep(MathUtils.random(500, 2500));
