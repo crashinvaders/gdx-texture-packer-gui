@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Align;
 
 class CompositionHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;
+    private static final float PG_VISIBILITY_SCALE_THRESHOLD = 5f;
 
     private final SourceImage sourceImage;
     private final NinePatchEditorModel model;
@@ -34,6 +35,7 @@ class CompositionHolder extends WidgetGroup {
 
         pixelGrid = new PixelGrid(skin);
         pixelGrid.setPixelSize(sourceImage.getScale());
+        pixelGrid.setVisible(model.zoomModel.getCurrentScale() > PG_VISIBILITY_SCALE_THRESHOLD);
         sourceImage.addActor(pixelGrid);
 
         patchGridGroup = new Stack();
@@ -63,7 +65,7 @@ class CompositionHolder extends WidgetGroup {
             @Override
             public void onZoomIndexChanged(int zoomIndex, float scale) {
                 sourceImage.setScale(scale);
-                pixelGrid.setVisible(scale > 5f);
+                pixelGrid.setVisible(scale > PG_VISIBILITY_SCALE_THRESHOLD);
             }
         });
 
