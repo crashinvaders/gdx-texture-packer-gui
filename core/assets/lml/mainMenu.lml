@@ -71,6 +71,10 @@
                         id="miLanguageRu"
                         onchange="changeLanguageRu"
                         text="@langRu"/>
+                <menuitem
+                        id="miLanguageZhTw"
+                        onchange="changeLanguageZhTw"
+                        text="@langZhTw"/>
             </submenu>
         </menuitem>
         <menuseparator/>
