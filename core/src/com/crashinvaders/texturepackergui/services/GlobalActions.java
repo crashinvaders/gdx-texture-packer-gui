@@ -44,6 +44,7 @@ public class GlobalActions implements ActionContainer {
     private static final Locale LOCALE_EN = Locale.ENGLISH;
     private static final Locale LOCALE_DE = Locale.GERMAN;
     private static final Locale LOCALE_RU = new Locale("ru", "");
+    private static final Locale LOCALE_ZH_TW = new Locale("zh", "tw");
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -316,6 +317,9 @@ public class GlobalActions implements ActionContainer {
     }
     @LmlAction("changeLanguageRu") public void changeLanguageRu() {
         changeLanguage(LOCALE_RU);
+    }
+    @LmlAction("changeLanguageZhTw") public void changeLanguageZhTw() {
+        changeLanguage(LOCALE_ZH_TW);
     }
 
     /** @return localized string */
