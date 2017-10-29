@@ -1,4 +1,4 @@
-package com.crashinvaders.common.stringecriptor;
+package com.crashinvaders.common.stringencriptor;
 
 public interface StringEncryptor {
     String encrypt(String value);

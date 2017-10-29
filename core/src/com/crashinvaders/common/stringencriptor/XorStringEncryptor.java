@@ -1,4 +1,4 @@
-package com.crashinvaders.common.stringecriptor;
+package com.crashinvaders.common.stringencriptor;
 
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
