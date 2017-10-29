@@ -3,11 +3,13 @@ package com.crashinvaders.texturepackergui.config;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Colors;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -39,6 +41,7 @@ import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileUtils;
 
+import java.nio.ByteBuffer;
 import java.util.Locale;
 
 @SuppressWarnings("unused")
@@ -82,46 +85,34 @@ public class Configuration {
     public void initiateSkin(final SkinService skinService) {
         Skin skin = new Skin();
         {
-            FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("NotoSansUI-Regular.ttf"));
             FreeTypeFontGenerator.setMaxTextureSize(2048);
+            FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("VisOpenSansKerned.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter paramsDefault = new FreeTypeFontGenerator.FreeTypeFontParameter();
             paramsDefault.color = new Color(0xffffffe0);
             paramsDefault.size = 15;
             paramsDefault.incremental = true;
             paramsDefault.renderCount = 1;
             paramsDefault.gamma = 1.0f;
+            paramsDefault.hinting = FreeTypeFontGenerator.Hinting.Full;
             BitmapFont fontDefault = fontGenerator.generateFont(paramsDefault);
+            FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontData = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontDefault.getData();
+
+            FileHandle cjkFontFile = Gdx.files.external(".gdxtexturepackergui/cjk-font/NotoSansCJK-Regular.ttc");
+            if (cjkFontFile.exists()) {
+                Gdx.app.log(TAG, "CJK font initialized");
+                ftFontData.addGenerator(new FreeTypeFontGenerator(cjkFontFile));
+            }
+
             skin.add("default-font", fontDefault, BitmapFont.class);
-            FreeTypeFontGenerator.FreeTypeFontParameter paramsSmall = new FreeTypeFontGenerator.FreeTypeFontParameter();
-            paramsSmall.color = new Color(0xffffffe0);
-            paramsSmall.size = 12;
-            paramsSmall.incremental = true;
-            paramsSmall.renderCount = 1;
-            paramsSmall.gamma = 1.0f;
-            BitmapFont fontSmall = fontGenerator.generateFont(paramsSmall);
-            skin.add("small-font", fontSmall, BitmapFont.class);
         }
         skin.addRegions(new TextureAtlas(Gdx.files.internal("skin/uiskin.atlas")));
         skin.load(Gdx.files.internal("skin/uiskin.json"));
         VisUI.load(skin);
         skinService.addSkin("default", skin);
 
-//        VisUI.load("skin/uiskin.json");
-//        Skin skin = VisUI.getSkin();
-//        skinService.addSkin("default", skin);
-//
-//        {
-//            FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("NotoSansUI-Regular.ttf"));
-//            FreeTypeFontGenerator.FreeTypeFontParameter params = new FreeTypeFontGenerator.FreeTypeFontParameter();
-//            params.size = 15;
-//            BitmapFont font = fontGenerator.generateFont(params);
-//            skin.remove("default-font", BitmapFont.class);
-//            skin.add("default-font", font);
-//            fontGenerator.dispose();
-//        }
-
         for (BitmapFont font : skin.getAll(BitmapFont.class).values()) {
             font.getData().markupEnabled = true;
+            font.getData().missingGlyph = font.getData().getGlyph((char)0xFFFD);
         }
 
         // Extracting all colors from the skin and importing them into global color collection

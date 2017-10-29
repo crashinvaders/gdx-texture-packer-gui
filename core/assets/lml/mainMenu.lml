@@ -71,10 +71,11 @@
                         id="miLanguageRu"
                         onchange="changeLanguageRu"
                         text="@langRu"/>
+                <!-- CJK strings require CJK font extension to be activated to be rendered. So we replace strings with hardcoded images in common places where CJK font may be not available. -->
                 <menuitem
                         id="miLanguageZhTw"
                         onchange="changeLanguageZhTw"
-                        text="@langZhTw"/>
+                        fillImage="custom/language-zh-tw"/>
             </submenu>
         </menuitem>
         <menuseparator/>

@@ -37,6 +37,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new HexColorLmlAttribute(), "hexColor");
     }
 
+
     @Override
     protected void registerTableAttributes() {
         super.registerTableAttributes();
@@ -60,6 +61,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerMenuAttributes();
 
         addAttributeProcessor(new ShortcutOnChangeLmlAttribute(), "onchange", "change");
+        addAttributeProcessor(new MenuItemFillImageLmlAttribute(), "fillImage");
     }
 
     @Override

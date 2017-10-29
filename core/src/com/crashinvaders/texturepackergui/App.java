@@ -195,7 +195,7 @@ public class App implements ApplicationListener {
     @Override
     public void dispose() {
         Disposables.disposeOf(contextDestroyer);
-        VisUI.dispose();
+        VisUI.dispose(false);
     }
 
     //region Accessors
