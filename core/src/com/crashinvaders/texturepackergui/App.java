@@ -48,9 +48,8 @@ public class App implements ApplicationListener {
     private final ClassScanner componentScanner;
     private final AppParams params;
     private final PrioritizedInputMultiplexer inputMultiplexer;
-    private final DragDropManager dragDropManager;
+    private final DragDropManager dragDropManager = new DragDropManager();
 
-    private Array<Pair<Class<?>, ClassScanner>> componentScanners;
     private ContextDestroyer contextDestroyer;
 
     private InterfaceService interfaceService;
@@ -75,24 +74,11 @@ public class App implements ApplicationListener {
     public App(ClassScanner componentScanner, AppParams params) {
         this.componentScanner = componentScanner;
         this.params = params;
-        componentScanners = GdxArrays.newArray();
-        registerComponents(componentScanner, App.class);
 
         inputMultiplexer = new PrioritizedInputMultiplexer();
         inputMultiplexer.setMaxPointers(1);
 
-        dragDropManager = new DragDropManager();
-
         instance = this;
-    }
-
-    /**
-     * Can be called only before {@link #create()} is invoked.
-     * @param componentScanner used to scan for annotated classes.
-     * @param scanningRoot root of the scanning.
-     */
-    protected void registerComponents(final ClassScanner componentScanner, final Class<?> scanningRoot) {
-        componentScanners.add(new Pair<Class<?>, ClassScanner>(scanningRoot, componentScanner));
     }
 
     @Override
@@ -100,7 +86,6 @@ public class App implements ApplicationListener {
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         initiateContext();
-        clearComponentScanners();
 
         FileChooser.setDefaultPrefsName("file_chooser.xml");
 
@@ -112,16 +97,13 @@ public class App implements ApplicationListener {
         final ContextInitializer initializer = new ContextInitializer();
         registerDefaultComponentAnnotations(initializer);
         addDefaultComponents(initializer);
-        for (final Pair<Class<?>, ClassScanner> componentScanner : componentScanners) {
-            initializer.scan(componentScanner.getFirst(), componentScanner.getSecond());
-        }
+        initializer.scan(this.getClass(), componentScanner);
         contextDestroyer = initializer.initiate();
 
         interfaceService.getParser().getData().addArgument("currentVersionCode", AppConstants.version.toString());
     }
 
     /** Invoked before context initiation.
-     *
      * @param initializer should be used to register component annotations to scan for. */
     @SuppressWarnings("unchecked")
     protected void registerDefaultComponentAnnotations(final ContextInitializer initializer) {
@@ -129,7 +111,6 @@ public class App implements ApplicationListener {
     }
 
     /** Invoked before context initiation.
-     *
      * @param initializer should be used to registered default components, created with plain old Java. */
     protected void addDefaultComponents(final ContextInitializer initializer) {
         initializer.addComponents(
@@ -156,11 +137,6 @@ public class App implements ApplicationListener {
                 modelService = new ModelService(),
                 shortcutHandler = new GlobalShortcutHandler(),
                 componentExtractor = new ComponentExtractor());
-    }
-
-    private void clearComponentScanners() {
-        componentScanners.clear();
-        componentScanners = null;
     }
 
     @Override
@@ -198,8 +174,13 @@ public class App implements ApplicationListener {
         VisUI.dispose(false);
     }
 
-    //region Accessors
+    public void restart() {
+        inputMultiplexer.clear();
+        dispose();
+        create();
+    }
 
+    //region Accessors
     public DragDropManager getDragDropManager() { return dragDropManager; }
     public InterfaceService getInterfaceService() { return interfaceService; }
     public ModelService getModelService() { return modelService; }
