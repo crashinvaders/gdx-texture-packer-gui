@@ -1,9 +1,9 @@
 [
   {
     "name":"font-cjk",
-    "rivisions":[
+    "revisions":[
       {
-        "rivision":0,
+        "revision":0,
         "file":"font-cjk0.zip"
       }
     ]
