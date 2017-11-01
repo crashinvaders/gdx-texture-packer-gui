@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "../../../lml.dtd">
+
+<stack fillparent="true">
+    <image style="custom/background-fill"/>
+    <vistable onecolumn="true" id="contentTable">
+
+        <vistable background="mainMenuBg" onecolumn="true" minwidth="400">
+            <label text="Removing [text-orange]CJK Font[] extension module" padleft="16" padright="16" padtop="16" padbottom="10"/>
+            <!--<visprogressbar id="progressBar" style="orange-horizontal" value="0.75" growx="true"/>-->
+            <busybar growx="true" hexcolor="eb5c4980" pad="4"/>
+
+            <!--<container fillx="true" growx="true">-->
+                <!--<:actor method="createBusyBar"/>-->
+            <!--</container>-->
+        </vistable>
+
+        <actor height="16"/>
+
+        <textbutton text="Cancel" minwidth="128" minheight="24" focusborderenabled="false" click="onCancelClicked"/>
+    </vistable>
+</stack>

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -23,6 +24,7 @@ import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileType
 import com.crashinvaders.texturepackergui.controllers.main.filetype.KtxFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.PngFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
+import com.crashinvaders.texturepackergui.controllers.test.ModuleInstallationController;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -54,7 +56,6 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.ToastManager;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
 import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.spinner.FloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
@@ -63,7 +64,7 @@ import java.util.Locale;
 @SuppressWarnings("WeakerAccess")
 @View(id = MainController.VIEW_ID, value = "lml/main.lml", first = true)
 public class MainController implements ActionContainer, ViewResizer {
-    public static final String VIEW_ID = "main";
+    public static final String VIEW_ID = "Main";
     public static final String TAG = MainController.class.getSimpleName();
     public static final String PREF_KEY_PACK_LIST_SPLIT = "pack_list_split";
 
@@ -159,10 +160,12 @@ public class MainController implements ActionContainer, ViewResizer {
 
     @Destroy
     void destroy() {
-        // Save pack list split value
-        float packListSplitValue = packListSplitPane.getSplit();
-        Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
-        prefs.putFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitValue).flush();
+        if (initialized) {
+            // Save pack list split value
+            float packListSplitValue = packListSplitPane.getSplit();
+            Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+            prefs.putFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitValue).flush();
+        }
     }
 
     @Override

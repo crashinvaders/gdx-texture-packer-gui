@@ -21,6 +21,7 @@ com.badlogic.gdx.graphics.Color: {
 	dark-grey: { hex: 333333ff },
 	light-green: { hex: 8bcd4bff },
 	title-icon-tint: { hex: ffffff88 },
+	text-orange: { hex: fb6a46ff },
 
 	output-green: { hex: 79e053ff },
 	output-red: { hex: ff846bff }
@@ -88,7 +89,9 @@ com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
 	default-horizontal: {background: progressbar, knob: progressbar-filled, knobBefore: progressbar-filled },
 	default-vertical: {background: progressbar-vertical, knob: progressbar-filled-vertical, knobBefore: progressbar-filled-vertical },
 	narrow-horizontal: {background: progressbar-narrow, knob: progressbar-narrow-filled, knobBefore: progressbar-narrow-filled },
-	narrow-horizontal-grey: {background: progressbar-narrow, knob: progressbar-narrow-filled-grey, knobBefore: progressbar-narrow-filled-grey }
+	narrow-horizontal-grey: {background: progressbar-narrow, knob: progressbar-narrow-filled-grey, knobBefore: progressbar-narrow-filled-grey },
+	orange-horizontal: {background: progressbar, knob: progressbar-filled-orange, knobBefore: progressbar-filled-orange },
+	orange-vertical: {background: progressbar-vertical, knob: progressbar-filled-vertical-orange, knobBefore: progressbar-filled-vertical-orange },
 },
 com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
 	default-horizontal: {background: slider, knob: slider-knob, knobOver: slider-knob-over, knobDown: slider-knob-down, disabledKnob: slider-knob-disabled },
@@ -238,6 +241,9 @@ com.kotcrab.vis.ui.util.adapter.SimpleListAdapter$SimpleListAdapterStyle: {
 
 com.crashinvaders.texturepackergui.views.ExpandEditTextButton$Style: {
 	default: {down: button-down, up: button, over: button-over, labelStyle: default, expandIcon: expand-arrow }
+},
+com.crashinvaders.texturepackergui.views.BusyBar$Style: {
+	default: {pattern: custom/busy-bar-pattern8, shiftSpeed: 32 }
 }
 
 }

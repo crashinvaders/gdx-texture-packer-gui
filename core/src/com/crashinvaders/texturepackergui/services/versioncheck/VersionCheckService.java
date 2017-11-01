@@ -34,6 +34,7 @@ public class VersionCheckService implements ActionContainer {
     /**
      * Runs version update checking process. Listen for {@link VersionUpdateCheckEvent} to get result.
      */
+    synchronized
     public void requestVersionCheck() {
         if (checkingInProgress) return;
 
