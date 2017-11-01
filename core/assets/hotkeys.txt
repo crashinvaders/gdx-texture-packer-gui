@@ -18,3 +18,4 @@ packAll: CTRL+SHIFT+P
 
 reloadView: F1
 reloadLocalization: F2
+reloadApp: F8

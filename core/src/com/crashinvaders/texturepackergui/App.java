@@ -52,6 +52,7 @@ public class App implements ApplicationListener {
 
     private ContextDestroyer contextDestroyer;
 
+    private Context context;
     private InterfaceService interfaceService;
     private ModelService modelService;
     private LocaleService localeService;
@@ -95,6 +96,7 @@ public class App implements ApplicationListener {
 
     private void initiateContext() {
         final ContextInitializer initializer = new ContextInitializer();
+        initializer.clearContextAfterInitiation(false);
         registerDefaultComponentAnnotations(initializer);
         addDefaultComponents(initializer);
         initializer.scan(this.getClass(), componentScanner);
@@ -181,6 +183,7 @@ public class App implements ApplicationListener {
     }
 
     //region Accessors
+    public Context getContext() { return context; }
     public DragDropManager getDragDropManager() { return dragDropManager; }
     public InterfaceService getInterfaceService() { return interfaceService; }
     public ModelService getModelService() { return modelService; }
@@ -195,7 +198,8 @@ public class App implements ApplicationListener {
     /** This is utility component class that helps to get access to some system components for App class */
     @SuppressWarnings("WeakerAccess")
     private class ComponentExtractor {
-        @Initiate() void extractComponents(EventDispatcher eventDispatcher, MessageDispatcher messageDispatcher) {
+        @Initiate() void extractComponents(Context context, EventDispatcher eventDispatcher, MessageDispatcher messageDispatcher) {
+            App.this.context = context;
             App.this.eventDispatcher = eventDispatcher;
             App.this.messageDispatcher = messageDispatcher;
         }

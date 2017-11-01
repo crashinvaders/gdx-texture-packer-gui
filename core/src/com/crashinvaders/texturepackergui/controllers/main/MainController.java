@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -15,6 +14,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.crashinvaders.common.async.AsyncTask;
+import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.controllers.FileDragDropController;
@@ -24,7 +25,7 @@ import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileType
 import com.crashinvaders.texturepackergui.controllers.main.filetype.KtxFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.PngFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
-import com.crashinvaders.texturepackergui.controllers.test.ModuleInstallationController;
+import com.crashinvaders.texturepackergui.controllers.test.ModalTaskDialogController;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -156,6 +157,46 @@ public class MainController implements ActionContainer, ViewResizer {
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
         updateFileType();
+
+        //TODO remove
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                ModalTaskDialogController dialogController = (ModalTaskDialogController) App.inst().getContext().getComponent(ModalTaskDialogController.class);
+                ModalTaskDialogController.DialogData data = new ModalTaskDialogController.DialogData();
+                data.message(getString("emTaskInstalling", getString("emNameCJKFont")));
+                data.cancelable();
+                data.putTask(new AsyncTask() {
+                    @Override
+                    protected void doInBackground() throws Exception {
+                        System.out.println("Task begins");
+                        for (int i = 0; i < 3; i++) {
+                            if (checkCanceled()) return;
+                            Thread.sleep(500);
+                            System.out.println("Msg from task " + i);
+                        }
+                        System.out.println("Task ends");
+                    }
+                });
+                data.listener(new AsyncTask.Listener() {
+                    @Override
+                    public void onSucceed() {
+                        System.out.println("MainController.onSucceed");
+                        toastManager.show(getString("emToastInstalled", getString("emNameCJKFont")));
+                    }
+                    @Override
+                    public void onFailed(String failMessage, Exception failException) {
+                        System.out.println("MainController.onFailed");
+                        toastManager.show(getString("emDescCJKFont", getString("emNameCJKFont")));
+                    }
+                    @Override
+                    public void onCanceled() {
+                        System.out.println("MainController.onCanceled");
+                    }
+                });
+                dialogController.showDialog(data);
+            }
+        });
     }
 
     @Destroy

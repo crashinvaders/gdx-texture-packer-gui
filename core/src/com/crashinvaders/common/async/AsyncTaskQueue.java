@@ -88,27 +88,27 @@ public class AsyncTaskQueue {
             }
 
             if (!tryExecuteNext()) {
+                reset();
                 if (listener != null) {
                     listener.onSucceed();
                 }
-                reset();
             }
         }
 
         @Override
         public void onFailed(String failMessage, Exception failException) {
+            reset();
             if (listener != null) {
                 listener.onFailed(failMessage, failException);
             }
-            reset();
         }
 
         @Override
         public void onCanceled() {
+            reset();
             if (listener != null) {
                 listener.onCanceled();
             }
-            reset();
         }
     }
 }
