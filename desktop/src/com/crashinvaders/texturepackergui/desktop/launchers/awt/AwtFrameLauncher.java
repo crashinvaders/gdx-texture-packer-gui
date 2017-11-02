@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.desktop.launchers.awt;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
 import com.crashinvaders.texturepackergui.desktop.Arguments;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
@@ -26,7 +27,7 @@ public class AwtFrameLauncher {
 
 				final LwjglCanvasConfiguration config = new LwjglCanvasConfiguration();
 				config.title = "LibGDX Texture Packer GUI";
-				config.preferencesDirectory = ".gdxtexturepackergui";
+				config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
 				config.iconFilePath = "icon128.png";
 				config.width = 1024;
 				config.height = 600;

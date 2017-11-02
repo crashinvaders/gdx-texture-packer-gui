@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+
+<visdialog
+        title="@emRepoTitle"
+        resizable="false"
+        movable="true"
+        closeonescape="true"
+        closebutton="true">
+    <stack minheight="32" maxheight="450" padtop="2">
+        <!--TODO scrollpane-->
+        <visscrollpane style="list" disabledx="true" fadebars="false">
+            <table id="tableModules" defaultgrowx="true" defaultpadbottom="8" tablepadbottom="-8" tablepadright="4" tablealign="top"/>
+        </visscrollpane>
+
+        <container id="testContainer">
+
+        </container>
+
+        <table id="groupChecking" background="dragndropDim" onecolumn="true" visible="false">
+            <animatedimage
+                    delay="0.1"
+                    frames="custom/ic-sandglass0;custom/ic-sandglass1;custom/ic-sandglass2;custom/ic-sandglass3;custom/ic-sandglass4;custom/ic-sandglass5;custom/ic-sandglass6;custom/ic-sandglass7"/>
+            <vislabel
+                    text="@dVersionChecking"/>
+        </table>
+    </stack>
+</visdialog>

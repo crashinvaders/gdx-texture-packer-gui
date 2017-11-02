@@ -4,6 +4,7 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
 import com.crashinvaders.texturepackergui.desktop.Arguments;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
@@ -27,7 +28,7 @@ public class GLSurfaceLauncher {
 		configuration.addIcon("icon128.png", Files.FileType.Classpath);
 		configuration.addIcon("icon32.png", Files.FileType.Classpath);
 		configuration.addIcon("icon16.png", Files.FileType.Classpath);
-		configuration.preferencesDirectory = ".gdxtexturepackergui";
+		configuration.preferencesDirectory = AppConstants.EXTERNAL_DIR;
 		configuration.width = 1024;
 		configuration.height = 600;
 

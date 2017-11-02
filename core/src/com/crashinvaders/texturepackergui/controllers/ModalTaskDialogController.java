@@ -1,9 +1,8 @@
-package com.crashinvaders.texturepackergui.controllers.test;
+package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.crashinvaders.common.async.AsyncJobTask;
 import com.crashinvaders.common.async.JobTask;
 import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
@@ -19,7 +18,8 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
-@ViewDialog(id = ModalTaskDialogController.VIEW_ID, value = "lml/modalTaskDialog.lml")
+/** Universal modal dialog to perform {@link JobTask}s. Call {@link #showDialog(DialogData)} to launch process. */
+@ViewDialog(id = ModalTaskDialogController.VIEW_ID, value = "lml/dialogModalTask.lml")
 public class ModalTaskDialogController implements ActionContainer, ViewDialogShower {
     public static final String VIEW_ID = "ModalTaskDialog";
     public static final String TAG = ModalTaskDialogController.class.getSimpleName();
@@ -103,6 +103,10 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
         String message = "";
         boolean cancelable = false;
         JobTask.Listener listener;
+
+        public JobTaskQueue getTaskQueue() {
+            return taskQueue;
+        }
 
         public DialogData cancelable() {
             cancelable = true;

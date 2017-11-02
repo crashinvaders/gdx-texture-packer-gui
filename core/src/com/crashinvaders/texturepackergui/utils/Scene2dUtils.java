@@ -1,19 +1,26 @@
 package com.crashinvaders.texturepackergui.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.crashinvaders.common.scene2d.InjectActor;
 import com.kotcrab.vis.ui.util.adapter.ItemAdapter;
 import com.kotcrab.vis.ui.widget.ListView;
 
 @SuppressWarnings("WeakerAccess")
 public class Scene2dUtils {
+    public static final String TAG_INJECT_FIELDS = "InjectActorFields";
     private static final String FILE_PATH_ELLIPSIS = ".../";
     private static final Vector2 tmpVec2 = new Vector2();
     private static final InputEvent tmpInputEvent = new InputEvent();
@@ -118,5 +125,36 @@ public class Scene2dUtils {
         }
         //TODO handle case when there is no slashes
         return filePath;
+    }
+
+    /** Injects actors from group into target's fields annotated with {@link InjectActor} using reflection. */
+    public static void injectActorFields(Object target, Group group) {
+        Class<?> handledClass = target.getClass();
+        while (handledClass != null && !handledClass.equals(Object.class)) {
+            for (final Field field : ClassReflection.getDeclaredFields(handledClass)) {
+                if (field != null && field.isAnnotationPresent(InjectActor.class)) {
+                    try {
+                        InjectActor annotation = field.getDeclaredAnnotation(InjectActor.class).getAnnotation(InjectActor.class);
+                        String actorName = annotation.value();
+                        if (actorName.length() == 0) {
+                            actorName = field.getName();
+                        }
+                        Actor actor = group.findActor(actorName);
+                        if (actor == null && actorName.equals(group.getName())) {
+                            actor = group;
+                        }
+                        if (actor == null) {
+                            Gdx.app.error(TAG_INJECT_FIELDS, "Can't find actor with name: " + actorName + " in group: " + group + " to inject into: " + target);
+                        } else {
+                            field.setAccessible(true);
+                            field.set(target, actor);
+                        }
+                    } catch (final ReflectionException exception) {
+                        Gdx.app.error(TAG_INJECT_FIELDS, "Unable to set value into field: " + field + " of object: " + target, exception);
+                    }
+                }
+            }
+            handledClass = handledClass.getSuperclass();
+        }
     }
 }

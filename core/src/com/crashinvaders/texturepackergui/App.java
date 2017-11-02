@@ -2,17 +2,11 @@ package com.crashinvaders.texturepackergui;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.shortcuts.GlobalShortcutHandler;
-import com.crashinvaders.texturepackergui.utils.LmlUtils;
-import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
-import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.context.Context;
 import com.github.czyzby.autumn.context.ContextDestroyer;
 import com.github.czyzby.autumn.context.ContextInitializer;
@@ -34,14 +28,8 @@ import com.github.czyzby.autumn.processor.event.MessageDispatcher;
 import com.github.czyzby.autumn.scanner.ClassScanner;
 import com.github.czyzby.kiwi.util.gdx.GdxUtilities;
 import com.github.czyzby.kiwi.util.gdx.asset.Disposables;
-import com.github.czyzby.kiwi.util.gdx.collection.GdxArrays;
-import com.github.czyzby.kiwi.util.tuple.immutable.Pair;
-import com.github.czyzby.lml.parser.LmlParser;
-import com.github.czyzby.lml.parser.impl.tag.Dtd;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
-
-import java.io.Writer;
 
 public class App implements ApplicationListener {
     private static App instance;

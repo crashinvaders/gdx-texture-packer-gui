@@ -2,7 +2,7 @@ package com.crashinvaders.texturepackergui.services.extensionmodules;
 
 import com.badlogic.gdx.utils.Array;
 
-public class ModuleData {
+public class RepositoryModuleData {
     public String name;
     public Array<Revision> revisions;
 

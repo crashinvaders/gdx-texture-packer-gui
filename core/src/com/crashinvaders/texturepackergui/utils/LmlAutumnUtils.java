@@ -21,7 +21,7 @@ public class LmlAutumnUtils {
     }
 
     /**
-     * @return false if action container already been registered
+     * @return false if action container already has been registered
      */
     public static boolean registerActionContainer(InterfaceService interfaceService, String name, ActionContainer actionContainer) {
         LmlData lmlData = interfaceService.getParser().getData();

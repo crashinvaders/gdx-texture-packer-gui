@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+
+<vistable onecolumn="true" defaultgrowx="true">
+    <vistable id="frameTable" width="350" onecolumn="true" defaultgrowx="true" tablepadtop="2" tablepadleft="7" tablepadright="5" tablepadbottom="5">
+        <vistable>
+            <label id="lblName" text="@emNameCJKFont" padbottom="2" align="left" expandx="true"/>
+            <label id="lblStatus" style="small" color="output-grey" text="Not installed" align="top"/>
+        </vistable>
+        <label id="lblDescription" style="grey-small" text="@emDescCJKFont" wrap="true"/>
+    </vistable>
+    <vistable>
+        <actor growx="true"/>
+
+        <shrinkcontainer id="scBtnInstall">
+            <container fillx="true" minwidth="96">
+                <vistextbutton text="@install" change="ModuleItemViewHolder.onInstallClicked" focusborderenabled="false"/>
+            </container>
+        </shrinkcontainer>
+        <shrinkcontainer id="scBtnUpdate">
+            <container fillx="true" minwidth="96" padleft="4">
+                <vistextbutton text="@update" change="ModuleItemViewHolder.onUpdateClicked" focusborderenabled="false"/>
+            </container>
+        </shrinkcontainer>
+        <shrinkcontainer id="scBtnUninstall">
+            <container fillx="true" minwidth="96" padleft="4">
+                <vistextbutton text="@uninstall" change="ModuleItemViewHolder.onUninstallClicked" focusborderenabled="false"/>
+            </container>
+        </shrinkcontainer>
+    </vistable>
+</vistable>

@@ -88,7 +88,7 @@ public class Configuration {
             FreeTypeFontGenerator.setMaxTextureSize(2048);
             FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("VisOpenSansKerned.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter paramsDefault = new FreeTypeFontGenerator.FreeTypeFontParameter();
-            paramsDefault.color = new Color(0xffffffe0);
+            paramsDefault.color = new Color(0xffffffe8);
             paramsDefault.size = 15;
             paramsDefault.incremental = true;
             paramsDefault.renderCount = 1;
