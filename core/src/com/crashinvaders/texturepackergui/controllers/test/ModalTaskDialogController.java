@@ -1,13 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers.test;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.crashinvaders.common.async.AsyncTask;
-import com.crashinvaders.common.async.AsyncTaskQueue;
+import com.crashinvaders.common.async.AsyncJobTask;
+import com.crashinvaders.common.async.JobTask;
+import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
-import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewDialogShower;
@@ -43,10 +42,10 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
     }
 
     public void hideDialog() {
-        if (data.asyncTaskQueue.isRunning()) {
-            data.asyncTaskQueue.requestCancel();
+        if (data.taskQueue.isRunning()) {
+            data.taskQueue.cancel();
         }
-        data.asyncTaskQueue.setListener(null);
+        data.taskQueue.setListener(null);
         this.data = null;
         interfaceService.destroyDialog(ModalTaskDialogController.class);
     }
@@ -63,17 +62,17 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
 
         cancelContainer.setVisible(data.cancelable);
         lblMessage.setText(data.message);
-        data.asyncTaskQueue.setListener(listenerWrapper);
-        data.asyncTaskQueue.execute();
+        data.taskQueue.setListener(listenerWrapper);
+        data.taskQueue.execute();
     }
 
     @LmlAction("onCancelClicked") void onCancelClicked() {
         if (data != null) {
-            data.asyncTaskQueue.requestCancel();
+            data.taskQueue.cancel();
         }
     }
 
-    private class TaskListenerWrapper implements AsyncTask.Listener {
+    private class TaskListenerWrapper implements JobTask.Listener {
         @Override
         public void onSucceed() {
             if (data.listener != null) {
@@ -100,10 +99,10 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
     }
 
     public static class DialogData {
-        final AsyncTaskQueue asyncTaskQueue = new AsyncTaskQueue("ModalTaskDialogQueue");
+        final JobTaskQueue taskQueue = new JobTaskQueue("ModalTaskDialogQueue");
         String message = "";
         boolean cancelable = false;
-        AsyncTask.Listener listener;
+        JobTask.Listener listener;
 
         public DialogData cancelable() {
             cancelable = true;
@@ -115,12 +114,12 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
             return this;
         }
 
-        public DialogData putTask(AsyncTask task) {
-            asyncTaskQueue.putTask(task);
+        public DialogData task(JobTask task) {
+            taskQueue.addTask(task);
             return this;
         }
 
-        public DialogData listener(AsyncTask.Listener listener) {
+        public DialogData listener(JobTask.Listener listener) {
             this.listener = listener;
             return this;
         }

@@ -14,7 +14,9 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.crashinvaders.common.async.AsyncTask;
+import com.crashinvaders.common.async.JobTask;
+import com.crashinvaders.common.async.AsyncJobTask;
+import com.crashinvaders.common.async.SyncJobTask;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
@@ -166,7 +168,7 @@ public class MainController implements ActionContainer, ViewResizer {
                 ModalTaskDialogController.DialogData data = new ModalTaskDialogController.DialogData();
                 data.message(getString("emTaskInstalling", getString("emNameCJKFont")));
                 data.cancelable();
-                data.putTask(new AsyncTask() {
+                data.task(new AsyncJobTask() {
                     @Override
                     protected void doInBackground() throws Exception {
                         System.out.println("Task begins");
@@ -178,7 +180,15 @@ public class MainController implements ActionContainer, ViewResizer {
                         System.out.println("Task ends");
                     }
                 });
-                data.listener(new AsyncTask.Listener() {
+                data.task(new SyncJobTask() {
+                    @Override
+                    protected void performJob() throws Exception {
+                        System.out.println("Sync task begins");
+                        Thread.sleep(3000);
+                        System.out.println("Sync task ends");
+                    }
+                });
+                data.listener(new JobTask.Listener() {
                     @Override
                     public void onSucceed() {
                         System.out.println("MainController.onSucceed");

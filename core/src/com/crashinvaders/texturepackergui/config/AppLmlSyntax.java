@@ -1,10 +1,9 @@
 package com.crashinvaders.texturepackergui.config;
 
-import com.crashinvaders.texturepackergui.config.tags.*;
 import com.crashinvaders.texturepackergui.config.attributes.*;
+import com.crashinvaders.texturepackergui.config.tags.*;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
-import com.github.czyzby.lml.parser.impl.tag.listener.provider.ClickListenerLmlTagProvider;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
 
 public class AppLmlSyntax extends VisLmlSyntax {
