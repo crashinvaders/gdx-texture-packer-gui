@@ -61,8 +61,8 @@ public class PackProcessingManager {
                         packProcessed(processingNode);
                     } catch (Exception e) {
                         String message = CommonUtils.fetchMessageStack(e);
-                        System.err.println("[output-red]Exception occurred:[] " + message);
-                        System.err.println("[output-red]Stack trace:[] ");
+                        System.err.println("[text-red]Exception occurred:[] " + message);
+                        System.err.println("[text-red]Stack trace:[] ");
                         e.printStackTrace();
 
                         processingNode.setLog(outputStream.toString());

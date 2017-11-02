@@ -9,7 +9,7 @@ import com.github.czyzby.autumn.annotation.Inject;
 @Component
 public class CjkFontExtensionModule extends ExtensionModuleController {
     public static final String MODULE_ID = "font-cjk";
-    public static final int CURRENT_REVISION = 1;
+    public static final int CURRENT_REVISION = 0;
 
     @Inject ExtensionModuleManagerService moduleRepository;
 

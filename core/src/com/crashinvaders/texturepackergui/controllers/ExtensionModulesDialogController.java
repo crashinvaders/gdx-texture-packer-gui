@@ -90,17 +90,17 @@ public class ExtensionModulesDialogController implements ActionContainer {
                 case NOT_INSTALLED:
                     frameTable.background(skin.getDrawable("custom/em-item-frame"));
                     lblStatus.setText(localeService.getI18nBundle().get("emRepoStatusNotInstalled"));
-                    lblStatus.setColor(skin.getColor("output-grey"));
+                    lblStatus.setColor(skin.getColor("text-grey"));
                     break;
                 case INSTALLED:
                     frameTable.background(skin.getDrawable("custom/em-item-frame-installed"));
                     lblStatus.setText(localeService.getI18nBundle().get("emRepoStatusInstalled"));
-                    lblStatus.setColor(skin.getColor("output-green"));
+                    lblStatus.setColor(skin.getColor("text-green"));
                     break;
                 case UPDATE_REQUIRED:
                     frameTable.background(skin.getDrawable("custom/em-item-frame-outofdate"));
                     lblStatus.setText(localeService.getI18nBundle().get("emRepoStatusUpdateRequired"));
-                    lblStatus.setColor(skin.getColor("output-yellow"));
+                    lblStatus.setColor(skin.getColor("text-yellow"));
                     break;
             }
             System.out.println();

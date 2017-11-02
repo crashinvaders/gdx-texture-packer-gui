@@ -19,7 +19,7 @@ public class ErrorDialogController implements ActionContainer {
 
     public void setError(Throwable error) {
         StringBuilder sb = new StringBuilder();
-        sb.append("[output-red]").append(CommonUtils.fetchMessageStack(error)).append("[]");
+        sb.append("[text-red]").append(CommonUtils.fetchMessageStack(error)).append("[]");
         sb.append("\n");
         sb.append(CommonUtils.obtainStackTrace(error));
 

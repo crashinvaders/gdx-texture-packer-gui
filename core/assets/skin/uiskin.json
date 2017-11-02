@@ -21,12 +21,11 @@ com.badlogic.gdx.graphics.Color: {
 	dark-grey: { hex: 333333ff },
 	light-green: { hex: 8bcd4bff },
 	title-icon-tint: { hex: ffffff88 },
-	text-orange: { hex: fb6a46ff },
 
-	output-green: { hex: 79e053ff },
-	output-red: { hex: ff846bff }
-	output-yellow: { hex: f5e35fff }
-	output-grey: { hex: a0a0a0ff },
+	text-green: { hex: 79e053ff },
+	text-red: { hex: ff846bff }
+	text-yellow: { hex: f5e35fff }
+	text-grey: { hex: a0a0a0ff },
 
 	nine-patch-lines-patch: { hex: 99e550ff }
 	nine-patch-lines-content: { hex: ffb000ff }

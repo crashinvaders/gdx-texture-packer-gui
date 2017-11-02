@@ -12,7 +12,7 @@
         padbottom="0">
     <vistable onecolumn="true" id="contentTable" minwidth="400" defaultgrowx="true">
         <vistable onecolumn="true">
-            <label id="lblMessage" text="Removing [output-red]CJK Font[] extension module" padleft="16" padright="16" padtop="4" padbottom="6"/>
+            <label id="lblMessage" text="Removing [text-red]CJK Font[] extension module" padleft="16" padright="16" padtop="4" padbottom="6"/>
             <busybar growx="true" hexcolor="eb5c4980" pad="0"/>
         </vistable>
 

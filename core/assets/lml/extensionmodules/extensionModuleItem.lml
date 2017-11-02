@@ -5,7 +5,7 @@
     <vistable id="frameTable" width="350" onecolumn="true" defaultgrowx="true" tablepadtop="2" tablepadleft="7" tablepadright="5" tablepadbottom="5">
         <vistable>
             <label id="lblName" text="@emNameCJKFont" padbottom="2" align="left" expandx="true"/>
-            <label id="lblStatus" style="small" color="output-grey" text="Not installed" align="top"/>
+            <label id="lblStatus" style="small" color="text-grey" text="Not installed" align="top"/>
         </vistable>
         <label id="lblDescription" style="grey-small" text="@emDescCJKFont" wrap="true"/>
     </vistable>

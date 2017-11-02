@@ -31,13 +31,13 @@
         <vistable
                 id="groupValid"
                 visible="false">
-            <label>[output-green]API key is valid!</label>
+            <label>[text-green]API key is valid!</label>
         </vistable>
 
         <vistable
                 id="groupInvalid"
                 visible="false">
-            <label>[output-red]API key is invalid!</label>
+            <label>[text-red]API key is invalid!</label>
         </vistable>
 
     </stack>
