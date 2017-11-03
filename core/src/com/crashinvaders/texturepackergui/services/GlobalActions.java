@@ -318,7 +318,7 @@ public class GlobalActions implements ActionContainer {
         changeLanguage(AppConstants.LOCALE_RU);
     }
     @LmlAction("changeLanguageZhTw") public void changeLanguageZhTw() {
-        if (commonDialogs.checkExtensionModuleInstalled(CjkFontExtensionModule.class)) {
+        if (commonDialogs.checkExtensionModuleActivated(CjkFontExtensionModule.class)) {
             changeLanguage(AppConstants.LOCALE_ZH_TW);
         }
     }

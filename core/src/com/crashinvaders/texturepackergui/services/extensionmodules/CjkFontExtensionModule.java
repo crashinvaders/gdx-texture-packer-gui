@@ -23,10 +23,10 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
         fontFile = getModuleDir().child("NotoSansCJK-Regular.ttc");
     }
 
-    /** Checks if one of CJK languages is selected and this module is not active. */
+    /** Checks if one of CJK languages is selected and this module is not activated. */
     @Initiate(priority = LOW_PRIORITY)
     void checkCjkLanguage(final LocaleService localeService, GlobalActions globalActions) {
-        if (isInstalled()) return;
+        if (getStatus() == Status.INSTALLED) return;
 
         Locale locale = localeService.getCurrentLocale();
         if (locale.equals(AppConstants.LOCALE_ZH_TW)) {

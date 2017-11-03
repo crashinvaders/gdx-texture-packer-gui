@@ -10,6 +10,7 @@ import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.crashinvaders.texturepackergui.controllers.ModalTaskDialogController;
+import com.crashinvaders.texturepackergui.events.RemoveToastEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.extensionmodules.ExtensionModuleController.Status;
 import com.github.czyzby.autumn.annotation.Component;
@@ -19,6 +20,8 @@ import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.kotcrab.vis.ui.widget.toast.Toast;
+import com.kotcrab.vis.ui.widget.toast.ToastTable;
 
 @Component
 public class ExtensionModuleManagerService {
@@ -35,8 +38,7 @@ public class ExtensionModuleManagerService {
     private final Preferences prefsInstalledModules = Gdx.app.getPreferences(AppConstants.PREF_NAME_INSTALLED_MODULES);
     private final ArrayMap<String, ExtensionModuleController> moduleControllers = new ArrayMap<>();
 
-    // Indicates that restart toast was already shown and thus should not be created again in the same session.
-    private boolean restartToastShown = false;
+    private Toast prevRestartToast;
 
     @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
     void initModuleControllers(CjkFontExtensionModule jcfFont) {
@@ -48,6 +50,7 @@ public class ExtensionModuleManagerService {
             if (installedRevision >= 0) {
                 if (installedRevision == module.getRequiredRevision()) {
                     module.setStatus(Status.INSTALLED, false);
+                    module.setActivated(true, false);
                 } else {
                     module.setStatus(Status.UPDATE_REQUIRED, false);
                 }
@@ -158,6 +161,7 @@ public class ExtensionModuleManagerService {
 
         removeInstalledEntry(moduleId);
         moduleController.setStatus(Status.NOT_INSTALLED, true);
+        moduleController.setActivated(false, true);
         showRestartToast();
         moduleTaskDialog.showDialog(dialogData);
     }
@@ -209,6 +213,7 @@ public class ExtensionModuleManagerService {
 
         removeInstalledEntry(moduleId);
         moduleController.setStatus(Status.NOT_INSTALLED, true);
+        moduleController.setActivated(false, true);
         moduleTaskDialog.showDialog(dialogData);
     }
 
@@ -223,13 +228,16 @@ public class ExtensionModuleManagerService {
     }
 
     private void showRestartToast() {
-        if (restartToastShown) return;
-        restartToastShown = true;
-
+        if (prevRestartToast != null) {
+            eventDispatcher.postEvent(new RemoveToastEvent().toast(prevRestartToast));
+        }
+        ToastTable toastTable = new ToastTable();
         Actor content = interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/toastRestartRequired.lml")).first();
+        toastTable.add(content).grow();
         eventDispatcher.postEvent(new ShowToastEvent()
-                .content(content)
+                .content(toastTable)
                 .duration(ShowToastEvent.DURATION_INDEFINITELY));
+        prevRestartToast = toastTable.getToast();
     }
 
     //region Utility methods

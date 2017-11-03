@@ -180,13 +180,14 @@ public class CommonDialogs {
      * Checks if particular extension module is installed and if not, shows dialog.
      * @return true if module is installed.
      */
-    public boolean checkExtensionModuleInstalled(Class<? extends ExtensionModuleController> moduleControllerClass) {
+    public boolean checkExtensionModuleActivated(Class<? extends ExtensionModuleController> moduleControllerClass) {
         ExtensionModuleController moduleController = (ExtensionModuleController) App.inst().getContext().getComponent(moduleControllerClass);
-        if (!moduleController.isInstalled()) {
+//        if (moduleController.getStatus() == ExtensionModuleController.Status.INSTALLED) {
+        if (moduleController.isActivated()) {
+            return true;
+        } else {
             emRequiredDialog.showDialog(moduleController.getModuleId());
             return false;
-        } else {
-            return true;
         }
     }
 

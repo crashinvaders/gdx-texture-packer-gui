@@ -84,7 +84,7 @@ public class Configuration {
             BitmapFont fontDefault = fontGenerator.generateFont(paramsDefault);
             FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontData = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontDefault.getData();
 
-            if (cjkFontModule.isInstalled()) {
+            if (cjkFontModule.isActivated()) {
                 Gdx.app.log(TAG, "Skin initialized with CJK font.");
                 ftFontData.addGenerator(new FreeTypeFontGenerator(cjkFontModule.getFontFile()));
             }

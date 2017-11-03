@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.events.ExtensionModuleActivationChangedEvent;
 import com.crashinvaders.texturepackergui.events.ExtensionModuleStatusChangedEvent;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
@@ -22,6 +23,8 @@ public abstract class ExtensionModuleController {
     private final String keyName;
     private final String keyDesc;
     private Status status = Status.NOT_INSTALLED;
+    // Means module was initialized on application startup
+    private boolean activated = false;
 
     public ExtensionModuleController(String moduleId, int requiredRevision, String keyName, String keyDesc) {
         this.moduleId = moduleId;
@@ -50,8 +53,8 @@ public abstract class ExtensionModuleController {
         return status;
     }
 
-    public boolean isInstalled() {
-        return status == Status.INSTALLED;
+    public boolean isActivated() {
+        return activated;
     }
 
     public FileHandle getModuleDir() {
@@ -59,9 +62,18 @@ public abstract class ExtensionModuleController {
     }
 
     void setStatus(Status status, boolean notify) {
+        if (this.status == status) return;
         this.status = status;
         if (notify) {
             eventDispatcher.postEvent(new ExtensionModuleStatusChangedEvent(this));
+        }
+    }
+
+    void setActivated(boolean activated, boolean notify) {
+        if (this.activated == activated) return;
+        this.activated = activated;
+        if (notify) {
+            eventDispatcher.postEvent(new ExtensionModuleActivationChangedEvent(this));
         }
     }
 
