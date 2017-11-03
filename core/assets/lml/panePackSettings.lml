@@ -159,7 +159,7 @@
 
             <vistable growx="true" defaultalign="left" padleft="8" padright="8">
 
-                <vistable onecolumn="true" align="top" defaultalign="left">
+                <vistable onecolumn="true" align="top" defaultalign="left" defaultpadbottom="4">
 
                     <vischeckbox id="cbUseFastAlgorithm" onchange="onSettingsCbChecked" tooltip="@psTtFast">@psUseFastAlgorithm</vischeckbox>
 
@@ -183,7 +183,7 @@
 
                 <actor width="12"/>
 
-                <vistable onecolumn="true" align="top" defaultalign="left">
+                <vistable onecolumn="true" align="top" defaultalign="left" defaultpadbottom="4">
 
                     <vischeckbox id="cbDuplicatePadding" onchange="onSettingsCbChecked" tooltip="@psTtDuplicatePadding">@psDuplicatePadding</vischeckbox>
 
