@@ -26,6 +26,7 @@ import com.github.czyzby.autumn.mvc.stereotype.preference.StageViewport;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.autumn.processor.event.MessageDispatcher;
 import com.github.czyzby.autumn.scanner.ClassScanner;
+import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.kiwi.util.gdx.GdxUtilities;
 import com.github.czyzby.kiwi.util.gdx.asset.Disposables;
 import com.kotcrab.vis.ui.VisUI;

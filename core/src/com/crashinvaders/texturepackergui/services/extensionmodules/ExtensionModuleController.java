@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.services.extensionmodules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.events.ExtensionModuleStatusChangedEvent;
@@ -51,6 +52,10 @@ public abstract class ExtensionModuleController {
 
     public boolean isInstalled() {
         return status == Status.INSTALLED;
+    }
+
+    public FileHandle getModuleDir() {
+        return Gdx.files.external(AppConstants.MODULES_DIR + "/" + moduleId);
     }
 
     void setStatus(Status status, boolean notify) {

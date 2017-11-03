@@ -68,7 +68,7 @@ public class KtxFileTypeProcessor implements PackProcessor {
             tmpPngFile.delete();
 
             if (zipping) {
-                FileUtils.gzip(output);
+                FileUtils.packGzip(output);
             }
         }
     }
@@ -99,7 +99,7 @@ public class KtxFileTypeProcessor implements PackProcessor {
             tmpPngFile.delete();
 
             if (zipping) {
-                FileUtils.gzip(output);
+                FileUtils.packGzip(output);
             }
         }
     }

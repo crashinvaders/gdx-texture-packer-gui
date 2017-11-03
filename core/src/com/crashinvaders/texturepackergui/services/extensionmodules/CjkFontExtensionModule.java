@@ -1,42 +1,61 @@
 package com.crashinvaders.texturepackergui.services.extensionmodules;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.crashinvaders.common.async.AsyncJobTask;
 import com.crashinvaders.common.async.JobTaskQueue;
+import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
-import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
+
+import java.util.Locale;
+
+import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.LOW_PRIORITY;
 
 @Component
 public class CjkFontExtensionModule extends ExtensionModuleController {
-    public static final String MODULE_ID = "font-cjk";
-    public static final int CURRENT_REVISION = 0;
-
-    @Inject ExtensionModuleManagerService moduleRepository;
+    private final FileHandle fontFile;
 
     public CjkFontExtensionModule() {
         super("font-cjk", 0, "emNameCJKFont", "emDescCJKFont");
+        fontFile = getModuleDir().child("NotoSansCJK-Regular.ttc");
     }
 
-    @Initiate void init() {
+    /** Checks if one of CJK languages is selected and this module is not active. */
+    @Initiate(priority = LOW_PRIORITY)
+    void checkCjkLanguage(final LocaleService localeService) {
+        if (isInstalled()) return;
 
+        Locale locale = localeService.getCurrentLocale();
+        if (locale.equals(AppConstants.LOCALE_ZH_TW)) {
+            // This is a dirty hack that should be gone after LML merge this https://github.com/czyzby/gdx-lml/pull/60
+            localeService.setActionOnLocaleChange(null);
+            localeService.setCurrentLocale(AppConstants.LOCALE_DEFAULT);
+            localeService.setActionOnLocaleChange(new LocaleService.LocaleChangeAction(localeService));
+        }
+    }
+
+    public FileHandle getFontFile() {
+        return fontFile;
     }
 
     @Override
-    public String getModuleId() {
-        return MODULE_ID;
-    }
-
-    @Override
-    public int getRequiredRevision() {
-        return CURRENT_REVISION;
-    }
-
-    @Override
-    void prepareInstallationJob(JobTaskQueue taskQueue, String fileUrl) {
+    void prepareInstallationJob(JobTaskQueue taskQueue, final String fileUrl) {
         taskQueue.addTask(new AsyncJobTask() {
             @Override
             protected void doInBackground() throws Exception {
-                Thread.sleep(3000);
+                FileHandle tmpFile = FileUtils.createTempFile("CjkFontPackage");
+                try {
+                    FileUtils.downloadFile(tmpFile, fileUrl);
+                    if (checkCanceled()) return;
+                    FileUtils.unpackZip(tmpFile, getModuleDir());
+                } finally {
+                    if (tmpFile != null) {
+                        tmpFile.delete();
+                    }
+                }
             }
         });
     }
@@ -46,7 +65,10 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
         taskQueue.addTask(new AsyncJobTask() {
             @Override
             protected void doInBackground() throws Exception {
-                Thread.sleep(3000);
+                FileHandle moduleDir = getModuleDir();
+                if (moduleDir.exists()) {
+                    moduleDir.deleteDirectory();
+                }
             }
         });
     }

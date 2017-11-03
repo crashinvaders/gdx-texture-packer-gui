@@ -103,7 +103,6 @@ public class ExtensionModulesDialogController implements ActionContainer {
                     lblStatus.setColor(skin.getColor("text-yellow"));
                     break;
             }
-            System.out.println();
         }
 
         @LmlAction("onInstallClicked") void onInstallClicked() {

@@ -15,6 +15,7 @@ import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 @Component
@@ -32,7 +33,8 @@ public class ExtensionModuleManagerService {
     private final Preferences prefsInstalledModules = Gdx.app.getPreferences(AppConstants.PREF_NAME_INSTALLED_MODULES);
     private final ArrayMap<String, ExtensionModuleController> moduleControllers = new ArrayMap<>();
 
-    @Initiate(priority = 1) void initModuleControllers(CjkFontExtensionModule jcfFont) {
+    @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
+    void initModuleControllers(CjkFontExtensionModule jcfFont) {
         moduleControllers.put(jcfFont.getModuleId(), jcfFont);
 
         for (int i = 0; i < moduleControllers.size; i++) {
@@ -85,7 +87,7 @@ public class ExtensionModuleManagerService {
 
         ModalTaskDialogController.DialogData dialogData = new ModalTaskDialogController.DialogData();
         dialogData.message(getString("emTaskInstalling", moduleController.getName()));
-        dialogData.cancelable();
+        dialogData.cancelBehavior(ModalTaskDialogController.CancelBehavior.CANCEL_BACKGROUND);
         JobTaskQueue taskQueue = dialogData.getTaskQueue();
         moduleController.prepareInstallationJob(taskQueue, moduleRepository.getRelativeUrl(revisionData.file));
 
@@ -124,7 +126,7 @@ public class ExtensionModuleManagerService {
 
         ModalTaskDialogController.DialogData dialogData = new ModalTaskDialogController.DialogData();
         dialogData.message(getString("emTaskRemoving", moduleController.getName()));
-        dialogData.cancelable();
+        dialogData.cancelBehavior(ModalTaskDialogController.CancelBehavior.CANCEL_BACKGROUND);
         JobTaskQueue taskQueue = dialogData.getTaskQueue();
         moduleController.prepareUninstallationJob(taskQueue);
 
@@ -171,7 +173,7 @@ public class ExtensionModuleManagerService {
 
         ModalTaskDialogController.DialogData dialogData = new ModalTaskDialogController.DialogData();
         dialogData.message(getString("emTaskUpdating", moduleController.getName()));
-        dialogData.cancelable();
+        dialogData.cancelBehavior(ModalTaskDialogController.CancelBehavior.CANCEL_BACKGROUND);
         JobTaskQueue taskQueue = dialogData.getTaskQueue();
         moduleController.prepareUninstallationJob(taskQueue);
         moduleController.prepareInstallationJob(taskQueue, moduleRepository.getRelativeUrl(revisionData.file));

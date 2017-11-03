@@ -8,10 +8,9 @@
         closeonescape="true"
         closebutton="true">
     <stack minheight="32" maxheight="450" padtop="2">
-        <!--TODO scrollpane-->
-        <visscrollpane style="list" disabledx="true" fadebars="false">
+        <!--<visscrollpane style="list" disabledx="true" fadebars="false">-->
             <table id="tableModules" defaultgrowx="true" defaultpadbottom="8" tablepadbottom="-8" tablepadright="4" tablealign="top"/>
-        </visscrollpane>
+        <!--</visscrollpane>-->
 
         <container id="testContainer">
 

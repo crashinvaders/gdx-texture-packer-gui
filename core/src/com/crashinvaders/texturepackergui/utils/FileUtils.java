@@ -2,10 +2,17 @@ package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.StreamUtils;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.Enumeration;
 import java.util.zip.GZIPOutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class FileUtils {
 
@@ -62,11 +69,42 @@ public class FileUtils {
         return null;
     }
 
-    public static void gzip(FileHandle file) throws IOException {
-        gzip(file, file);
+    public static void packGzip(FileHandle file) throws IOException {
+        packGzip(file, file);
     }
 
-    public static void gzip(FileHandle input, FileHandle output) throws IOException {
+    /** @see File#createTempFile(String, String) */
+    public static FileHandle createTempFile(String baseName) throws IOException {
+        return Gdx.files.absolute(File.createTempFile(baseName, null).getAbsolutePath());
+    }
+
+    /** Synchronously downloads file by URL*/
+    public static void downloadFile(FileHandle output, String urlString) throws IOException {
+//        ReadableByteChannel rbc = null;
+//        FileOutputStream fos = null;
+//        try {
+//            URL url = new URL(urlString);
+//            rbc = Channels.newChannel(url.openStream());
+//            fos = new FileOutputStream(output.file());
+//            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+//        } finally {
+//            StreamUtils.closeQuietly(rbc);
+//            StreamUtils.closeQuietly(fos);
+//        }
+        InputStream in = null;
+        FileOutputStream out = null;
+        try {
+            URL url = new URL(urlString);
+            in = url.openStream();
+            out = new FileOutputStream(output.file());
+            StreamUtils.copyStream(in, out);
+        } finally {
+            StreamUtils.closeQuietly(in);
+            StreamUtils.closeQuietly(out);
+        }
+    }
+
+    public static void packGzip(FileHandle input, FileHandle output) throws IOException {
         FileInputStream read = null;
         DataOutputStream write = null;
         FileHandle tempFile = null;
@@ -97,6 +135,30 @@ public class FileUtils {
             if (tempFile != null && tempFile.exists()) {
                 tempFile.delete();
             }
+        }
+    }
+
+    public static void unpackZip(FileHandle input, FileHandle output) throws IOException {
+        ZipFile zipFile = new ZipFile(input.file());
+        File outputDir = output.file();
+        try {
+            Enumeration<? extends ZipEntry> entries = zipFile.entries();
+            while (entries.hasMoreElements()) {
+                ZipEntry entry = entries.nextElement();
+                File entryDestination = new File(outputDir, entry.getName());
+                if (entry.isDirectory()) {
+                    entryDestination.mkdirs();
+                } else {
+                    entryDestination.getParentFile().mkdirs();
+                    InputStream in = zipFile.getInputStream(entry);
+                    OutputStream out = new FileOutputStream(entryDestination);
+                    StreamUtils.copyStream(in, out);
+                    StreamUtils.closeQuietly(in);
+                    out.close();
+                }
+            }
+        } finally {
+            StreamUtils.closeQuietly(zipFile);
         }
     }
 }

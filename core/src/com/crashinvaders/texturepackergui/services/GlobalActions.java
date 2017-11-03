@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
@@ -40,11 +38,6 @@ import java.util.Locale;
 
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
-    private static final String TAG = GlobalActions.class.getSimpleName();
-    private static final Locale LOCALE_EN = Locale.ENGLISH;
-    private static final Locale LOCALE_DE = Locale.GERMAN;
-    private static final Locale LOCALE_RU = new Locale("ru", "");
-    private static final Locale LOCALE_ZH_TW = new Locale("zh", "tw");
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -310,16 +303,23 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("changeLanguageEn") public void changeLanguageEn() {
-        changeLanguage(LOCALE_EN);
+        changeLanguage(AppConstants.LOCALE_EN);
     }
     @LmlAction("changeLanguageDe") public void changeLanguageDe() {
-        changeLanguage(LOCALE_DE);
+        changeLanguage(AppConstants.LOCALE_DE);
     }
     @LmlAction("changeLanguageRu") public void changeLanguageRu() {
-        changeLanguage(LOCALE_RU);
+        changeLanguage(AppConstants.LOCALE_RU);
     }
     @LmlAction("changeLanguageZhTw") public void changeLanguageZhTw() {
-        changeLanguage(LOCALE_ZH_TW);
+        changeLanguage(AppConstants.LOCALE_ZH_TW);
+    }
+
+    public void changeLanguage(Locale locale) {
+        if (localeService.getCurrentLocale().equals(locale)) return;
+
+        Locales.setLocale(locale);
+        localeService.setCurrentLocale(locale);
     }
 
     /** @return localized string */
@@ -341,13 +341,6 @@ public class GlobalActions implements ActionContainer {
 
     private Stage getStage() {
         return interfaceService.getCurrentController().getStage();
-    }
-
-    private void changeLanguage(Locale locale) {
-        if (localeService.getCurrentLocale().equals(locale)) return;
-
-        Locales.setLocale(locale);
-        localeService.setCurrentLocale(locale);
     }
 
     /** Stores last used dir for specific actions */

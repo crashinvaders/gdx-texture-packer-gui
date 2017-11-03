@@ -42,6 +42,8 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
     }
 
     public void hideDialog() {
+        if (data == null) return;
+
         if (data.taskQueue.isRunning()) {
             data.taskQueue.cancel();
         }
@@ -60,7 +62,7 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
             throw new IllegalStateException("DialogData wasn't set. You should display this dialog by calling ModalTaskDialogController#showDialog(DialogData).");
         }
 
-        cancelContainer.setVisible(data.cancelable);
+        cancelContainer.setVisible(data.cancelBehavior != CancelBehavior.NON_CANCELABLE);
         lblMessage.setText(data.message);
         data.taskQueue.setListener(listenerWrapper);
         data.taskQueue.execute();
@@ -69,13 +71,16 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
     @LmlAction("onCancelClicked") void onCancelClicked() {
         if (data != null) {
             data.taskQueue.cancel();
+            if (data.cancelBehavior == CancelBehavior.CANCEL_BACKGROUND) {
+                hideDialog();
+            }
         }
     }
 
     private class TaskListenerWrapper implements JobTask.Listener {
         @Override
         public void onSucceed() {
-            if (data.listener != null) {
+            if (data != null && data.listener != null) {
                 data.listener.onSucceed();
             }
             hideDialog();
@@ -83,7 +88,7 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
 
         @Override
         public void onFailed(String failMessage, Exception failException) {
-            if (data.listener != null) {
+            if (data != null && data.listener != null) {
                 data.listener.onFailed(failMessage, failException);
             }
             hideDialog();
@@ -91,25 +96,34 @@ public class ModalTaskDialogController implements ActionContainer, ViewDialogSho
 
         @Override
         public void onCanceled() {
-            if (data.listener != null) {
+            if (data != null && data.listener != null) {
                 data.listener.onCanceled();
             }
             hideDialog();
         }
     }
 
+    public enum CancelBehavior {
+        /** Cancel button is hidden, there is no way to close dialog before the job gets done. */
+        NON_CANCELABLE,
+        /** Cancel will be requested for the job, but dialog will stay until the job returns. */
+        CANCEL_AWAIT,
+        /** Cancel will be requested for the job, the dialog will be hidden, and the job will be returned in the background. */
+        CANCEL_BACKGROUND
+    }
+
     public static class DialogData {
         final JobTaskQueue taskQueue = new JobTaskQueue("ModalTaskDialogQueue");
         String message = "";
-        boolean cancelable = false;
+        CancelBehavior cancelBehavior = CancelBehavior.NON_CANCELABLE;
         JobTask.Listener listener;
 
         public JobTaskQueue getTaskQueue() {
             return taskQueue;
         }
 
-        public DialogData cancelable() {
-            cancelable = true;
+        public DialogData cancelBehavior(CancelBehavior cancelBehavior) {
+            this.cancelBehavior = cancelBehavior;
             return this;
         }
 

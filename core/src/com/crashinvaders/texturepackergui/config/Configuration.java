@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
+import com.crashinvaders.texturepackergui.services.extensionmodules.CjkFontExtensionModule;
 import com.crashinvaders.texturepackergui.services.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ProjectModel;
@@ -44,6 +45,8 @@ import com.kotcrab.vis.ui.widget.file.FileUtils;
 import java.nio.ByteBuffer;
 import java.util.Locale;
 
+import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.*;
+
 @SuppressWarnings("unused")
 @Component
 public class Configuration {
@@ -65,24 +68,8 @@ public class Configuration {
     @AvailableLocales String[] availableLocales = new String[] { "en", "ru", "de" };
     @I18nBundle String bundlePath = "i18n/bundle";
 
-    @Initiate(priority = AutumnActionPriority.LOW_PRIORITY)
-    public void initVisUiI18n(InterfaceService interfaceService, final LocaleService localeService) {
-        Locales.setLocale(localeService.getCurrentLocale());
-        interfaceService.setActionOnBundlesReload(new Runnable() {
-            @Override
-            public void run() {
-                Locale locale = localeService.getCurrentLocale();
-                Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar"), locale));
-                Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker"), locale));
-                Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs"), locale));
-                Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser"), locale));
-                Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane"), locale));
-            }
-        });
-    }
-
-    @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
-    public void initiateSkin(final SkinService skinService) {
+    @Initiate(priority = VERY_HIGH_PRIORITY)
+    public void initiateSkin(final SkinService skinService, CjkFontExtensionModule cjkFontModule) {
         Skin skin = new Skin();
         {
             FreeTypeFontGenerator.setMaxTextureSize(2048);
@@ -97,7 +84,12 @@ public class Configuration {
             BitmapFont fontDefault = fontGenerator.generateFont(paramsDefault);
             FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontData = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontDefault.getData();
 
-            FileHandle cjkFontFile = Gdx.files.external(".gdxtexturepackergui/cjk-font/NotoSansCJK-Regular.ttc");
+            if (cjkFontModule.isInstalled()) {
+                Gdx.app.log(TAG, "Skin initialized with CJK font.");
+                ftFontData.addGenerator(new FreeTypeFontGenerator(cjkFontModule.getFontFile()));
+            }
+
+            FileHandle cjkFontFile = Gdx.files.external(AppConstants.MODULES_DIR + "/NotoSansCJK-Regular.ttc");
             if (cjkFontFile.exists()) {
                 Gdx.app.log(TAG, "CJK font initialized");
                 ftFontData.addGenerator(new FreeTypeFontGenerator(cjkFontFile));
@@ -121,7 +113,23 @@ public class Configuration {
         }
     }
 
-    @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
+    @Initiate(priority = HIGH_PRIORITY)
+    public void initVisUiI18n(InterfaceService interfaceService, final LocaleService localeService) {
+        Locales.setLocale(localeService.getCurrentLocale());
+        interfaceService.setActionOnBundlesReload(new Runnable() {
+            @Override
+            public void run() {
+                Locale locale = localeService.getCurrentLocale();
+                Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar"), locale));
+                Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker"), locale));
+                Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs"), locale));
+                Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser"), locale));
+                Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane"), locale));
+            }
+        });
+    }
+
+    @Initiate(priority = HIGH_PRIORITY)
     public void initializeInterface(InterfaceService interfaceService) {
         InterfaceService.DEFAULT_FADING_TIME = 0.15f;
 

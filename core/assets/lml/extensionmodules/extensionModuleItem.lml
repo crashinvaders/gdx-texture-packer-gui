@@ -10,7 +10,7 @@
         <label id="lblDescription" style="grey-small" text="@emDescCJKFont" wrap="true"/>
     </vistable>
     <vistable>
-        <actor growx="true"/>
+        <actor expandx="true"/>
 
         <shrinkcontainer id="scBtnInstall">
             <container fillx="true" minwidth="96">
