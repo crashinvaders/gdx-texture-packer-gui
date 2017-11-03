@@ -302,6 +302,10 @@ public class GlobalActions implements ActionContainer {
         interfaceService.showDialog(PreviewBackgroundDialogController.class);
     }
 
+    @LmlAction("showExtensionModulesDialog") public void showExtensionModulesDialog() {
+        interfaceService.showDialog(ExtensionModulesDialogController.class);
+    }
+
     @LmlAction("changeLanguageEn") public void changeLanguageEn() {
         changeLanguage(AppConstants.LOCALE_EN);
     }

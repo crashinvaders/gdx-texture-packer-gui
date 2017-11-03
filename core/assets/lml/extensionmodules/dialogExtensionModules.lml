@@ -9,12 +9,8 @@
         closebutton="true">
     <stack minheight="32" maxheight="450" padtop="2">
         <!--<visscrollpane style="list" disabledx="true" fadebars="false">-->
-            <table id="tableModules" defaultgrowx="true" defaultpadbottom="8" tablepadbottom="-8" tablepadright="4" tablealign="top"/>
+            <table id="tableModules" defaultgrowx="true" defaultpadbottom="8" tablepadbottom="-8" tablepadright="0" tablealign="top"/>
         <!--</visscrollpane>-->
-
-        <container id="testContainer">
-
-        </container>
 
         <table id="groupChecking" background="dragndropDim" onecolumn="true" visible="false">
             <animatedimage

@@ -14,17 +14,17 @@
 
         <shrinkcontainer id="scBtnInstall">
             <container fillx="true" minwidth="96">
-                <vistextbutton text="@install" change="ModuleItemViewHolder.onInstallClicked" focusborderenabled="false"/>
+                <visimagetextbutton text="@install" image="custom/ic-download" change="ModuleItemViewHolder.onInstallClicked" focusborderenabled="false" defaultspace="0"/>
             </container>
         </shrinkcontainer>
         <shrinkcontainer id="scBtnUpdate">
             <container fillx="true" minwidth="96" padleft="4">
-                <vistextbutton text="@update" change="ModuleItemViewHolder.onUpdateClicked" focusborderenabled="false"/>
+                <visimagetextbutton text="@update" image="custom/ic-upgrade" change="ModuleItemViewHolder.onUpdateClicked" focusborderenabled="false" defaultspace="0"/>
             </container>
         </shrinkcontainer>
         <shrinkcontainer id="scBtnUninstall">
             <container fillx="true" minwidth="96" padleft="4">
-                <vistextbutton text="@uninstall" change="ModuleItemViewHolder.onUninstallClicked" focusborderenabled="false"/>
+                <visimagetextbutton text="@uninstall" image="custom/ic-trash-red" change="ModuleItemViewHolder.onUninstallClicked" focusborderenabled="false" defaultspace="0"/>
             </container>
         </shrinkcontainer>
     </vistable>

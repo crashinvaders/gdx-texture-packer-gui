@@ -78,7 +78,14 @@
                         fillImage="custom/language-zh-tw"/>
             </submenu>
         </menuitem>
+        <menuitem
+                id="miExtensionModules"
+                text="Extension modules"
+                onchange="showExtensionModulesDialog"
+                icon="custom/ic-extension-module"/>
+
         <menuseparator/>
+
         <menuitem
                 id="miTextureUnpacker"
                 text="@textureUnpacker"

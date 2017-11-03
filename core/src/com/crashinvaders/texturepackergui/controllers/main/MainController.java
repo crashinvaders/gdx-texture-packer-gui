@@ -155,62 +155,6 @@ public class MainController implements ActionContainer, ViewResizer {
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
         updateFileType();
-
-//        //TODO remove
-//        Gdx.app.postRunnable(new Runnable() {
-//            @Override
-//            public void run() {
-//                ModalTaskDialogController dialogController = (ModalTaskDialogController) App.inst().getContext().getComponent(ModalTaskDialogController.class);
-//                ModalTaskDialogController.DialogData data = new ModalTaskDialogController.DialogData();
-//                data.message(getString("emTaskInstalling", getString("emNameCJKFont")));
-//                data.cancelable();
-//                data.task(new AsyncJobTask() {
-//                    @Override
-//                    protected void doInBackground() throws Exception {
-//                        System.out.println("Task begins");
-//                        for (int i = 0; i < 3; i++) {
-//                            if (checkCanceled()) return;
-//                            Thread.sleep(500);
-//                            System.out.println("Msg from task " + i);
-//                        }
-//                        System.out.println("Task ends");
-//                    }
-//                });
-//                data.task(new SyncJobTask() {
-//                    @Override
-//                    protected void performJob() throws Exception {
-//                        System.out.println("Sync task begins");
-//                        Thread.sleep(3000);
-//                        System.out.println("Sync task ends");
-//                    }
-//                });
-//                data.listener(new JobTask.Listener() {
-//                    @Override
-//                    public void onSucceed() {
-//                        System.out.println("MainController.onSucceed");
-//                        toastManager.show(getString("emToastInstalled", getString("emNameCJKFont")));
-//                    }
-//                    @Override
-//                    public void onFailed(String failMessage, Exception failException) {
-//                        System.out.println("MainController.onFailed");
-//                        toastManager.show(getString("emDescCJKFont", getString("emNameCJKFont")));
-//                    }
-//                    @Override
-//                    public void onCanceled() {
-//                        System.out.println("MainController.onCanceled");
-//                    }
-//                });
-//                dialogController.showDialog(data);
-//            }
-//        });
-
-        //TODO remove
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                interfaceService.showDialog(ExtensionModulesDialogController.class);
-            }
-        });
     }
 
     @Destroy
