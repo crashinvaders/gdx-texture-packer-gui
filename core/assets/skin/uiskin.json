@@ -104,7 +104,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 	big: {font: big-font, fontColor: white },
 	menuitem-shortcut: {font: default-font, fontColor: menuitem },
 	grey: {font: default-font, fontColor: light-grey },
-	grey-small: {font: small-font, fontColor: light-grey },
+	small-grey: {font: small-font, fontColor: light-grey },
+	small-yellow: {font: small-font, fontColor: text-yellow },
+	small-red: {font: small-font, fontColor: text-red },
+	small-green: {font: small-font, fontColor: text-green },
 },
 com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
 	default: {font: default-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, cursor: cursor, messageFont: default-font, messageFontColor: grey },

@@ -7,7 +7,7 @@
             <label id="lblName" text="@emNameCJKFont" padbottom="2" align="left" expandx="true"/>
             <label id="lblStatus" style="small" color="text-grey" text="Not installed" align="top"/>
         </vistable>
-        <label id="lblDescription" style="grey-small" text="@emDescCJKFont" wrap="true"/>
+        <label id="lblDescription" style="small-grey" text="@emDescCJKFont" wrap="true"/>
     </vistable>
     <vistable>
         <actor expandx="true"/>

@@ -4,5 +4,5 @@
 <vistable onecolumn="true" defaultalign="left" defaultexpandx="true" padleft="8">
     <label text="@toastRestartRequired" minwidth="300" growx="true" wrap="true"/>
     <:row padtop="4"/>
-    <textbutton style="orange" text="Restart application" growx="true" change="restartApplication"/>
+    <textbutton style="orange" text="@restartApplication" growx="true" change="restartApplication"/>
 </vistable>

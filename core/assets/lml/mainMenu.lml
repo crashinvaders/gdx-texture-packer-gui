@@ -80,7 +80,7 @@
         </menuitem>
         <menuitem
                 id="miExtensionModules"
-                text="Extension modules"
+                text="@emRepoTitle"
                 onchange="showExtensionModulesDialog"
                 icon="custom/ic-extension-module"/>
 

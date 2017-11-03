@@ -8,9 +8,12 @@
         closeonescape="true"
         closebutton="true">
     <stack minheight="32" maxheight="450" padtop="2">
+        <table onecolumn="true" defaultgrowx="true">
         <!--<visscrollpane style="list" disabledx="true" fadebars="false">-->
             <table id="tableModules" defaultgrowx="true" defaultpadbottom="8" tablepadbottom="-8" tablepadright="0" tablealign="top"/>
         <!--</visscrollpane>-->
+            <label style="small-red" text="@internetConnectionRequired" textalign="center" padbottom="-8" padtop="4"/>
+        </table>
 
         <table id="groupChecking" background="dragndropDim" onecolumn="true" visible="false">
             <animatedimage
