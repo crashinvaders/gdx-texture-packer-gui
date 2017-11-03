@@ -1,10 +1,10 @@
 package com.crashinvaders.texturepackergui.services.extensionmodules;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.crashinvaders.common.async.AsyncJobTask;
 import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.services.GlobalActions;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -25,14 +25,19 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
 
     /** Checks if one of CJK languages is selected and this module is not active. */
     @Initiate(priority = LOW_PRIORITY)
-    void checkCjkLanguage(final LocaleService localeService) {
+    void checkCjkLanguage(final LocaleService localeService, GlobalActions globalActions) {
         if (isInstalled()) return;
 
         Locale locale = localeService.getCurrentLocale();
         if (locale.equals(AppConstants.LOCALE_ZH_TW)) {
             // This is a dirty hack that should be gone after LML merge this https://github.com/czyzby/gdx-lml/pull/60
-            localeService.setActionOnLocaleChange(null);
-            localeService.setCurrentLocale(AppConstants.LOCALE_DEFAULT);
+            localeService.setActionOnLocaleChange(new Runnable() {
+                @Override
+                public void run() {
+                    localeService.saveLocaleInPreferences();
+                }
+            });
+            globalActions.changeLanguage(AppConstants.LOCALE_DEFAULT);
             localeService.setActionOnLocaleChange(new LocaleService.LocaleChangeAction(localeService));
         }
     }

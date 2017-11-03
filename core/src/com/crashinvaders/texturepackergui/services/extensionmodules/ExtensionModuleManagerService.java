@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.services.extensionmodules;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.crashinvaders.common.async.JobTask;
@@ -9,6 +10,7 @@ import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.crashinvaders.texturepackergui.controllers.ModalTaskDialogController;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.services.extensionmodules.ExtensionModuleController.Status;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -32,6 +34,9 @@ public class ExtensionModuleManagerService {
 
     private final Preferences prefsInstalledModules = Gdx.app.getPreferences(AppConstants.PREF_NAME_INSTALLED_MODULES);
     private final ArrayMap<String, ExtensionModuleController> moduleControllers = new ArrayMap<>();
+
+    // Indicates that restart toast was already shown and thus should not be created again in the same session.
+    private boolean restartToastShown = false;
 
     @Initiate(priority = AutumnActionPriority.TOP_PRIORITY)
     void initModuleControllers(CjkFontExtensionModule jcfFont) {
@@ -65,6 +70,10 @@ public class ExtensionModuleManagerService {
         return result;
     }
 
+    public ExtensionModuleController findModuleController(String moduleId) {
+        return moduleControllers.get(moduleId);
+    }
+
     public void installModule(final String moduleId) {
         final ExtensionModuleController moduleController = moduleControllers.get(moduleId);
         if (moduleController == null) {
@@ -96,6 +105,7 @@ public class ExtensionModuleManagerService {
             public void onSucceed() {
                 addInstalledEntry(moduleId, requiredRevision);
                 moduleController.setStatus(Status.INSTALLED, true);
+                showRestartToast();
             }
             @Override
             public void onFailed(String failMessage, Exception failException) {
@@ -148,6 +158,7 @@ public class ExtensionModuleManagerService {
 
         removeInstalledEntry(moduleId);
         moduleController.setStatus(Status.NOT_INSTALLED, true);
+        showRestartToast();
         moduleTaskDialog.showDialog(dialogData);
     }
 
@@ -183,6 +194,7 @@ public class ExtensionModuleManagerService {
             public void onSucceed() {
                 addInstalledEntry(moduleId, requiredRevision);
                 moduleController.setStatus(Status.INSTALLED, true);
+                showRestartToast();
             }
             @Override
             public void onFailed(String failMessage, Exception failException) {
@@ -208,6 +220,16 @@ public class ExtensionModuleManagerService {
     private void removeInstalledEntry(String moduleId) {
         prefsInstalledModules.remove(moduleId);
         prefsInstalledModules.flush();
+    }
+
+    private void showRestartToast() {
+        if (restartToastShown) return;
+        restartToastShown = true;
+
+        Actor content = interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/toastRestartRequired.lml")).first();
+        eventDispatcher.postEvent(new ShowToastEvent()
+                .content(content)
+                .duration(ShowToastEvent.DURATION_INDEFINITELY));
     }
 
     //region Utility methods

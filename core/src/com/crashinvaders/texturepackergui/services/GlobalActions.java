@@ -6,12 +6,14 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
+import com.crashinvaders.texturepackergui.services.extensionmodules.CjkFontExtensionModule;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
@@ -316,7 +318,19 @@ public class GlobalActions implements ActionContainer {
         changeLanguage(AppConstants.LOCALE_RU);
     }
     @LmlAction("changeLanguageZhTw") public void changeLanguageZhTw() {
-        changeLanguage(AppConstants.LOCALE_ZH_TW);
+        if (commonDialogs.checkExtensionModuleInstalled(CjkFontExtensionModule.class)) {
+            changeLanguage(AppConstants.LOCALE_ZH_TW);
+        }
+    }
+
+    @LmlAction("restartApplication") public void restartApplication() {
+        //TODO reload current active project (if any)
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                App.inst().restart();
+            }
+        });
     }
 
     public void changeLanguage(Locale locale) {

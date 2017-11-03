@@ -7,6 +7,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.controllers.ExtensionModuleRequiredDialogController;
+import com.crashinvaders.texturepackergui.services.extensionmodules.ExtensionModuleController;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
 import com.crashinvaders.texturepackergui.services.model.ModelUtils;
 import com.crashinvaders.texturepackergui.services.model.PackModel;
@@ -31,6 +34,7 @@ public class CommonDialogs {
     @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
+    @Inject ExtensionModuleRequiredDialogController emRequiredDialog;
 
     public void newPack() {
         final ContentDialog dialog = WidgetUtils.showContentDialog(
@@ -170,6 +174,20 @@ public class CommonDialogs {
                         dialog.fadeOut();
                     }
                 }).prepare());
+    }
+
+    /**
+     * Checks if particular extension module is installed and if not, shows dialog.
+     * @return true if module is installed.
+     */
+    public boolean checkExtensionModuleInstalled(Class<? extends ExtensionModuleController> moduleControllerClass) {
+        ExtensionModuleController moduleController = (ExtensionModuleController) App.inst().getContext().getComponent(moduleControllerClass);
+        if (!moduleController.isInstalled()) {
+            emRequiredDialog.showDialog(moduleController.getModuleId());
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /** @return localized string */
