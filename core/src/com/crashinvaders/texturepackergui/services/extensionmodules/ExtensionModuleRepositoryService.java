@@ -3,51 +3,69 @@ package com.crashinvaders.texturepackergui.services.extensionmodules;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.net.HttpRequestHeader;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.crashinvaders.common.async.JobTask;
-import com.crashinvaders.common.async.JobTaskQueue;
+import com.badlogic.gdx.utils.*;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
-import com.crashinvaders.texturepackergui.controllers.ModalTaskDialogController;
 import com.crashinvaders.texturepackergui.events.ModuleRepositoryRefreshEvent;
-import com.crashinvaders.texturepackergui.services.extensionmodules.ExtensionModuleController.Status;
+import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
-import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
-import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
+
+import java.util.Date;
 
 @Component
 public class ExtensionModuleRepositoryService {
     private static final String TAG = ExtensionModuleRepositoryService.class.getSimpleName();
     private static final String BASE_URL = "https://crashinvaders.github.io/gdx-texture-packer-gui/modules/";
+    private static final String PREF_KEY_LAST_CHECK = "lastModuleRepoCheck";
+    private static final int CACHE_LIFE = 1000*60*60*24; // One day in millis
 
     @Inject EventDispatcher eventDispatcher;
 
+    private final ObjectMap<String, RepositoryModuleData> repositoryModules = new ObjectMap<>();
     private final Preferences prefsCommon = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
     private final Json json = new Json();
-    private final ObjectMap<String, RepositoryModuleData> repositoryModules = new ObjectMap<>();
+
+    private final FileHandle modulesDir = Gdx.files.external(AppConstants.MODULES_DIR);
+    private final FileHandle repoCacheFile = modulesDir.child("repoCache.json");
+
     private boolean checkingInProgress;
 
-    @Initiate() void init() {
+    @Initiate(priority = AutumnActionPriority.TOP_PRIORITY) void init() {
+        modulesDir.mkdirs();
+
+        if (repoCacheFile.exists()) {
+            Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, repoCacheFile);
+            repositoryModules.clear();
+            for (RepositoryModuleData moduleData : newArray) {
+                repositoryModules.put(moduleData.name, moduleData);
+            }
+            Gdx.app.log(TAG, "Cached data was loaded");
+        }
+
         requestRefreshRepositoryIfNeeded();
     }
 
     synchronized
     public void requestRefreshRepositoryIfNeeded() {
-        //TODO add time delay check
-        requestRefreshRepository();
+        long lastCheckDate = prefsCommon.getLong(PREF_KEY_LAST_CHECK);
+        long currentDate = new Date().getTime();
+        if (Math.abs(currentDate - lastCheckDate) > CACHE_LIFE) {
+            Gdx.app.log(TAG, "Cached data is outdated.");
+            requestRefreshRepository();
+        }
     }
 
     synchronized
     public void requestRefreshRepository() {
         if (checkingInProgress) return;
+
+        Gdx.app.log(TAG, "Requesting new data from remote server.");
 
         checkingInProgress = true;
         eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_STARTED));
@@ -61,13 +79,22 @@ public class ExtensionModuleRepositoryService {
                 new Net.HttpResponseListener() {
             @Override
             public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                String result = httpResponse.getResultAsString();
                 try {
+                    String result = httpResponse.getResultAsString();
+
+                    // Cache result into local file
+                    FileUtils.saveTextToFile(repoCacheFile, result);
+
+                    // Update in-memory data
                     Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, result);
                     repositoryModules.clear();
                     for (RepositoryModuleData moduleData : newArray) {
                         repositoryModules.put(moduleData.name, moduleData);
                     }
+                    prefsCommon.putLong(PREF_KEY_LAST_CHECK, new Date().getTime()).flush();
+
+                    Gdx.app.log(TAG, "Data was loaded from remote server.");
+
                     checkingInProgress = false;
                     eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
                     eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_SUCCESS));

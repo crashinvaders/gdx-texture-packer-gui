@@ -3,7 +3,6 @@ package com.crashinvaders.texturepackergui.services.projectserializer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
@@ -54,7 +53,7 @@ public class ProjectSerializer {
     public void saveProject(ProjectModel project, FileHandle file) {
         String serialized = serializeProject(project, file.parent());
         try {
-            saveTextToFile(serialized, file);
+            saveTextToFile(file, serialized);
         } catch (IOException e) {
             eventDispatcher.postEvent(new ShowToastEvent().message(localeService.getI18nBundle()
                     .format("toastProjectSaveError", project.getProjectFile().path())));

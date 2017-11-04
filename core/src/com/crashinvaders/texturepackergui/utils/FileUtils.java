@@ -7,8 +7,6 @@ import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 
 import java.io.*;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.Enumeration;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipEntry;
@@ -46,12 +44,12 @@ public class FileUtils {
         }
     }
 
-    public static void saveTextToFile(String text, FileHandle file) throws IOException {
+    public static void saveTextToFile(FileHandle file, String text) throws IOException {
         org.apache.commons.io.FileUtils.write(file.file(), text, "UTF-8");
     }
-    public static void saveTextToFileSilent(String text, FileHandle file) {
+    public static void saveTextToFileSilent(FileHandle file, String text) {
         try {
-            saveTextToFile(text, file);
+            saveTextToFile(file, text);
         } catch (IOException e) {
             e.printStackTrace();
         }
