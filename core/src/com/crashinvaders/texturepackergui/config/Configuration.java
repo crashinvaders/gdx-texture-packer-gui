@@ -81,21 +81,38 @@ public class Configuration {
             paramsDefault.renderCount = 1;
             paramsDefault.gamma = 1.0f;
             paramsDefault.hinting = FreeTypeFontGenerator.Hinting.Full;
+            FreeTypeFontGenerator.FreeTypeFontParameter paramsSmall = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            paramsSmall.color = new Color(0xffffffe8);
+            paramsSmall.size = 12;
+            paramsSmall.incremental = true;
+            paramsSmall.renderCount = 1;
+            paramsSmall.gamma = 0.5f;
+            paramsSmall.hinting = FreeTypeFontGenerator.Hinting.Full;
+            FreeTypeFontGenerator.FreeTypeFontParameter paramsBig = new FreeTypeFontGenerator.FreeTypeFontParameter();
+            paramsBig.color = new Color(0xffffffe8);
+            paramsBig.size = 22;
+            paramsBig.incremental = true;
+            paramsBig.renderCount = 1;
+            paramsBig.gamma = 0.75f;
+            paramsBig.hinting = FreeTypeFontGenerator.Hinting.Full;
+
             BitmapFont fontDefault = fontGenerator.generateFont(paramsDefault);
-            FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontData = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontDefault.getData();
+            BitmapFont fontSmall = fontGenerator.generateFont(paramsSmall);
+            BitmapFont fontBig = fontGenerator.generateFont(paramsBig);
 
             if (cjkFontModule.isActivated()) {
                 Gdx.app.log(TAG, "Skin initialized with CJK font.");
-                ftFontData.addGenerator(new FreeTypeFontGenerator(cjkFontModule.getFontFile()));
-            }
-
-            FileHandle cjkFontFile = Gdx.files.external(AppConstants.MODULES_DIR + "/NotoSansCJK-Regular.ttc");
-            if (cjkFontFile.exists()) {
-                Gdx.app.log(TAG, "CJK font initialized");
-                ftFontData.addGenerator(new FreeTypeFontGenerator(cjkFontFile));
+                FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontDataDefault = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontDefault.getData();
+                ftFontDataDefault.addGenerator(new FreeTypeFontGenerator(cjkFontModule.getFontFile()));
+                FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontDataSmall = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontSmall.getData();
+                ftFontDataSmall.addGenerator(new FreeTypeFontGenerator(cjkFontModule.getFontFile()));
+                FreeTypeFontGenerator.FreeTypeBitmapFontData ftFontDataBig = (FreeTypeFontGenerator.FreeTypeBitmapFontData) fontBig.getData();
+                ftFontDataBig.addGenerator(new FreeTypeFontGenerator(cjkFontModule.getFontFile()));
             }
 
             skin.add("default-font", fontDefault, BitmapFont.class);
+            skin.add("small-font", fontSmall, BitmapFont.class);
+            skin.add("big-font", fontBig, BitmapFont.class);
         }
         skin.addRegions(new TextureAtlas(Gdx.files.internal("skin/uiskin.atlas")));
         skin.load(Gdx.files.internal("skin/uiskin.json"));
