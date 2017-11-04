@@ -1,4 +1,6 @@
 [LATEST]
+- Support for CJK fonts (downloadable extension module)
+- Traditional Chinese localization, thanks to Tokenyet
 
 [4.5.0]
 - Page image file type configuration. ETC(KTX) file format support.
@@ -16,7 +18,7 @@
 - .tpproj file extension association for Windows (if program installed through installer)
 
 [4.3.2]
-- German localization added, thanks to terafog
+- German localization added, thanks to TeraFog
 - Fixed occasional crash upon language change
 - Fixed "Flatten paths" checkbox (it works now!)
 - Fixed no window on application startup in some cases
