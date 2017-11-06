@@ -14,15 +14,17 @@ import org.kohsuke.args4j.CmdLineParser;
 public class GLSurfaceLauncher {
 	public static void main(final String[] args) {
 		Arguments arguments = new Arguments();
-
-		try	{
+		try {
 			CmdLineParser parser = new CmdLineParser(arguments);
 			parser.parseArgument(args);
 		} catch (CmdLineException e) {
 			System.out.println("Error: " + e.getLocalizedMessage());
 			return;
 		}
+		start(arguments);
+	}
 
+	public static void start(Arguments arguments) {
 		final LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
 		configuration.title = "LibGDX Texture Packer GUI";
 		configuration.addIcon("icon128.png", Files.FileType.Classpath);
@@ -31,6 +33,7 @@ public class GLSurfaceLauncher {
 		configuration.preferencesDirectory = AppConstants.EXTERNAL_DIR;
 		configuration.width = 1024;
 		configuration.height = 600;
+		configuration.allowSoftwareMode = arguments.softOpenGL;
 
 		AppParams appParams = new AppParams();
 		appParams.startupProject = arguments.project;

@@ -8,7 +8,6 @@ public class ApplicationStarter {
 
     public static void main(final String[] args) {
         Arguments arguments = new Arguments();
-
         try {
             CmdLineParser parser = new CmdLineParser(arguments);
             parser.parseArgument(args);
@@ -20,12 +19,12 @@ public class ApplicationStarter {
         switch (arguments.launcher) {
             case Arguments.LAUNCHER_AWT: {
                 System.out.println("AWT launcher is starting");
-                AwtFrameLauncher.main(args);
+                AwtFrameLauncher.start(arguments);
                 break;
             }
             case Arguments.LAUNCHER_GL_SURFACE: {
                 System.out.println("GL surface launcher is starting");
-                GLSurfaceLauncher.main(args);
+                GLSurfaceLauncher.start(arguments);
                 break;
             }
             default:

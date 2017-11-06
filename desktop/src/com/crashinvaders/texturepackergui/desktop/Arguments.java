@@ -14,4 +14,7 @@ public class Arguments {
 
     @Option(name = "-launcher")
     public String launcher = LAUNCHER_AWT;
+
+    @Option(name = "-softopengl")
+    public boolean softOpenGL;
 }
