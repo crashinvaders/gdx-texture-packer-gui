@@ -324,6 +324,11 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("restartApplication") public void restartApplication() {
+        FileHandle projectFile = modelService.getProject().getProjectFile();
+        if (projectFile != null && projectFile.exists()) {
+            App.inst().getParams().startupProject = projectFile.file();
+        }
+
         //TODO reload current active project (if any)
         Gdx.app.postRunnable(new Runnable() {
             @Override
