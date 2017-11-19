@@ -36,6 +36,12 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new HexColorLmlAttribute(), "hexColor");
     }
 
+    @Override
+    protected void registerImageAttributes() {
+        super.registerImageAttributes();
+
+        addAttributeProcessor(new ImageTiledLmlAttribute(), "tiled");
+    }
 
     @Override
     protected void registerTableAttributes() {

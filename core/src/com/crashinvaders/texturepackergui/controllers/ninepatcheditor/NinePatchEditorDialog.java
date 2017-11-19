@@ -2,9 +2,6 @@ package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -25,9 +22,8 @@ public class NinePatchEditorDialog implements ActionContainer {
     @Inject ErrorDialogController errorDialogController;
 
     @LmlActor("dialog") VisDialog dialog;
-    @LmlActor("canvasStack") Stack canvasStack;
     @LmlActor("chbMatchContent") VisCheckBox chbMatchContent;
-    CompositionHolder compositionHolder;
+    @LmlActor("compositionHolder") CompositionHolder compositionHolder;
 
     private NinePatchEditorModel model;
     private ResultListener resultListener;
@@ -57,16 +53,6 @@ public class NinePatchEditorDialog implements ActionContainer {
                 }
             }
         });
-
-        Skin skin = interfaceService.getSkin();
-
-        Image imgBackground = new Image(skin.getTiledDrawable("custom/transparent-light"));
-        canvasStack.addActor(imgBackground);
-
-        SourceImage sourceImage = new SourceImage(model.pixmap);
-
-        compositionHolder = new CompositionHolder(skin, sourceImage, model);
-        canvasStack.addActor(compositionHolder);
     }
 
     @Destroy void destroy() {
@@ -76,12 +62,16 @@ public class NinePatchEditorDialog implements ActionContainer {
         }
     }
 
+    @LmlAction("createCompositionHolder") CompositionHolder createCompositionHolder() {
+        return new CompositionHolder(interfaceService.getSkin(), new SourceImage(model.pixmap), model);
+    }
+
     @LmlAction("editPatchGrid") void editPatchGrid() {
-        compositionHolder.editPatchGrid();
+        compositionHolder.activatePatchGrid();
     }
 
     @LmlAction("editContentGrid") void editContentGrid() {
-        compositionHolder.editContentGird();
+        compositionHolder.activateContentGird();
     }
 
     @LmlAction("hide") void hide() {
@@ -117,8 +107,6 @@ public class NinePatchEditorDialog implements ActionContainer {
             model.dispose();
             model = null;
         }
-
-        if (imageFile.exists());
 
         try {
             model = new NinePatchEditorModel(imageFile);

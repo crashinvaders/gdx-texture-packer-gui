@@ -8,18 +8,33 @@
         closeonescape="true"
         resizable="true">
     <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
-        <container grow="true" minwidth="600" minheight="400" padbottom="4" clip="true" fill="true">
-            <stack id="canvasStack"/>
-        </container>
-        <table onecolumn="true">
-            <buttongroup>
-                <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
-                <actor width="16"/>
-                <visradiobutton text="@ninePatchContent" change="editContentGrid"/>
-            </buttongroup>
+        <vissplitpane grow="true" minwidth="600" minheight="400" padbottom="4">
 
-            <checkbox id="chbMatchContent" text="@ninePatchKeepContentWithin" padtop="4" change="onMatchContentChanged"/>
-        </table>
+            <!--LEFT | Editor-->
+            <table onecolumn="true">
+                <container clip="true" fill="true" grow="true">
+                    <stack>
+                        <image tiled="custom/transparent-light"/>
+                        <:actor id="compositionHolder" method="createCompositionHolder"/>
+                    </stack>
+                </container>
+                <table onecolumn="true" growx="true">
+                    <buttongroup>
+                        <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
+                        <actor width="16"/>
+                        <visradiobutton text="@ninePatchContent" change="editContentGrid"/>
+                    </buttongroup>
+
+                    <checkbox id="chbMatchContent" text="@ninePatchKeepContentWithin" padtop="4" change="onMatchContentChanged"/>
+                </table>
+            </table>
+
+            <!--RIGHT | Preview-->
+            <container fill="true">
+                <image tiled="custom/transparent-light"/>
+            </container>
+
+        </vissplitpane>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
             <textbutton text="@save" change="confirmResult"/>
             <textbutton text="@cancel" change="hide"/>

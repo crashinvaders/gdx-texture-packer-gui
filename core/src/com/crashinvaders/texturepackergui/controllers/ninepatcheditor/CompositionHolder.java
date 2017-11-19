@@ -72,16 +72,16 @@ class CompositionHolder extends WidgetGroup {
         addListener(new PanListener());
         addListener(new ZoomListener());
 
-        editPatchGrid();
+        activatePatchGrid();
     }
 
-    public void editPatchGrid() {
+    public void activatePatchGrid() {
         contentGrid.setDisabled(true);
         patchGrid.setDisabled(false);
         patchGrid.toFront();
     }
 
-    public void editContentGird() {
+    public void activateContentGird() {
         patchGrid.setDisabled(true);
         contentGrid.setDisabled(false);
         contentGrid.toFront();
