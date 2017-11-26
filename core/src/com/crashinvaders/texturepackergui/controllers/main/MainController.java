@@ -24,6 +24,8 @@ import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileType
 import com.crashinvaders.texturepackergui.controllers.main.filetype.KtxFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.PngFileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.services.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.services.model.ModelService;
@@ -74,6 +76,8 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
+    @Inject NinePatchEditorDialog ninePatchEditorDialog;
+
     @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
@@ -155,6 +159,23 @@ public class MainController implements ActionContainer, ViewResizer {
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
         updateFileType();
+
+        //TODO remove
+        {
+            Gdx.app.postRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    ninePatchEditorDialog.setImageFile(Gdx.files.absolute("C:/Projects/libgdx/flippyhex/resources/battle/card-base.png"));
+                    ninePatchEditorDialog.setResultListener(new NinePatchEditorDialog.ResultListener() {
+                        @Override
+                        public void onResult(NinePatchEditorModel model) {
+                            System.out.println("MainController.onResult");
+                        }
+                    });
+                    interfaceService.showDialog(ninePatchEditorDialog.getClass());
+                }
+            });
+        }
     }
 
     @Destroy

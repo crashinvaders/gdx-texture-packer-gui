@@ -22,16 +22,16 @@
                 <table onecolumn="true" growx="true" padtop="4">
                     <table padtop="4" padright="4">
                         <image style="custom/ic-pad-left" scaling="none" padright="2"/>
-                        <intspinner id="spnValueLeft" value="0" width="48" change="updateLeftPadFromView"/>
+                        <intspinner id="spnValueLeft" value="0" min="0" max="999999" width="48" change="updateLeftPadFromView"/>
                         <actor width="8"/>
                         <image style="custom/ic-pad-right" scaling="none" padright="2"/>
-                        <intspinner id="spnValueRight" value="0" width="48" change="updateRightPadFromView"/>
+                        <intspinner id="spnValueRight" value="0" min="0" max="999999" width="48" change="updateRightPadFromView"/>
                         <actor width="8"/>
                         <image style="custom/ic-pad-bottom" scaling="none" padright="2"/>
-                        <intspinner id="spnValueBottom" value="0" width="48" change="updateBottomPadFromView"/>
+                        <intspinner id="spnValueBottom" value="0" min="0" max="999999" width="48" change="updateBottomPadFromView"/>
                         <actor width="8"/>
                         <image style="custom/ic-pad-top" scaling="none" padright="2"/>
-                        <intspinner id="spnValueTop" value="0" width="48" change="updateTopPadFromView"/>
+                        <intspinner id="spnValueTop" value="0" min="0" max="999999" width="48" change="updateTopPadFromView"/>
                     </table>
                     <buttongroup padtop="4">
                         <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
@@ -61,11 +61,11 @@
                 <table growx="true" padleft="8" padtop="4">
                     <label text="X" padright="4"/>
                     <label id="lblPreviewScaleX" style="small-grey" width="32" text="100%" padright="4"/>
-                    <visslider id="sbPreviewScaleX" growx="true" min="0.5" max="4" value="1" step="0.1"/>
+                    <visslider id="sbPreviewScaleX" growx="true" min="0.5" max="4" value="1" step="0.05"/>
                     <:row padtop="2"/>
                     <label text="Y" padright="4"/>
                     <label id="lblPreviewScaleY" style="small-grey" width="32" text="100%" padright="4"/>
-                    <visslider id="sbPreviewScaleY" growx="true" min="0.5" max="4" value="1" step="0.1"/>
+                    <visslider id="sbPreviewScaleY" growx="true" min="0.5" max="4" value="1" step="0.05"/>
                 </table>
 
                 <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true" padtop="4">

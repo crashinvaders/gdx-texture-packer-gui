@@ -1,6 +1,7 @@
 [LATEST]
 - Support for CJK fonts (downloadable extension module)
 - Traditional Chinese localization, thanks to Tokenyet
+- 9-patch editor improvements (preview pane, value number fields)
 
 [4.5.0]
 - Page image file type configuration. ETC(KTX) file format support.
