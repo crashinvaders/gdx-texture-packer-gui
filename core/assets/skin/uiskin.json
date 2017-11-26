@@ -67,7 +67,8 @@ com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
 	list: {vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal },
 	default: {background: border, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal },
 	custom: {background: listBorder, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal },
-	text-output: {background: textfield, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
+	text-output: {background: textfield, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal },
+	minimal: {}
 },
 com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
 	default: {background: default-select, backgroundOver: default-select-over, scrollStyle: default, listStyle: {font: default-font, selection: padded-list-selection, background: select-box-list-bg}, font: default-font, fontColor: white, disabledFontColor: grey },

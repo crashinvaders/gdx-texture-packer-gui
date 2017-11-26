@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Disposable;
 import com.crashinvaders.texturepackergui.services.model.InputFile;
@@ -14,6 +15,7 @@ public class NinePatchEditorModel implements Disposable {
     private static final int BOTTOM = 3;
 
     public final Pixmap pixmap;
+    public final Texture texture;
     public final ZoomModel zoomModel = new ZoomModel();
     public final GridValues patchValues = new GridValues();
     public final GridValues contentValues = new GridValues();
@@ -24,10 +26,12 @@ public class NinePatchEditorModel implements Disposable {
         } else {
             this.pixmap = new Pixmap(imageFile);
         }
+        texture = new Texture(pixmap);
     }
 
     @Override
     public void dispose() {
+        texture.dispose();
         pixmap.dispose();
     }
 

@@ -19,6 +19,8 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addTagProvider(new ShrinkContainerLmlTag.TagProvider(), "shrinkContainer");
         addTagProvider(new ExpandEditTextButton.TagProvider(), "expandEditTextButton");
         addTagProvider(new BusyBarLmlTag.TagProvider(), "busybar");
+        addTagProvider(new TransformScalableWrapperLmlTag.TagProvider(), "transformScalable");
+        addTagProvider(new ScalarScalableWrapperLmlTag.TagProvider(), "scalarScalable");
     }
 
     @Override

@@ -18,7 +18,7 @@
                         <:actor id="compositionHolder" method="createCompositionHolder"/>
                     </stack>
                 </container>
-                <table onecolumn="true" growx="true">
+                <table onecolumn="true" growx="true" padtop="4">
                     <buttongroup>
                         <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
                         <actor width="16"/>
@@ -30,9 +30,31 @@
             </table>
 
             <!--RIGHT | Preview-->
-            <container fill="true">
-                <image tiled="custom/transparent-light"/>
-            </container>
+            <table onecolumn="true">
+                <stack grow="true">
+                    <image id="imgPreviewBackground" tiled="custom/transparent-light"/>
+                    <visscrollpane style="minimal">
+                        <container pad="8">
+                                <container>
+                                    <transformscalable id="previewTransform">
+                                        <scalarscalable id="previewScalar">
+                                            <image id="previewImage"/>
+                                        </scalarscalable>
+                                    </transformscalable>
+                                </container>
+                        </container>
+                    </visscrollpane>
+                </stack>
+                <table growx="true" padleft="4" padtop="4">
+                    <label text="X" padright="4"/>
+                    <label id="lblPreviewScaleX" style="small-grey" width="32" text="100%" padright="4"/>
+                    <visslider id="sbPreviewScaleX" growx="true" min="0.5" max="4" value="1" step="0.1"/>
+                    <:row padtop="2"/>
+                    <label text="Y" padright="4"/>
+                    <label id="lblPreviewScaleY" style="small-grey" width="32" text="100%" padright="4"/>
+                    <visslider id="sbPreviewScaleY" growx="true" min="0.5" max="4" value="1" step="0.1"/>
+                </table>
+            </table>
 
         </vissplitpane>
         <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">
