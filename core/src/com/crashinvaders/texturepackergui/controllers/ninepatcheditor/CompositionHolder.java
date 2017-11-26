@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
+import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 
 class CompositionHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;
@@ -201,6 +202,10 @@ class CompositionHolder extends WidgetGroup {
             float preHeight = sourceImage.getPrefHeight();
             float xNormalized = x < sourceImage.getX() ? 0f : x > sourceImage.getX()+preWidth ? 1f : (x- sourceImage.getX())/preWidth;
             float yNormalized = y < sourceImage.getY() ? 0f : y > sourceImage.getY()+preHeight ? 1f : (y- sourceImage.getY())/preHeight;
+
+            if (!Scene2dUtils.containsLocal(CompositionHolder.this, x, y)) {
+                xNormalized = yNormalized = 0.5f;
+            }
 
             int zoomIndex = model.zoomModel.getIndex();
             model.zoomModel.setIndex(zoomIndex - amount);

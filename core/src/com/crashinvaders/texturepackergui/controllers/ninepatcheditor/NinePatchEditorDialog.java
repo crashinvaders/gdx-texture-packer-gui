@@ -8,15 +8,18 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.crashinvaders.common.MutableInt;
 import com.crashinvaders.common.scene2d.ScalarScalableWrapper;
 import com.crashinvaders.common.scene2d.TransformScalableWrapper;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
@@ -32,11 +35,12 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisSlider;
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
+import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
 @ViewDialog("lml/ninepatcheditor/dialogNinePatchEditor.lml")
 public class NinePatchEditorDialog implements ActionContainer {
     private static final String TAG = NinePatchEditorDialog.class.getSimpleName();
-    private static final float PREVIEW_UPDATE_THRESHOLD = 1f;
 
     @Inject InterfaceService interfaceService;
     @Inject ErrorDialogController errorDialogController;
@@ -46,6 +50,7 @@ public class NinePatchEditorDialog implements ActionContainer {
     @LmlActor("chbMatchContent") VisCheckBox chbMatchContent;
     @LmlActor("compositionHolder") CompositionHolder compositionHolder;
     @LmlActor("imgPreviewBackground") Image imgPreviewBackground;
+    @LmlActor("spPreview") ScrollPane spPreview;
     @LmlActor("previewTransform") TransformScalableWrapper previewTransform;
     @LmlActor("previewScalar") ScalarScalableWrapper previewScalar;
     @LmlActor("previewImage") Image previewImage;
@@ -53,9 +58,15 @@ public class NinePatchEditorDialog implements ActionContainer {
     @LmlActor("sbPreviewScaleY") Slider sbPreviewScaleY;
     @LmlActor("lblPreviewScaleX") Label lblPreviewScaleX;
     @LmlActor("lblPreviewScaleY") Label lblPreviewScaleY;
+    @LmlActor("spnValueLeft") Spinner spnValueLeft;
+    @LmlActor("spnValueRight") Spinner spnValueRight;
+    @LmlActor("spnValueBottom") Spinner spnValueBottom;
+    @LmlActor("spnValueTop") Spinner spnValueTop;
 
     private NinePatchEditorModel model;
     private ResultListener resultListener;
+
+    private boolean contentEditMode = false;
 
     @LmlAfter void initView() {
         if (model == null) {
@@ -86,15 +97,7 @@ public class NinePatchEditorDialog implements ActionContainer {
 
         //TODO remove
         updatePreviewNinePatch();
-//        previewScalar.setScale(0.5f, 2f);
-//        previewScalar.addAction(Actions.repeat(-1, Actions.sequence(
-//                Actions.scaleTo(2f, 0.5f, 2f, Interpolation.pow4),
-//                Actions.scaleTo(0.5f, 2f, 2f, Interpolation.pow4)
-//        )));
-//        previewTransform.addAction(Actions.repeat(-1, Actions.sequence(
-//                Actions.scaleTo(3f, 3f, 3f, Interpolation.pow4),
-//                Actions.scaleTo(1f, 1f, 3f, Interpolation.pow4)
-//        )));
+        updatePadValuesFromModel();
         imgPreviewBackground.setColor(modelService.getProject().getPreviewBackgroundColor());
 
         model.zoomModel.addListener(new ZoomModel.ChangeListener() {
@@ -119,6 +122,31 @@ public class NinePatchEditorDialog implements ActionContainer {
                 lblPreviewScaleY.setText(String.format("%.0f%%", value*100f));
             }
         });
+        spPreview.addListener(new InputListener() {
+            @Override
+            public boolean scrolled(InputEvent event, float x, float y, int amount) {
+                int zoomIndex = model.zoomModel.getIndex();
+                model.zoomModel.setIndex(zoomIndex - amount);
+                return true;
+            }
+        });
+
+        model.contentValues.addListener(new GridValues.ChangeListener() {
+            @Override
+            public void onValuesChanged(GridValues values) {
+                if (contentEditMode) {
+                    updatePadValuesFromModel();
+                }
+            }
+        });
+        model.patchValues.addListener(new GridValues.ChangeListener() {
+            @Override
+            public void onValuesChanged(GridValues values) {
+                if (!contentEditMode) {
+                    updatePadValuesFromModel();
+                }
+            }
+        });
     }
 
     @Destroy void destroy() {
@@ -134,10 +162,14 @@ public class NinePatchEditorDialog implements ActionContainer {
 
     @LmlAction("editPatchGrid") void editPatchGrid() {
         compositionHolder.activatePatchGrid();
+        contentEditMode = false;
+        updatePadValuesFromModel();
     }
 
     @LmlAction("editContentGrid") void editContentGrid() {
         compositionHolder.activateContentGird();
+        contentEditMode = true;
+        updatePadValuesFromModel();
     }
 
     @LmlAction("hide") void hide() {
@@ -164,6 +196,60 @@ public class NinePatchEditorDialog implements ActionContainer {
         }
     }
 
+    @LmlAction("updatePadValuesFromView") void updatePadValuesFromView() {
+        GridValues gridValues = getActiveGridValues();
+        gridValues.set(
+                ((IntSpinnerModel) spnValueLeft.getModel()).getValue(),
+                ((IntSpinnerModel) spnValueRight.getModel()).getValue(),
+                ((IntSpinnerModel) spnValueBottom.getModel()).getValue(),
+                ((IntSpinnerModel) spnValueTop.getModel()).getValue());
+    }
+
+    @LmlAction("updateLeftPadFromView") void updateLeftPadFromView(Spinner spinner) {
+        GridValues gridValues = getActiveGridValues();
+        IntSpinnerModel spinnerModel = (IntSpinnerModel) spinner.getModel();
+
+        int maxValue = model.texture.getWidth() - gridValues.right.get() - 1;
+        if (spinnerModel.getValue() > maxValue) {
+            spinnerModel.setValue(maxValue);
+            return;
+        }
+        gridValues.left.set(spinnerModel.getValue());
+    }
+    @LmlAction("updateRightPadFromView") void updateRightPadFromView(Spinner spinner) {
+        GridValues gridValues = getActiveGridValues();
+        IntSpinnerModel spinnerModel = (IntSpinnerModel) spinner.getModel();
+
+        int maxValue = model.texture.getWidth() - gridValues.left.get() - 1;
+        if (spinnerModel.getValue() > maxValue) {
+            spinnerModel.setValue(maxValue);
+            return;
+        }
+        gridValues.right.set(spinnerModel.getValue());
+    }
+    @LmlAction("updateBottomPadFromView") void updateBottomPadFromView(Spinner spinner) {
+        GridValues gridValues = getActiveGridValues();
+        IntSpinnerModel spinnerModel = (IntSpinnerModel) spinner.getModel();
+
+        int maxValue = model.texture.getHeight() - gridValues.top.get() - 1;
+        if (spinnerModel.getValue() > maxValue) {
+            spinnerModel.setValue(maxValue);
+            return;
+        }
+        gridValues.bottom.set(spinnerModel.getValue());
+    }
+    @LmlAction("updateTopPadFromView") void updateTopPadFromView(Spinner spinner) {
+        GridValues gridValues = getActiveGridValues();
+        IntSpinnerModel spinnerModel = (IntSpinnerModel) spinner.getModel();
+
+        int maxValue = model.texture.getHeight() - gridValues.bottom.get() - 1;
+        if (spinnerModel.getValue() > maxValue) {
+            spinnerModel.setValue(maxValue);
+            return;
+        }
+        gridValues.top.set(spinnerModel.getValue());
+    }
+
     public NinePatchEditorModel getModel() {
         return model;
     }
@@ -185,6 +271,31 @@ public class NinePatchEditorDialog implements ActionContainer {
         this.resultListener = resultListener;
     }
 
+    private void updatePreviewNinePatch() {
+        System.out.println("NinePatchEditorDialog.updatePreviewNinePatch");
+        int[] patches = model.readPatchValues();
+        NinePatch ninePatch = new NinePatch(model.texture, patches[0], patches[1], patches[2], patches[3]);
+        previewImage.setDrawable(new NinePatchDrawable(ninePatch));
+    }
+
+    private GridValues getActiveGridValues() {
+        GridValues gridValues;
+        if (contentEditMode) {
+            gridValues = model.contentValues;
+        } else {
+            gridValues = model.patchValues;
+        }
+        return gridValues;
+    }
+
+    private void updatePadValuesFromModel() {
+        GridValues gridValues = getActiveGridValues();
+        ((IntSpinnerModel) spnValueLeft.getModel()).setValue(gridValues.left.get());
+        ((IntSpinnerModel) spnValueRight.getModel()).setValue(gridValues.right.get());
+        ((IntSpinnerModel) spnValueBottom.getModel()).setValue(gridValues.bottom.get());
+        ((IntSpinnerModel) spnValueTop.getModel()).setValue(gridValues.top.get());
+    }
+
     private void showErrorAndHide(final Exception exception) {
         Gdx.app.error(TAG, "", exception);
         Gdx.app.postRunnable(new Runnable() {
@@ -200,44 +311,8 @@ public class NinePatchEditorDialog implements ActionContainer {
         });
     }
 
-    private void updatePreviewNinePatch() {
-        System.out.println("NinePatchEditorDialog.updatePreviewNinePatch");
-        int[] patches = model.readPatchValues();
-        NinePatch ninePatch = new NinePatch(model.texture, patches[0], patches[1], patches[2], patches[3]);
-        previewImage.setDrawable(new NinePatchDrawable(ninePatch));
-    }
-
     public interface ResultListener {
         /** Called only if user confirmed changes (closed dialog through "OK" button) */
         void onResult(NinePatchEditorModel model);
     }
-
-//    private class PreviewUpdateAction extends Action {
-//        private final float threshold;
-//        private float counter = 0f;
-//        private boolean triggered = false;
-//
-//        public PreviewUpdateAction(float threshold) {
-//            this.threshold = threshold;
-//        }
-//
-//        @Override
-//        public void restart() {
-//            super.restart();
-//            counter = 0f;
-//            triggered = false;
-//        }
-//
-//        @Override
-//        public boolean act(float delta) {
-//            if (triggered) return true;
-//
-//            counter += delta;
-//            triggered = counter > threshold;
-//            if (triggered) {
-//                updatePreviewNinePatch();
-//            }
-//            return triggered;
-//        }
-//    }
 }

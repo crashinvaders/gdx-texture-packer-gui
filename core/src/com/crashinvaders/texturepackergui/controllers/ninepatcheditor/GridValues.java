@@ -49,6 +49,13 @@ public class GridValues implements MutableInt.ChangeListener, Pool.Poolable {
         }
     }
 
+    public void set(int left, int right, int bottom, int top) {
+        this.left.set(left);
+        this.right.set(right);
+        this.bottom.set(bottom);
+        this.top.set(top);
+    }
+
     @Override
     public void onValueChanged(MutableInt value) {
         if (programmaticChangeEvents && listeners.size > 0) {

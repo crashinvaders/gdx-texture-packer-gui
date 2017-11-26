@@ -157,4 +157,8 @@ public class Scene2dUtils {
             handledClass = handledClass.getSuperclass();
         }
     }
+
+    public static boolean containsLocal(Actor actor, float x, float y) {
+        return x > 0f && y > 0f && x < actor.getWidth() && y < actor.getHeight();
+    }
 }
