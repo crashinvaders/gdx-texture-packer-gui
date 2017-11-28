@@ -23,7 +23,7 @@ import com.crashinvaders.common.MutableInt;
 import com.crashinvaders.common.scene2d.ScalarScalableWrapper;
 import com.crashinvaders.common.scene2d.TransformScalableWrapper;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;

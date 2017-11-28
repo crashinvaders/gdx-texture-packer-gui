@@ -3,7 +3,7 @@ package com.crashinvaders.texturepackergui.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.crashinvaders.texturepackergui.events.TinifyServicePropertyChangedEvent;
-import com.crashinvaders.texturepackergui.services.TinifyService;
+import com.crashinvaders.texturepackergui.controllers.TinifyService;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;

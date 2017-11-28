@@ -3,7 +3,7 @@ package com.crashinvaders.texturepackergui.utils.packprocessing;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.ThreadPrintStream;
 import org.apache.commons.io.IOUtils;

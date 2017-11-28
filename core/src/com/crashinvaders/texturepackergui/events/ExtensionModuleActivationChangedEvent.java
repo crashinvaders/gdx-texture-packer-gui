@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.extensionmodules.ExtensionModuleController;
+import com.crashinvaders.texturepackergui.controllers.extensionmodules.ExtensionModuleController;
 
 public class ExtensionModuleActivationChangedEvent {
     private final ExtensionModuleController moduleController;

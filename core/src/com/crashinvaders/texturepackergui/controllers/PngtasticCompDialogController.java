@@ -1,14 +1,14 @@
 package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
-import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.KtxFileTypeModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.ModelService;
+import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.compression.PngCompressionModel;
+import com.crashinvaders.texturepackergui.controllers.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.KtxFileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.lml.annotation.LmlAction;

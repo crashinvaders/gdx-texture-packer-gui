@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.services.model.EtcCompressionType;
-import com.crashinvaders.texturepackergui.services.model.FileTypeType;
-import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.EtcCompressionType;
+import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
+import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
 import com.github.czyzby.kiwi.util.gdx.reflection.Reflection;
 
 public class WidgetData {

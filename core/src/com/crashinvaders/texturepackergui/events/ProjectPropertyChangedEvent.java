@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 
 public class ProjectPropertyChangedEvent {
 

@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.kotcrab.vis.ui.widget.ListView;

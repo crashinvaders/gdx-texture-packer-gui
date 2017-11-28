@@ -2,11 +2,11 @@ package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
-import com.crashinvaders.texturepackergui.services.model.compression.PngtasticCompressionModel;
-import com.crashinvaders.texturepackergui.services.model.filetype.PngFileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.PackModel;
+import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.googlecode.pngtastic.core.PngImage;

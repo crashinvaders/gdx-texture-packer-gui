@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
-import com.crashinvaders.texturepackergui.config.filechooser.AppIconProvider;
+import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Component;

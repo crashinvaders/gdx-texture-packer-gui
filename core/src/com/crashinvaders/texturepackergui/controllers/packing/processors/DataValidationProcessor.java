@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.PackModel;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.github.czyzby.kiwi.util.common.Strings;

@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.model.ModelService;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.ModelService;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 
 public class ProjectInitializedEvent {
 

@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.model.filetype.FileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
 
 public class FileTypePropertyChangedEvent {
 

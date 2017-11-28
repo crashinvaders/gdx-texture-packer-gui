@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.model.PackModel;
+import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 
 /**
  * Usually fires when texture packing was successful

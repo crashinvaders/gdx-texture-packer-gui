@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
-import com.crashinvaders.texturepackergui.services.model.InputFile;
+import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 
 import java.util.Comparator;
 

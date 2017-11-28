@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.InputFile;
+import com.crashinvaders.texturepackergui.controllers.model.PackModel;
+import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 
 public class PackPropertyChangedEvent {
 

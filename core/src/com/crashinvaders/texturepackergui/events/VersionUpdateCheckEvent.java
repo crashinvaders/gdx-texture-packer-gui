@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.crashinvaders.texturepackergui.services.versioncheck.VersionData;
+import com.crashinvaders.texturepackergui.controllers.versioncheck.VersionData;
 
 public class VersionUpdateCheckEvent {
 

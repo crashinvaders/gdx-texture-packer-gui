@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.events;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 
 public class ProjectSerializerEvent {
 

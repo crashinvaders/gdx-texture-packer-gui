@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.crashinvaders.common.Timer;
-import com.crashinvaders.texturepackergui.services.model.ModelService;
+import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;

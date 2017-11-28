@@ -2,8 +2,8 @@ package com.crashinvaders.texturepackergui.utils.packprocessing;
 
 import com.badlogic.gdx.tools.texturepacker.PageFileWriter;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.crashinvaders.texturepackergui.services.model.PackModel;
-import com.crashinvaders.texturepackergui.services.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.model.PackModel;
+import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 
 public class PackProcessingNode {
     /** Compression result percents */
