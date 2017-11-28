@@ -6,7 +6,7 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs += ['resources/']
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
-project.ext.assetsDir = new File("../core/assets");
+project.ext.assetsDir = new File("../assets");
 project.ext.distOutputDir = "../distribution/output"
 project.ext.distFileName = "$project.ext.appName-$project.ext.version"
 project.ext.nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
@@ -68,7 +68,7 @@ nsisInstaller.dependsOn zipRelease
 eclipse {
     project {
         name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/core/assets'
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/assets'
     }
 }
 

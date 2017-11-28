@@ -1,6 +1,6 @@
 name=uiskin
 filename=
-output=../core/assets/skin
+output=../assets/skin
 
 alias=true
 alphaThreshold=0
@@ -10,14 +10,11 @@ edgePadding=true
 fast=false
 filterMag=Nearest
 filterMin=Nearest
-format=RGBA8888
 ignoreBlankImages=true
-jpegQuality=0.9
 maxHeight=2048
 maxWidth=2048
 minHeight=16
 minWidth=16
-outputFormat=png
 paddingX=2
 paddingY=2
 pot=true
@@ -27,18 +24,19 @@ stripWhitespaceY=false
 wrapX=ClampToEdge
 wrapY=ClampToEdge
 premultiplyAlpha=false
-combineSubdirectories=true
 grid=false
 square=false
 bleed=true
-flattenPaths=false
 limitMemory=true
+useIndexes=true
 
 scaleFactors=[{suffix:"",factor:1}]
-inputFiles=[{path:uiskin/images,type:Input,dirFilePrefix:null,regionName:null},{path:uiskin/images/custom,type:Input,dirFilePrefix:custom/,regionName:null}]
+inputFiles=[{path:uiskin/images,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:uiskin/images/custom,type:Input,dirFilePrefix:custom/,recursive:false,flattenPaths:false}]
 
 
 -PROJ-
 
-version=4.4.0
+version=4.5.0
+fileTypeType=png
+fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=808080ff
