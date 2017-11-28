@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.config.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.controllers.FileDragDropController;
-import com.crashinvaders.texturepackergui.controllers.ExtensionModulesDialogController;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.FileTypeController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileTypeController;
@@ -105,6 +105,9 @@ public class MainController implements ActionContainer, ViewResizer {
 
     private ToastManager toastManager;
 
+    private Tooltip outputDirTooltip;
+    private boolean outputDirTooltipDisplaysPath = false;
+
     /** Indicates that view is shown and ready to be used in code */
     private boolean initialized;
 
@@ -148,6 +151,12 @@ public class MainController implements ActionContainer, ViewResizer {
             float splitValue = prefs.getFloat(PREF_KEY_PACK_LIST_SPLIT, 0f);
             packListSplitPane.setSplitAmount(splitValue);
         }
+
+        outputDirTooltip = new Tooltip();
+        outputDirTooltip.setAppearDelayTime(0.25f);
+        outputDirTooltip.setTouchable(Touchable.disabled);
+        outputDirTooltip.setText(getString("packGeneralTtOutputDir"));
+        outputDirTooltip.setTarget(actorsPacks.edtOutputDir);
 
         initialized = true;
 
@@ -331,6 +340,23 @@ public class MainController implements ActionContainer, ViewResizer {
                 pack.setOutputDir(text);
             }
         });
+
+        // Tooltip update
+        boolean textFit = Scene2dUtils.isTextFitTextField(textField, text);
+        if (textFit && outputDirTooltipDisplaysPath) {
+            // Text is fully fit, display regular tooltip
+            outputDirTooltipDisplaysPath = false;
+            outputDirTooltip.setText(getString("packGeneralTtOutputDir"));
+
+        } else if (!textFit && !outputDirTooltipDisplaysPath){
+            // Text overflows TextField's content, change text to full output path
+            outputDirTooltipDisplaysPath = true;
+            outputDirTooltip.setText(text);
+        }
+        if (outputDirTooltipDisplaysPath) {
+            // If user edits overflowed text field, update tooltip's content
+            outputDirTooltip.setText(text);
+        }
     }
 
     @LmlAction("onPackFilenameTextChanged") void onPackFilenameTextChanged(VisTextField textField) {

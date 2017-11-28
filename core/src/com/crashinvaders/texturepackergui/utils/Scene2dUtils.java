@@ -1,22 +1,23 @@
 package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.crashinvaders.common.scene2d.InjectActor;
 import com.kotcrab.vis.ui.util.adapter.ItemAdapter;
 import com.kotcrab.vis.ui.widget.ListView;
+import com.kotcrab.vis.ui.widget.VisTextField;
 
 @SuppressWarnings("WeakerAccess")
 public class Scene2dUtils {
@@ -70,6 +71,23 @@ public class Scene2dUtils {
         ItemAdapter adapter = (ItemAdapter) listView.getAdapter();
         Actor itemView = adapter.getView(item);
         listView.getScrollPane().scrollTo(0, itemView.getY(), 0, itemView.getHeight());
+    }
+
+    /** Checks if text could fully fit the specified width. */
+    public static boolean isTextFitWidth(BitmapFont font, float width, String text) {
+        glyphLayout.setText(font, text);
+        return glyphLayout.width <= width;
+    }
+
+    /** Checks if the text could fit the current textField's width. */
+    public static boolean isTextFitTextField(VisTextField textField, String text) {
+        float availableWidth = textField.getWidth();
+        Drawable fieldBg = textField.getStyle().background;
+        if (fieldBg != null) {
+            availableWidth = availableWidth - fieldBg.getLeftWidth() - fieldBg.getRightWidth();
+        }
+        BitmapFont font = textField.getStyle().font;
+        return isTextFitWidth(font, availableWidth, text);
     }
 
     public static String ellipsisFilePath(String filePath, BitmapFont font, float maxWidth) {

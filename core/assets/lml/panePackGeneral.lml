@@ -5,12 +5,15 @@
 
     <table tablealign="top" tablepad="8" defaultpadbottom="4" defaultpadright="4">
 
-        <label align="right">@packGeneralOutputDir</label>
+        <label
+                align="right"
+                text="@packGeneralOutputDir"
+                tooltip="@packGeneralTtOutputDir"/>
+        <!--Tooltip will be assigned dynamically from the code-->
         <textfield
                 id="edtOutputDir"
                 minwidth="24"
                 growx="true"
-                tooltip="@packGeneralTtOutputDir"
                 onchange="onOutputDirTextChanged"/>
         <imagebutton
                 image="custom/ic-folder-pick"
@@ -23,7 +26,10 @@
 
         <:row/>
 
-        <label align="right">@packGeneralFileName</label>
+        <label
+                align="right"
+                text="@packGeneralFileName"
+                tooltip="@packGeneralTtFileName"/>
         <textfield
                 id="edtFileName"
                 minwidth="24"
