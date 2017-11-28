@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.events;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.kotcrab.vis.ui.widget.toast.ToastTable;
+import com.crashinvaders.common.scene2d.visui.ToastTable;
 
 public class ShowToastEvent {
     public static final float DURATION_SHORT = 4f;

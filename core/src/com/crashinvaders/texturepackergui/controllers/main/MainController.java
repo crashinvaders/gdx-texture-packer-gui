@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -52,7 +53,7 @@ import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.util.ToastManager;
+import com.crashinvaders.common.scene2d.visui.ToastManager;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
@@ -83,6 +84,7 @@ public class MainController implements ActionContainer, ViewResizer {
 
     @ViewStage Stage stage;
 
+    @LmlActor("toastHostGroup") Group toastHostGroup;
     @LmlActor("canvas") Canvas canvas;
     @LmlActor("packListSplitPane") VisSplitPane packListSplitPane;
 
@@ -138,7 +140,7 @@ public class MainController implements ActionContainer, ViewResizer {
             }
         });
 
-        toastManager = new ToastManager(getStage());
+        toastManager = new ToastManager(toastHostGroup);
         toastManager.setAlignment(Align.bottomRight);
 
         canvasController.initialize(canvas);

@@ -7,6 +7,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.crashinvaders.common.async.JobTask;
 import com.crashinvaders.common.async.JobTaskQueue;
+import com.crashinvaders.common.scene2d.visui.Toast;
+import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.crashinvaders.texturepackergui.controllers.ModalTaskDialogController;
@@ -20,8 +22,6 @@ import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.config.AutumnActionPriority;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
-import com.kotcrab.vis.ui.widget.toast.Toast;
-import com.kotcrab.vis.ui.widget.toast.ToastTable;
 
 @Component
 public class ExtensionModuleManagerService {

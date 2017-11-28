@@ -10,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.scene2d.visui.Toast;
+import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.packing.processors.*;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
@@ -42,8 +44,6 @@ import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.adapter.ListAdapter;
 import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.toast.Toast;
-import com.kotcrab.vis.ui.widget.toast.ToastTable;
 
 @ViewDialog(id = "dialog_packing", value = "lml/dialogPacking.lml")
 public class PackDialogController implements ActionContainer {

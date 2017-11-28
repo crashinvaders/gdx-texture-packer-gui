@@ -66,5 +66,7 @@
 
     </vistable>
 
+    <group id="toastHostGroup" touchable="childrenOnly"/>
+
     <:import path="lml/drandropOverlay.lml"/>
 </stack>

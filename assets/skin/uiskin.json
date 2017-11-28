@@ -246,6 +246,10 @@ com.crashinvaders.texturepackergui.views.ExpandEditTextButton$Style: {
 },
 com.crashinvaders.texturepackergui.views.BusyBar$Style: {
 	default: {pattern: custom/busy-bar-pattern8, shiftSpeed: 32 }
-}
+},
+com.crashinvaders.common.scene2d.visui.Toast$ToastStyle: {
+	default: {background: tooltip-bg, closeButtonStyle: "close" },
+	dark: {background: window-border-bg, closeButtonStyle: "close-window" }
+},
 
 }

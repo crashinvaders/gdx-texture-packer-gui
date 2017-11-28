@@ -1,6 +1,6 @@
 package com.crashinvaders.texturepackergui.events;
 
-import com.kotcrab.vis.ui.widget.toast.Toast;
+import com.crashinvaders.common.scene2d.visui.Toast;
 
 public class RemoveToastEvent {
 

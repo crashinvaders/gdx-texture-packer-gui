@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.crashinvaders.common.Version;
+import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.events.VersionUpdateCheckEvent;
@@ -18,7 +19,6 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.toast.ToastTable;
 
 /** Checks if new version is available (on application launch) */
 @Component

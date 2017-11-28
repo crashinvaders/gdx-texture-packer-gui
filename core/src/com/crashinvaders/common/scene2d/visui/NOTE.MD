@@ -1,0 +1,1 @@
+This package contains modified `ToastManager` classes and should be removed after [this ticket](https://github.com/kotcrab/vis-editor/issues/279) gets resolved.
