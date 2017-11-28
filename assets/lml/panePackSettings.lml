@@ -3,7 +3,7 @@
 
 <stack grow="true">
 
-    <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false">
+    <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false" scrollcapture="true">
 
         <vistable tablealign="top" tablepad="8" onecolumn="true">
 

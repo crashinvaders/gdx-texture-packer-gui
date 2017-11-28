@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
+import com.crashinvaders.common.scene2d.ScrollFocusCaptureInputListener;
 import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 
 class CompositionHolder extends WidgetGroup {
@@ -72,6 +73,7 @@ class CompositionHolder extends WidgetGroup {
 
         addListener(new PanListener());
         addListener(new ZoomListener());
+        addListener(new ScrollFocusCaptureInputListener());
 
         activatePatchGrid();
     }
@@ -189,12 +191,6 @@ class CompositionHolder extends WidgetGroup {
     }
 
     private class ZoomListener extends InputListener {
-
-        @Override
-        public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-            getStage().setScrollFocus(CompositionHolder.this);
-        }
-
         @Override
         public boolean scrolled(InputEvent event, float x, float y, int amount) {
 

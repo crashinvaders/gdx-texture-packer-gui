@@ -163,7 +163,7 @@ public class ConfigurationController {
                         Actions.run(new Runnable() {
                             @Override
                             public void run() {
-                                App.inst().getInput().addProcessor(forController.getStage(), 0);
+                                App.inst().getInput().addProcessor(forController.getStage(), 100);
                             }
                         }));
             }

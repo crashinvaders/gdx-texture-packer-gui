@@ -40,29 +40,6 @@
                 tooltip="@packGeneralTtFileName"
                 onchange="onPackFilenameTextChanged"/>
 
-        <!--<:row/>-->
-
-        <!--<horizontalgroup growx="true" colspan="3">-->
-            <!--<textbutton text="Add input files" change="PackInputFilesController.addInputFiles"/>-->
-            <!--<textbutton text="Add ignore files" change="PackInputFilesController.addIgnoreFiles"/>-->
-            <!--<textbutton text="Delete" change="PackInputFilesController.removeSelected"/>-->
-        <!--</horizontalgroup>-->
-
-        <!--<:row padbottom="0"/>-->
-
-        <!--<listview-->
-                <!--id="lvSourceFiles"-->
-                <!--style="custom"-->
-                <!--colspan="3"-->
-                <!--padright="0"-->
-                <!--growx="true"-->
-                <!--growy="true"-->
-                <!--disabledx="true"-->
-                <!--fadescrollbars="false"-->
-                <!--overscroll="false"-->
-                <!--flickscroll="false"-->
-                <!--adapter="PackInputFilesController.createAdapter"/>-->
-
     </table>
 
     <:import path="lml/paneLockPack.lml" replace="id">paneLockPackGeneral</:import>

@@ -21,7 +21,8 @@
             disabledx="true"
             fadescrollbars="false"
             overscroll="false"
-            flickscroll="false"/>
+            flickscroll="false"
+            scrollcapture="true"/>
 
     <actor padtop="2"/>
 

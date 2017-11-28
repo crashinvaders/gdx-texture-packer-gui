@@ -12,7 +12,8 @@
             <listview
                     id="listScales"
                     adapter="$obtainListAdapter"
-                    disabledx="true">
+                    disabledx="true"
+                    scrollcapture="true">
                 <table footer="true" tablealign="right">
                     <imagebutton
                             change="createScaleRecord"

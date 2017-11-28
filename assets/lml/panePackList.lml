@@ -44,6 +44,7 @@
         <vistable grow="true" pad="4">
             <listview
                     id="lvPacks"
+                    scrollcapture="true"
                     adapter="createPacksListAdapter"
                     style="custom"
                     grow="true"

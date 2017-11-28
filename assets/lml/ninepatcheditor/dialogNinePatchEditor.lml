@@ -46,7 +46,7 @@
             <table onecolumn="true">
                 <stack grow="true">
                     <image id="imgPreviewBackground" tiled="custom/transparent-light"/>
-                    <visscrollpane id="spPreview" style="minimal">
+                    <visscrollpane id="spPreview" style="minimal" scrollcapture="true">
                         <container pad="8">
                                 <container>
                                     <transformscalable id="previewTransform">

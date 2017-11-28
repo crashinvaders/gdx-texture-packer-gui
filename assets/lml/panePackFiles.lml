@@ -50,6 +50,7 @@
                 fadescrollbars="false"
                 overscroll="false"
                 flickscroll="false"
+                scrollcapture="true"
                 adapter="PackInputFilesController.createAdapter"/>
 
     </table>
