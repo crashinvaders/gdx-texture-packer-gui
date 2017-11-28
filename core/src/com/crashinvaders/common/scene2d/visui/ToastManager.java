@@ -19,6 +19,7 @@ package com.crashinvaders.common.scene2d.visui;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -56,7 +57,10 @@ public class ToastManager {
 	}
 
 	public ToastManager(Stage stage) {
-		this.root = stage.getRoot();
+		WidgetGroup widgetGroup = new WidgetGroup();
+		widgetGroup.setFillParent(true);
+		stage.addActor(widgetGroup);
+		this.root = widgetGroup;
 	}
 
 	private ObjectMap<Toast, Timer.Task> timersTasks = new ObjectMap<Toast, Timer.Task>();
