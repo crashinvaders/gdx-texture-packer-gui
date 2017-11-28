@@ -72,6 +72,8 @@ public class App implements ApplicationListener {
 
     @Override
     public void create() {
+        Gdx.app.getGraphics().setContinuousRendering(false);
+
         Gdx.input.setInputProcessor(inputMultiplexer);
 
         initiateContext();
