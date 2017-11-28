@@ -5,7 +5,7 @@
 
     <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false" scrollcapture="true">
 
-        <vistable tablealign="top" tablepad="8" onecolumn="true">
+        <vistable tablealign="top" tablepad="6" onecolumn="true">
 
             <vistable growx="true" defaultalign="center" tablepadbottom="12">
 
@@ -15,7 +15,7 @@
                 </:macro>
 
                 <:macro alias="separator" replace="content">
-                    <actor growx="true" height="8" colspan="2" row="true"/>
+                    <actor growx="true" height="6" colspan="2" row="true"/>
                 </:macro>
 
                 <vistable growx="true" defaultpad="2" defaultminwidth="0">
