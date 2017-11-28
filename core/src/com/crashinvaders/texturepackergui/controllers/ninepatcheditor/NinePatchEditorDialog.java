@@ -272,7 +272,6 @@ public class NinePatchEditorDialog implements ActionContainer {
     }
 
     private void updatePreviewNinePatch() {
-        System.out.println("NinePatchEditorDialog.updatePreviewNinePatch");
         int[] patches = model.readPatchValues();
         NinePatch ninePatch = new NinePatch(model.texture, patches[0], patches[1], patches[2], patches[3]);
         previewImage.setDrawable(new NinePatchDrawable(ninePatch));
