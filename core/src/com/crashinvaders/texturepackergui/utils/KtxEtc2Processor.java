@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
-import com.crashinvaders.texturepackergui.utils.FileUtils;
 
 import java.io.*;
 import java.net.URI;
@@ -20,11 +19,16 @@ public class KtxEtc2Processor {
             , 0);
 
     public static void process(FileHandle input, FileHandle output, PixelFormat format) {
+        File tmpOutputFile = null;
         try {
-            final URI exe = fileAccessorEtcTools.getExecutableFile().toURI();
+            System.out.println("etc2comp has started");
 
-            System.out.println("Starting etc2comp");
-            String[] cmd = {exe.getPath(), input.file().getAbsolutePath(), "-format", format.stringParam, "-output", output.file().getAbsolutePath()};
+            // Etctool has a bug and can't properly handle output path with a spaces (at least in Windows OS).
+            // So we will render to temp file and then copy it to the destination with a java code.
+            tmpOutputFile = File.createTempFile("ktx2output", null);
+
+            final URI exe = fileAccessorEtcTools.getExecutableFile().toURI();
+            String[] cmd = {exe.getPath(), input.file().getAbsolutePath(), "-format", format.stringParam, "-output", tmpOutputFile.getAbsolutePath()};
             Process process = Runtime.getRuntime().exec(cmd);
             InputStream is = process.getInputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
@@ -36,9 +40,17 @@ public class KtxEtc2Processor {
             if (result != 0) {
                 throw new RuntimeException("Error executing etc2comp command, result code: " + result);
             }
-            System.out.println("etc2comp finished");
+            // Copy temp file to the destination
+            org.apache.commons.io.FileUtils.copyFile(tmpOutputFile, output.file());
+            tmpOutputFile.delete();
+
+            System.out.println("etc2comp hsa finished");
         } catch (IOException | InterruptedException e) {
             throw new RuntimeException("Error executing etc2comp command: ", e);
+        } finally {
+            if (tmpOutputFile != null && tmpOutputFile.exists()) {
+                tmpOutputFile.delete();
+            }
         }
     }
 
