@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.lml;
 
+import com.crashinvaders.common.scene2d.lml.AnimatedImage;
 import com.crashinvaders.texturepackergui.lml.attributes.*;
 import com.crashinvaders.texturepackergui.lml.tags.*;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
@@ -21,6 +22,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addTagProvider(new BusyBarLmlTag.TagProvider(), "busybar");
         addTagProvider(new TransformScalableWrapperLmlTag.TagProvider(), "transformScalable");
         addTagProvider(new ScalarScalableWrapperLmlTag.TagProvider(), "scalarScalable");
+        addTagProvider(new AnimatedImage.LmlTag.Provider(), "animatedImage");
     }
 
     @Override

@@ -33,6 +33,7 @@ public class BusyBar extends Widget {
     public void act(float delta) {
         super.act(delta);
         shift = (shift + delta * style.shiftSpeed) % patternDrawable.getMinWidth();
+        Gdx.graphics.requestRendering();
     }
 
     @Override
