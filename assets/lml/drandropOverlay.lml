@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE vistable SYSTEM "/lml.dtd">
 <vistable id="dragndropOverlay" background="dragndropDim" onecolumn="true" scale="1.5" padbottom="96" origin="center" transform="true" visible="false">
     <:assign key="fontScale" value="1.5"/>
 

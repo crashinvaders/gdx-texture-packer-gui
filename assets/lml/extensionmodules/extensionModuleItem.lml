@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE vistable SYSTEM "/lml.dtd">
 
 <vistable onecolumn="true" defaultgrowx="true">
     <vistable id="frameTable" width="350" onecolumn="true" defaultgrowx="true" tablepadtop="2" tablepadleft="7" tablepadright="5" tablepadbottom="5">

@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
 
 <visdialog
         id="dialog"

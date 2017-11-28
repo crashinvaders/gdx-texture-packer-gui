@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE viswindow SYSTEM "../../../lml.dtd">
+<!DOCTYPE viswindow SYSTEM "/lml.dtd">
 
 <!--
 This template could be used to create blocking dialogs for background tasks

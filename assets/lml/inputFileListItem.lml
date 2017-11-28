@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE table SYSTEM "../../../lml.dtd">
+<!DOCTYPE table SYSTEM "/lml.dtd">
 
 <table id="root" padleft="4" padright="4" transform="false"
        rightclick="PackInputFilesController.showContextMenu"

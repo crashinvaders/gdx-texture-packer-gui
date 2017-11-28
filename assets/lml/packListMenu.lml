@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE popupmenu SYSTEM "../../../lml.dtd">
+<!DOCTYPE popupmenu SYSTEM "/lml.dtd">
 
 <popupmenu>
     <menuitem

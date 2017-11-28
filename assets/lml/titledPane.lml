@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE :macro SYSTEM "../../../lml.dtd">
+<!DOCTYPE :macro SYSTEM "/lml.dtd">
 
 <:macro alias="titledpane" replace="content" id title icon>
     <vistable id="{id}" onecolumn="true" align="topleft">

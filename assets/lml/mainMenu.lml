@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE menubar SYSTEM "../../../lml.dtd">
+<!DOCTYPE menubar SYSTEM "/lml.dtd">
 
 <menubar growx="true" style="main-menu">
     <menu text="@file" style="main-menu">

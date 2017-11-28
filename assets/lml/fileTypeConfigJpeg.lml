@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE vistable SYSTEM "../../../lml.dtd">
+<!DOCTYPE vistable SYSTEM "/lml.dtd">
 
 <vistable tablealign="top" pad="4">
     <label align="right" padright="4">@gsEncoding</label>

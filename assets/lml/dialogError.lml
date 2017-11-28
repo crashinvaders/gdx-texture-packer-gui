@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE visdialog SYSTEM "../../../lml.dtd">
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
 
 <!-- Default dialog for displaying any kind of an error with stacktrace -->
 

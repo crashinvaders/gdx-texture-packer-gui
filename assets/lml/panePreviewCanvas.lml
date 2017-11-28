@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE stack SYSTEM "../../../lml.dtd">
+<!DOCTYPE stack SYSTEM "/lml.dtd">
 
 <stack grow="true">
     <canvas id="canvas"/>

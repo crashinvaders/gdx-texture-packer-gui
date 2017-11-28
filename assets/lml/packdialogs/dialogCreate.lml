@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE container SYSTEM "../../../lml.dtd">
+<!DOCTYPE container SYSTEM "/lml.dtd">
 
 <container minwidth="160">
     <table onecolumn="true">
