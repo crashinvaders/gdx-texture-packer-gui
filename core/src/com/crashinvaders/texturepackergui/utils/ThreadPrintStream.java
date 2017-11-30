@@ -10,9 +10,6 @@ import java.io.PrintStream;
  * PrintStream for each thread.
  */
 public class ThreadPrintStream extends PrintStream {
-    // Save the existing System.out
-    public static final PrintStream stdout = System.out;
-    public static final PrintStream stderr = System.err;
 
     /**
      * Changes System.out to a ThreadPrintStream which will
@@ -26,7 +23,7 @@ public class ThreadPrintStream extends PrintStream {
         System.setErr(threadStdOut);
 
         // Use the original System.out as the current thread's System.out
-        threadStdOut.setThreadOut(stdout);
+        threadStdOut.setThreadOut(System.out);
     }
 
     public static PrintStream getThreadLocalSystemOut() {
@@ -43,7 +40,7 @@ public class ThreadPrintStream extends PrintStream {
     private static final InheritableThreadLocal<PrintStream> out = new InheritableThreadLocal<PrintStream>() {
         @Override
         protected PrintStream initialValue() {
-            return stdout;
+            return System.out;
         }
     };
 

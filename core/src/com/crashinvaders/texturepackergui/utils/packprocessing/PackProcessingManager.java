@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PackProcessingManager {
 
@@ -23,6 +24,7 @@ public class PackProcessingManager {
     private final ExecutorService executorService;
 
     private boolean processing;
+    private final AtomicInteger processedCount = new AtomicInteger();
 
     public PackProcessingManager(PackProcessor processor, Listener listener) {
         this.processor = processor;
@@ -49,8 +51,6 @@ public class PackProcessingManager {
             executorService.submit(new Runnable() {
                 @Override
                 public void run() {
-                    ObjectMap metadataMap = new ObjectMap();
-
                     final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     ThreadPrintStream.setThreadLocalSystemOut(new PrintStream(outputStream));
                     try {
@@ -58,17 +58,15 @@ public class PackProcessingManager {
                         processor.processPackage(processingNode);
                         processingNode.setLog(outputStream.toString());
                         listener.onSuccess(processingNode);
-                        packProcessed(processingNode);
                     } catch (Exception e) {
                         String message = CommonUtils.fetchMessageStack(e);
                         System.err.println("[text-red]Exception occurred:[] " + message);
                         System.err.println("[text-red]Stack trace:[] ");
                         e.printStackTrace();
-
                         processingNode.setLog(outputStream.toString());
                         listener.onError(processingNode, e);
-                        packProcessed(processingNode);
                     } finally {
+                        nodeProcessed(processingNode);
                         IOUtils.closeQuietly(outputStream);
                     }
                 }
@@ -76,18 +74,26 @@ public class PackProcessingManager {
         }
     }
 
-    private void packProcessed(PackProcessingNode processingNode) {
-        synchronized (processingNodes) {
-            processingNodes.removeValue(processingNode, true);
-
-            if (processingNodes.size == 0) {
-                System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-                System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
-
-                processing = false;
-                listener.onProcessingFinished();
-            }
+    private synchronized void nodeProcessed(PackProcessingNode node) {
+        // Check if all nodes are processed
+        if (processedCount.addAndGet(1) == processingNodes.size) {
+            finishProcessing();
         }
+    }
+
+    /** Get called when all nodes are processed */
+    private void finishProcessing() {
+        // Restore system output streams
+        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
+        System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
+        // Print out each log to the output
+        for (PackProcessingNode node : processingNodes) {
+            System.out.println(node.getLog());
+        }
+        processingNodes.clear();
+        processedCount.set(0);
+        processing = false;
+        listener.onProcessingFinished();
     }
 
     private static class SyncListener implements Listener {
