@@ -29,7 +29,7 @@ public class GLSurfaceLauncher {
 		LoggerUtils.setupExternalFileOutput();
 
 		final LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
-		configuration.title = "LibGDX Texture Packer GUI";
+		configuration.title = AppConstants.APP_TITLE;
 		configuration.addIcon("icon128.png", Files.FileType.Classpath);
 		configuration.addIcon("icon32.png", Files.FileType.Classpath);
 		configuration.addIcon("icon16.png", Files.FileType.Classpath);

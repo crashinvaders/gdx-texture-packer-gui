@@ -69,18 +69,26 @@ SectionIn RO
   ;Create files association (http://nsis.sourceforge.net/FileAssoc)
   !insertmacro APP_ASSOCIATE "tpproj" "GdxTexturePacker.Project" "GDX Texture Packer project" "$INSTDIR\icon.ico,0" "Open with GDX Texture Packer" "$INSTDIR\launcher.bat $\"%1$\""
 
+  ;Delete legacy symlink files
+  IfFileExists "$SMPROGRAMS\GdxTexturePacker.lnk" DeleteOldSymlinkPrograms
+  DeleteOldSymlinkPrograms:
+    Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
+  IfFileExists "$DESKTOP\GdxTexturePacker.lnk" DeleteOldSymlinkDesktop
+  DeleteOldSymlinkDesktop:
+    Delete "$DESKTOP\GdxTexturePacker.lnk"
+
 SectionEnd
 
 Section "Start Menu shortcuts" StartMenuShortcuts
 
-    createShortCut "$SMPROGRAMS\GdxTexturePacker.lnk" "$INSTDIR\launcher_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
- 
+    createShortCut "$SMPROGRAMS\GDX Texture Packer.lnk" "$INSTDIR\launcher_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
+
 # default sec end
 SectionEnd
 
 Section "Desktop shortcuts" DesktopShortcuts
  
-    createShortCut "$DESKTOP\GdxTexturePacker.lnk" "$INSTDIR\launcher_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
+    createShortCut "$DESKTOP\GDX Texture Packer.lnk" "$INSTDIR\launcher_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
  
 # default sec end
 SectionEnd
@@ -93,8 +101,12 @@ Section "Uninstall"
   RMDir /r "$INSTDIR"
   RMDir /r "$PROFILE\.gdxtexturepackergui"
 
+  ;Legacy link files
   Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
   Delete "$DESKTOP\GdxTexturePacker.lnk"
+  ;Actual link files
+  Delete "$SMPROGRAMS\GDX Texture Packer.lnk"
+  Delete "$DESKTOP\GDX Texture Packer.lnk"
 
   DeleteRegKey /ifempty HKCU "Software\GdxTexturePacker"
 

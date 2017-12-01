@@ -32,7 +32,7 @@ public class AwtFrameLauncher {
 				LoggerUtils.setupExternalFileOutput();
 
 				final LwjglCanvasConfiguration config = new LwjglCanvasConfiguration();
-				config.title = "LibGDX Texture Packer GUI";
+				config.title = AppConstants.APP_TITLE;
 				config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
 				config.iconFilePath = "icon128.png";
 				config.width = 1024;
