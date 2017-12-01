@@ -1,4 +1,4 @@
-![](http://i.imgur.com/xoVAHZy.png)
+![](https://i.imgur.com/7aOmSQb.png)
 
 Simple utility to help you pack and manage texture atlases for [LibGDX game framework](https://github.com/libgdx/libgdx).
 It's mostly just visual wrapper over [LibGDX TexturePacker classes](https://github.com/libgdx/libgdx/wiki/Texture-packer)
