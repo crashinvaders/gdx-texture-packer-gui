@@ -53,6 +53,7 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.annotation.LmlInject;
+import com.github.czyzby.lml.parser.LmlData;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
 import com.kotcrab.vis.ui.widget.*;
@@ -184,6 +185,10 @@ public class MainController implements ActionContainer, ViewResizer {
         viewport.update(width, height, true);
 
         toastManager.resize();
+
+        LmlData lmlData = interfaceService.getParser().getData();
+        lmlData.addArgument("stageWidth", stage.getWidth());
+        lmlData.addArgument("stageHeight", stage.getHeight());
     }
 
     //region Events

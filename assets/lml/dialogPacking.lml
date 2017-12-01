@@ -11,32 +11,38 @@
         movable="true"
         resizable="true">
 
-    <listview
-            id="listItems"
-            adapter="$obtainListAdapter"
-            grow="true"
-            minheight="240"
-            minwidth="360"
-            align="top"
-            disabledx="true"
-            fadescrollbars="false"
-            overscroll="false"
-            flickscroll="false"
-            scrollcapture="true"/>
+    <:calculate key="contetnMaxHeight" value="({stageHeight} - 64)" />
 
-    <actor padtop="2"/>
+    <table grow="true" onecolumn="true" maxheight="{contetnMaxHeight}">
 
-    <vischeckbox
-            id="cbAutoClose"
-            align="left"
-            text="@dPackingAutoCloseCb"
-            change="onAutoCloseChecked"/>
+        <listview
+                id="listItems"
+                adapter="$obtainListAdapter"
+                grow="true"
+                minheight="240"
+                minwidth="360"
+                align="top"
+                disabledx="true"
+                fadescrollbars="false"
+                overscroll="false"
+                flickscroll="false"
+                scrollcapture="true"/>
 
-    <actor padtop="2"/>
+        <actor padtop="2"/>
 
-    <progressbar
-            id="progressBar"
-            style="narrow-horizontal"
-            growx="true"/>
+        <vischeckbox
+                id="cbAutoClose"
+                align="left"
+                text="@dPackingAutoCloseCb"
+                change="onAutoCloseChecked"/>
+
+        <actor padtop="2"/>
+
+        <progressbar
+                id="progressBar"
+                style="narrow-horizontal"
+                growx="true"/>
+
+    </table>
 
 </visdialog>

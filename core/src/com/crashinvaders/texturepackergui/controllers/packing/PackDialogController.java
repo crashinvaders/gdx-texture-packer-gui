@@ -105,6 +105,12 @@ public class PackDialogController implements ActionContainer {
             adapter.add(node);
         }
 
+        // Pack and align at center
+        window.pack();
+        window.setPosition(
+                Math.round((stage.getWidth() - window.getWidth()) / 2),
+                Math.round((stage.getHeight() - window.getHeight()) / 2));
+
         PackProcessingManager packProcessingManager = new PackProcessingManager(
                 new CompositePackProcessor(
                         // Startup metadata
