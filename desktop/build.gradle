@@ -94,7 +94,7 @@ macAppBundle {
 //    backgroundImage = "doc/macbackground.png"
 }
 
-// Since macAppBundle 2.1.6 doesn't let us customize jar assembling we will simply swap it by hand
+// Since macAppBundle 2.1.6 doesn't let us customize jar assembling. So we will simply swap files by hand.
 task cleanAppJavaDir (type: Delete) {
     delete fileTree(dir: "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java")
 }

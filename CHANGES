@@ -1,7 +1,7 @@
 [LATEST]
 - Application eats much less system CPU resources when idle
 - 9-patch editor improvements (preview pane, value number fields)
-- Support for CJK fonts (downloadable extension module)
+- Support for CJK characters (downloadable extension module)
 - Traditional Chinese localization, thanks to Tokenyet
 - Log output into external files (easy to grab and send with a report)
 - Fixed KTX ETC2 compression fails to write page files to a directory with spaces
