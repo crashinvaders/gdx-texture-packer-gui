@@ -1,4 +1,6 @@
 [LATEST]
+
+[4.6.0]
 - Application eats much less system CPU resources when idle
 - 9-patch editor improvements (preview pane, value number fields)
 - Support for CJK characters (downloadable extension module)
