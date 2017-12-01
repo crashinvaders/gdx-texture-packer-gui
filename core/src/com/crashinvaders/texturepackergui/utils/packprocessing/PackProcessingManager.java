@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.utils.packprocessing;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.ThreadPrintStream;
@@ -26,6 +27,9 @@ public class PackProcessingManager {
     private boolean processing;
     private final AtomicInteger processedCount = new AtomicInteger();
 
+    private PrintStream origStdOut;
+    private PrintStream origStdErr;
+
     public PackProcessingManager(PackProcessor processor, Listener listener) {
         this.processor = processor;
         this.listener = new SyncListener(listener);
@@ -45,6 +49,8 @@ public class PackProcessingManager {
         processing = true;
         listener.onProcessingStarted();
 
+        origStdOut = System.out;
+        origStdErr = System.err;
         ThreadPrintStream.replaceSystemOut();
 
         for (final PackProcessingNode processingNode : processingNodes) {
@@ -75,7 +81,7 @@ public class PackProcessingManager {
     }
 
     private synchronized void nodeProcessed(PackProcessingNode node) {
-        // Check if all nodes are processed
+        // Check if all nodes have been processed
         if (processedCount.addAndGet(1) == processingNodes.size) {
             finishProcessing();
         }
@@ -83,9 +89,9 @@ public class PackProcessingManager {
 
     /** Get called when all nodes are processed */
     private void finishProcessing() {
-        // Restore system output streams
-        System.setOut(new PrintStream(new FileOutputStream(FileDescriptor.out)));
-        System.setErr(new PrintStream(new FileOutputStream(FileDescriptor.err)));
+        // Restore original system output streams
+        System.setOut(origStdOut);
+        System.setErr(origStdErr);
         // Print out each log to the output
         for (PackProcessingNode node : processingNodes) {
             System.out.println(node.getLog());

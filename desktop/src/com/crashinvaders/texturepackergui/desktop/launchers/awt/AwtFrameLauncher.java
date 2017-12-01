@@ -5,6 +5,7 @@ import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
 import com.crashinvaders.texturepackergui.desktop.Arguments;
+import com.crashinvaders.texturepackergui.desktop.LoggerUtils;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
@@ -28,6 +29,8 @@ public class AwtFrameLauncher {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				LoggerUtils.setupExternalFileOutput();
+
 				final LwjglCanvasConfiguration config = new LwjglCanvasConfiguration();
 				config.title = "LibGDX Texture Packer GUI";
 				config.preferencesDirectory = AppConstants.EXTERNAL_DIR;

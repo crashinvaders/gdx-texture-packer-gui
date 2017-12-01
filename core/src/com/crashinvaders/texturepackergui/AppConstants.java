@@ -2,12 +2,14 @@ package com.crashinvaders.texturepackergui;
 
 import com.crashinvaders.common.Version;
 
+import java.io.File;
 import java.util.Locale;
 
 public class AppConstants {
     public static final Version version = new Version("4.6.0");
     public static final String EXTERNAL_DIR = ".gdxtexturepackergui";
-    public static final String MODULES_DIR = EXTERNAL_DIR + "/modules";
+    public static final String MODULES_DIR = EXTERNAL_DIR + File.separator + "modules";
+    public static final String LOGS_DIR = EXTERNAL_DIR + File.separator + "logs";
     public static final String PROJECT_FILE_EXT = "tpproj";
     public static final String[] IMAGE_FILE_EXT = new String[]{"png", "jpg", "jpeg"};
 
