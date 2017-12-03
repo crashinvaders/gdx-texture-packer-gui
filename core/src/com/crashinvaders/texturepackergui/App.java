@@ -78,6 +78,7 @@ public class App implements ApplicationListener {
 
         initiateContext();
 
+        FileChooser.setSaveLastDirectory(true);
         FileChooser.setDefaultPrefsName("file_chooser.xml");
 
         // Uncomment to update project's LML DTD schema
