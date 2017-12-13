@@ -1,7 +1,6 @@
 package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.utils.Array;
-import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

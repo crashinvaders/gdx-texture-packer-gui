@@ -2,7 +2,6 @@ package com.crashinvaders.common.scene2d;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

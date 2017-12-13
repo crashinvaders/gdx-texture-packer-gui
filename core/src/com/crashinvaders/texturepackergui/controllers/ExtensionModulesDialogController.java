@@ -14,7 +14,7 @@ import com.crashinvaders.texturepackergui.controllers.extensionmodules.Extension
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.ExtensionModuleManagerService;
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.ExtensionModuleRepositoryService;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
-import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
+import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;

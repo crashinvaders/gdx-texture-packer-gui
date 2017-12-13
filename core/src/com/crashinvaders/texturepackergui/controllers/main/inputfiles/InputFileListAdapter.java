@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.controllers.model.InputFile;
-import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
+import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.LmlParser;

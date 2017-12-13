@@ -39,7 +39,7 @@ import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
-import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
+import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;

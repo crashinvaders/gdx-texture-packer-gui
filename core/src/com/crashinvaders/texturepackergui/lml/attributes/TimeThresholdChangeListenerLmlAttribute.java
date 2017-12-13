@@ -1,7 +1,7 @@
 package com.crashinvaders.texturepackergui.lml.attributes;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.crashinvaders.common.scene2d.TimeThresholdChangeListenerAction;
+import com.crashinvaders.common.scene2d.actions.TimeThresholdChangeListenerAction;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActorConsumer;
 import com.github.czyzby.lml.parser.tag.LmlAttribute;

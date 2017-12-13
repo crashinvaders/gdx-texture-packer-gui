@@ -1,7 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -9,7 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
 import com.crashinvaders.common.scene2d.ScrollFocusCaptureInputListener;
-import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
+import com.crashinvaders.common.scene2d.Scene2dUtils;
 
 class CompositionHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;

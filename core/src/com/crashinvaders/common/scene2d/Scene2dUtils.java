@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.utils;
+package com.crashinvaders.common.scene2d;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,12 +9,10 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.crashinvaders.common.scene2d.InjectActor;
 import com.kotcrab.vis.ui.util.adapter.ItemAdapter;
 import com.kotcrab.vis.ui.widget.ListView;
 import com.kotcrab.vis.ui.widget.VisTextField;

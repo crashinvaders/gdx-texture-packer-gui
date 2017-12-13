@@ -20,7 +20,7 @@ import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelUtils;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
-import com.crashinvaders.texturepackergui.utils.Scene2dUtils;
+import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;

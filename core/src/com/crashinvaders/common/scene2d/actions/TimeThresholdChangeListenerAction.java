@@ -1,10 +1,9 @@
-package com.crashinvaders.common.scene2d;
+package com.crashinvaders.common.scene2d.actions;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.crashinvaders.common.Timer;
-import com.crashinvaders.texturepackergui.controllers.main.inputfiles.InputFilePropertiesDialogController;
 
 /**
  * Action that works just like regular {@link ChangeListener}, but accumulates change events for certain time threshold.
