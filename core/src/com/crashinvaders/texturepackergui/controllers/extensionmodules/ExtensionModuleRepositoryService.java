@@ -32,7 +32,7 @@ public class ExtensionModuleRepositoryService {
     private final Json json = new Json();
 
     private final FileHandle modulesDir = Gdx.files.external(AppConstants.MODULES_DIR);
-    private final FileHandle repoCacheFile = modulesDir.child("repoCache.json");
+    private final FileHandle repoCacheFile = modulesDir.child("repo_cache.json");
 
     private boolean checkingInProgress;
 
