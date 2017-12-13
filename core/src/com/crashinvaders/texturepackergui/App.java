@@ -135,6 +135,7 @@ public class App implements ApplicationListener {
     @Override
     public void resize(final int width, final int height) {
         interfaceService.resize(width, height);
+        Gdx.graphics.requestRendering();
     }
 
     @Override
