@@ -7,6 +7,10 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.tag.LmlAttribute;
 import com.github.czyzby.lml.parser.tag.LmlTag;
 
+/** Allows to set tiled drawable obtained from the default skin to the {@link Image}.
+ *
+ * @see Skin#getTiledDrawable(String)
+ * @author Metaphore */
 public class ImageTiledLmlAttribute implements LmlAttribute<Image> {
     @Override
     public Class<Image> getHandledType() {

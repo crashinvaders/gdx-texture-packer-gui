@@ -328,8 +328,6 @@ public class GlobalActions implements ActionContainer {
         if (projectFile != null && projectFile.exists()) {
             App.inst().getParams().startupProject = projectFile.file();
         }
-
-        //TODO reload current active project (if any)
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {

@@ -9,7 +9,7 @@
             <actor height="16"/>
 
             <vistable onecolumn="true" align="center">
-                <image drawable="custom/app-logo-2x" scaling="none"/>
+                <image style="custom/app-logo-2x" scaling="none"/>
                 <horizontalgroup align="right" spacing="4" padright="10" padtop="-2">
                     <label style="small" text="@dAboutVersion" color="orange"/>
                     <label style="small" text="{currentVersionCode}" color="orange"/>

@@ -6,6 +6,10 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.tag.LmlAttribute;
 import com.github.czyzby.lml.parser.tag.LmlTag;
 
+/** Changes font scale for the {@link Label}.
+ *
+ * @see Label#setFontScale(float)
+ * @author Metaphore */
 public class LabelFontScaleLmlAttribute implements LmlAttribute<Label> {
     @Override
     public Class<Label> getHandledType() {

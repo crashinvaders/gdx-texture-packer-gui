@@ -6,7 +6,7 @@
         <container background="custom/tp-title-bg" fillx="true">
             <vistable padleft="6" padright="6" padbottom="2" padtop="2" align="left" tablealign="left">
                 <:notnull test="{icon}">
-                    <visimage drawable="{icon}" padright="4" padbottom="-1" color="title-icon-tint"/>
+                    <visimage style="{icon}" padright="4" padbottom="-1" color="title-icon-tint"/>
                 </:notnull>
                 <label text="{title}"/>
                 <container id="titleExtraContainer" growx="true"/>

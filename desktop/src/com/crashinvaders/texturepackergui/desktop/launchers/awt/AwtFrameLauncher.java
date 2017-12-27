@@ -38,6 +38,7 @@ public class AwtFrameLauncher {
 				config.width = 1024;
 				config.height = 600;
 				config.allowSoftwareMode = arguments.softOpenGL;
+				config.useHDPI = true;
 
 				AppParams appParams = new AppParams();
 				appParams.startupProject = arguments.project;
