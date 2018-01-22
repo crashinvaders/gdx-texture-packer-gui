@@ -140,7 +140,7 @@ public class TransformScalableWrapper<T extends Actor> extends WidgetGroup {
     @Deprecated
     @Override
     public void setTransform(boolean transform) {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Transform is always enabled for this widget.");
     }
 
     //region Omitted child related methods

@@ -1,4 +1,5 @@
 [LATEST]
+- If output directory doesn't exist, it will be created automatically during packing.
 
 [4.6.0]
 - Application eats much less system CPU resources when idle
