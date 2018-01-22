@@ -1,6 +1,7 @@
 [LATEST]
 - If output directory doesn't exist, it will be created automatically during packing.
 - Fixed crash when input text contains square brackets.
+- Fixed memory leak with new TTF fonts.
 
 [4.6.0]
 - Application eats much less system CPU resources when idle.
