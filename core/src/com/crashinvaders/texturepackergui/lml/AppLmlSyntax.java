@@ -1,11 +1,13 @@
 package com.crashinvaders.texturepackergui.lml;
 
 import com.crashinvaders.common.scene2d.lml.AnimatedImage;
+import com.crashinvaders.common.scene2d.lml.tags.PatchedVisTextFieldLmlTag;
 import com.crashinvaders.texturepackergui.lml.attributes.*;
 import com.crashinvaders.texturepackergui.lml.tags.*;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
+import com.github.czyzby.lml.vis.parser.impl.tag.provider.VisTextFieldLmlTagProvider;
 
 public class AppLmlSyntax extends VisLmlSyntax {
 
@@ -23,6 +25,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addTagProvider(new TransformScalableWrapperLmlTag.TagProvider(), "transformScalable");
         addTagProvider(new ScalarScalableWrapperLmlTag.TagProvider(), "scalarScalable");
         addTagProvider(new AnimatedImage.LmlTag.Provider(), "animatedImage");
+        addTagProvider(new PatchedVisTextFieldLmlTag.Provider(), "textField", "visTextField");
     }
 
     @Override
