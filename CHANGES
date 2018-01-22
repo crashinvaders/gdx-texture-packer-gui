@@ -1,65 +1,66 @@
 [LATEST]
 - If output directory doesn't exist, it will be created automatically during packing.
+- Fixed crash when input text contains square brackets.
 
 [4.6.0]
-- Application eats much less system CPU resources when idle
-- 9-patch editor improvements (preview pane, value number fields)
-- Support for CJK characters (downloadable extension module)
-- Traditional Chinese localization, thanks to Tokenyet
-- Log output into external files (easy to grab and send with a report)
-- Fixed KTX ETC2 compression fails to write page files to a directory with spaces
+- Application eats much less system CPU resources when idle.
+- 9-patch editor improvements (preview pane, value number fields).
+- Support for CJK characters (downloadable extension module).
+- Traditional Chinese localization, thanks to Tokenyet.
+- Log output into external files (easy to grab and send with a report).
+- Fixed KTX ETC2 compression fails to write page files to a directory with spaces.
 
 [4.5.0]
 - Page image file type configuration. ETC(KTX) file format support.
 - Nine patch editor. Nine patches can be created from a plain images on the fly.
-- Recursive and flatten paths flags for an input directory
-- "Grid layout" algorithm now sorts regions and packs them in a name/index order
-- Fixed "Use aliases" flag is missing in a save file
-- Fixed old pack data file does not get replaced with a new one properly, when custom extension is being used
-- Fixed crash when project contains input dir that is a parent of the project save file itself
+- Recursive and flatten paths flags for an input directory.
+- "Grid layout" algorithm now sorts regions and packs them in a name/index order.
+- Fixed "Use aliases" flag is missing in a save file.
+- Fixed old pack data file does not get replaced with a new one properly, when custom extension is being used.
+- Fixed crash when project contains input dir that is a parent of the project save file itself.
 
 [4.4.0]
-- Each pack now consists of list of input/ignore files (no more single source dir)
-- File drag'n'drop support (image files and project file)
-- Fixed occasional output image file locking after Pngtastic compression
-- .tpproj file extension association for Windows (if program installed through installer)
+- Each pack now consists of list of input/ignore files (no more single source dir).
+- File drag'n'drop support (image files and project file).
+- Fixed occasional output image file locking after Pngtastic compression.
+- .tpproj file extension association for Windows (if program installed through installer).
 
 [4.3.2]
-- German localization added, thanks to TeraFog
-- Fixed occasional crash upon language change
-- Fixed "Flatten paths" checkbox (it works now!)
-- Fixed no window on application startup in some cases
-- MacOS distribution configuration
+- German localization added, thanks to TeraFog.
+- Fixed occasional crash upon language change.
+- Fixed "Flatten paths" checkbox (it works now!).
+- Fixed no window on application startup in some cases.
+- MacOS distribution configuration.
 
 [4.3.1]
-- Input/output paths that are equal to project file dir, now correctly save and load
-- Minor layout and localization text fixes
+- Input/output paths that are equal to project file dir, now correctly save and load.
+- Minor layout and localization text fixes.
 
 [4.3.0]
-- "bleed", "limitMemory" and "flattenPaths" flags were added to pack settings
-- Full set of tooltips for all pack setting properties
-- Russian localization added
-- Common UI improvements and some new inspection data is shown for packing and atlas preview
+- "bleed", "limitMemory" and "flattenPaths" flags were added to pack settings.
+- Full set of tooltips for all pack setting properties.
+- Russian localization added.
+- Common UI improvements and some new inspection data is shown for packing and atlas preview.
 
 [4.2.0]
 - Support of TinyPNG/TinyJPG compression service, see https://tinypng.com
-- Export with multiple scale factors
-- Atlas preview background color can be changed
-- Double click on pack list triggers packing procedure
-- Fixed: relative file paths now correctly saved in UNIX format
+- Export with multiple scale factors.
+- Atlas preview background color can be changed.
+- Double click on pack list triggers packing procedure.
+- Fixed: relative file paths now correctly saved in UNIX format.
 
 [4.1.0]
-- Parallel processing for atlas packing
+- Parallel processing for atlas packing.
 - Compression option for png atlases, see https://github.com/depsypher/pngtastic
-- Texture unpacker added under tools section
-- "square" and "grid" pack setting added
-- Option to choose position for newly created and copied packs
+- Texture unpacker added under tools section.
+- "square" and "grid" pack setting added.
+- Option to choose position for newly created and copied packs.
 
 [4.0.0]
 - App rewritten from the scratch.
-- New reworked UI based on VisUI and LML
+- New reworked UI based on VisUI and LML.
 - All reported bugs (for 3.2.0) were fixed, see https://github.com/aurelienRibonBackup/libgdx-texturepacker-gui/issues
-- New atlas preview widget, now with basic inspection capabilities
+- New atlas preview widget, now with basic inspection capabilities.
 
 [3.2.0]
-- Last Aurelien Ribon's release (2012)
+- Last Aurelien Ribon's release (2012).
