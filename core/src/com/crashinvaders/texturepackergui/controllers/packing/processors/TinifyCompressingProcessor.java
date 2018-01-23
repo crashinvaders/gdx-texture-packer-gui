@@ -33,6 +33,11 @@ public class TinifyCompressingProcessor implements PackProcessor {
 
         System.out.println("Tinify compression started");
 
+        String apiKey = tinifyService.getApiKey();
+        if (apiKey == null || apiKey.trim().isEmpty()) {
+            throw new IllegalStateException("An API key is not specified. Please go to TinyPNG/TinyJPG compression settings and set up the API key.");
+        }
+
         TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(
                         Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()),
                         Gdx.files.absolute(pack.getOutputDir()), false);
