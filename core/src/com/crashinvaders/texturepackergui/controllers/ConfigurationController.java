@@ -49,6 +49,7 @@ import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.*;
 @Component
 public class ConfigurationController {
     private static final String TAG = ConfigurationController.class.getSimpleName();
+    private static final char UNKNOWN_CHARACTER = (char) 0xFFFD;
 
     @LmlParserSyntax LmlSyntax syntax = new AppLmlSyntax();
 
@@ -79,6 +80,8 @@ public class ConfigurationController {
             Gdx.app.log(TAG, "Incremental fonts are " + (incrementalFonts ? "enabled" : "disabled"));
 
             String defaultCharacters = FreeTypeFontGenerator.DEFAULT_CHARS;
+            // Special characters
+            defaultCharacters += UNKNOWN_CHARACTER;
             // Russian characters
             defaultCharacters += "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя№";
 
@@ -143,8 +146,12 @@ public class ConfigurationController {
         skinService.addSkin("default", skin);
 
         for (BitmapFont font : skin.getAll(BitmapFont.class).values()) {
-            font.getData().markupEnabled = true;
-            font.getData().missingGlyph = font.getData().getGlyph((char)0xFFFD);
+            BitmapFont.BitmapFontData fontData = font.getData();
+            fontData.markupEnabled = true;
+            fontData.missingGlyph = fontData.getGlyph(UNKNOWN_CHARACTER);
+            // If missing glyph is set, bitmap font returns it on place of \r character.
+            // We forcefully replace it with NBSP glyph for now.
+            fontData.setGlyph('\r', fontData.getGlyph('\u00A0'));
         }
 
         // Extracting all colors from the skin and importing them into global color collection
