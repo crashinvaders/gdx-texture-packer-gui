@@ -24,7 +24,7 @@ public class GlobalShortcutHandler extends InputAdapter {
     private ArrayMap<String, Shortcut> shortcuts;
 
     @Initiate void initialize() {
-        App.inst().getInput().addProcessor(this, -1000);
+        App.inst().getInput().addProcessor(this, 1000);
 
         ShortcutParser shortcutParser = new ShortcutParser();
         Array<Shortcut> shortcutArray = shortcutParser.parse(Gdx.files.internal("hotkeys.txt"));
