@@ -1,6 +1,5 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
@@ -10,17 +9,17 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
-import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
-import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
-import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
-import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelUtils;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
+import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
-import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
@@ -31,7 +30,10 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.Tooltip;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
@@ -139,10 +141,15 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         boolean checked = chbNinePatch.isChecked();
         btnEditNinePatch.setVisible(checked);
 
-        // Ignore model logic for a file based nine patch
-        if (inputFile.isFileBasedNinePatch()) return;
+        // Apply model logic only for a file based nine patch
+        if (!inputFile.isFileBasedNinePatch()) {
+            inputFile.setProgrammaticNinePatch(checked);
+        }
 
-        inputFile.setProgrammaticNinePatch(checked);
+        // Open 9patch editor immediately
+        if (checked) {
+            navigateToNinePatchEditor();
+        }
     }
 
     @LmlAction("navigateToNinePatchEditor") void navigateToNinePatchEditor() {
@@ -150,15 +157,13 @@ public class InputFilePropertiesDialogController implements ActionContainer {
 
         if (inputFile.isProgrammaticNinePatch()) {
             ninePatchEditorDialog.getModel().loadFromInputFile(inputFile);
-            ninePatchEditorDialog.setResultListener(
-                    new NinePatchEditorDialog.ResultListener() {
-                        @Override
-                        public void onResult(NinePatchEditorModel model) {
-                            // Update input file model
-                            model.saveToInputFile(inputFile);
-                        }
-                    }
-            );
+            ninePatchEditorDialog.setResultListener(new NinePatchEditorDialog.ResultListener() {
+                @Override
+                public void onResult(NinePatchEditorModel model) {
+                    // Update input file model
+                    model.saveToInputFile(inputFile);
+                }
+            });
         }
 
         if (inputFile.isFileBasedNinePatch()) {
@@ -229,15 +234,19 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             edtRegionName.setMessageText(inputFile.getFileHandle().nameWithoutExtension());
             edtRegionName.setText(inputFile.getRegionName());
 
+            chbNinePatch.setProgrammaticChangeEvents(false);
             if (inputFile.isFileBasedNinePatch()) {
                 chbNinePatch.setDisabled(true);
-                // Delay checkbox change for one frame to not provoke update event twice in a same frame
-                Gdx.app.postRunnable(new Runnable() { @Override public void run() { chbNinePatch.setChecked(true); } });
+                chbNinePatch.setChecked(true);
+                btnEditNinePatch.setVisible(true);
             } else {
                 chbNinePatch.setDisabled(false);
                 chbNinePatch.setChecked(inputFile.isProgrammaticNinePatch());
+                btnEditNinePatch.setVisible(inputFile.isProgrammaticNinePatch());
             }
+            chbNinePatch.setProgrammaticChangeEvents(true);
         }
+
 
         // Ignored file data
         if (inputFile.getType() == InputFile.Type.Ignore) {

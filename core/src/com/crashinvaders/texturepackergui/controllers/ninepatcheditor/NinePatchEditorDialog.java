@@ -3,23 +3,15 @@ package com.crashinvaders.texturepackergui.controllers.ninepatcheditor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.DelayAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
-import com.crashinvaders.common.MutableInt;
 import com.crashinvaders.common.scene2d.ScalarScalableWrapper;
 import com.crashinvaders.common.scene2d.TransformScalableWrapper;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
@@ -34,7 +26,6 @@ import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisSlider;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
@@ -74,6 +65,8 @@ public class NinePatchEditorDialog implements ActionContainer {
             return;
         }
 
+        contentEditMode = false;
+
         if (model.patchValues.equals(model.contentValues)) {
             chbMatchContent.setChecked(true);
         }
@@ -95,7 +88,6 @@ public class NinePatchEditorDialog implements ActionContainer {
             }
         });
 
-        //TODO remove
         updatePreviewNinePatch();
         updatePadValuesFromModel();
         imgPreviewBackground.setColor(modelService.getProject().getPreviewBackgroundColor());
