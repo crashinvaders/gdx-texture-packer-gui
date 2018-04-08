@@ -203,6 +203,9 @@ public class PackingProcessor implements PackProcessor {
         final FileHandle fileHandle;
         final String name;
 
+        /** The result name of the region in atlas. */
+        final String regionName;
+
         // Nine patch related fields
         boolean ninePatch = false;
         int[] splits, pads;
@@ -210,6 +213,12 @@ public class PackingProcessor implements PackProcessor {
         public ImageEntry(FileHandle fileHandle, String name) {
             this.fileHandle = fileHandle;
             this.name = name;
+
+            if (name.endsWith(".9")) {
+                regionName = name.substring(0, name.length() - 2);
+            } else {
+                regionName = name;
+            }
         }
 
         public void setNinePatch(InputFile.NinePatchProps npp) {
@@ -228,12 +237,12 @@ public class PackingProcessor implements PackProcessor {
 
             ImageEntry that = (ImageEntry) o;
 
-            return fileHandle.equals(that.fileHandle);
+            return regionName.equals(that.regionName);
         }
 
         @Override
         public int hashCode() {
-            return fileHandle.hashCode();
+            return regionName.hashCode();
         }
     }
 
@@ -243,7 +252,9 @@ public class PackingProcessor implements PackProcessor {
         public boolean add(ImageEntry image) {
             if (imageSet.contains(image)) {
                 imageSet.remove(image);
-                System.out.println("File: " + image.fileHandle + " is listed twice (last added configuration will be used)");
+                System.out.println(String.format(
+                        "Region: \"%s\" is listed twice (the last added configuration will be used).",
+                        image.regionName));
             }
             return imageSet.add(image);
         }
