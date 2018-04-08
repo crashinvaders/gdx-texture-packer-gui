@@ -1,13 +1,13 @@
 package com.crashinvaders.texturepackergui.lml.attributes;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.crashinvaders.common.scene2d.actions.TimeThresholdChangeListenerAction;
+import com.crashinvaders.common.scene2d.TimeThresholdChangeListener;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActorConsumer;
 import com.github.czyzby.lml.parser.tag.LmlAttribute;
 import com.github.czyzby.lml.parser.tag.LmlTag;
 
-/** @see TimeThresholdChangeListenerAction */
+/** @see com.crashinvaders.common.scene2d.TimeThresholdChangeListener */
 public class TimeThresholdChangeListenerLmlAttribute implements LmlAttribute<Actor> {
 
     @Override
@@ -21,11 +21,11 @@ public class TimeThresholdChangeListenerLmlAttribute implements LmlAttribute<Act
         if (action == null) {
             parser.throwError("Could not find action for: " + rawAttributeData + " with actor: " + actor);
         }
-        actor.addAction(new TimeThresholdChangeListenerAction(0.5f, new TimeThresholdChangeListenerAction.DelayedChangeListener() {
+        actor.addListener(new TimeThresholdChangeListener(0.5f) {
             @Override
-            public void onActorChanged(Actor actor) {
+            public void onChanged() {
                 action.consume(actor);
             }
-        }));
+        });
     }
 }
