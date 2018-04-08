@@ -109,13 +109,6 @@ public class PackInputFilesController implements ActionContainer {
         }
     }
 
-//    @OnEvent(FileDragDropEvent.class) void onEvent(FileDragDropEvent event) {
-//        // Reset selection when file drag'n'drop action has been initiated.
-//        if (event.getAction() == FileDragDropEvent.Action.START_DRAGGING) {
-//            resetInputFileSelection();
-//        }
-//    }
-
     @LmlAction("createAdapter") InputFileListAdapter createAdapter() {
         return new InputFileListAdapter(interfaceService.getParser());
     }

@@ -2,7 +2,7 @@
 - If output directory doesn't exist, it will be created automatically during packing.
 - Visual indication for newly added pack files.
 - Fixed crash when input text contains square brackets.
-- Fixed memory leak with new TTF fonts.
+- Fixed memory leak with the new TTF fonts.
 - Fixed shortcut keys do not function when an input field is focused.
 - Fixed crash when a pack file no longer exists during packing or properties dialog.
 
