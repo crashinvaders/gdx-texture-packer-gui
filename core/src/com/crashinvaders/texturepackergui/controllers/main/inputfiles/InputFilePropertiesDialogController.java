@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
@@ -18,6 +19,7 @@ import com.crashinvaders.texturepackergui.controllers.model.ModelUtils;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -26,6 +28,7 @@ import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
@@ -43,6 +46,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
+    @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
     @Inject NinePatchEditorDialog ninePatchEditorDialog;
@@ -153,6 +157,8 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     }
 
     @LmlAction("navigateToNinePatchEditor") void navigateToNinePatchEditor() {
+        if (!checkFileExists(inputFile, true)) return;
+
         ninePatchEditorDialog.setImageFile(inputFile.getFileHandle());
 
         if (inputFile.isProgrammaticNinePatch()) {
@@ -188,6 +194,10 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     }
 
     public void show(InputFile inputFile) {
+        if (!checkFileExists(inputFile, true)) {
+            Gdx.app.error(TAG, "Input file doesn't exist: " + inputFile.getFileHandle().path());
+        }
+
         setInputFile(inputFile);
         interfaceService.showDialog(this.getClass());
     }
@@ -252,5 +262,14 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         if (inputFile.getType() == InputFile.Type.Ignore) {
             dialog.getTitleLabel().setText(localeService.getI18nBundle().get("dInputFileTitleFileIgnore"));
         }
+    }
+
+    private boolean checkFileExists(InputFile inputFile, boolean showErrorToast) {
+        boolean exists = inputFile.getFileHandle().exists();
+        if (!exists && showErrorToast) {
+            eventDispatcher.postEvent(new ShowToastEvent()
+                    .message(localeService.getI18nBundle().format("toastInputFileDoesNotExist", inputFile.getFileHandle().path())));
+        }
+        return exists;
     }
 }

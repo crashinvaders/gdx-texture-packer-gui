@@ -3,6 +3,7 @@
 - Fixed crash when input text contains square brackets.
 - Fixed memory leak with new TTF fonts.
 - Fixed shortcut keys do not function when an input field is focused.
+- Fixed crash when a pack file no longer exists during packing or properties dialog.
 
 [4.6.0]
 - Application eats much less system CPU resources when idle.

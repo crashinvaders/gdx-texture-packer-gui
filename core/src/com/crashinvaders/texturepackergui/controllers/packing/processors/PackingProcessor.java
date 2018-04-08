@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.FileProcessor;
 import com.badlogic.gdx.tools.texturepacker.PageFileWriter;
@@ -24,6 +25,7 @@ import java.util.Comparator;
 import java.util.regex.Pattern;
 
 public class PackingProcessor implements PackProcessor {
+
     @Override
     public void processPackage(PackProcessingNode node) throws Exception {
         PackModel pack = node.getPack();
@@ -86,6 +88,13 @@ public class PackingProcessor implements PackProcessor {
         // Collect input images from directories
         for (InputFile inputFile : inputFiles) {
             if (inputFile.getType() == InputFile.Type.Input && inputFile.isDirectory()) {
+                if (!inputFile.getFileHandle().exists()) {
+                    System.out.println(String.format(
+                            "WARNING: Input directory doesn't exist: \"%s\"",
+                            inputFile.getFileHandle().path()));
+                    continue;
+                }
+
                 final String dirPrefix = inputFile.getDirFilePrefix() != null ? inputFile.getDirFilePrefix() : "";
 
                 class RecursiveCollector {
@@ -250,11 +259,19 @@ public class PackingProcessor implements PackProcessor {
         private final ObjectSet<ImageEntry> imageSet = new ObjectSet<>();
 
         public boolean add(ImageEntry image) {
+            if (!image.fileHandle.exists()) {
+                System.out.println(String.format(
+                        "WARNING: Input file doesn't exist: \"%s\"",
+                        image.fileHandle.path()));
+                return false;
+            }
+
             if (imageSet.contains(image)) {
                 imageSet.remove(image);
                 System.out.println(String.format(
-                        "Region: \"%s\" is listed twice (the last added configuration will be used).",
-                        image.regionName));
+                        "WARNING: Region: \"%s\" is listed twice. The last added configuration will be used - \"%s\"",
+                        image.regionName,
+                        image.fileHandle.path()));
             }
             return imageSet.add(image);
         }
