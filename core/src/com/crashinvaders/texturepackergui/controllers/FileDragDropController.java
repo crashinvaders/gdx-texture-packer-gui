@@ -60,13 +60,13 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
         this.stage = stage;
     }
 
-    //TODO replace with LML code when issues get resolved https://github.com/czyzby/gdx-lml/issues/36
+    //TODO replace with LML code when the issue gets resolved https://github.com/czyzby/gdx-lml/issues/36
     @LmlAction("getProjectFileHint") String getProjectFileHint() {
         return localeService.getI18nBundle().format("dndProjectFileHint",
                 "."+AppConstants.PROJECT_FILE_EXT);
     }
 
-    //TODO replace with LML code when issues get resolved https://github.com/czyzby/gdx-lml/issues/36
+    //TODO replace with LML code when the issue gets resolved https://github.com/czyzby/gdx-lml/issues/36
     @LmlAction("getImageFilesHint") String getImageFilesHint() {
         return localeService.getI18nBundle().format("dndImageFilesHint",
                 "."+ Strings.join(" .", AppConstants.IMAGE_FILE_EXT));

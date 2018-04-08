@@ -85,7 +85,8 @@ public class ConfigurationController {
             // Russian characters
             defaultCharacters += "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя№";
 
-            FreeTypeFontGenerator.setMaxTextureSize(2048);
+            // The less the page size, the less memory will be eaten (IDK why FreeType really works in that way).
+            FreeTypeFontGenerator.setMaxTextureSize(1024);
             FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("VisOpenSansKerned.ttf"));
             FreeTypeFontGenerator.FreeTypeFontParameter paramsDefault = new FreeTypeFontGenerator.FreeTypeFontParameter();
             paramsDefault.color = new Color(0xffffffe8);
