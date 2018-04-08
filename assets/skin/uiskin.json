@@ -29,6 +29,8 @@ com.badlogic.gdx.graphics.Color: {
 	nine-patch-lines-content: { hex: ffb000ff }
 },
 com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	orange: {name: white, color: orange },
+
 	dialogDim: {name: white, color: {hex:252526a0} },
 	dragndropDim: {name: white, color: {hex:252526e0} },
 	settingsInternalPanel: {name: white, color: {hex:202020ff} },

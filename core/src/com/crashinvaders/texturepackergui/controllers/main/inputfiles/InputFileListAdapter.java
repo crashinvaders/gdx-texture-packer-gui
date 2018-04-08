@@ -1,10 +1,14 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
@@ -16,7 +20,7 @@ import com.kotcrab.vis.ui.widget.Tooltip;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
+class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
 
     private final LmlParser lmlParser;
 
@@ -58,7 +62,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
     }
 
     @Override
-    protected VisTable createView(InputFile item) {
+    protected Stack createView(InputFile item) {
         ViewHolder viewHolder = new ViewHolder(lmlParser.getData().getDefaultSkin(), item);
         lmlParser.createView(viewHolder, Gdx.files.internal("lml/inputFileListItem.lml"));
         viewHolder.root.setUserObject(viewHolder);
@@ -66,7 +70,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
     }
 
     @Override
-    protected void prepareViewBeforeAddingToTable(InputFile item, VisTable view) {
+    protected void prepareViewBeforeAddingToTable(InputFile item, Stack view) {
         super.prepareViewBeforeAddingToTable(item, view);
 
 //        // Seems like this is the only way to extract adapter's internal click listener
@@ -75,21 +79,23 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
     }
 
     @Override
-    protected void selectView(VisTable view) {
+    protected void selectView(Stack view) {
         ViewHolder viewHolder = (ViewHolder) view.getUserObject();
         viewHolder.setSelected(true);
     }
 
     @Override
-    protected void deselectView(VisTable view) {
+    protected void deselectView(Stack view) {
         ViewHolder viewHolder = (ViewHolder) view.getUserObject();
         viewHolder.setSelected(false);
     }
 
     public static class ViewHolder {
-        @LmlActor("root") VisTable root;
+        @LmlActor("root") Stack root;
+        @LmlActor("contentTable") VisTable contentTable;
         @LmlActor("lblName") VisLabel lblName;
         @LmlActor("imgTypeIndicator") Image imgTypeIndicator;
+        @LmlActor("imgHighlight") Image imgHighlight;
 
         private final Skin skin;
         private final InputFile inputFile;
@@ -97,6 +103,8 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
 
         private boolean selected = false;
         private boolean pathProcessed = false;
+
+        private Action highlightAction = null;
 
         public ViewHolder(Skin skin, InputFile inputFile) {
             this.skin = skin;
@@ -142,11 +150,25 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, VisTable> {
             if (this.selected == selected) return;
             this.selected = selected;
 
-            root.setBackground(selected ? skin.getDrawable("padded-list-selection") : null);
+            contentTable.setBackground(selected ? skin.getDrawable("padded-list-selection") : null);
         }
 
         public InputFile getInputFile() {
             return inputFile;
+        }
+
+        public void animateHighlight() {
+            if (highlightAction != null) {
+                imgHighlight.removeAction(highlightAction);
+                highlightAction = null;
+            }
+
+            imgHighlight.addAction(highlightAction = Actions.sequence(
+                    Actions.alpha(1f),
+                    Actions.visible(true),
+                    Actions.fadeOut(5f, Interpolation.pow3Out),
+                    Actions.visible(false)
+            ));
         }
 
         private void processPathText() {

@@ -3,13 +3,11 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
-import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
-import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
-import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
-import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.controllers.model.*;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
@@ -55,13 +53,13 @@ public class PackInputFilesController implements ActionContainer {
         this.stage = stage;
 
         listAdapter = ((InputFileListAdapter) listTable.getListView().getAdapter());
-        listAdapter.getSelectionManager().setListener(new AbstractListAdapter.ListSelectionListener<InputFile, VisTable>() {
+        listAdapter.getSelectionManager().setListener(new AbstractListAdapter.ListSelectionListener<InputFile, Stack>() {
             @Override
-            public void selected(InputFile item, VisTable view) {
+            public void selected(InputFile item, Stack view) {
                 updateButtonsState();
             }
             @Override
-            public void deselected(InputFile item, VisTable view) {
+            public void deselected(InputFile item, Stack view) {
                 updateButtonsState();
             }
         });
@@ -88,13 +86,16 @@ public class PackInputFilesController implements ActionContainer {
 
     @OnEvent(PackPropertyChangedEvent.class) void onEvent(PackPropertyChangedEvent event) {
         if (getSelectedPack() != event.getPack()) return;
+
+        InputFile inputFile = event.getInputFile();
         switch (event.getProperty()) {
             case INPUT_FILE_ADDED:
-                listAdapter.add(event.getInputFile());
+                listAdapter.add(inputFile);
+                listAdapter.getViewHolder(inputFile).animateHighlight();
                 updateButtonsState();
                 break;
             case INPUT_FILE_REMOVED:
-                listAdapter.removeValue(event.getInputFile(), true);
+                listAdapter.removeValue(inputFile, true);
                 updateButtonsState();
                 break;
         }
@@ -108,12 +109,19 @@ public class PackInputFilesController implements ActionContainer {
         }
     }
 
+//    @OnEvent(FileDragDropEvent.class) void onEvent(FileDragDropEvent event) {
+//        // Reset selection when file drag'n'drop action has been initiated.
+//        if (event.getAction() == FileDragDropEvent.Action.START_DRAGGING) {
+//            resetInputFileSelection();
+//        }
+//    }
+
     @LmlAction("createAdapter") InputFileListAdapter createAdapter() {
         return new InputFileListAdapter(interfaceService.getParser());
     }
 
     @LmlAction("showContextMenu") void showContextMenu(OnRightClickLmlAttribute.Params params) {
-        AbstractListAdapter.ListSelection<InputFile, VisTable> sm = listAdapter.getSelectionManager();
+        AbstractListAdapter.ListSelection<InputFile, Stack> sm = listAdapter.getSelectionManager();
 
         // Make sure that target item is selected
         InputFileListAdapter.ViewHolder viewHolder = listAdapter.getViewHolder(params.actor);
@@ -279,4 +287,7 @@ public class PackInputFilesController implements ActionContainer {
         return project.getSelectedPack();
     }
 
+    private void resetInputFileSelection() {
+        listAdapter.getSelectionManager().deselectAll();
+    }
 }

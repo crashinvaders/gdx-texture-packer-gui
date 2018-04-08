@@ -1,10 +1,15 @@
 <?xml version="1.0"?>
-<!DOCTYPE table SYSTEM "/lml.dtd">
+<!DOCTYPE stack SYSTEM "/lml.dtd">
 
-<table id="root" padleft="4" padright="4" transform="false"
-       rightclick="PackInputFilesController.showContextMenu"
-       doubleclick="PackInputFilesController.showInputFileDialog">
-    <image id="imgTypeIndicator" scaling="none" padleft="-1" padright="-1"/>
-    <actor width="6"/>
-    <label id="lblName" textalign="left" growx="true" width="270" align="left"/>
-</table>
+<stack id="root">
+    <!-- The image will be used for highlight indication animation (like when the file is added it will create flash effect). -->
+    <image id="imgHighlight" style="orange" touchable="disabled" visible="false"/>
+
+    <table id="contentTable" padleft="4" padright="4" transform="false"
+           rightclick="PackInputFilesController.showContextMenu"
+           doubleclick="PackInputFilesController.showInputFileDialog">
+        <image id="imgTypeIndicator" scaling="none" padleft="-1" padright="-1"/>
+        <actor width="6"/>
+        <label id="lblName" textalign="left" growx="true" width="270" align="left"/>
+    </table>
+</stack>

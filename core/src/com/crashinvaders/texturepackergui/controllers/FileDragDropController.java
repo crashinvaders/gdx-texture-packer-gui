@@ -18,6 +18,7 @@ import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
+import com.crashinvaders.texturepackergui.events.FileDragDropEvent;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Destroy;
@@ -25,6 +26,7 @@ import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -37,6 +39,7 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
+    @Inject EventDispatcher eventDispatcher;
     @Inject GlobalActions globalActions;
     @Inject ModelService modelService;
 
@@ -74,6 +77,8 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
 
     @Override
     public void onDragStarted(int screenX, int screenY) {
+        eventDispatcher.postEvent(new FileDragDropEvent(FileDragDropEvent.Action.START_DRAGGING));
+
         overlayRoot.clearActions();
         overlayRoot.addAction(Actions.sequence(
                 Actions.scaleTo(1.5f, 1.5f),
@@ -87,6 +92,8 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
 
     @Override
     public void onDragFinished() {
+        eventDispatcher.postEvent(new FileDragDropEvent(FileDragDropEvent.Action.STOP_DRAGGING));
+
         overlayRoot.clearActions();
         overlayRoot.addAction(Actions.sequence(
                 Actions.fadeOut(0.35f),
