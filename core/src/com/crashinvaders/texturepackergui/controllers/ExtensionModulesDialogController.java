@@ -42,11 +42,6 @@ public class ExtensionModulesDialogController implements ActionContainer, ViewDi
 
     private final ArrayMap<String, ModuleViewHolder> moduleViewHolders = new ArrayMap<>();
 
-    @Override
-    public void doBeforeShow(Window dialog) {
-        moduleRepository.requestRefreshRepositoryIfNeeded();
-    }
-
     @LmlAfter void initView() {
         moduleViewHolders.clear();
 
@@ -57,6 +52,11 @@ public class ExtensionModulesDialogController implements ActionContainer, ViewDi
             tableModules.row();
             tableModules.add(viewHolder.root);
         }
+    }
+
+    @Override
+    public void doBeforeShow(Window dialog) {
+        moduleRepository.requestRefreshRepositoryIfNeeded();
     }
 
     @OnEvent(ExtensionModuleStatusChangedEvent.class) void onEvent(ExtensionModuleStatusChangedEvent event) {

@@ -35,6 +35,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new PatchedOnClickLmlAttribute(), "onClick", "click");
         addAttributeProcessor(new OnRightClickLmlAttribute(), "onRightClick", "rightClick");
         addAttributeProcessor(new OnDoubleClickLmlAttribute(), "onDoubleClick", "doubleClick");
+        addAttributeProcessor(new OnTouchUpLmlAttribute(), "onTouchUp", "touchUp");
         addAttributeProcessor(new ScrollFocusCaptureLmlAttribute(), "scrollCapture");
         addAttributeProcessor(new TimeThresholdChangeListenerLmlAttribute(), "delayedChange", "delayedOnChange", "timeThresholdChange");
         addAttributeProcessor(new TooltipLmlAttribute(), "visTooltip", "tooltip");

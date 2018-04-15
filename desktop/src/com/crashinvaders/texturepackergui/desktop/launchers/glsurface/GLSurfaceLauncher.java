@@ -37,6 +37,7 @@ public class GLSurfaceLauncher {
 		configuration.width = 1024;
 		configuration.height = 600;
 		configuration.allowSoftwareMode = arguments.softOpenGL;
+		configuration.useHDPI = true;
 
 		AppParams appParams = new AppParams();
 		appParams.startupProject = arguments.project;

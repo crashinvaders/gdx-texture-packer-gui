@@ -53,14 +53,6 @@ public class ConfigurationController {
 
     @LmlParserSyntax LmlSyntax syntax = new AppLmlSyntax();
 
-    @StageViewport
-    ObjectProvider<Viewport> viewportProvider = new ObjectProvider<Viewport>() {
-        @Override
-        public Viewport provide() {
-            return new ScreenViewport();
-        }
-    };
-
     /** These i18n-related fields will allow {@link LocaleService} to save game's locale in preferences file. Locale
      * changing actions will be automatically added to LML templates - see settings.lml. */
     @I18nLocale(propertiesPath = AppConstants.PREF_NAME_COMMON, defaultLocale = "en") String localePreference = "locale";

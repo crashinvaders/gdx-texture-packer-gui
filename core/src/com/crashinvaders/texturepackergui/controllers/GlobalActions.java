@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
-import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
@@ -306,6 +305,10 @@ public class GlobalActions implements ActionContainer {
 
     @LmlAction("showExtensionModulesDialog") public void showExtensionModulesDialog() {
         interfaceService.showDialog(ExtensionModulesDialogController.class);
+    }
+
+    @LmlAction("showUiScalingDialog") public void showUiScalingDialog() {
+        interfaceService.showDialog(InterfaceScalingDialogController.class);
     }
 
     @LmlAction("changeLanguageEn") public void changeLanguageEn() {
