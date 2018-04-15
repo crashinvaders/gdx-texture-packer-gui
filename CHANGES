@@ -1,5 +1,6 @@
 [LATEST]
 - If output directory doesn't exist, it will be created automatically during packing.
+- Interface scaling option appears under "Tools" menu.
 - Visual indication for newly added pack files.
 - Fixed crash when input text contains square brackets.
 - Fixed memory leak with the new TTF fonts.
