@@ -26,7 +26,7 @@ public class GLSurfaceLauncher {
 	}
 
 	public static void start(Arguments arguments) {
-		LoggerUtils.setupExternalFileOutput();
+		AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
 
 		final LwjglApplicationConfiguration configuration = new LwjglApplicationConfiguration();
 		configuration.title = AppConstants.APP_TITLE;

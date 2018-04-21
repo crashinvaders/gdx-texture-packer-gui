@@ -22,4 +22,6 @@ public class AppConstants {
     public static final Locale LOCALE_RU = new Locale("ru", "");
     public static final Locale LOCALE_ZH_TW = new Locale("zh", "tw");
     public static final Locale LOCALE_DEFAULT = LOCALE_EN;
+
+    public static File logFile;
 }

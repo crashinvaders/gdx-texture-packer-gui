@@ -13,7 +13,7 @@ public class LoggerUtils {
     private static final long EXPIRATION_THRESHOLD = 7 * 24 * 60 * 60 * 1000; // 7 days
     private static final String LOG_FILE_EXTENSION = ".log";
 
-    public static void setupExternalFileOutput() {
+    public static File setupExternalFileOutput() {
         try {
             Date currentDate = new Date();
             long currentTime = currentDate.getTime();
@@ -39,9 +39,11 @@ public class LoggerUtils {
             System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
             System.out.println("JRE: " + System.getProperty("java.version") + " " + System.getProperty("java.vendor"));
             System.out.println("External log file: " + logFile.getAbsolutePath());
+            return logFile;
         } catch (FileNotFoundException e) {
             System.err.println("Can't setup logging to external file.");
             e.printStackTrace();
+            return null;
         }
     }
 }

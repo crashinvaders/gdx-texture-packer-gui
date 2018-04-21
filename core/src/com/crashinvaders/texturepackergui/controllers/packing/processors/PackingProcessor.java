@@ -1,6 +1,5 @@
 package com.crashinvaders.texturepackergui.controllers.packing.processors;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.FileProcessor;
 import com.badlogic.gdx.tools.texturepacker.PageFileWriter;

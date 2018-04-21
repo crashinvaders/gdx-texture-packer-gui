@@ -21,6 +21,8 @@ class CustomLwjglCanvas extends LwjglCanvas {
     private String prefersDir;
     private Files.FileType prefsFileType;
 
+    private UnhandledExceptionListener unhandledExceptionListener;
+
     public CustomLwjglCanvas(App app, LwjglCanvasConfiguration config) {
         super(app, config);
 
@@ -37,5 +39,21 @@ class CustomLwjglCanvas extends LwjglCanvas {
             preferences.put(name, prefs);
             return prefs;
         }
+    }
+
+    @Override
+    protected void exception(Throwable ex) {
+        if (unhandledExceptionListener != null) {
+            unhandledExceptionListener.onGdxException(ex);
+        }
+        super.exception(ex);
+    }
+
+    public void setUnhandledExceptionListener(UnhandledExceptionListener unhandledExceptionListener) {
+        this.unhandledExceptionListener = unhandledExceptionListener;
+    }
+
+    public interface UnhandledExceptionListener {
+        void onGdxException(Throwable ex);
     }
 }

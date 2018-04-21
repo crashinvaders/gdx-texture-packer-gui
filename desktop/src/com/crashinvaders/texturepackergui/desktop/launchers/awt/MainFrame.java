@@ -1,7 +1,6 @@
 package com.crashinvaders.texturepackergui.desktop.launchers.awt;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
 
@@ -14,18 +13,21 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 
-class MainFrame extends JFrame {
+class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionListener {
     private static final Color colorFill = new Color(37, 37, 38);
 
-    private final LwjglCanvas lwjglCanvas;
+    private final CustomLwjglCanvas lwjglCanvas;
+    private final LwjglCanvasConfiguration lwjglConfig;
     private final JLayeredPane pane;
 
-    public MainFrame(App app, final LwjglCanvas lwjglCanvas, LwjglCanvasConfiguration config) {
-        super(config.title);
+    public MainFrame(App app, final CustomLwjglCanvas lwjglCanvas, LwjglCanvasConfiguration lwjglConfig) {
+        super(lwjglConfig.title);
         this.lwjglCanvas = lwjglCanvas;
+        this.lwjglConfig = lwjglConfig;
+        lwjglCanvas.setUnhandledExceptionListener(this);
 
         try {
-            setIconImage(ImageIO.read((MainFrame.class.getClassLoader().getResourceAsStream(config.iconFilePath))));
+            setIconImage(ImageIO.read((MainFrame.class.getClassLoader().getResourceAsStream(lwjglConfig.iconFilePath))));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,8 +73,6 @@ class MainFrame extends JFrame {
 
             FramePropertiesPersister.loadFrameProperties(this);
 
-            setVisible(true);
-
             pane = new JLayeredPane();
             pane.setBackground(colorFill);
             pane.setLayout(new BorderLayout());
@@ -83,6 +83,18 @@ class MainFrame extends JFrame {
             pane.setTransferHandler(new TransferHandler(null));
             pane.setDropTarget(new FileDropTarget(app.getDragDropManager()));
         }
+    }
+
+    @Override
+    public void onGdxException(final Throwable ex) {
+        ErrorReportFrame errorFrame = new ErrorReportFrame(lwjglConfig, ex);
+        // Center error frame
+        errorFrame.setLocation(
+            Math.max(0, (getWidth() - errorFrame.getWidth()) / 2),
+            Math.max(0, (getHeight() - errorFrame.getHeight()) / 2));
+        errorFrame.setVisible(true);
+
+        this.dispose();
     }
 
     private static class FileDropTarget extends DropTarget {

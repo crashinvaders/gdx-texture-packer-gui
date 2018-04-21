@@ -1,8 +1,9 @@
 [LATEST]
-- Memory consumption optimized run configuration. The app will never exceed 1GB of RAM and free up memory faster.
 - If output directory doesn't exist, it will be created automatically during packing.
 - Interface scaling option appears under "Tools" menu.
 - Visual indication for newly added pack files.
+- Memory consumption optimized run configuration. The app will never exceed 1GB of RAM and free up memory faster.
+- Application crashes get captured and reported directly to GitHub issues.
 - Fixed crash when input text contains square brackets.
 - Fixed memory leak with the new TTF fonts.
 - Fixed shortcut keys do not function when an input field is focused.

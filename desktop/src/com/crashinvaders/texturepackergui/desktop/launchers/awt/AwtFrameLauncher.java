@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.desktop.launchers.awt;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
@@ -29,7 +30,7 @@ public class AwtFrameLauncher {
 		EventQueue.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				LoggerUtils.setupExternalFileOutput();
+				AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
 
 				final LwjglCanvasConfiguration config = new LwjglCanvasConfiguration();
 				config.title = AppConstants.APP_TITLE;
@@ -44,9 +45,10 @@ public class AwtFrameLauncher {
 				appParams.startupProject = arguments.project;
 
 				App app = new App(new DesktopClassScanner(), appParams);
-				LwjglCanvas canvas = new CustomLwjglCanvas(app, config);
+				CustomLwjglCanvas canvas = new CustomLwjglCanvas(app, config);
 
-				new MainFrame(app, canvas, config);
+				MainFrame mainFrame = new MainFrame(app, canvas, config);
+				mainFrame.setVisible(true);
 			}
 		});
 
