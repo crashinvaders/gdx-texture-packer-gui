@@ -1,4 +1,5 @@
 [LATEST]
+- Memory consumption optimized run configuration. The app will never exceed 1GB of RAM and free up memory faster.
 - If output directory doesn't exist, it will be created automatically during packing.
 - Interface scaling option appears under "Tools" menu.
 - Visual indication for newly added pack files.
