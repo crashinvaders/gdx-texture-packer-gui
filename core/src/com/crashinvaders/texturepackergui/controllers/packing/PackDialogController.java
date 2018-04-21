@@ -284,6 +284,10 @@ public class PackDialogController implements ActionContainer {
                 @Override
                 public void run() {
                     eventDispatcher.postEvent(new PackAtlasUpdatedEvent(node.getOrigPack()));
+
+                    // Since the atlas packing operation is pretty memory consuming,
+                    // it is reasonable to manually cleanup memory a bit.
+                    System.gc();
                 }
             });
         }

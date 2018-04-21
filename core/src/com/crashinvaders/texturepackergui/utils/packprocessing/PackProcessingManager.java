@@ -78,6 +78,7 @@ public class PackProcessingManager {
                 }
             });
         }
+        executorService.shutdown();
     }
 
     private synchronized void nodeProcessed(PackProcessingNode node) {
