@@ -83,4 +83,11 @@ public class AppLmlSyntax extends VisLmlSyntax {
 
         addAttributeProcessor(new LabelFontScaleLmlAttribute(), "fontScale");
     }
+
+    @Override
+    protected void registerSpinnerAttributes() {
+        super.registerSpinnerAttributes();
+
+        addAttributeProcessor(new SpinnerSelectAllOnFocusLmlAttribute(), "selectAllOnFocus");
+    }
 }

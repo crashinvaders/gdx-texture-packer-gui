@@ -22,16 +22,20 @@
                 <table onecolumn="true" growx="true" padtop="4">
                     <table padtop="4" padright="4">
                         <image style="custom/ic-pad-left" scaling="none" padright="2"/>
-                        <intspinner id="spnValueLeft" value="0" min="0" max="999999" width="48" change="updateLeftPadFromView"/>
+                        <intspinner id="spnValueLeft" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateLeftPadFromView"/>
                         <actor width="8"/>
                         <image style="custom/ic-pad-right" scaling="none" padright="2"/>
-                        <intspinner id="spnValueRight" value="0" min="0" max="999999" width="48" change="updateRightPadFromView"/>
+                        <intspinner id="spnValueRight" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateRightPadFromView"/>
                         <actor width="8"/>
                         <image style="custom/ic-pad-bottom" scaling="none" padright="2"/>
-                        <intspinner id="spnValueBottom" value="0" min="0" max="999999" width="48" change="updateBottomPadFromView"/>
+                        <intspinner id="spnValueBottom" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateBottomPadFromView"/>
                         <actor width="8"/>
                         <image style="custom/ic-pad-top" scaling="none" padright="2"/>
-                        <intspinner id="spnValueTop" value="0" min="0" max="999999" width="48" change="updateTopPadFromView"/>
+                        <intspinner id="spnValueTop" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateTopPadFromView"/>
                     </table>
                     <buttongroup padtop="4">
                         <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
