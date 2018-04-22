@@ -44,6 +44,7 @@ public class ImageProcessor {
 	private final HashMap<String, Rect> crcs = new HashMap();
 	private final Array<Rect> rects = new Array();
 	private float scale = 1;
+	private TexturePacker.Resampling resampling = TexturePacker.Resampling.bicubic;
 
 	/** @param rootDir Used to strip the root directory prefix from image file names, can be null. */
 	public ImageProcessor(File rootDir, Settings settings) {
@@ -142,6 +143,10 @@ public class ImageProcessor {
 		this.scale = scale;
 	}
 
+	public void setResampling (TexturePacker.Resampling resampling) {
+		this.resampling = resampling;
+	}
+
 	public Array<Rect> getImages () {
 		return rects;
 	}
@@ -190,7 +195,7 @@ public class ImageProcessor {
 			} else {
 				Graphics2D g = (Graphics2D)newImage.getGraphics();
 				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, resampling.value);
 				g.drawImage(image, 0, 0, width, height, null);
 			}
 			image = newImage;

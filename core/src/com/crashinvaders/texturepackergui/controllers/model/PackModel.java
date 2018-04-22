@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.controllers.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
@@ -25,7 +26,7 @@ public class PackModel {
     private EventDispatcher eventDispatcher;
 
     public PackModel() {
-        scaleFactors.add(new ScaleFactorModel("", 1f));
+        scaleFactors.add(new ScaleFactorModel("", 1f, TexturePacker.Resampling.bicubic));
     }
 
     public PackModel(PackModel pack) {

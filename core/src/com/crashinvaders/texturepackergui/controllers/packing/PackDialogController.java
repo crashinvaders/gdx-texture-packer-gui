@@ -157,6 +157,7 @@ public class PackDialogController implements ActionContainer {
                 TexturePacker.Settings settings = newPack.getSettings();
                 settings.scaleSuffix[0] = "";
                 settings.scale[0] = scaleFactor.getFactor();
+                settings.scaleResampling[0] = scaleFactor.getResampling();
 
                 PackProcessingNode processingNode = new PackProcessingNode(project, newPack);
                 processingNode.setOrigPack(pack);

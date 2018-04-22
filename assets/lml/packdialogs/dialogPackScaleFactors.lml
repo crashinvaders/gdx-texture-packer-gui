@@ -6,7 +6,7 @@
         title="@dSfTitle"
         closebutton="true"
         closeonescape="true">
-    <vistable width="232" height="224" onecolumn="true">
+    <vistable width="302" height="224" onecolumn="true">
 
         <container background="button" minheight="64" grow="true" fill="true">
             <listview

@@ -129,6 +129,11 @@ public class TexturePacker {
 
 		for (int i = 0, n = settings.scale.length; i < n; i++) {
 			imageProcessor.setScale(settings.scale[i]);
+
+			if (settings.scaleResampling != null && settings.scaleResampling.length > i && settings.scaleResampling[i] != null) {
+				imageProcessor.setResampling(settings.scaleResampling[i]);
+			}
+
 			for (InputImage inputImage : inputImages) {
 				if (inputImage.file != null) {
 					if (inputImage.ninePatchProps != null) {
@@ -572,6 +577,7 @@ public class TexturePacker {
 		public boolean grid;
 		public float[] scale = {1};
 		public String[] scaleSuffix = {""};
+		public Resampling[] scaleResampling = {Resampling.bicubic};
 		public String atlasExtension = ".atlas";
 
 		public Settings () {
@@ -619,6 +625,7 @@ public class TexturePacker {
 			grid = settings.grid;
 			scale = Arrays.copyOf(settings.scale, settings.scale.length);
 			scaleSuffix = Arrays.copyOf(settings.scaleSuffix, settings.scaleSuffix.length);
+			scaleResampling = Arrays.copyOf(settings.scaleResampling, settings.scaleResampling.length);
 			atlasExtension = settings.atlasExtension;
 		}
 
@@ -635,6 +642,18 @@ public class TexturePacker {
 				}
 			}
 			return packFileName;
+		}
+	}
+
+	static public enum Resampling {
+		nearest(RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR), //
+		bilinear(RenderingHints.VALUE_INTERPOLATION_BILINEAR), //
+		bicubic(RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+
+		final Object value;
+
+		Resampling (Object value) {
+			this.value = value;
 		}
 	}
 

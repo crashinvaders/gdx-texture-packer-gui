@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.projectserializer;
 
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonValue;
 import com.crashinvaders.texturepackergui.controllers.model.ScaleFactorModel;
@@ -11,6 +12,7 @@ public class ScaleFactorJsonSerializer implements Json.Serializer<ScaleFactorMod
         json.writeObjectStart();
         json.writeValue("suffix", model.getSuffix());
         json.writeValue("factor", model.getFactor());
+        json.writeValue("resampling", model.getResampling().name());
         json.writeObjectEnd();
     }
 
@@ -18,6 +20,7 @@ public class ScaleFactorJsonSerializer implements Json.Serializer<ScaleFactorMod
     public ScaleFactorModel read(Json json, JsonValue jsonData, Class type) {
         String suffix = "";
         float factor = 1f;
+        TexturePacker.Resampling resampling = TexturePacker.Resampling.bicubic;
 
         JsonValue.JsonIterator iterator = jsonData.iterator();
         while (iterator.hasNext()) {
@@ -29,8 +32,11 @@ public class ScaleFactorJsonSerializer implements Json.Serializer<ScaleFactorMod
                 case "factor":
                     factor = value.asFloat();
                     break;
+                case "resampling":
+                    resampling = TexturePacker.Resampling.valueOf(value.asString());
+                    break;
             }
         }
-        return new ScaleFactorModel(suffix, factor);
+        return new ScaleFactorModel(suffix, factor, resampling);
     }
 }

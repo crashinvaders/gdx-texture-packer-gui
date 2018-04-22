@@ -3,6 +3,8 @@ package com.crashinvaders.texturepackergui.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Resampling;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
@@ -16,6 +18,7 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
 import com.kotcrab.vis.ui.util.adapter.ListAdapter;
@@ -75,14 +78,14 @@ public class ScaleFactorsDialogController implements ActionContainer {
     }
 
     @LmlAction("createScaleRecord") void createScaleRecord() {
-        listScales.getListView().getAdapter().add(new ScaleFactorModel("", 1f));
+        listScales.getListView().getAdapter().add(new ScaleFactorModel("", 1f, Resampling.bicubic));
     }
 
     @LmlAction("saveAndCloseDialog") void saveAndCloseDialog() {
         Array<ScaleFactorModel> scaleFactors = new Array<>();
         for (int i = 0; i < listAdapter.size(); i++) {
             ScaleListViewItem view = listAdapter.getView(listAdapter.get(i));
-            ScaleFactorModel model = new ScaleFactorModel(view.getSuffix(), view.getFactor());
+            ScaleFactorModel model = new ScaleFactorModel(view.getSuffix(), view.getFactor(), view.getResampling());
             scaleFactors.add(model);
         }
 
@@ -130,19 +133,24 @@ public class ScaleFactorsDialogController implements ActionContainer {
 
         @Override
         protected ScaleListViewItem createView(ScaleFactorModel item) {
+            LmlParser lmlParser = interfaceService.getParser();
             ScaleListViewItem view = new ScaleListViewItem(this, item);
-            interfaceService.getParser().createView(view, Gdx.files.internal("lml/packdialogs/packScaleFactorListItem.lml"));
+            lmlParser.getData().addArgument(ScaleListViewItem.ARG_EVEN_ROW, indexOf(item) % 2 == 0);
+            lmlParser.createView(view, Gdx.files.internal("lml/packdialogs/packScaleFactorListItem.lml"));
             return view;
         }
     }
 
     private static class ScaleListViewItem extends Container<VisTable> implements ActionContainer {
+        static final String ARG_EVEN_ROW = "evenRow";
+
         private final ScaleListAdapter adapter;
         private final ScaleFactorModel model;
 
         @LmlActor("content") VisTable content;
         @LmlActor("edtSuffix") VisTextField edtSuffix;
         @LmlActor("spnScale") Spinner spnScale;
+        @LmlActor("cmbResampling") VisSelectBox cmbResampling;
 
         private FloatSpinnerModel spnScaleModel;
 
@@ -158,6 +166,9 @@ public class ScaleFactorsDialogController implements ActionContainer {
             edtSuffix.setText(model.getSuffix());
             spnScaleModel = (FloatSpinnerModel) spnScale.getModel();
             spnScaleModel.setValue(BigDecimal.valueOf(model.getFactor()));
+
+            cmbResampling.setItems(ResamplingOption.values());
+            cmbResampling.setSelected(ResamplingOption.find(model.getResampling()));
         }
 
         @LmlAction("deleteRecord") void deleteRecord() {
@@ -170,6 +181,38 @@ public class ScaleFactorsDialogController implements ActionContainer {
 
         public float getFactor() {
             return spnScaleModel.getValue().floatValue();
+        }
+
+        public Resampling getResampling() {
+            return ((ResamplingOption) cmbResampling.getSelected()).resampling;
+        }
+
+        public enum ResamplingOption {
+            NEAREST(Resampling.nearest, "Nearest"),
+            BILINEAR(Resampling.bilinear, "Bilinear"),
+            BICUBIC(Resampling.bicubic, "Bicubic"),;
+
+            final Resampling resampling;
+            final String displayName;
+
+            ResamplingOption(Resampling resampling, String displayName) {
+                this.resampling = resampling;
+                this.displayName = displayName;
+            }
+
+            @Override
+            public String toString() {
+                return displayName;
+            }
+
+            public static ResamplingOption find(Resampling resampling) {
+                for (ResamplingOption value : values()) {
+                    if (value.resampling == resampling) {
+                        return value;
+                    }
+                }
+                return null;
+            }
         }
     }
 }

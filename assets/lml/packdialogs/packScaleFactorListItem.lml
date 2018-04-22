@@ -4,10 +4,11 @@
 <table id="content">
     <textfield
             id="edtSuffix"
-            width="122"
             messagetext="@dSfNoSuffix"
-            expandx="true"
+            growx="true"
+            minwidth="0"
             align="left"/>
+    <selectbox id="cmbResampling"/>
     <floatspinner
             id="spnScale"
             value="1.00"
@@ -16,10 +17,10 @@
             step="0.5"
             width="64"
             textalign="right"/>
-    <actor width="8"/>
     <imagebutton
             change="deleteRecord"
             icon="custom/ic-scale-del"
             imagescaling="none"
-            focusborder="false"/>
+            focusborder="false"
+            padleft="8"/>
 </table>
