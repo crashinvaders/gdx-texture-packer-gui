@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.views.canvas.widgets.preview;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -27,7 +28,10 @@ class PageGroup extends Group {
 
         borderFrame = new NinePatchDrawable(skin.getPatch("custom/white_frame")).tint(Color.BLACK);
 
-        setSize(page.getTexture().getWidth(), page.getTexture().getHeight());
+        Texture pageTexture = page.getTexture();
+        pageTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+
+        setSize(pageTexture.getWidth(), pageTexture.getHeight());
         setTouchable(Touchable.disabled);
 
         addActor(new RegionSpotlight(skin));
