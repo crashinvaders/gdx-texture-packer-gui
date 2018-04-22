@@ -64,7 +64,7 @@ public class ErrorReportFrame extends JDialog {
             JScrollPane spComment = new JScrollPane(txaComment);
             spComment.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
-            JButton btnReport = new JButton("Report on GitHub");
+            JButton btnReport = new JButton("Create Issue");
             btnReport.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {

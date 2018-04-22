@@ -143,7 +143,8 @@ public class PackingProcessor implements PackProcessor {
         // Exclude all ignore entries
         for (InputFile inputFile : inputFiles) {
             if (inputFile.getType() != InputFile.Type.Ignore || inputFile.isDirectory()) continue;
-            images.remove(new ImageEntry(inputFile.getFileHandle(), null));
+            FileHandle fileHandle = inputFile.getFileHandle();
+            images.remove(new ImageEntry(fileHandle, fileHandle.nameWithoutExtension()));
         }
 
         return images.getAsArray();

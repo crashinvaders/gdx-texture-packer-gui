@@ -165,6 +165,11 @@ public class NinePatchEditorDialog implements ActionContainer {
     }
 
     @LmlAction("hide") void hide() {
+        if (model != null) {
+            model.dispose();
+            model = null;
+        }
+
         if (dialog != null) {
             dialog.hide();
         }
@@ -174,9 +179,6 @@ public class NinePatchEditorDialog implements ActionContainer {
         if (resultListener != null) {
             resultListener.onResult(model);
         }
-
-        model.dispose();
-        model = null;
         hide();
     }
 

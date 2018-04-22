@@ -172,17 +172,24 @@ public class NinePatchEditorModel implements Disposable {
         InputFile.NinePatchProps ninePatchProps = inputFile.getNinePatchProps();
 
         patchValues.left.set(MathUtils.clamp(ninePatchProps.left, 0, pixmap.getWidth()));
-        patchValues.right.set(MathUtils.clamp(ninePatchProps.right, 0, pixmap.getWidth()));
+        patchValues.right.set(MathUtils.clamp(ninePatchProps.right, 0, pixmap.getWidth() - patchValues.left.get()));
         patchValues.top.set(MathUtils.clamp(ninePatchProps.top, 0, pixmap.getHeight()));
-        patchValues.bottom.set(MathUtils.clamp(ninePatchProps.bottom, 0, pixmap.getHeight()));
+        patchValues.bottom.set(MathUtils.clamp(ninePatchProps.bottom, 0, pixmap.getHeight() - patchValues.top.get()));
 
+        if (patchValues.left.get() == pixmap.getWidth()) patchValues.left.set(0);
+        if (patchValues.top.get() == pixmap.getHeight()) patchValues.top.set(0);
         if (patchValues.right.get() == pixmap.getWidth()) patchValues.right.set(0);
         if (patchValues.bottom.get() == pixmap.getHeight()) patchValues.bottom.set(0);
 
         contentValues.left.set(MathUtils.clamp(ninePatchProps.padLeft, 0, pixmap.getWidth()));
-        contentValues.right.set(MathUtils.clamp(ninePatchProps.padRight, 0, pixmap.getWidth()));
+        contentValues.right.set(MathUtils.clamp(ninePatchProps.padRight, 0, pixmap.getWidth() - contentValues.left.get()));
         contentValues.top.set(MathUtils.clamp(ninePatchProps.padTop, 0, pixmap.getHeight()));
-        contentValues.bottom.set(MathUtils.clamp(ninePatchProps.padBottom, 0, pixmap.getHeight()));
+        contentValues.bottom.set(MathUtils.clamp(ninePatchProps.padBottom, 0, pixmap.getHeight() - contentValues.top.get()));
+
+        if (contentValues.left.get() == pixmap.getWidth()) contentValues.left.set(0);
+        if (contentValues.top.get() == pixmap.getHeight()) contentValues.top.set(0);
+        if (contentValues.right.get() == pixmap.getWidth()) contentValues.right.set(0);
+        if (contentValues.bottom.get() == pixmap.getHeight()) contentValues.bottom.set(0);
     }
 
     /** @return original image pixmap with 1-pixel border 9-patch markup. */
