@@ -8,16 +8,16 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.utils.AppIconProvider;
-import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
-import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
-import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.CjkFontExtensionModule;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelUtils;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
+import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
+import com.crashinvaders.texturepackergui.events.ShowToastEvent;
+import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -37,6 +37,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
 import java.util.Locale;
 
+//TODO move model logic code to ModelUtils
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
 
@@ -149,20 +150,13 @@ public class GlobalActions implements ActionContainer {
         packDialogController.launchPack(project, pack);
     }
 
-    //TODO move model logic code to ModelUtils
     @LmlAction("newProject") public void newProject() {
-        //TODO check if there were any changes
-        ProjectModel project = getProject();
-        if (project.getPacks().size > 0) {
-            Dialogs.showOptionDialog(getStage(), getString("dialogTitleNewProject"), getString("dialogTextNewProject"), Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
-                @Override
-                public void yes() {
-                    modelService.setProject(new ProjectModel());
-                }
-            });
-        } else {
-            modelService.setProject(new ProjectModel());
-        }
+        checkUnsavedChanges(new Runnable() {
+            @Override
+            public void run() {
+                modelService.setProject(new ProjectModel());
+            }
+        });
     }
 
     @LmlAction("openProject") public void openProject() {
@@ -180,8 +174,13 @@ public class GlobalActions implements ActionContainer {
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                loadProject(chosenFile);
+                final FileHandle chosenFile = file.first();
+                checkUnsavedChanges(new Runnable() {
+                    @Override
+                    public void run() {
+                        loadProject(chosenFile);
+                    }
+                });
             }
         });
         getStage().addActor(fileChooser.fadeIn());
@@ -365,6 +364,27 @@ public class GlobalActions implements ActionContainer {
 
     private Stage getStage() {
         return interfaceService.getCurrentController().getStage();
+    }
+
+    private void checkUnsavedChanges(final Runnable onConfirm) {
+        if (!modelService.hasProjectChanges()) {
+            onConfirm.run();
+        } else {
+            //TODO i18n
+            Dialogs.showOptionDialog(getStage(), "You have unsaved changes.",
+                    "Do you want to save changes before close?",
+                    Dialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
+                        @Override
+                        public void no() {
+                            onConfirm.run();
+                        }
+                        @Override
+                        public void yes() {
+                            saveProject();
+                            onConfirm.run();
+                        }
+            });
+        }
     }
 
     /** Stores last used dir for specific actions */

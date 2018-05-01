@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.model.compression;
 
 import com.badlogic.gdx.utils.*;
+import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 
 import java.io.StringWriter;
@@ -53,5 +54,10 @@ public class PngtasticCompressionModel extends PngCompressionModel {
         JsonValue jsonValue = new JsonReader().parse(data);
         level = jsonValue.getInt("level", level);
         removeGamma = jsonValue.getBoolean("removeGamma", removeGamma);
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(super.computeStateHash(), level, removeGamma);
     }
 }

@@ -1,11 +1,13 @@
 package com.crashinvaders.texturepackergui.controllers.model;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.crashinvaders.common.statehash.StateHashUtils;
+import com.crashinvaders.common.statehash.StateHashable;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
 
-public class InputFile {
+public class InputFile implements StateHashable {
     private final Type type;
     private final FileHandle fileHandle;
     private final boolean directory;
@@ -131,6 +133,12 @@ public class InputFile {
     }
 
     @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(type, fileHandle, directory, dirFilePrefix,
+                recursive, flattenPaths, regionName, ninePatchProps);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -149,10 +157,15 @@ public class InputFile {
         Input, Ignore
     }
 
-    public static class NinePatchProps {
+    public static class NinePatchProps implements StateHashable {
         public int left, right, top, bottom;
         public int padLeft = -1, padRight = -1, padTop = -1, padBottom = -1;
 
         boolean active = false;  // If true, this file will be treated as predefined ninepatch
+
+        @Override
+        public int computeStateHash() {
+            return StateHashUtils.computeHash(left, right, top, bottom, padLeft, padRight, padTop, padBottom, active);
+        }
     }
 }

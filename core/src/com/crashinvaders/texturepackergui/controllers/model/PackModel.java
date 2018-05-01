@@ -6,14 +6,18 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.statehash.StateHashUtils;
+import com.crashinvaders.common.statehash.StateHashable;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent.Property;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Objects;
 
-public class PackModel {
+public class PackModel implements StateHashable {
     private static final String TAG = PackModel.class.getSimpleName();
 
     private final Array<ScaleFactorModel> scaleFactors = new Array<>();
@@ -192,4 +196,23 @@ public class PackModel {
         return name;
     }
 
+    @Override
+    public int computeStateHash() {
+        int settingsHash = computeSettingsStateHash(settings);
+        return StateHashUtils.computeHash(scaleFactors, inputFiles, settingsHash, name, filename, outputDir);
+    }
+
+    private static int computeSettingsStateHash(Settings s) {
+        int result = Objects.hash(s.pot, s.paddingX, s.paddingY, s.edgePadding, s.duplicatePadding,
+                s.rotation, s.minWidth, s.minHeight, s.maxWidth, s.maxHeight,
+                s.square, s.stripWhitespaceX, s.stripWhitespaceY, s.alphaThreshold,
+                s.filterMin, s.filterMag, s.wrapX, s.wrapY, s.format, s.alias, s.ignoreBlankImages,
+                s.fast, s.debug, s.silent, s.combineSubdirectories, s.ignore, s.flattenPaths,
+                s.premultiplyAlpha, s.useIndexes, s.bleed, s.bleedIterations, s.limitMemory,
+                s.grid, s.atlasExtension);
+        result = 31 * result + Arrays.hashCode(s.scale);
+        result = 31 * result + Arrays.hashCode(s.scaleSuffix);
+        result = 31 * result + Arrays.hashCode(s.scaleResampling);
+        return result;
+    }
 }

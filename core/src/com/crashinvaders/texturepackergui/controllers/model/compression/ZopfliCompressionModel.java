@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.model.compression;
 
 import com.badlogic.gdx.utils.*;
+import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 
 import java.io.StringWriter;
@@ -53,5 +54,10 @@ public class ZopfliCompressionModel extends PngCompressionModel {
         JsonValue jsonValue = new JsonReader().parse(data);
         level = jsonValue.getInt("level", level);
         iterations = jsonValue.getInt("iterations", iterations);
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash( super.computeStateHash(), type, level, iterations);
     }
 }

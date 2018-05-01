@@ -1,11 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers.model.filetype;
 
-import com.crashinvaders.texturepackergui.utils.KtxEtc2Processor;
 import com.badlogic.gdx.utils.*;
+import com.crashinvaders.common.statehash.StateHashUtils;
+import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent.Property;
-import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
+import com.crashinvaders.texturepackergui.utils.KtxEtc2Processor;
 
 import java.io.StringWriter;
 
@@ -106,6 +107,11 @@ public class KtxFileTypeModel extends FileTypeModel {
         this.encodingEtc2 = CommonUtils.findEnumConstantSafe(EncodingETC2.class,
                 jsonValue.getString("encodingEtc2", null), this.encodingEtc2);
         this.zipping = jsonValue.getBoolean("zipping", this.zipping);
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(format, encodingEtc1, encodingEtc2, zipping);
     }
 
     public enum Format {

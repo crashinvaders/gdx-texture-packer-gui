@@ -2,10 +2,7 @@ package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -14,8 +11,6 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.kotcrab.vis.ui.util.adapter.ArrayAdapter;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-
-import java.util.Iterator;
 
 public class PackListAdapter extends ArrayAdapter<PackModel, VisTable> {
 
@@ -65,7 +60,7 @@ public class PackListAdapter extends ArrayAdapter<PackModel, VisTable> {
 
     @Override
     protected void deselectView(VisTable view) {
-         ViewHolder viewHolder = (ViewHolder) view.getUserObject();
+        ViewHolder viewHolder = (ViewHolder) view.getUserObject();
         viewHolder.setSelected(false);
     }
 

@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.controllers.model.filetype;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.*;
+import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent.Property;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
@@ -14,6 +15,7 @@ import com.crashinvaders.texturepackergui.controllers.model.compression.ZopfliCo
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
 import java.io.StringWriter;
+import java.util.Objects;
 
 public class PngFileTypeModel extends FileTypeModel {
     private static final String TAG = PngFileTypeModel.class.getSimpleName();
@@ -101,5 +103,10 @@ public class PngFileTypeModel extends FileTypeModel {
             }
             this.compression = compModel;
         }
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(encoding, compression);
     }
 }

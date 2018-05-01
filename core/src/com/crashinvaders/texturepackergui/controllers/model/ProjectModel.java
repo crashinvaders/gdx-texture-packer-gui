@@ -3,20 +3,23 @@ package com.crashinvaders.texturepackergui.controllers.model;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
-import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
-import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent.Property;
+import com.crashinvaders.common.statehash.StateHashUtils;
+import com.crashinvaders.common.statehash.StateHashable;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
+import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent.Property;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
-public class ProjectModel {
+public class ProjectModel implements StateHashable {
 
     private final Array<PackModel> packs = new Array<>(true, 16);
     private final Color previewBackgroundColor = new Color(Color.WHITE);
-    private PackModel selectedPack;
     private FileHandle projectFile;
+    private FileTypeModel fileType = new PngFileTypeModel(); // PNG file type by default
+
     private EventDispatcher eventDispatcher;
-    private FileTypeModel fileType = new PngFileTypeModel(); // Png file type by default
+    private PackModel selectedPack;
 
     public ProjectModel() {
     }
@@ -106,5 +109,10 @@ public class ProjectModel {
         if (eventDispatcher != null) {
             eventDispatcher.postEvent(new ProjectPropertyChangedEvent(this, Property.PREVIEW_BG_COLOR));
         }
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(packs, previewBackgroundColor, projectFile, fileType);
     }
 }

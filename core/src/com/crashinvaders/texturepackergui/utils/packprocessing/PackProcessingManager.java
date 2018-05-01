@@ -78,7 +78,6 @@ public class PackProcessingManager {
                 }
             });
         }
-        executorService.shutdown();
     }
 
     private synchronized void nodeProcessed(PackProcessingNode node) {
@@ -101,6 +100,7 @@ public class PackProcessingManager {
         processedCount.set(0);
         processing = false;
         listener.onProcessingFinished();
+        executorService.shutdown();
     }
 
     private static class SyncListener implements Listener {

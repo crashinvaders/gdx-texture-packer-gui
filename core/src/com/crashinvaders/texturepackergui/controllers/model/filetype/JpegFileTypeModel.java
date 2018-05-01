@@ -2,8 +2,9 @@ package com.crashinvaders.texturepackergui.controllers.model.filetype;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.*;
-import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
+import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
+import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
 import java.io.StringWriter;
@@ -69,5 +70,10 @@ public class JpegFileTypeModel extends FileTypeModel {
         this.encoding = CommonUtils.findEnumConstantSafe(Pixmap.Format.class,
                 jsonValue.getString("encoding", null), encoding);
         this.quality = jsonValue.getFloat("quality", quality);
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(encoding, quality);
     }
 }

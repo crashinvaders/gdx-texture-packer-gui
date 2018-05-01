@@ -1,8 +1,10 @@
 package com.crashinvaders.texturepackergui.controllers.model;
 
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.crashinvaders.common.statehash.StateHashUtils;
+import com.crashinvaders.common.statehash.StateHashable;
 
-public class ScaleFactorModel {
+public class ScaleFactorModel implements StateHashable {
     private final String suffix;
     private final float factor;
     private final TexturePacker.Resampling resampling;
@@ -29,5 +31,10 @@ public class ScaleFactorModel {
 
     public TexturePacker.Resampling getResampling() {
         return resampling;
+    }
+
+    @Override
+    public int computeStateHash() {
+        return StateHashUtils.computeHash(suffix, factor, resampling);
     }
 }
