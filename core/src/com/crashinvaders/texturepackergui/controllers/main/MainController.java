@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.FileDragDropController;
+import com.crashinvaders.texturepackergui.controllers.GlobalActions;
 import com.crashinvaders.texturepackergui.controllers.RecentProjectsRepository;
 import com.crashinvaders.texturepackergui.controllers.ScaleFactorsDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.FileTypeController;
@@ -73,6 +74,7 @@ public class MainController implements ActionContainer, ViewResizer {
     @Inject ModelService modelService;
     @Inject LocaleService localeService;
     @Inject ProjectSerializer projectSerializer;
+    @Inject GlobalActions globalActions;
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
@@ -620,9 +622,14 @@ public class MainController implements ActionContainer, ViewResizer {
                     Gdx.app.postRunnable(new Runnable() {
                         @Override
                         public void run() {
-                            ProjectModel project = projectSerializer.loadProject(file);
+                            final ProjectModel project = projectSerializer.loadProject(file);
                             if (project != null) {
-                                modelService.setProject(project);
+                                globalActions.commonDialogs.checkUnsavedChanges(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        modelService.setProject(project);
+                                    }
+                                });
                             }
                         }
                     });

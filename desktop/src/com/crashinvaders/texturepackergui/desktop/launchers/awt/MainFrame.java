@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.desktop.launchers.awt;
 import com.badlogic.gdx.Gdx;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
+import com.crashinvaders.texturepackergui.controllers.GlobalActions;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -34,6 +35,7 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
         addWindowListener(new WindowAdapter() {
             boolean iconified = false;
+            boolean closeHandling = false;
 
             @Override
             public void windowIconified(WindowEvent e) {
@@ -51,14 +53,31 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
             @Override
             public void windowClosing(WindowEvent e) {
-                FramePropertiesPersister.saveFrameProperties(MainFrame.this);
-                lwjglCanvas.stop();
+                if (closeHandling) return;
+                closeHandling = true;
 
-                EventQueue.invokeLater(new Runnable() {
-                    public void run() {
-                        System.exit(0);
-                    }
-                });
+                ((GlobalActions) App.inst().getContext().getComponent(GlobalActions.class)).commonDialogs.checkUnsavedChanges(
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                closeHandling = false;
+                                FramePropertiesPersister.saveFrameProperties(MainFrame.this);
+                                lwjglCanvas.stop();
+
+                                EventQueue.invokeLater(new Runnable() {
+                                    public void run() {
+                                        System.exit(0);
+                                    }
+                                });
+                            }
+                        }, new Runnable() {
+                            @Override
+                            public void run() {
+                                closeHandling = false;
+
+                            }
+                        });
+                Gdx.graphics.requestRendering();
             }
         });
 

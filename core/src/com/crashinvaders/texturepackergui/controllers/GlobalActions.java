@@ -19,6 +19,7 @@ import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectS
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
+import com.crashinvaders.texturepackergui.views.dialogs.OptionDialog;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
@@ -51,7 +52,7 @@ public class GlobalActions implements ActionContainer {
     @Inject RecentProjectsRepository recentProjects;
     @Inject PackDialogController packDialogController;
     @Inject NinePatchToolController ninePatchToolController;
-    @Inject CommonDialogs commonDialogs;
+    @Inject public CommonDialogs commonDialogs;
 
     /** Common preferences */
     private Preferences prefs;
@@ -92,7 +93,7 @@ public class GlobalActions implements ActionContainer {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        Dialogs.OptionDialog optionDialog = Dialogs.showOptionDialog(getStage(), getString("deletePack"), getString("dialogTextDeletePack", pack.getName()),
+        OptionDialog optionDialog = OptionDialog.show(getStage(), getString("deletePack"), getString("dialogTextDeletePack", pack.getName()),
                 Dialogs.OptionDialogType.YES_CANCEL, new OptionDialogAdapter() {
                     @Override
                     public void yes() {
@@ -151,7 +152,7 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("newProject") public void newProject() {
-        checkUnsavedChanges(new Runnable() {
+        commonDialogs.checkUnsavedChanges(new Runnable() {
             @Override
             public void run() {
                 modelService.setProject(new ProjectModel());
@@ -175,7 +176,7 @@ public class GlobalActions implements ActionContainer {
             @Override
             public void selected (Array<FileHandle> file) {
                 final FileHandle chosenFile = file.first();
-                checkUnsavedChanges(new Runnable() {
+                commonDialogs.checkUnsavedChanges(new Runnable() {
                     @Override
                     public void run() {
                         loadProject(chosenFile);
@@ -364,27 +365,6 @@ public class GlobalActions implements ActionContainer {
 
     private Stage getStage() {
         return interfaceService.getCurrentController().getStage();
-    }
-
-    private void checkUnsavedChanges(final Runnable onConfirm) {
-        if (!modelService.hasProjectChanges()) {
-            onConfirm.run();
-        } else {
-            //TODO i18n
-            Dialogs.showOptionDialog(getStage(), "You have unsaved changes.",
-                    "Do you want to save changes before close?",
-                    Dialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
-                        @Override
-                        public void no() {
-                            onConfirm.run();
-                        }
-                        @Override
-                        public void yes() {
-                            saveProject();
-                            onConfirm.run();
-                        }
-            });
-        }
     }
 
     /** Stores last used dir for specific actions */

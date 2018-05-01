@@ -221,7 +221,7 @@ public class ConfigurationController {
 
     // Try load initial project
     @Initiate(priority = -1000)
-    public void startupProject(ModelService modelService, ProjectSerializer projectSerializer) {
+    public void setupInitialProject(ModelService modelService, ProjectSerializer projectSerializer) {
         AppParams params = App.inst().getParams();
         if (params.startupProject == null) return;
 

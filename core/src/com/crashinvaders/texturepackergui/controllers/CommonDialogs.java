@@ -17,12 +17,15 @@ import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.crashinvaders.texturepackergui.views.ButtonBarBuilder;
 import com.crashinvaders.texturepackergui.views.ContentDialog;
+import com.crashinvaders.texturepackergui.views.dialogs.OptionDialog;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.scene2d.ui.reflected.ButtonTable;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
+import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
 import com.kotcrab.vis.ui.widget.ButtonBar;
 import com.kotcrab.vis.ui.widget.VisTextField;
 
@@ -34,6 +37,7 @@ public class CommonDialogs {
     @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
+    @Inject GlobalActions globalActions;
     @Inject ExtensionModuleRequiredDialogController emRequiredDialog;
 
     public void newPack() {
@@ -210,5 +214,43 @@ public class CommonDialogs {
 
     private Stage getStage() {
         return interfaceService.getCurrentController().getStage();
+    }
+
+    /**
+     * @param onConfirm Fires on "no" or "yes" choice.
+     * @param onCancel Fires on "cancel" choice. May be null.
+     */
+    public void checkUnsavedChanges(final Runnable onConfirm, final Runnable onCancel) {
+        if (!globalActions.modelService.hasProjectChanges()) {
+            onConfirm.run();
+        } else {
+            OptionDialog optionDialog = OptionDialog.show(getStage(),
+                    getString("dUnsavedChangesTitle"),
+                    getString("dUnsavedChangesMessage"),
+                    Dialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
+                        @Override
+                        public void no() {
+                            onConfirm.run();
+                        }
+
+                        @Override
+                        public void yes() {
+                            globalActions.saveProject();
+                            onConfirm.run();
+                        }
+
+                        @Override
+                        public void cancel() {
+                            if (onCancel != null) {
+                                onCancel.run();
+                            }
+                        }
+                    });
+            optionDialog.closeOnEscape();
+        }
+    }
+
+    public void checkUnsavedChanges(final Runnable onConfirm) {
+        checkUnsavedChanges(onConfirm, null);
     }
 }
