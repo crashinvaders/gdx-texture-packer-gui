@@ -2,7 +2,8 @@
 - Save prompt before project closing if any changes are detected.
 - Scaling resampling option per scale factor entry.
 - If output directory doesn't exist, it will be created automatically during packing.
-- Interface scaling option appears under "Tools" menu.
+- Interface scaling option (check Tools -> Interface scaling).
+- Support for user defined hotkeys (check Tools -> Customize hotkeys).
 - Visual indication for newly added pack files.
 - Memory consumption optimized run configuration. The app will never exceed 1GB of RAM and free up memory faster.
 - Application crashes get captured and reported directly to GitHub issues.
