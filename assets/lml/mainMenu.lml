@@ -88,6 +88,11 @@
                 text="@isTitle"
                 onchange="showUiScalingDialog"
                 icon="custom/ic-interface-scaling"/>
+        <menuitem
+                id="miUserHotkeys"
+                text="@customizeHotkeys"
+                onchange="editCustomHotkeys"
+                icon="custom/ic-custom-hotkeys"/>
 
         <menuseparator/>
 

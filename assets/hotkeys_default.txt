@@ -2,8 +2,9 @@
 #
 # Lines started with "#" are comments.
 #
-# One expression per line. Syntax is "[operation_name]:[shortcut_definition]".
-# Shortcut definition may contain any number of modifiers in any order
+# One expression per line.
+# Syntax is "<operation_name>:<shortcut_definition>".
+# A shortcut definition may contain any number of modifiers (in any order)
 # and only one any other key connected by plus(+) character.
 # Available modifiers (keys from the one group are self-interchangeable and should be treated as the same key):
 #   SHIFT
@@ -11,9 +12,10 @@
 #   CTRL, CONTROL
 #   CMD, COMMAND, SUPER, META, WIN, WINDOWS
 #
-# You can create your custom shortcut file with different keys. Place it into the application directory
-# (next to "gdx-texturepacker.jar" location) and name the file "hotkeys.txt".
-
+# You can create your custom shortcut file with different keys.
+# Place it into the application data directory and name the file "hotkeys-user.txt".
+#   Linux/MacOS:    "~/.gdxtexturepackergui/"
+#   Windows:        "C:\Users\<username>\.gdxtexturepackergui\"
 
 newProject: CTRL+SHIFT+N
 openProject: CTRL+O

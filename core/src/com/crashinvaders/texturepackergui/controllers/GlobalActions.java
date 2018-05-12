@@ -36,11 +36,14 @@ import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.Locale;
 
 //TODO move model logic code to ModelUtils
 @ViewActionContainer("global")
 public class GlobalActions implements ActionContainer {
+    private static final String TAG = GlobalActions.class.getSimpleName();
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
@@ -339,6 +342,18 @@ public class GlobalActions implements ActionContainer {
         });
     }
 
+    @LmlAction("editCustomHotkeys") void editCustomHotkeys() {
+        FileHandle userHotkeyFile = Gdx.files.external(AppConstants.EXTERNAL_DIR + "/hotkeys_user.txt");
+        if (!userHotkeyFile.exists()) {
+            Gdx.files.internal("hotkeys_user.txt").copyTo(userHotkeyFile);
+        }
+        try {
+            Desktop.getDesktop().open(userHotkeyFile.file());
+        } catch (IOException e) {
+            Gdx.app.error(TAG, "Error opening " + userHotkeyFile, e);
+        }
+    }
+
     public void changeLanguage(Locale locale) {
         if (localeService.getCurrentLocale().equals(locale)) return;
 
@@ -406,5 +421,6 @@ public class GlobalActions implements ActionContainer {
                 this.prefKey = prefKey;
             }
         }
+
     }
 }

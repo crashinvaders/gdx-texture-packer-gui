@@ -7,6 +7,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.GlobalActions;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Destroy;
@@ -29,13 +30,13 @@ public class GlobalShortcutHandler extends InputAdapter {
 
         // Read shortcut files
         {
-            parseShortcutFile(Gdx.files.internal("hotkeys-default.txt"));
+            parseShortcutFile(Gdx.files.internal("hotkeys_default.txt"));
 
             if (App.inst().getParams().debug) {
-                parseShortcutFile(Gdx.files.internal("hotkeys-debug.txt"));
+                parseShortcutFile(Gdx.files.internal("hotkeys_debug.txt"));
             }
 
-            FileHandle userShortcutFile = Gdx.files.internal("hotkeys.txt");
+            FileHandle userShortcutFile = Gdx.files.external(AppConstants.EXTERNAL_DIR + "/hotkeys_user.txt");
             if (userShortcutFile.exists()) {
                 parseShortcutFile(userShortcutFile);
             }

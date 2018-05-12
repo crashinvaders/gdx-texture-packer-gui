@@ -22,7 +22,7 @@ import java.util.Date;
 public class ExtensionModuleRepositoryService {
     private static final String TAG = ExtensionModuleRepositoryService.class.getSimpleName();
     private static final String BASE_URL = "https://crashinvaders.github.io/gdx-texture-packer-gui/modules/";
-    private static final String PREF_KEY_LAST_CHECK = "lastModuleRepoCheck";
+    private static final String PREF_KEY_LAST_CHECK = "last_module_repo_check";
     private static final int CACHE_LIFE = 1000*60*60*24; // One day in millis
 
     @Inject EventDispatcher eventDispatcher;
