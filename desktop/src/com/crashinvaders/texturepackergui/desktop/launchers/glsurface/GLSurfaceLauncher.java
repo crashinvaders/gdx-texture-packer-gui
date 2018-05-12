@@ -41,6 +41,7 @@ public class GLSurfaceLauncher {
 
 		AppParams appParams = new AppParams();
 		appParams.startupProject = arguments.project;
+		appParams.debug = arguments.debug;
 
 		App app = new App(new DesktopClassScanner(), appParams);
 		new LwjglApplication(new WindowParamsPersistingApplicationWrapper(app, configuration), configuration);

@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.controllers.shortcuts;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.crashinvaders.texturepackergui.App;
@@ -14,24 +15,30 @@ import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.parser.action.ActorConsumer;
 
-@Component
 public class GlobalShortcutHandler extends InputAdapter {
     private static String TAG = GlobalShortcutHandler.class.getSimpleName();
 
     @Inject GlobalActions globalActions;
     @Inject InterfaceService interfaceService;
 
-    private ArrayMap<String, Shortcut> shortcuts;
+    private final ArrayMap<String, Shortcut> shortcuts = new ArrayMap<>();
+    private final ShortcutParser shortcutParser = new ShortcutParser();
 
     @Initiate void initialize() {
         App.inst().getInput().addProcessor(this, 1000);
 
-        ShortcutParser shortcutParser = new ShortcutParser();
-        Array<Shortcut> shortcutArray = shortcutParser.parse(Gdx.files.internal("hotkeys.txt"));
+        // Read shortcut files
+        {
+            parseShortcutFile(Gdx.files.internal("hotkeys-default.txt"));
 
-        shortcuts = new ArrayMap<>(shortcutArray.size);
-        for (Shortcut shortcut : shortcutArray) {
-            shortcuts.put(shortcut.getActionName(), shortcut);
+            if (App.inst().getParams().debug) {
+                parseShortcutFile(Gdx.files.internal("hotkeys-debug.txt"));
+            }
+
+            FileHandle userShortcutFile = Gdx.files.internal("hotkeys.txt");
+            if (userShortcutFile.exists()) {
+                parseShortcutFile(userShortcutFile);
+            }
         }
     }
 
@@ -63,6 +70,16 @@ public class GlobalShortcutHandler extends InputAdapter {
             }
         }
         return false;
+    }
+
+    private void parseShortcutFile(FileHandle fileHandle) {
+        Gdx.app.log(TAG, "Parsing shortcut file: " + fileHandle);
+
+        Array<Shortcut> shortcutArray = shortcutParser.parse(fileHandle);
+
+        for (Shortcut shortcut : shortcutArray) {
+            shortcuts.put(shortcut.getActionName(), shortcut);
+        }
     }
 
     private void executeShortcutAction(Shortcut shortcut) {

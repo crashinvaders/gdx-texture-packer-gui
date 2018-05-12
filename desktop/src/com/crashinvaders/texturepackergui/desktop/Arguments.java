@@ -17,4 +17,7 @@ public class Arguments {
 
     @Option(name = "-softopengl")
     public boolean softOpenGL;
+
+    @Option(name = "-debug")
+    public boolean debug;
 }

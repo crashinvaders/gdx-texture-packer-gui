@@ -1,0 +1,34 @@
+# This is a default hotkey list.
+#
+# Lines started with "#" are comments.
+#
+# One expression per line. Syntax is "[operation_name]:[shortcut_definition]".
+# Shortcut definition may contain any number of modifiers in any order
+# and only one any other key connected by plus(+) character.
+# Available modifiers (keys from the one group are self-interchangeable and should be treated as the same key):
+#   SHIFT
+#   ALT
+#   CTRL, CONTROL
+#   CMD, COMMAND, SUPER, META, WIN, WINDOWS
+#
+# You can create your custom shortcut file with different keys. Place it into the application directory
+# (next to "gdx-texturepacker.jar" location) and name the file "hotkeys.txt".
+
+
+newProject: CTRL+SHIFT+N
+openProject: CTRL+O
+saveProjectAs: CTRL+SHIFT+S
+saveProject: CTRL+S
+
+newPack: CTRL+N
+deletePack: CTRL+SHIFT+DEL
+copyPack: CTRL+SHIFT+C
+renamePack: CTRL+R
+
+movePackUp: ALT+SHIFT+UP
+movePackDown: ALT+SHIFT+DOWN
+selectNextPack: ALT+DOWN
+selectPreviousPack: ALT+UP
+
+packSelected: CTRL+P
+packAll: CTRL+SHIFT+P

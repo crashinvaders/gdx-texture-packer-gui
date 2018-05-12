@@ -41,6 +41,7 @@ public class AwtFrameLauncher {
 
 				AppParams appParams = new AppParams();
 				appParams.startupProject = arguments.project;
+				appParams.debug = arguments.debug;
 
 				App app = new App(new DesktopClassScanner(), appParams);
 				CustomLwjglCanvas canvas = new CustomLwjglCanvas(app, config);

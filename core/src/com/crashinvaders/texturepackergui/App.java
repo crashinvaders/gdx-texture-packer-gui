@@ -32,6 +32,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 
 public class App implements ApplicationListener {
+    private static final String TAG = App.class.getSimpleName();
+
     private static App instance;
     private final ClassScanner componentScanner;
     private final AppParams params;
@@ -72,6 +74,10 @@ public class App implements ApplicationListener {
 
     @Override
     public void create() {
+        if (params.debug) {
+            Gdx.app.log(TAG, "Application is running in DEBUG mode.");
+        }
+
         Gdx.app.getGraphics().setContinuousRendering(false);
 
         Gdx.input.setInputProcessor(inputMultiplexer);

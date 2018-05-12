@@ -6,6 +6,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
@@ -15,31 +17,34 @@ import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
 
 public class ShortcutParser {
     private static final String TAG = ShortcutParser.class.getSimpleName();
-    private static final String COMMENT_PREFIX = "//";
+    private static final String COMMENT_PREFIX = "#";
     private static final ShortcutComparator shortcutComparator = new ShortcutComparator();
     private static final HashMap<String, Integer> keyCodes = prepareKeyCodes();
 
     public Array<Shortcut> parse(FileHandle fileHandle) {
+        BufferedReader br = null;
         try {
-            String hotkeyMarkup = fileHandle.readString();
-            return parse(hotkeyMarkup);
-        } catch (GdxRuntimeException e) {
+            br = new BufferedReader(fileHandle.reader());
+            return parse(br);
+        } catch (IOException | GdxRuntimeException e) {
             Gdx.app.error(TAG, "Error reading shortcut file", e);
             return new Array<>();
+        } finally {
+            if (br != null) try { br.close(); } catch (IOException ignore) { }
         }
     }
 
-    public Array<Shortcut> parse(String hotkeyMarkup) {
+    public Array<Shortcut> parse(BufferedReader bufferedReader) throws IOException {
         Array<Shortcut> shortcuts = new Array<>();
 
-        Array<String> lines = splitAndTrim(hotkeyMarkup);
-        for (String line : lines) {
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
             line = line.trim();
-            if (line.startsWith(COMMENT_PREFIX)) continue;
+            if (line.length() == 0 || line.startsWith(COMMENT_PREFIX)) continue;
 
             Array<String> segments = splitAndTrim(line, ":");
             if (segments.size != 2) {
-                Gdx.app.error(TAG, "Wrong format in line: " + line);
+                Gdx.app.error(TAG, "Wrong format at line: " + line);
                 continue;
             }
 
