@@ -1,4 +1,6 @@
 [LATEST]
+
+[4.7.0]
 - Save prompt before project closing if any changes are detected.
 - Scaling resampling option per scale factor entry.
 - If output directory doesn't exist, it will be created automatically during packing.
