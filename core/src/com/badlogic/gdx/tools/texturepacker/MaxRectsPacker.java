@@ -76,9 +76,7 @@ public class MaxRectsPacker implements Packer {
 		}
 
 		Array<Page> pages = new Array();
-		while (inputRects.size > 0)
-
-		{
+		while (inputRects.size > 0) {
 			Page result = packPage(inputRects);
 			pages.add(result);
 			inputRects = result.remainingRects;
@@ -135,8 +133,8 @@ public class MaxRectsPacker implements Packer {
 
 		if (!settings.silent) System.out.print("Packing");
 
-		edgePaddingX -= settings.paddingX;
-		edgePaddingY -= settings.paddingY;
+		edgePaddingX = Math.max(0, edgePaddingX - settings.paddingX);
+		edgePaddingY = Math.max(0, edgePaddingY - settings.paddingY);
 
 		// Find the minimal page size that fits all rects.
 		Page bestResult = null;

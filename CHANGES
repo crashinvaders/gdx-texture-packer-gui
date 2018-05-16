@@ -1,4 +1,5 @@
 [LATEST]
+- Fixed wrong page size when padding is not zero.
 
 [4.7.0]
 - Save prompt before project closing if any changes are detected.
