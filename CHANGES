@@ -1,4 +1,6 @@
 [LATEST]
+
+[4.7.1]
 - Fixed wrong page size when padding is not zero.
 
 [4.7.0]
