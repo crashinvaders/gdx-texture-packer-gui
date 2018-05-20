@@ -133,8 +133,10 @@ public class MaxRectsPacker implements Packer {
 
 		if (!settings.silent) System.out.print("Packing");
 
-		edgePaddingX = Math.max(0, edgePaddingX - settings.paddingX);
-		edgePaddingY = Math.max(0, edgePaddingY - settings.paddingY);
+		//FIXME These two lines cause wrong page size in some cases.
+		//FIXME Resolve https://github.com/libgdx/libgdx/commit/68264cb9f90a39f82a06b88dc3f5f295440e3ceb
+//		edgePaddingX = Math.max(0, edgePaddingX - settings.paddingX);
+//		edgePaddingY = Math.max(0, edgePaddingY - settings.paddingY);
 
 		// Find the minimal page size that fits all rects.
 		Page bestResult = null;
