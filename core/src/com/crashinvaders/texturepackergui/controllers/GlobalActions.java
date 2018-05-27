@@ -29,7 +29,9 @@ import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.Locales;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
@@ -202,6 +204,8 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("saveProject") public void saveProject() {
+        FocusManager.resetFocus(getStage());
+
         ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
 
@@ -214,6 +218,8 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("saveProjectAs") public void saveProjectAs() {
+        FocusManager.resetFocus(getStage());
+
         final ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
         FileHandle dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.PROJECT);
