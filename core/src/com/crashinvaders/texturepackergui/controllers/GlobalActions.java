@@ -69,6 +69,10 @@ public class GlobalActions implements ActionContainer {
         fileChooserHistory = new FileChooserHistory(prefs);
     }
 
+    @LmlAction("resetViewFocus") public void resetViewFocus() {
+        FocusManager.resetFocus(getStage());
+    }
+
 	@LmlAction("newPack") public void newPack() {
         commonDialogs.newPack();
 	}
@@ -204,7 +208,7 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("saveProject") public void saveProject() {
-        FocusManager.resetFocus(getStage());
+        resetViewFocus();
 
         ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
@@ -218,7 +222,7 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("saveProjectAs") public void saveProjectAs() {
-        FocusManager.resetFocus(getStage());
+        resetViewFocus();
 
         final ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();

@@ -5,10 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -42,6 +39,8 @@ import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
+import com.crashinvaders.texturepackergui.views.seekbar.IntSeekBarModel;
+import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
@@ -87,6 +86,7 @@ public class MainController implements ActionContainer, ViewResizer {
 
     @ViewStage Stage stage;
 
+    @LmlActor("mainRoot") Group mainRoot;
     @LmlActor("toastHostGroup") Group toastHostGroup;
     @LmlActor("canvas") Canvas canvas;
     @LmlActor("packListSplitPane") VisSplitPane packListSplitPane;
@@ -406,31 +406,31 @@ public class MainController implements ActionContainer, ViewResizer {
         }
     }
 
-    @LmlAction("onSettingsIntSpinnerChanged") void onSettingsIntSpinnerChanged(Spinner spinner) {
+    @LmlAction("onSettingsIntSeekBarChanged") void onSettingsIntSeekBarChanged(SeekBar seekBar) {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         TexturePacker.Settings settings = pack.getSettings();
-        IntSpinnerModel model = (IntSpinnerModel) spinner.getModel();
-        switch (spinner.getName()) {
-            case "spnMinPageWidth": settings.minWidth = model.getValue(); break;
-            case "spnMinPageHeight": settings.minHeight = model.getValue(); break;
-            case "spnMaxPageWidth": settings.maxWidth = model.getValue(); break;
-            case "spnMaxPageHeight": settings.maxHeight = model.getValue(); break;
-            case "spnAlphaThreshold": settings.alphaThreshold = model.getValue(); break;
-            case "spnPaddingX": settings.paddingX = model.getValue(); break;
-            case "spnPaddingY": settings.paddingY = model.getValue(); break;
+        IntSeekBarModel model = (IntSeekBarModel) seekBar.getModel();
+        switch (seekBar.getName()) {
+            case "skbMinPageWidth": settings.minWidth = model.getValue(); break;
+            case "skbMinPageHeight": settings.minHeight = model.getValue(); break;
+            case "skbMaxPageWidth": settings.maxWidth = model.getValue(); break;
+            case "skbMaxPageHeight": settings.maxHeight = model.getValue(); break;
+            case "skbAlphaThreshold": settings.alphaThreshold = model.getValue(); break;
+            case "skbPaddingX": settings.paddingX = model.getValue(); break;
+            case "skbPaddingY": settings.paddingY = model.getValue(); break;
         }
     }
 
-//    @LmlAction("onSettingsFloatSpinnerChanged") void onSettingsFloatSpinnerChanged(Spinner spinner) {
+//    @LmlAction("onSettingsFloatSpinnerChanged") void onSettingsFloatSpinnerChanged(SeekBar seekBar) {
 //        PackModel pack = getSelectedPack();
 //        if (pack == null) return;
 //
 //        TexturePacker.Settings settings = pack.getSettings();
-//        FloatSpinnerModel model = (FloatSpinnerModel) spinner.getModel();
+//        FloatSeekBarModel model = (FloatSeekBarModel) seekBar.getModel();
 //        switch (spinner.getName()) {
-//            case "spnJpegQuality": settings.jpegQuality = model.getValue().floatValue(); break;
+//            case "skbJpegQuality": settings.jpegQuality = model.getValue().floatValue(); break;
 //        }
 //    }
 
@@ -528,13 +528,13 @@ public class MainController implements ActionContainer, ViewResizer {
             actorsPackSettings.cbSquare.setChecked(settings.square);
             actorsPackSettings.cbLimitMemory.setChecked(settings.limitMemory);
 
-            ((IntSpinnerModel) actorsPackSettings.spnMinPageWidth.getModel()).setValue(settings.minWidth, false);
-            ((IntSpinnerModel) actorsPackSettings.spnMinPageHeight.getModel()).setValue(settings.minHeight, false);
-            ((IntSpinnerModel) actorsPackSettings.spnMaxPageWidth.getModel()).setValue(settings.maxWidth, false);
-            ((IntSpinnerModel) actorsPackSettings.spnMaxPageHeight.getModel()).setValue(settings.maxHeight, false);
-            ((IntSpinnerModel) actorsPackSettings.spnAlphaThreshold.getModel()).setValue(settings.alphaThreshold, false);
-            ((IntSpinnerModel) actorsPackSettings.spnPaddingX.getModel()).setValue(settings.paddingX, false);
-            ((IntSpinnerModel) actorsPackSettings.spnPaddingY.getModel()).setValue(settings.paddingY, false);
+            ((IntSeekBarModel) actorsPackSettings.skbMinPageWidth.getModel()).setValue(settings.minWidth, false);
+            ((IntSeekBarModel) actorsPackSettings.skbMinPageHeight.getModel()).setValue(settings.minHeight, false);
+            ((IntSeekBarModel) actorsPackSettings.skbMaxPageWidth.getModel()).setValue(settings.maxWidth, false);
+            ((IntSeekBarModel) actorsPackSettings.skbMaxPageHeight.getModel()).setValue(settings.maxHeight, false);
+            ((IntSeekBarModel) actorsPackSettings.skbAlphaThreshold.getModel()).setValue(settings.alphaThreshold, false);
+            ((IntSeekBarModel) actorsPackSettings.skbPaddingX.getModel()).setValue(settings.paddingX, false);
+            ((IntSeekBarModel) actorsPackSettings.skbPaddingY.getModel()).setValue(settings.paddingY, false);
 
             actorsPackSettings.cboMinFilter.setSelected(settings.filterMin);
             actorsPackSettings.cboMagFilter.setSelected(settings.filterMag);

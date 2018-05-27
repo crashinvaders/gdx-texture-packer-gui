@@ -98,6 +98,7 @@
 		default-horizontal: {background: slider, knob: slider-knob, knobOver: slider-knob-over, knobDown: slider-knob-down, disabledKnob: slider-knob-disabled }
 		default-vertical: {background: slider-vertical, knob: slider-knob, knobOver: slider-knob-over, knobDown: slider-knob-down, disabledKnob: slider-knob-disabled }
 		seekbar: {background: custom/seekbar-background, knob: custom/seekbar-knob-up, knobOver: custom/seekbar-knob-over, knobBefore: custom/seekbar-fill-before }
+		seekbar-small: {background: custom/seekbar-background-small, knob: custom/seekbar-knob-up-small, knobOver: custom/seekbar-knob-over-small, knobBefore: custom/seekbar-fill-before-small }
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		default: {font: default-font, fontColor: white }

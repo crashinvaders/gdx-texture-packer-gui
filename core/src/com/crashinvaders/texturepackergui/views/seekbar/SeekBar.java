@@ -212,6 +212,22 @@ public class SeekBar extends Table implements Focusable, BorderOwner {
         this.listenSliderChangeEvents = listenChangeEvents;
     }
 
+    public ChangeEventPolicy getChangeEventPolicy() {
+        return changeEventPolicy;
+    }
+
+    public void setChangeEventPolicy(ChangeEventPolicy changeEventPolicy) {
+        this.changeEventPolicy = changeEventPolicy;
+    }
+
+    public SeekBarModel getModel() {
+        return model;
+    }
+
+    public Style getStyle() {
+        return style;
+    }
+
     public static class Style {
         public VisTextField.VisTextFieldStyle textFieldStyle;
         public Slider.SliderStyle sliderStyle;

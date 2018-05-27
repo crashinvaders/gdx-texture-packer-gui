@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE stack SYSTEM "/lml.dtd">
 
-<stack fillparent="true">
+<stack fillparent="true" touchable="enabled" click="resetViewFocus" onescape="resetViewFocus">
     <vistable id="root" bgtiled="custom/background-fill">
 
         <:import path="lml/mainMenu.lml"/>

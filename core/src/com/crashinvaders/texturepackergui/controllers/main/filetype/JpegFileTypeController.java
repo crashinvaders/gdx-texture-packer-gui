@@ -8,6 +8,8 @@ import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.JpegFileTypeModel;
+import com.crashinvaders.texturepackergui.views.seekbar.FloatSeekBarModel;
+import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
@@ -30,7 +32,7 @@ public class JpegFileTypeController implements FileTypeController {
 
     @LmlActor("ftcJpeg") ShrinkContainer container;
     @LmlActor("cboJpegEncoding") VisSelectBox<Pixmap.Format> cboEncoding;
-    @LmlActor("spnJpegQuality") Spinner spnQuality;
+    @LmlActor("skbJpegQuality") SeekBar skbQuality;
 
     private JpegFileTypeModel model;
 
@@ -80,7 +82,7 @@ public class JpegFileTypeController implements FileTypeController {
     @LmlAction("onQualityChanged") void onQualityChanged() {
         if (model == null) return;
 
-        float quality = ((FloatSpinnerModel) spnQuality.getModel()).getValue().floatValue();
+        float quality = ((FloatSeekBarModel) skbQuality.getModel()).getValue();
         model.setQuality(quality);
     }
 
@@ -95,6 +97,6 @@ public class JpegFileTypeController implements FileTypeController {
         if (model == null) return;
 
         float quality = model.getQuality();
-        ((FloatSpinnerModel) spnQuality.getModel()).setValue(BigDecimal.valueOf(quality), false);
+        ((FloatSeekBarModel) skbQuality.getModel()).setValue(quality, false);
     }
 }

@@ -33,6 +33,13 @@ public class AppLmlSyntax extends VisLmlSyntax {
     }
 
     @Override
+    protected void registerAttributes() {
+        super.registerAttributes();
+
+        registerSeekBarAttributes();
+    }
+
+    @Override
     protected void registerBuildingAttributes() {
         super.registerBuildingAttributes();
 
@@ -64,6 +71,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new KeyboardFocusChangedLmlAttribute(), "keyboardFocus");
         addAttributeProcessor(new OriginLmlAttribute(), "origin");
         addAttributeProcessor(new HexColorLmlAttribute(), "hexColor");
+        addAttributeProcessor(new OnBackPressedLmlAttribute(), "back", "onBack", "onEscape");
     }
 
     @Override
@@ -111,5 +119,9 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerSpinnerAttributes();
 
         addAttributeProcessor(new SpinnerSelectAllOnFocusLmlAttribute(), "selectAllOnFocus");
+    }
+
+    protected void registerSeekBarAttributes() {
+        addAttributeProcessor(new SeekBarChangePolicyLmlAttribute(), "changePolicy");
     }
 }

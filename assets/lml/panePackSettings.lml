@@ -37,8 +37,8 @@
 
                     <!--<:item title="@psJpegQuality">-->
                         <!--<floatspinner-->
-                                <!--id="spnJpegQuality"-->
-                                <!--onchange="onSettingsFloatSpinnerChanged"-->
+                                <!--id="skbJpegQuality"-->
+                                <!--onchange="onSettingsFloatSeekBarChanged"-->
                                 <!--tooltip="@psTtJpegQuality"-->
                                 <!--min="0.1"-->
                                 <!--max="1.0"-->
@@ -48,51 +48,55 @@
                     <!--<:separator/>-->
 
                     <:item title="@psMinPageWidth">
-                        <intspinner
-                                id="spnMinPageWidth"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbMinPageWidth"
+                                onchange="onSettingsIntSeekBarChanged"
                                 value="2048"
                                 tooltip="@psTtMinWidth"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                step="128"/>
                     </:item>
 
                     <:item title="@psMinPageHeight">
-                        <intspinner
-                                id="spnMinPageHeight"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbMinPageHeight"
+                                onchange="onSettingsIntSeekBarChanged"
                                 value="2048"
                                 tooltip="@psTtMinHeight"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                step="128"/>
                     </:item>
 
                     <:item title="@psMaxPageWidth">
-                        <intspinner
-                                id="spnMaxPageWidth"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbMaxPageWidth"
+                                onchange="onSettingsIntSeekBarChanged"
                                 value="2048"
                                 tooltip="@psTtMaxWidth"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                step="128"/>
                     </:item>
 
                     <:item title="@psMaxPageHeight">
-                        <intspinner
-                                id="spnMaxPageHeight"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbMaxPageHeight"
+                                onchange="onSettingsIntSeekBarChanged"
                                 value="2048"
                                 tooltip="@psTtMaxHeight"
                                 min="16"
-                                max="8192"/>
+                                max="8192"
+                                step="128"/>
                     </:item>
 
                     <:separator/>
 
                     <:item title="@psAlphaThreshold">
-                        <intspinner
-                                id="spnAlphaThreshold"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbAlphaThreshold"
+                                onchange="onSettingsIntSeekBarChanged"
                                 tooltip="@psTtAlphaThreshold"
                                 min="0"
                                 max="255"/>
@@ -115,18 +119,18 @@
                     <:separator/>
 
                     <:item title="@psPaddingX">
-                        <intspinner
-                                id="spnPaddingX"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbPaddingX"
+                                onchange="onSettingsIntSeekBarChanged"
                                 tooltip="@psTtPaddingX"
                                 min="0"
                                 max="64"/>
                     </:item>
 
                     <:item title="@psPaddingY">
-                        <intspinner
-                                id="spnPaddingY"
-                                onchange="onSettingsIntSpinnerChanged"
+                        <intseekbar
+                                id="skbPaddingY"
+                                onchange="onSettingsIntSeekBarChanged"
                                 tooltip="@psTtPaddingY"
                                 min="0"
                                 max="64"/>

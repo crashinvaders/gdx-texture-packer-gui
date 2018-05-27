@@ -30,13 +30,13 @@ bleed=true
 limitMemory=true
 useIndexes=true
 
-scaleFactors=[{suffix:"",factor:1}]
+scaleFactors=[{suffix:"",factor:1,resampling:bicubic}]
 inputFiles=[{path:uiskin/images,type:Input,dirFilePrefix:null,recursive:false,flattenPaths:false},{path:uiskin/images/custom,type:Input,dirFilePrefix:custom/,recursive:false,flattenPaths:false}]
 
 
 -PROJ-
 
-version=4.5.0
+version=4.7.2
 fileTypeType=png
 fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=808080ff
