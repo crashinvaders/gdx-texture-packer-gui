@@ -1,4 +1,7 @@
 [LATEST]
+- Fixed wrong page size when padding is not zero (regression bug).
+- Spinner widgets replace with seek bars (where suitable).
+- UI texture/font filtering changed to linear/linear.
 
 [4.7.1]
 - Fixed wrong page size when padding is not zero.
