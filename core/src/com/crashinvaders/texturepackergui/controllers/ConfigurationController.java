@@ -88,6 +88,8 @@ public class ConfigurationController {
             paramsDefault.gamma = 1.0f;
             paramsDefault.hinting = FreeTypeFontGenerator.Hinting.Full;
             paramsDefault.characters = defaultCharacters;
+            paramsDefault.magFilter = Texture.TextureFilter.Linear;
+            paramsDefault.minFilter = Texture.TextureFilter.Linear;
             FreeTypeFontGenerator.FreeTypeFontParameter paramsSmall = new FreeTypeFontGenerator.FreeTypeFontParameter();
             paramsSmall.color = new Color(0xffffffe8);
             paramsSmall.size = 12;
@@ -96,6 +98,8 @@ public class ConfigurationController {
             paramsSmall.gamma = 0.5f;
             paramsSmall.hinting = FreeTypeFontGenerator.Hinting.Full;
             paramsSmall.characters = defaultCharacters;
+            paramsSmall.magFilter = Texture.TextureFilter.Linear;
+            paramsSmall.minFilter = Texture.TextureFilter.Linear;
             FreeTypeFontGenerator.FreeTypeFontParameter paramsBig = new FreeTypeFontGenerator.FreeTypeFontParameter();
             paramsBig.color = new Color(0xffffffe8);
             paramsBig.size = 22;
@@ -104,6 +108,8 @@ public class ConfigurationController {
             paramsBig.gamma = 0.75f;
             paramsBig.hinting = FreeTypeFontGenerator.Hinting.Full;
             paramsBig.characters = defaultCharacters;
+            paramsBig.magFilter = Texture.TextureFilter.Linear;
+            paramsBig.minFilter = Texture.TextureFilter.Linear;
 
             BitmapFont fontDefault = fontGenerator.generateFont(paramsDefault);
             BitmapFont fontSmall = fontGenerator.generateFont(paramsSmall);
