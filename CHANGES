@@ -1,4 +1,7 @@
-[LATEST]
+[4.7.3]
+- Fixed launching of nine patch editor leads to crash.
+
+[4.7.2]
 - Fixed wrong page size when padding is not zero (regression bug).
 - Spinner widgets replace with seek bars (where suitable).
 - UI texture/font filtering changed to linear/linear.
