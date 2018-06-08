@@ -19,9 +19,6 @@ import java.io.StringWriter;
 
 public class ErrorReportFrame extends JDialog {
 
-    //TODO replace this token with a personalized token of gdx-texture-packer-gui repo admin. This token will be deleted soon.
-    private static final String OAUTHTOKEN = "0f74dfb346cf6f021e05f78abd9a4495985c35a1";
-
     public ErrorReportFrame(LwjglCanvasConfiguration config, final Throwable ex) {
         super((Dialog) null);
 
@@ -68,7 +65,14 @@ public class ErrorReportFrame extends JDialog {
         btnReport.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createGitHubIssue(txfTitle.getText(), txaComment.getText(), ex);
+                GithubCredentialsDialog dialog = new GithubCredentialsDialog();
+                dialog.setVisible(true);
+                if (!dialog.isCanceled()) {
+                    String u = dialog.getUsername();
+                    String p = dialog.getPassword();
+                    createGitHubIssue(u, p, txfTitle.getText(), txaComment.getText(), ex);
+                }
+                dialog.dispose();
             }
         });
         JButton btnClose = new JButton("Close");
@@ -100,9 +104,9 @@ public class ErrorReportFrame extends JDialog {
         getContentPane().add(rootTable, BorderLayout.CENTER);
     }
 
-    private void createGitHubIssue(String title, String comment, Throwable ex) {
+    private void createGitHubIssue(String user, String password, String title, String comment, Throwable ex) {
         GitHubClient client = new GitHubClient();
-        client.setOAuth2Token(OAUTHTOKEN);
+        client.setCredentials(user, password);
         IssueService issueService = new IssueService(client);
         Issue issue = new Issue();
         issue.setTitle("[Crash Report] " + title);
@@ -110,7 +114,7 @@ public class ErrorReportFrame extends JDialog {
         StringWriter stringWriter = new StringWriter();
         ex.printStackTrace(new PrintWriter(stringWriter));
         String stackTrace = stringWriter.toString().trim();
-        issue.setBody(comment + "\\n\\n<details><summary>Stack trace</summary>\\n```\\n" + stackTrace + "\\n```");
+        issue.setBody(comment + "<details><summary>Stack trace</summary>\\n```\\n" + stackTrace + "\\n```");
         try {
             Issue createdIssue = issueService.createIssue("crashinvaders", "gdx-texture-packer-gui", issue);
             Sys.openURL(createdIssue.getHtmlUrl());
