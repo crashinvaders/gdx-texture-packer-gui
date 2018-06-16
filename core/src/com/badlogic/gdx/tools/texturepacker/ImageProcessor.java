@@ -132,6 +132,9 @@ public class ImageProcessor {
 	public Rect addImageNinePatch (File file, String name, int[] splits, int[] pads) {
 		//TODO Add sanity checks. Probably do not allow "*.9" filenames.
 		Rect rect = addImage(file, name);
+		// Rect may be null in case the input images is a duplicate (alias).
+		if (rect == null) return null;
+
 		rect.programmaticPatch = true;
 		rect.canRotate = false;
 		rect.splits = splits;
