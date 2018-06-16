@@ -1,15 +1,26 @@
 package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pool;
+import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.Sort;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 
 public class CommonUtils {
+
+    private static final Pool<Sort> sortPool = new SyncPool<Sort>() {
+        @Override
+        protected Sort newObjectInternal() {
+            return new Sort();
+        }
+    };
 
     public static String fetchMessageStack(Throwable throwable) {
         StringBuilder sb = new StringBuilder();
@@ -146,5 +157,21 @@ public class CommonUtils {
         } catch (Exception e) {
             return defaultValue;
         }
+   }
+
+   /** Thread safe approach.
+    * @see Array#sort() */
+    public static void sort(Array array) {
+        Sort sort = sortPool.obtain();
+        sort.sort(array.items, 0, array.size);
+        sortPool.free(sort);
+    }
+
+   /** Thread safe approach.
+    * @see Array#sort(Comparator) */
+    public static void sort(Array array, Comparator comparator) {
+        Sort sort = sortPool.obtain();
+        sort.sort(array.items, comparator, 0, array.size);
+        sortPool.free(sort);
     }
 }

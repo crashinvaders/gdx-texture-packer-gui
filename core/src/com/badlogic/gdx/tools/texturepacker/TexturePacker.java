@@ -26,6 +26,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData.Region;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.Sort;
+import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
@@ -327,11 +330,11 @@ public class TexturePacker {
 			writer.write("filter: " + settings.filterMin + "," + settings.filterMag + "\n");
 			writer.write("repeat: " + getRepeatValue() + "\n");
 
-			page.outputRects.sort();
+			CommonUtils.sort(page.outputRects);
 			for (Rect rect : page.outputRects) {
 				writeRect(writer, page, rect, rect.name);
 				Array<Alias> aliases = new Array(rect.aliases.toArray());
-				aliases.sort();
+				CommonUtils.sort(aliases);
 				for (Alias alias : aliases) {
 					Rect aliasRect = new Rect();
 					aliasRect.set(rect);
