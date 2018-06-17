@@ -38,6 +38,9 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.github.czyzby:gdx-autumn-fcs:$lmlVersion"
         compile "args4j:args4j:$args4jVersion"
+        compile "com.github.scribejava:scribejava-core:$scribeJavaVersion"
+        compile "com.github.scribejava:scribejava-apis:$scribeJavaVersion"
+        compile "com.github.scribejava:scribejava-httpclient-okhttp:$scribeJavaVersion"
     }
 }
 

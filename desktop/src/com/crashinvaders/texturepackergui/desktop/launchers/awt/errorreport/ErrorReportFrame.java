@@ -1,6 +1,7 @@
-package com.crashinvaders.texturepackergui.desktop.launchers.awt;
+package com.crashinvaders.texturepackergui.desktop.launchers.awt.errorreport;
 
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.desktop.launchers.awt.LwjglCanvasConfiguration;
 import com.crashinvaders.texturepackergui.desktop.launchers.awt.swing.HintTextAreaUI;
 import com.crashinvaders.texturepackergui.desktop.launchers.awt.swing.HintTextFieldUI;
 import com.esotericsoftware.tablelayout.swing.Table;
@@ -13,21 +14,27 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.net.URLEncoder;
 
 public class ErrorReportFrame extends JDialog {
     private static final String STRING_ENCODING = "UTF-8";
     private static final String PLACEHOLDER_LOG = "$log_placeholder";
 
-    private boolean gitHubLoginHintShown = false;
+    private final GitHubApiHelper gitHubApiHelper;
 
     public ErrorReportFrame(LwjglCanvasConfiguration config, final Throwable ex) {
         super((Dialog)null);
 
         try {
-            setIconImage(ImageIO.read((ErrorReportFrame.class.getClassLoader().getResourceAsStream(config.iconFilePath))));
+            setIconImage(ImageIO.read((ErrorReportFrame.class.getClassLoader()
+                    .getResourceAsStream(config.iconFilePath))));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        try {
+            gitHubApiHelper = new GitHubApiHelper();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
         // Frame layout
@@ -45,7 +52,7 @@ public class ErrorReportFrame extends JDialog {
 
             JLabel lblInstructions = new JLabel("<html>An unexpected error occurred. " +
                     "Please fill out this form to create a <b>GitHub</b> issue about the incident. " +
-                    "A stack trace will be included.<html>");
+                    "Application log will be included.<html>");
             lblInstructions.setFont(fontRegular);
             lblInstructions.setForeground(Color.darkGray);
 
@@ -82,11 +89,6 @@ public class ErrorReportFrame extends JDialog {
             actionTable.addCell(btnReport).padRight(8);
             actionTable.addCell(btnClose);
 
-            JLabel lblGitHubLoginHint = new JLabel("<html><i>In case you're getting response code 500, " +
-                    "make sure you're logged in to <b>GitHub</b>.</i><html>");
-            lblGitHubLoginHint.setFont(fontRegular);
-            lblGitHubLoginHint.setForeground(new Color(0xde7668));
-
             rootTable.addCell(lblInstructions).expandX().fillX();
             rootTable.row().padTop(8);
             rootTable.addCell(separator0).expandX().fillX();
@@ -99,9 +101,6 @@ public class ErrorReportFrame extends JDialog {
             rootTable.row().padTop(4);
             rootTable.addCell(spComment).expand().fill();
 
-            rootTable.row().padTop(8);
-            rootTable.addCell(lblGitHubLoginHint).expandX().fillX();
-
             rootTable.row().padTop(16);
             rootTable.addCell(actionTable).right();
 
@@ -109,34 +108,48 @@ public class ErrorReportFrame extends JDialog {
         }
     }
 
+    @Override
+    public void dispose() {
+        try {
+            gitHubApiHelper.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.dispose();
+    }
+
     private void createGitHubIssue(String title, String comment, Throwable ex) {
         try {
-            InputStream templateInputStream = ErrorReportFrame.class.getClassLoader().getResourceAsStream("github-error-report-template.md");
+            // Try to read log file. If it doesn't exist, use just stacktrace.
+            String logContent;
+            if (AppConstants.logFile != null && AppConstants.logFile.exists()) {
+                logContent = IOUtils.toString(new FileInputStream(AppConstants.logFile.toString()),
+                        STRING_ENCODING).trim();
+            } else {
+                StringWriter stringWriter = new StringWriter();
+                ex.printStackTrace(new PrintWriter(stringWriter));
+                logContent = stringWriter.toString().trim();
+            }
+
+            InputStream templateInputStream = ErrorReportFrame.class.getClassLoader()
+                    .getResourceAsStream("github-error-report-template.md");
             String bodyTemplate = IOUtils.toString(templateInputStream, STRING_ENCODING);
+            String body = comment + bodyTemplate.replace(PLACEHOLDER_LOG, logContent);
 
-//            if (AppConstants.logFile != null && AppConstants.logFile.exists()) {
-//                String log = IOUtils.toString(new FileInputStream(AppConstants.logFile.toString()), STRING_ENCODING).trim();
-//                bodyTemplate = bodyTemplate.replace(PLACEHOLDER_LOG, log);
-//                comment += bodyTemplate;
-//            }
+            gitHubApiHelper.createIssue(title, body, new GitHubApiHelper.CreateIssueResultHandler() {
+                @Override
+                public void onSuccess(String issueUrl) {
+                    // Navigate to a newly created issue and terminate application.
+                    Sys.openURL(issueUrl);
+                    ErrorReportFrame.this.dispose();
+                }
 
-            StringWriter stringWriter = new StringWriter();
-            ex.printStackTrace(new PrintWriter(stringWriter));
-            String stackTrace = stringWriter.toString().trim();
-            bodyTemplate = bodyTemplate.replace(PLACEHOLDER_LOG, stackTrace);
-            comment += bodyTemplate;
-
-            String titleEncoded = URLEncoder.encode(title, STRING_ENCODING);
-            String commentEncoded = URLEncoder.encode(comment, STRING_ENCODING);
-            String requestBody = String.format(
-                    "https://github.com/crashinvaders/gdx-texture-packer-gui/issues/new?" +
-                            "labels=crash+report&" +
-                            "title=[Crash Report] %s&" +
-                            "body=%s",
-                    titleEncoded,
-                    commentEncoded);
-
-            Sys.openURL(requestBody);
+                @Override
+                public void onError(Exception exception) {
+                    // Display error message.
+                    JOptionPane.showMessageDialog(ErrorReportFrame.this, exception.toString());
+                }
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

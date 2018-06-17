@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
 import com.crashinvaders.texturepackergui.controllers.GlobalActions;
+import com.crashinvaders.texturepackergui.desktop.launchers.awt.errorreport.ErrorReportFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -74,7 +75,6 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
                             @Override
                             public void run() {
                                 closeHandling = false;
-
                             }
                         });
                 Gdx.graphics.requestRendering();

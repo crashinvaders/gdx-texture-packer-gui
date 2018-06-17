@@ -1,6 +1,6 @@
 
 
-<details><summary>Stack trace</summary>
+<details><summary>Application log</summary>
 
 ```
 $log_placeholder
