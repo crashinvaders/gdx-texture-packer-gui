@@ -26,7 +26,7 @@ public class PatchedOnClickLmlAttribute implements LmlAttribute<Actor> {
         actor.addListener(new ClickListener() {
             @Override
             public void clicked(final InputEvent event, final float x, final float y) {
-                if (event.isCancelled() || event.isHandled()) return;
+                if (event.isCancelled() || event.getTarget() != actor) return;
                 action.consume(actor);
             }
         });

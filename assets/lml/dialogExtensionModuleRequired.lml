@@ -13,6 +13,6 @@
     <vistable onecolumn="true" minwidth="300">
         <vislabel text="@emRequiredToBeInstalled|{moduleName}" growx="true" wrap="true" align="center" textalign="center"/>
         <:row padtop="4"/>
-        <textbutton text="@ok" click="onOkClicked" minwidth="96"/>
+        <textbutton text="@ok" change="ExtensionModuleRequiredDialog.onOkClicked" minwidth="96"/>
     </vistable>
 </visdialog>
