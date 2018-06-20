@@ -148,7 +148,7 @@ public class ConfigurationController {
             BitmapFont.BitmapFontData fontData = font.getData();
             fontData.markupEnabled = true;
             fontData.missingGlyph = fontData.getGlyph(UNKNOWN_CHARACTER);
-            // If missing glyph is set, bitmap font returns it on place of \r character.
+            // If missing glyph is set, bitmap font returns it in place of '\r' character.
             // We forcefully replace it with NBSP glyph for now.
             fontData.setGlyph('\r', fontData.getGlyph('\u00A0'));
         }
