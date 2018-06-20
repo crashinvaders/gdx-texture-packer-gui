@@ -54,6 +54,7 @@ project(":core") {
         compile "commons-io:commons-io:$commonsIoVersion"
         compile "com.github.depsypher:pngtastic:$pngtasticVersion"
         compile "com.tinify:tinify:$tinifyVersion"
+        compile "org.eclipse.mylyn.github:org.eclipse.egit.github.core:2.1.5"
     }
 }
 
