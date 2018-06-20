@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.desktop.launchers.awt.errorreport;
 import com.badlogic.gdx.utils.*;
 import com.github.scribejava.apis.GitHubApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
+import com.github.scribejava.core.exceptions.OAuthException;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
@@ -12,31 +13,38 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import com.sun.net.httpserver.HttpServer;
 import okhttp3.HttpUrl;
+import org.apache.commons.io.IOUtils;
 import org.lwjgl.Sys;
 
 import java.awt.*;
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutionException;
+
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_OWNER;
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
 
 public class GitHubApiHelper implements Closeable {
     private static final int PORT = 20023;
     private static final String BASE_URL = "http://localhost:";
     private static final String AUTH_CALLBACK_PATH = "/auth-github";
     private static final String CALLBACK_URL = BASE_URL + PORT + AUTH_CALLBACK_PATH;
+    private static final String INVALID_API_KEY = "Invalid";
 
+    private final String apiSecret;
     private final AuthCallbackHandler authCallbackHandler;
     private final OAuth20Service apiService;
     private final Json json;
 
     public GitHubApiHelper() throws IOException {
+        apiSecret = resolveApiKey();
+
         authCallbackHandler = new AuthCallbackHandler();
 
         // Request access to interact with public repos.
         apiService = new ServiceBuilder("466a909f95b8e2789a5e")
-                .apiSecret("a4c41c85aab630e04e86057c8fe5eb36293d63bd")  //TODO Reset secret from GitHub settings and keep it hidden.
+                .apiSecret(apiSecret)
                 .state("authorized")
                 .scope("public_repo")   // Request access to interact with public repos.
                 .callback(CALLBACK_URL)
@@ -52,7 +60,12 @@ public class GitHubApiHelper implements Closeable {
 
     /** Beware: there is no timeout for browser GitHub authorization and in case user closed/left
      * authorization page without completing whole process, there will be no feedback in {@link CreateIssueResultHandler}. */
-    public void createIssue(final String title, final String body, final CreateIssueResultHandler createIssueResultHandler) {
+    public void createIssue(final String title, final String body, final CreateIssueResultHandler resultHandler) {
+        if (!checkApiKey()) {
+            resultHandler.onError(new IllegalStateException("GitHub API key is invalid."));
+            return;
+        }
+
         authCallbackHandler.setListener(new AuthCallbackHandler.Listener() {
             @Override
             public void onAuthCodeReceived(String authCode) {
@@ -61,29 +74,33 @@ public class GitHubApiHelper implements Closeable {
                     String contentJson = json.toJson(new CreateIssueBody(title, body));
 
                     OAuth2AccessToken accessToken = apiService.getAccessToken(authCode);
-                    //TODO Use real user and repo from (see VersionCheckService).
-                    OAuthRequest request = new OAuthRequest(Verb.POST, "https://api.github.com/repos/metaphore/test001/issues");
+
+                    OAuthRequest request = new OAuthRequest(Verb.POST, "https://api.github.com/repos/"+GITHUB_OWNER+"/"+GITHUB_REPO+"/issues");
                     request.setPayload(contentJson);
                     apiService.signRequest(accessToken, request);
                     Response response = apiService.execute(request);
 
                     if (response.getCode() != 201) {
-                        createIssueResultHandler.onError(new IllegalStateException("GitHub returned bad code: " +
+                        resultHandler.onError(new IllegalStateException("GitHub returned bad code: " +
                                 response.getCode() + "\n" +
                                 response.getMessage() + "\n" +
                                 response.getBody()));
                     } else {
                         JsonValue jsonRoot = new JsonReader().parse(response.getBody());
                         String issueUrl = jsonRoot.getString("html_url");
-                        createIssueResultHandler.onSuccess(issueUrl);
+                        resultHandler.onSuccess(issueUrl);
                     }
-                } catch (IOException | InterruptedException | ExecutionException e) {
+                } catch (IOException | InterruptedException | ExecutionException | OAuthException e) {
                     e.printStackTrace();
-                    createIssueResultHandler.onError(e);
+                    resultHandler.onError(e);
                 }
             }
         });
         Sys.openURL(apiService.getAuthorizationUrl());
+    }
+
+    private boolean checkApiKey() {
+        return !INVALID_API_KEY.equals(apiSecret);
     }
 
     public interface CreateIssueResultHandler {
@@ -98,6 +115,21 @@ public class GitHubApiHelper implements Closeable {
         public CreateIssueBody(String title, String body) {
             this.title = title;
             this.body = body;
+        }
+    }
+
+    private static String resolveApiKey() {
+        InputStream is = GitHubApiHelper.class.getClassLoader().getResourceAsStream("github-api");
+        if (is == null) {
+            System.err.println("GitHubApiHelper: Can't find API key resource.");
+            return INVALID_API_KEY;
+        }
+        try {
+            String encoded = IOUtils.toString(is, StandardCharsets.UTF_8);
+            return Base64Coder.decodeString(encoded);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return INVALID_API_KEY;
         }
     }
 
@@ -145,11 +177,6 @@ public class GitHubApiHelper implements Closeable {
 
         public void setListener(Listener listener) {
             this.listener = listener;
-        }
-
-        public String getAuthCode() {
-//        return authCode;
-            return "c7dc83f5c9ff47090462";
         }
 
         public interface Listener {

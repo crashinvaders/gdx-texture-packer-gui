@@ -17,6 +17,9 @@ public class AppConstants {
     public static final String PREF_NAME_COMMON = "common.xml";
     public static final String PREF_NAME_INSTALLED_MODULES = "installed_modules.xml";
 
+    public static final String GITHUB_OWNER = "crashinvaders";
+    public static final String GITHUB_REPO = "gdx-texture-packer-gui";
+
     public static final Locale LOCALE_EN = Locale.ENGLISH;
     public static final Locale LOCALE_DE = Locale.GERMAN;
     public static final Locale LOCALE_RU = new Locale("ru", "");

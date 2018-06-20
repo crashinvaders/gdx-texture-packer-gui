@@ -1,6 +1,7 @@
 [4.7.3]
 - Fixed launching of nine patch editor leads to crash.
 - Fixed packing of multiple atlases occasionally fails.
+- GitHub error reporting workflow improved with better API integration.
 
 [4.7.2]
 - Fixed wrong page size when padding is not zero (regression bug).

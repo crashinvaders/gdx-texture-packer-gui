@@ -75,7 +75,8 @@ public class ErrorReportFrame extends JDialog {
             btnReport.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    createGitHubIssue(txfTitle.getText(), txaComment.getText(), ex);
+                    txfTitle.setText(txfTitle.getText().trim());
+                    ErrorReportFrame.this.createGitHubIssue(txfTitle.getText(), txaComment.getText(), ex);
                 }
             });
             JButton btnClose = new JButton("Close");
@@ -85,7 +86,15 @@ public class ErrorReportFrame extends JDialog {
                     ErrorReportFrame.this.dispose();
                 }
             });
+            JButton btnViewLog = new JButton("Open Log");
+            btnViewLog.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    ErrorReportFrame.this.openLogFile();
+                }
+            });
             Table actionTable = new Table();
+            actionTable.addCell(btnViewLog).expandX().left();
             actionTable.addCell(btnReport).padRight(8);
             actionTable.addCell(btnClose);
 
@@ -93,7 +102,7 @@ public class ErrorReportFrame extends JDialog {
             rootTable.row().padTop(8);
             rootTable.addCell(separator0).expandX().fillX();
             rootTable.row().padTop(16);
-            rootTable.addCell("Title").left();
+            rootTable.addCell("Title*").left();
             rootTable.row().padTop(4);
             rootTable.addCell(txfTitle).expandX().fillX();
             rootTable.row().padTop(8);
@@ -102,7 +111,7 @@ public class ErrorReportFrame extends JDialog {
             rootTable.addCell(spComment).expand().fill();
 
             rootTable.row().padTop(16);
-            rootTable.addCell(actionTable).right();
+            rootTable.addCell(actionTable).expandX().fillX();
 
             getContentPane().add(rootTable, BorderLayout.CENTER);
         }
@@ -118,7 +127,27 @@ public class ErrorReportFrame extends JDialog {
         super.dispose();
     }
 
+    private void openLogFile() {
+        if (AppConstants.logFile != null && AppConstants.logFile.exists()) {
+            try {
+                Desktop.getDesktop().open(AppConstants.logFile.getAbsoluteFile());
+            } catch (IOException ignore) { }
+        }
+    }
+
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(ErrorReportFrame.this, message);
+    }
+
     private void createGitHubIssue(String title, String comment, Throwable ex) {
+        if (title.trim().length() < 8) {
+            showErrorMessage("Title should be at least 8 characters long.");
+            return;
+        }
+
+        // Extra recognition prefix.
+        title = "[Report] " + title;
+
         try {
             // Try to read log file. If it doesn't exist, use just stacktrace.
             String logContent;
@@ -146,8 +175,12 @@ public class ErrorReportFrame extends JDialog {
 
                 @Override
                 public void onError(Exception exception) {
-                    // Display error message.
-                    JOptionPane.showMessageDialog(ErrorReportFrame.this, exception.toString());
+                    // Truncate string with ellipsis.
+                    String message = exception.getMessage();
+                    if (message.length() > 128) {
+                        message = message.substring(0, 128) + "...";
+                    }
+                    showErrorMessage(message);
                 }
             });
         } catch (IOException e) {

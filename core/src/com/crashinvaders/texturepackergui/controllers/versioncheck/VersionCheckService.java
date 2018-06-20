@@ -13,11 +13,12 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_OWNER;
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
+
 @Component
 @ViewActionContainer("versionCheckService")
 public class VersionCheckService implements ActionContainer {
-    private static final String GITHUB_OWNER = "crashinvaders";
-    private static final String GITHUB_REPO = "gdx-texture-packer-gui";
 
     @Inject EventDispatcher eventDispatcher;
 

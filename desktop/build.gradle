@@ -4,12 +4,14 @@ apply plugin: "edu.sc.seis.macAppBundle"
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs += ['resources/']
+sourceSets.main.resources.srcDirs += ["$rootDir/secret/"]
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
-project.ext.assetsDir = new File("../assets");
-project.ext.distOutputDir = "../distribution/output"
+project.ext.assetsDir = new File("$rootDir/assets");
+project.ext.distOutputDir = "$rootDir/distribution/output"
 project.ext.distFileName = "$project.ext.appName-$project.ext.version"
 project.ext.nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
+project.ext.secretDir = "$rootDir/secret/"
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
@@ -23,8 +25,9 @@ task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
- 
+    from files(project.assetsDir)
+    from secretDir
+
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
@@ -36,6 +39,7 @@ task distRelease(type: Jar) {
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
     from files(project.assetsDir);
+    from secretDir
 
     archiveName = "$project.ext.appName.$extension"
     destinationDir = project.distsDir;
