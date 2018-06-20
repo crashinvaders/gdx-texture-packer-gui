@@ -26,11 +26,7 @@ import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_OWNER;
 import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
 
 public class GitHubApiHelper implements Closeable {
-    private static final int PORT = 20023;
-    private static final String BASE_URL = "http://localhost:";
-    private static final String AUTH_CALLBACK_PATH = "/auth-github";
-    private static final String CALLBACK_URL = BASE_URL + PORT + AUTH_CALLBACK_PATH;
-    private static final String INVALID_API_KEY = "Invalid";
+    private static final String INVALID_API_KEY = "invalid";
 
     private final String apiSecret;
     private final AuthCallbackHandler authCallbackHandler;
@@ -47,7 +43,7 @@ public class GitHubApiHelper implements Closeable {
                 .apiSecret(apiSecret)
                 .state("authorized")
                 .scope("public_repo")   // Request access to interact with public repos.
-                .callback(CALLBACK_URL)
+                .callback(AuthCallbackHandler.CALLBACK_URL)
                 .build(GitHubApi.instance());
 
         json = new Json(JsonWriter.OutputType.json);
@@ -134,6 +130,10 @@ public class GitHubApiHelper implements Closeable {
     }
 
     private static class AuthCallbackHandler implements HttpHandler, Closeable {
+        private static final int PORT = 20023;
+        private static final String BASE_URL = "http://localhost:" + PORT;
+        private static final String AUTH_CALLBACK_PATH = "/auth-github";
+        private static final String CALLBACK_URL = BASE_URL + AUTH_CALLBACK_PATH;
 
         private final HttpServer httpServer;
         private Listener listener;
@@ -153,7 +153,7 @@ public class GitHubApiHelper implements Closeable {
         @Override
         public void handle(HttpExchange httpExchange) throws IOException {
             String requestUrl = httpExchange.getRequestURI().toString();
-            HttpUrl parsedUrl = HttpUrl.parse(BASE_URL + PORT + requestUrl);
+            HttpUrl parsedUrl = HttpUrl.parse(BASE_URL + requestUrl);
             final String authCode = parsedUrl.queryParameter("code");
             final String authState = parsedUrl.queryParameter("state");   //TODO Check if state matches requested one.
             System.out.println("AuthCallbackHandler: Got auth code: " + authCode);
