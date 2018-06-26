@@ -1,3 +1,6 @@
+[Upcoming]
+- Atlases can be saved as indexed-mode PNG8 as a compression type, optionally dithering colors that don't match exactly.
+
 [4.7.3]
 - Fixed launching of nine patch editor leads to crash.
 - Fixed packing of multiple atlases occasionally fails.

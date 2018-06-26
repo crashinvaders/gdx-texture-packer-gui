@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        title="@dCompTitle|Png8"
+        closebutton="true"
+        closeonescape="true">
+    <vistable
+            minwidth="256"
+            defaultalign="left"
+            padtop="8">
+
+        <vistable align="center">
+            <label>@dCompLevel</label>
+            <actor width="8"/>
+            <intspinner
+                    id="spnLevel"
+                    change="onLevelValueChanged"
+                    growx="true"
+                    min="1"
+                    max="9"
+                    step="1"
+                    value="6"/>
+        </vistable>
+
+        <:row/>
+
+        <vistable align="center">
+            <label>@dCompThreshold</label>
+            <actor width="8"/>
+            <intspinner
+                    id="spnThreshold"
+                    change="onThresholdValueChanged"
+                    growx="true"
+                    min="1"
+                    max="4000"
+                    step="10"
+                    value="400"/>
+        </vistable>
+
+        <:row/>
+
+        <vistable align="center">
+            <label>@dCompDither</label>
+            <actor width="8"/>
+            <checkbox
+                    id="chbDithering"
+                    change="onDitheringChanged"
+                    align="center"/>
+        </vistable>
+
+        <:row padtop="4"/>
+
+        <label wrap="true" growx="true" textalign="center">
+            @dCompPng8Description
+        </label>
+    </vistable>
+</visdialog>
