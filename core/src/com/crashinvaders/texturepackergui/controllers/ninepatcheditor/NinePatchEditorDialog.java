@@ -169,7 +169,6 @@ public class NinePatchEditorDialog implements ActionContainer {
             model.dispose();
             model = null;
         }
-
         if (dialog != null) {
             dialog.hide();
         }
@@ -253,7 +252,6 @@ public class NinePatchEditorDialog implements ActionContainer {
             model.dispose();
             model = null;
         }
-
         try {
             model = new NinePatchEditorModel(imageFile);
         } catch (Exception e) {

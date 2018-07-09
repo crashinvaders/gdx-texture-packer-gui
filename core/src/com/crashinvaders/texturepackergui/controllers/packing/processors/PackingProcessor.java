@@ -215,7 +215,7 @@ public class PackingProcessor implements PackProcessor {
         /** The result name of the region in atlas. */
         final String regionName;
 
-        // Nine patch related fields
+        //BEWARE: Programmatic only 9-patch related fields!
         boolean ninePatch = false;
         int[] splits, pads;
 

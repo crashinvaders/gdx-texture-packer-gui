@@ -110,17 +110,18 @@ public class TexturePacker {
 		inputImage.name = name;
 		inputImage.ninePatchProps = new InputImage.NinePatchProps();
 		inputImage.ninePatchProps.splits = splits;
+		inputImage.ninePatchProps.pads = pads;
 
-		boolean hasPads = false;
-		for (int i = 0; i < pads.length; i++) {
-			if (pads[i] > 0) {
-				hasPads = true;
-				break;
-			}
-		}
-		if (hasPads) {
-			inputImage.ninePatchProps.pads = pads;
-		}
+//		boolean hasPads = false;
+//		for (int i = 0; i < pads.length; i++) {
+//			if (pads[i] > 0) {
+//				hasPads = true;
+//				break;
+//			}
+//		}
+//		if (hasPads) {
+//			inputImage.ninePatchProps.pads = pads;
+//		}
 
 		inputImages.add(inputImage);
 	}

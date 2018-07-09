@@ -128,7 +128,7 @@ public class ImageProcessor {
 		return rect;
 	}
 
-	/** Precomputed ninepatch */
+	/** Precomputed ninepatch. */
 	public Rect addImageNinePatch (File file, String name, int[] splits, int[] pads) {
 		//TODO Add sanity checks. Probably do not allow "*.9" filenames.
 		Rect rect = addImage(file, name);

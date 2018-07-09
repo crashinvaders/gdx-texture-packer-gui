@@ -1,4 +1,5 @@
 [LATEST]
+- Fixed programmatic 9-patch pad values are omitted if they are all zero.
 
 [4.7.3]
 - Fixed launching of nine patch editor leads to crash.
