@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui;
 
 import com.crashinvaders.common.Version;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 
 import java.io.File;
 import java.util.Locale;
@@ -22,8 +23,8 @@ public class AppConstants {
 
     public static final Locale LOCALE_EN = Locale.ENGLISH;
     public static final Locale LOCALE_DE = Locale.GERMAN;
-    public static final Locale LOCALE_RU = new Locale("ru", "");
-    public static final Locale LOCALE_ZH_TW = new Locale("zh", "tw");
+    public static final Locale LOCALE_RU = LocaleService.toLocale("ru");
+    public static final Locale LOCALE_ZH_TW = LocaleService.toLocale("zh_TW");
     public static final Locale LOCALE_DEFAULT = LOCALE_EN;
 
     public static File logFile;

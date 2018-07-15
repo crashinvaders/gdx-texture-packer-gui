@@ -2,7 +2,9 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -13,16 +15,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
-import com.crashinvaders.texturepackergui.lml.AppLmlSyntax;
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.CjkFontExtensionModule;
-import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
+import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
+import com.crashinvaders.texturepackergui.lml.AppLmlSyntax;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -32,9 +32,11 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.SkinService;
 import com.github.czyzby.autumn.mvc.component.ui.action.ActionProvider;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewController;
-import com.github.czyzby.autumn.mvc.stereotype.preference.*;
+import com.github.czyzby.autumn.mvc.stereotype.preference.AvailableLocales;
+import com.github.czyzby.autumn.mvc.stereotype.preference.I18nBundle;
+import com.github.czyzby.autumn.mvc.stereotype.preference.I18nLocale;
+import com.github.czyzby.autumn.mvc.stereotype.preference.LmlParserSyntax;
 import com.github.czyzby.kiwi.util.common.Strings;
-import com.github.czyzby.kiwi.util.gdx.asset.lazy.provider.ObjectProvider;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.LmlSyntax;
 import com.kotcrab.vis.ui.Locales;
@@ -43,7 +45,8 @@ import com.kotcrab.vis.ui.widget.file.FileUtils;
 
 import java.util.Locale;
 
-import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.*;
+import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.HIGH_PRIORITY;
+import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.VERY_HIGH_PRIORITY;
 
 @SuppressWarnings("unused")
 @Component
@@ -167,7 +170,7 @@ public class ConfigurationController {
     }
 
     @Initiate(priority = HIGH_PRIORITY)
-    public void initVisUiI18n(InterfaceService interfaceService, final LocaleService localeService) {
+    public void initVisUiI18n(final InterfaceService interfaceService, final LocaleService localeService) {
         Locales.setLocale(localeService.getCurrentLocale());
         interfaceService.setActionOnBundlesReload(new Runnable() {
             @Override
@@ -193,7 +196,6 @@ public class ConfigurationController {
         LmlParser parser = interfaceService.getParser();
         parser.getData().addArgument("projectExt", "."+AppConstants.PROJECT_FILE_EXT);
         parser.getData().addArgument("imageExt", "."+Strings.join(" .", AppConstants.IMAGE_FILE_EXT));
-
 
         interfaceService.setShowingActionProvider(new ActionProvider() {
             @Override

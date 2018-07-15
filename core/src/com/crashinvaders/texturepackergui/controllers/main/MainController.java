@@ -5,10 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -45,11 +42,13 @@ import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.crashinvaders.texturepackergui.views.seekbar.IntSeekBarModel;
 import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Destroy;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
+import com.github.czyzby.autumn.mvc.component.ui.controller.ViewShower;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -65,7 +64,7 @@ import java.util.Locale;
 
 @SuppressWarnings("WeakerAccess")
 @View(id = MainController.VIEW_ID, value = "lml/main.lml", first = true)
-public class MainController implements ActionContainer, ViewResizer {
+public class MainController implements ActionContainer, ViewShower, ViewResizer {
     public static final String VIEW_ID = "Main";
     public static final String TAG = MainController.class.getSimpleName();
     public static final String PREF_KEY_PACK_LIST_SPLIT = "pack_list_split";
@@ -115,11 +114,26 @@ public class MainController implements ActionContainer, ViewResizer {
     private boolean outputDirTooltipDisplaysPath = false;
 
     /** Indicates that view is shown and ready to be used in code */
-    private boolean initialized;
+    private boolean viewShown;
+
+    @Initiate
+    void initialize() {
+
+    }
+
+    @Destroy
+    void destroy() {
+        if (viewShown) {
+            // Save pack list split value
+            float packListSplitValue = packListSplitPane.getSplit();
+            Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+            prefs.putFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitValue).flush();
+        }
+    }
 
     @SuppressWarnings("unchecked")
     @LmlAfter
-    void initialize() {
+    void initializeView() {
         fileTypeControllers.put(WidgetData.FileType.PNG, ftPngController);
         fileTypeControllers.put(WidgetData.FileType.JPEG, ftJpegController);
         fileTypeControllers.put(WidgetData.FileType.KTX, ftKtxController);
@@ -163,8 +177,13 @@ public class MainController implements ActionContainer, ViewResizer {
         outputDirTooltip.setTouchable(Touchable.disabled);
         outputDirTooltip.setText(getString("packGeneralTtOutputDir"));
         outputDirTooltip.setTarget(actorsPacks.edtOutputDir);
+    }
 
-        initialized = true;
+    @Override
+    public void show(Stage stage, Action action) {
+        InterfaceService.DEFAULT_VIEW_SHOWER.show(stage, action);
+
+        viewShown = true;
 
         updatePackList();
         updateViewsFromPack(getSelectedPack());
@@ -172,14 +191,11 @@ public class MainController implements ActionContainer, ViewResizer {
         updateFileType();
     }
 
-    @Destroy
-    void destroy() {
-        if (initialized) {
-            // Save pack list split value
-            float packListSplitValue = packListSplitPane.getSplit();
-            Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
-            prefs.putFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitValue).flush();
-        }
+    @Override
+    public void hide(Stage stage, Action action) {
+        InterfaceService.DEFAULT_VIEW_SHOWER.hide(stage, action);
+
+        viewShown = false;
     }
 
     @Override
@@ -196,7 +212,7 @@ public class MainController implements ActionContainer, ViewResizer {
 
     //region Events
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
-        if (initialized) {
+        if (viewShown) {
             updatePackList();
             updateViewsFromPack(event.getProject().getSelectedPack());
             updateRecentProjects();
@@ -205,7 +221,7 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @OnEvent(ProjectPropertyChangedEvent.class) void onEvent(ProjectPropertyChangedEvent event) {
-        if (initialized) {
+        if (viewShown) {
             switch (event.getProperty()) {
                 case SELECTED_PACK:
                     updateViewsFromPack(event.getProject().getSelectedPack());
@@ -221,7 +237,7 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @OnEvent(PackPropertyChangedEvent.class) void onEvent(PackPropertyChangedEvent event) {
-        if (initialized) {
+        if (viewShown) {
             switch (event.getProperty()) {
                 case NAME:
                 case SCALE_FACTORS:
@@ -248,20 +264,20 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @OnEvent(RecentProjectsUpdatedEvent.class) void onEvent(RecentProjectsUpdatedEvent event) {
-        if (initialized) {
+        if (viewShown) {
             updateRecentProjects();
         }
     }
 
     @OnEvent(PackListOrderChangedEvent.class) void onEvent(PackListOrderChangedEvent event) {
-        if (initialized) {
+        if (viewShown) {
             //TODO rearrange items within adapter (do not recreate items)
             updatePackList();
         }
     }
 
     @OnEvent(ShowToastEvent.class) void onEvent(ShowToastEvent event) {
-        if (initialized) {
+        if (viewShown) {
             if (event.getContent() != null) {
                 toastManager.show(event.getContent(), event.getDuration());
             } else {
@@ -271,7 +287,7 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @OnEvent(RemoveToastEvent.class) void onEvent(RemoveToastEvent event) {
-        if (initialized) {
+        if (viewShown) {
             if (event.getToast() != null) {
                 toastManager.remove(event.getToast());
             }
@@ -436,7 +452,7 @@ public class MainController implements ActionContainer, ViewResizer {
 //    }
 
     @LmlAction("onSettingsCboChanged") void onSettingsCboChanged(VisSelectBox selectBox) {
-        if (!initialized) return;
+        if (!viewShown) return;
 
         PackModel pack = getSelectedPack();
         if (pack == null) return;
@@ -454,7 +470,7 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @LmlAction("onFileTypeChanged") void onFileTypeChanged() {
-        if (!initialized) return;
+        if (!viewShown) return;
 
         WidgetData.FileType fileType = actorsGlobalSettings.cboFileType.getSelected();
         ProjectModel project = getProject();
@@ -476,7 +492,7 @@ public class MainController implements ActionContainer, ViewResizer {
     }
 
     @LmlAction("onScalesBtnClick") void onScalesBtnClick(Button scalesButton) {
-        if (!initialized) return;
+        if (!viewShown) return;
 
         PackModel pack = getSelectedPack();
         if (pack == null) return;

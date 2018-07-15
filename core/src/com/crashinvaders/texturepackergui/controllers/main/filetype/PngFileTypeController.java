@@ -41,10 +41,14 @@ public class PngFileTypeController implements FileTypeController {
 
     private PngFileTypeModel model;
 
+    private boolean ignoreViewChangeEvents = false;
+
     @Override
     public void onViewCreated(Stage stage) {
+        ignoreViewChangeEvents = true;
         cboEncoding.setItems(TexturePacker.availableEncodings);
         cboCompression.setItems(WidgetData.PngCompression.values());
+        ignoreViewChangeEvents = false;
     }
 
     @Override
@@ -80,6 +84,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlAction("onEncodingChanged") void onEncodingChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         Pixmap.Format encoding = cboEncoding.getSelected();
         model.setEncoding(encoding);
@@ -87,6 +92,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlAction("onCompressionChanged") void onCompressionChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         PngCompressionType compType = cboCompression.getSelected().type;
 
@@ -118,6 +124,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlAction("showPngCompSettings") public void showPngCompSettings() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         PngCompressionModel compression = model.getCompression();
         if (compression == null) return;

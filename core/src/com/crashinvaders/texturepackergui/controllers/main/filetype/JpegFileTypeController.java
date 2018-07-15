@@ -36,9 +36,13 @@ public class JpegFileTypeController implements FileTypeController {
 
     private JpegFileTypeModel model;
 
+    private boolean ignoreViewChangeEvents = false;
+
     @Override
     public void onViewCreated(Stage stage) {
+        ignoreViewChangeEvents = true;
         cboEncoding.setItems(TexturePacker.availableEncodings);
+        ignoreViewChangeEvents = false;
     }
 
     @Override
@@ -74,6 +78,7 @@ public class JpegFileTypeController implements FileTypeController {
 
     @LmlAction("onEncodingChanged") void onEncodingChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         Pixmap.Format encoding = cboEncoding.getSelected();
         model.setEncoding(encoding);
@@ -81,6 +86,7 @@ public class JpegFileTypeController implements FileTypeController {
 
     @LmlAction("onQualityChanged") void onQualityChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         float quality = ((FloatSeekBarModel) skbQuality.getModel()).getValue();
         model.setQuality(quality);

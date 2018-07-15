@@ -1,5 +1,6 @@
 [Upcoming]
 - Atlases can be saved as indexed-mode PNG8 as a compression type, optionally dithering colors that don't match exactly.
+- Fixed global settings section values get reset upon UI reload (e.g. language change).
 
 [4.7.3]
 - Fixed launching of nine patch editor leads to crash.
