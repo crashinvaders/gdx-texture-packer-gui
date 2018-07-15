@@ -4,7 +4,7 @@ public enum PngCompressionType {
     PNGTASTIC("pngtastic"),
     ZOPFLI("zopfli"),
     TINY_PNG("tinify"),
-    PALETTE("palette");
+    PNG8("png8");
 
     public final String key;
 

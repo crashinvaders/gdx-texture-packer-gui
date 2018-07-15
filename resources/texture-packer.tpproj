@@ -36,7 +36,7 @@ inputFiles=[{path:uiskin/images,type:Input,dirFilePrefix:null,recursive:false,fl
 
 -PROJ-
 
-version=4.7.2
+version=4.7.3
 fileTypeType=png
 fileTypeData={encoding:RGBA8888}
 previewBackgroundColor=808080ff

@@ -106,7 +106,7 @@ public class PngFileTypeController implements FileTypeController {
                 case TINY_PNG:
                     model.setCompression(new TinyPngCompressionModel());
                     break;
-                case PALETTE:
+                case PNG8:
                     model.setCompression(new Png8CompressionModel());
                     break;
                 default:
@@ -132,7 +132,7 @@ public class PngFileTypeController implements FileTypeController {
             case TINY_PNG:
                 interfaceService.showDialog(TinifyCompDialogController.class);
                 break;
-            case PALETTE:
+            case PNG8:
                 interfaceService.showDialog(Png8CompDialogController.class);
                 break;
             default:

@@ -7,6 +7,8 @@ import com.crashinvaders.texturepackergui.controllers.model.compression.Png8Comp
 import com.crashinvaders.texturepackergui.controllers.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
+import com.crashinvaders.texturepackergui.views.seekbar.IntSeekBarModel;
+import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -14,8 +16,6 @@ import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
-import com.kotcrab.vis.ui.widget.spinner.Spinner;
 
 @ViewDialog(id = "dialog_comp_png8", value = "lml/compression/dialogPng8.lml")
 public class Png8CompDialogController implements ActionContainer {
@@ -23,9 +23,9 @@ public class Png8CompDialogController implements ActionContainer {
 
     @Inject ModelService modelService;
 
-    @LmlActor("spnLevel") Spinner spnLevel;
-    @LmlActor("spnThreshold") Spinner spnThreshold;
-    @LmlActor("chbDithering") VisCheckBox chbDithering;
+    @LmlActor SeekBar sbCompLevel;
+    @LmlActor SeekBar sbColorThreshold;
+    @LmlActor VisCheckBox chbDithering;
 
     private Png8CompressionModel compressionModel;
 
@@ -37,24 +37,24 @@ public class Png8CompDialogController implements ActionContainer {
         updateValuesFromModel();
     }
 
-    @LmlAction("onLevelValueChanged") void onLevelValueChanged() {
-        int level = ((IntSpinnerModel) spnLevel.getModel()).getValue();
+    @LmlAction void onCompLevelChanged() {
+        int level = ((IntSeekBarModel) sbCompLevel.getModel()).getValue();
         compressionModel.setLevel(level);
     }
 
-    @LmlAction("onThresholdValueChanged") void onThresholdValueChanged() {
-        int threshold = ((IntSpinnerModel) spnThreshold.getModel()).getValue();
+    @LmlAction void onColorThresholdChanged() {
+        int threshold = ((IntSeekBarModel) sbColorThreshold.getModel()).getValue();
         compressionModel.setThreshold(threshold);
     }
 
-    @LmlAction("onDitheringChanged") void onDitheringChanged() {
+    @LmlAction void onDitheringChanged() {
         boolean dithering = chbDithering.isChecked();
         compressionModel.setDithering(dithering);
     }
 
     private void updateValuesFromModel() {
-        ((IntSpinnerModel) spnLevel.getModel()).setValue(compressionModel.getLevel());
-        ((IntSpinnerModel) spnThreshold.getModel()).setValue(compressionModel.getThreshold());
+        ((IntSeekBarModel) sbCompLevel.getModel()).setValue(compressionModel.getLevel());
+        ((IntSeekBarModel) sbColorThreshold.getModel()).setValue(compressionModel.getThreshold());
         chbDithering.setChecked(compressionModel.isDithering());
     }
 

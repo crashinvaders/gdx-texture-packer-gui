@@ -16,7 +16,6 @@ import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import java.util.Locale;
 
 public class Png8CompressingProcessor implements PackProcessor {
-    private static final String LOG_LEVEL = "INFO";
 
     @Override
     public void processPackage(PackProcessingNode node) throws Exception {
@@ -27,7 +26,7 @@ public class Png8CompressingProcessor implements PackProcessor {
 
         PngFileTypeModel fileType = (PngFileTypeModel) project.getFileType();
 
-        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.PALETTE) return;
+        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.PNG8) return;
 
         System.out.println("PNG8 compression started");
 

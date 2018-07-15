@@ -4,18 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.utils.*;
 import com.crashinvaders.common.statehash.StateHashUtils;
+import com.crashinvaders.texturepackergui.controllers.model.compression.*;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent.Property;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.controllers.model.compression.PngCompressionModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.PngtasticCompressionModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.TinyPngCompressionModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
 import java.io.StringWriter;
-import java.util.Objects;
 
 public class PngFileTypeModel extends FileTypeModel {
     private static final String TAG = PngFileTypeModel.class.getSimpleName();
@@ -93,6 +89,9 @@ public class PngFileTypeModel extends FileTypeModel {
                     break;
                 case TINY_PNG:
                     compModel = new TinyPngCompressionModel();
+                    break;
+                case PNG8:
+                    compModel = new Png8CompressionModel();
                     break;
                 default:
                     Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compType);

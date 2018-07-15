@@ -72,6 +72,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new OriginLmlAttribute(), "origin");
         addAttributeProcessor(new HexColorLmlAttribute(), "hexColor");
         addAttributeProcessor(new OnBackPressedLmlAttribute(), "back", "onBack", "onEscape");
+        addAttributeProcessor(new DelegateInputEventsLmlAttribute(), "delegateInput");
     }
 
     @Override

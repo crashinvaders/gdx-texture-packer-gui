@@ -40,7 +40,7 @@ public class WidgetData {
         NONE (null, "none", false),
         PNGTASTIC (PngCompressionType.PNGTASTIC, "pngtastic", true),
         TINY_PNG (PngCompressionType.TINY_PNG, "tinyPng", true),
-        PALETTE(PngCompressionType.PALETTE, "png8", true);
+        PNG8(PngCompressionType.PNG8, "png8", true);
 //        ZOPFLI (PngCompressionType.ZOPFLI, "zopfli", true);
 
         public final PngCompressionType type;
