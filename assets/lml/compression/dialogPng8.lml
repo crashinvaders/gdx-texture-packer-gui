@@ -11,9 +11,10 @@
         <label text="@dCompLevel" padbottom="4"/>
         <intseekbar id="sbCompLevel"
                     change="onCompLevelChanged"
-                    growx="true" min="1" max="9" value="6"/>
+                    min="1" max="9" value="6"
+                    growx="true"/>
 
-        <:row padtop="16"/>
+        <:row padtop="12"/>
 
         <table padbottom="4">
             <label text="@dCompColorThreshold" padright="6"/>
@@ -23,12 +24,13 @@
                     change="onColorThresholdChanged"
                     growx="true" min="250" max="1000" value="400" step="50"/>
 
-        <:row padtop="16"/>
+        <:row padtop="12"/>
 
         <table>
             <checkbox id="chbDithering"
-                      change="onDitheringChanged"/>
-            <label text="@dCompDithering" delegateinput="chbDithering" padright="6"/>
+                      text="@dCompDithering"
+                      change="onDitheringChanged"
+                      padright="6"/>
             <image style="custom/help-small" vistooltip="@dCompDitheringDesc" padbottom="1"/>
         </table>
 
