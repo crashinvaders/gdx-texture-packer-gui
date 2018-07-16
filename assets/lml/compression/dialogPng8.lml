@@ -22,7 +22,7 @@
         </table>
         <intseekbar id="sbColorThreshold"
                     change="onColorThresholdChanged"
-                    growx="true" min="250" max="1000" value="400" step="50"/>
+                    growx="true" min="0" max="1000" value="400" step="50"/>
 
         <:row padtop="12"/>
 
