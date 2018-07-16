@@ -1,7 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.main.filetype;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
@@ -30,11 +29,14 @@ public class KtxFileTypeController implements FileTypeController {
     @LmlActor("chbKtxZipping") VisCheckBox chbZipping;
 
     private KtxFileTypeModel model;
-    private boolean muteEncodingChangeEvent;
+    private boolean ignoreViewChangeEvents = false;
+    private boolean ignoreEncodingChangeEvent = false;
 
     @Override
     public void onViewCreated(Stage stage) {
+        ignoreViewChangeEvents = true;
         cboFormat.setItems(KtxFileTypeModel.Format.values());
+        ignoreViewChangeEvents = false;
     }
 
     @Override
@@ -75,6 +77,7 @@ public class KtxFileTypeController implements FileTypeController {
 
     @LmlAction("onFormatChanged") void onFormatChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         KtxFileTypeModel.Format format = cboFormat.getSelected();
         model.setFormat(format);
@@ -82,7 +85,8 @@ public class KtxFileTypeController implements FileTypeController {
 
     @LmlAction("onEncodingChanged") void onEncodingChanged() {
         if (model == null) return;
-        if (muteEncodingChangeEvent) return;
+        if (ignoreViewChangeEvents) return;
+        if (ignoreEncodingChangeEvent) return;
 
         Object encoding = cboEncoding.getSelected();
         switch (model.getFormat()) {
@@ -108,7 +112,7 @@ public class KtxFileTypeController implements FileTypeController {
         KtxFileTypeModel.Format format = model.getFormat();
         cboFormat.setSelected(format);
 
-        muteEncodingChangeEvent = true;
+        ignoreEncodingChangeEvent = true;
         switch (format) {
             case ETC1:
                 cboEncoding.setItems(KtxFileTypeModel.EncodingETC1.values());
@@ -119,13 +123,13 @@ public class KtxFileTypeController implements FileTypeController {
                 cboEncoding.setSelected(model.getEncodingEtc2());
                 break;
         }
-        muteEncodingChangeEvent = false;
+        ignoreEncodingChangeEvent = false;
     }
 
     private void updateEncoding() {
         if (model == null) return;
 
-        muteEncodingChangeEvent = true;
+        ignoreEncodingChangeEvent = true;
         switch (model.getFormat()) {
             case ETC1:
                 cboEncoding.setSelected(model.getEncodingEtc1());
@@ -134,7 +138,7 @@ public class KtxFileTypeController implements FileTypeController {
                 cboEncoding.setSelected(model.getEncodingEtc2());
                 break;
         }
-        muteEncodingChangeEvent = false;
+        ignoreEncodingChangeEvent = false;
     }
 
     private void updateZipping() {

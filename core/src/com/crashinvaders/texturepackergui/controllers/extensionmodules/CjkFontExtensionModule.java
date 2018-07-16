@@ -1,6 +1,9 @@
 package com.crashinvaders.texturepackergui.controllers.extensionmodules;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Field;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.crashinvaders.common.async.AsyncJobTask;
 import com.crashinvaders.common.async.JobTaskQueue;
 import com.crashinvaders.texturepackergui.AppConstants;
@@ -9,6 +12,7 @@ import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
+import com.github.czyzby.kiwi.util.gdx.reflection.Reflection;
 
 import java.util.Locale;
 
@@ -29,7 +33,18 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
         if (getStatus() == Status.INSTALLED) return;
 
         Locale locale = localeService.getCurrentLocale();
-        if (locale.equals(AppConstants.LOCALE_ZH_TW)) {
+        if (locale.getLanguage().equals(AppConstants.LOCALE_ZH_TW.getLanguage())) {
+            // Read an original locale change action through reflection.
+            Runnable origDoOnLocaleChange;
+            try {
+                origDoOnLocaleChange = Reflection.getFieldValue(
+                        ClassReflection.getDeclaredField(LocaleService.class, "doOnLocaleChange"),
+                        localeService,
+                        Runnable.class);
+            } catch (ReflectionException e) {
+                throw new RuntimeException(e);
+            }
+
             // This is a dirty hack that should be gone after LML merge this https://github.com/czyzby/gdx-lml/pull/60
             localeService.setActionOnLocaleChange(new Runnable() {
                 @Override
@@ -38,7 +53,7 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
                 }
             });
             globalActions.changeLanguage(AppConstants.LOCALE_DEFAULT);
-            localeService.setActionOnLocaleChange(new LocaleService.LocaleChangeAction(localeService));
+            localeService.setActionOnLocaleChange(origDoOnLocaleChange);
         }
     }
 

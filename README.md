@@ -18,7 +18,7 @@ All major changes are listed in [this file](https://github.com/crashinvaders/gdx
 
 ### Contribution and contact
 Any contribution is highly appreciated. You can help either by making PR or reporting bugs/suggestions by creating new issues.
-If you have any questions or ideas and you think they don't fit standart GitHub issue format, you always welcome to contact me directly at anton@crashinvaders.com
+If you have any questions or ideas and you think they don't fit standard GitHub issue format, you always welcome to contact me directly at anton@crashinvaders.com
 
 Also you can participate in translation. It can be done by translating all the strings in [bundle.properties](https://github.com/crashinvaders/gdx-texture-packer-gui/blob/master/assets/i18n/bundle.properties) and saving copy as bundle_XX.properties, where XX is your language code.
 

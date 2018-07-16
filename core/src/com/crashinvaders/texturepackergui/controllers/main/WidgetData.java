@@ -8,7 +8,6 @@ import com.crashinvaders.texturepackergui.controllers.model.EtcCompressionType;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
-import com.github.czyzby.kiwi.util.gdx.reflection.Reflection;
 
 public class WidgetData {
 
@@ -40,7 +39,8 @@ public class WidgetData {
     public enum PngCompression {
         NONE (null, "none", false),
         PNGTASTIC (PngCompressionType.PNGTASTIC, "pngtastic", true),
-        TINY_PNG (PngCompressionType.TINY_PNG, "tinyPng", true);
+        TINY_PNG (PngCompressionType.TINY_PNG, "tinyPng", true),
+        PNG8(PngCompressionType.PNG8, "png8", true);
 //        ZOPFLI (PngCompressionType.ZOPFLI, "zopfli", true);
 
         public final PngCompressionType type;

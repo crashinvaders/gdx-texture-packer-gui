@@ -131,6 +131,7 @@ public class PackDialogController implements ActionContainer {
                         new PngtasticCompressingProcessor(),
                         new ZopfliCompressingProcessor(),
                         new TinifyCompressingProcessor(tinifyService),
+                        new Png8CompressingProcessor(),
 
                         // Trailing metadata
                         new FileSizeMetadataProcessor(),

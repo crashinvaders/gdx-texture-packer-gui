@@ -44,7 +44,7 @@ public class VersionData {
         return plainJson;
     }
 
-    public static class Serializer implements com.badlogic.gdx.utils.Json.Serializer<VersionData> {
+    public static class Serializer implements Json.Serializer<VersionData> {
         @Override
         public VersionData read(Json json, JsonValue jsonData, Class type) {
             VersionData data = new VersionData();

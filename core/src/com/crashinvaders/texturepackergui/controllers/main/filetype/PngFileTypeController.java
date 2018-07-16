@@ -6,18 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
+import com.crashinvaders.texturepackergui.controllers.Png8CompDialogController;
 import com.crashinvaders.texturepackergui.controllers.PngtasticCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.TinifyCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
 import com.crashinvaders.texturepackergui.controllers.main.WidgetData;
+import com.crashinvaders.texturepackergui.controllers.model.compression.*;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
-import com.crashinvaders.texturepackergui.controllers.model.compression.PngCompressionModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.PngtasticCompressionModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.TinyPngCompressionModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -43,10 +41,14 @@ public class PngFileTypeController implements FileTypeController {
 
     private PngFileTypeModel model;
 
+    private boolean ignoreViewChangeEvents = false;
+
     @Override
     public void onViewCreated(Stage stage) {
+        ignoreViewChangeEvents = true;
         cboEncoding.setItems(TexturePacker.availableEncodings);
         cboCompression.setItems(WidgetData.PngCompression.values());
+        ignoreViewChangeEvents = false;
     }
 
     @Override
@@ -82,6 +84,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlAction("onEncodingChanged") void onEncodingChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         Pixmap.Format encoding = cboEncoding.getSelected();
         model.setEncoding(encoding);
@@ -89,6 +92,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlAction("onCompressionChanged") void onCompressionChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         PngCompressionType compType = cboCompression.getSelected().type;
 
@@ -108,6 +112,9 @@ public class PngFileTypeController implements FileTypeController {
                 case TINY_PNG:
                     model.setCompression(new TinyPngCompressionModel());
                     break;
+                case PNG8:
+                    model.setCompression(new Png8CompressionModel());
+                    break;
                 default:
                     Gdx.app.error(TAG, "Unexpected compression type: " + compType);
                     model.setCompression(null);
@@ -117,6 +124,7 @@ public class PngFileTypeController implements FileTypeController {
 
     @LmlAction("showPngCompSettings") public void showPngCompSettings() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         PngCompressionModel compression = model.getCompression();
         if (compression == null) return;
@@ -130,6 +138,9 @@ public class PngFileTypeController implements FileTypeController {
                 break;
             case TINY_PNG:
                 interfaceService.showDialog(TinifyCompDialogController.class);
+                break;
+            case PNG8:
+                interfaceService.showDialog(Png8CompDialogController.class);
                 break;
             default:
                 Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());

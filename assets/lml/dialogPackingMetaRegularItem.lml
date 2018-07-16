@@ -2,6 +2,6 @@
 <!DOCTYPE vistable SYSTEM "/lml.dtd">
 
 <vistable>
-    <image id="imgIcon" scaling="none" color="light-grey" padright="2" padbottom="0"/>
+    <image id="imgIcon" scaling="none" color="light-grey" padright="3" padbottom="2"/>
     <vislabel id="lblContent" style="small-grey"/>
 </vistable>

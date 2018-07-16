@@ -2,7 +2,6 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
-import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.compression.PngCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.compression.ZopfliCompressionModel;
@@ -62,7 +61,7 @@ public class ZopfliCompDialogController implements ActionContainer {
 
         PngCompressionModel compression = ((PngFileTypeModel) project.getFileType()).getCompression();
         if (!(compression instanceof ZopfliCompressionModel)) {
-            Gdx.app.error(TAG, "Project isn't set to Pngtastic compression");
+            Gdx.app.error(TAG, "Project isn't set to Zopfli compression");
             return null;
         }
 
