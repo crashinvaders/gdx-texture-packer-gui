@@ -2,6 +2,7 @@
 - Atlases can be saved as indexed-mode PNG8 as a compression type, optionally dithering colors that don't match exactly.
 - Fixed programmatic 9-patch pad values are omitted if they are all zero.
 - Fixed global settings section values get reset upon UI reload (e.g. language change).
+- Fixed new version notification occasionally leads to crash.
 
 [4.7.3]
 - Fixed launching of nine patch editor leads to crash.

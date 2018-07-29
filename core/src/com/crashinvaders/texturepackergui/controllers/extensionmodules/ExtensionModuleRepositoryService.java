@@ -6,7 +6,10 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.net.HttpRequestHeader;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.crashinvaders.SyncHttpResponseListener;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.events.ModuleRepositoryRefreshEvent;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
@@ -76,47 +79,56 @@ public class ExtensionModuleRepositoryService {
                 .timeout(10000)
                 .header(HttpRequestHeader.CacheControl, "no-cache")
                 .build(),
-                new Net.HttpResponseListener() {
-            @Override
-            public void handleHttpResponse(Net.HttpResponse httpResponse) {
-                try {
-                    String result = httpResponse.getResultAsString();
+                new SyncHttpResponseListener() {
 
-                    // Cache result into local file
-                    FileUtils.saveTextToFile(repoCacheFile, result);
+                    private String responseString;
 
-                    // Update in-memory data
-                    Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, result);
-                    repositoryModules.clear();
-                    for (RepositoryModuleData moduleData : newArray) {
-                        repositoryModules.put(moduleData.name, moduleData);
+                    @Override
+                    protected void handleResponseAsync(Net.HttpResponse httpResponse) {
+                        responseString = httpResponse.getResultAsString();
                     }
-                    prefsCommon.putLong(PREF_KEY_LAST_CHECK, new Date().getTime()).flush();
 
-                    Gdx.app.log(TAG, "Data was loaded from remote server.");
+                    @Override
+                    protected void handleResponseSync(Net.HttpResponse httpResponse) {
+                        try {
+                            // Cache result into local file
+                            FileUtils.saveTextToFile(repoCacheFile, responseString);
+                            responseString = null;
 
-                    checkingInProgress = false;
-                    eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
-                    eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_SUCCESS));
-                } catch (Exception e) {
-                    checkingInProgress = false;
-                    eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
-                    eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_ERROR));
-                }
-            }
-            @Override
-            public void failed(Throwable t) {
-                checkingInProgress = false;
-                eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
-                eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_ERROR));
-            }
-            @Override
-            public void cancelled() {
-                checkingInProgress = false;
-                eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
-                eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_ERROR));
-            }
-        });
+                            // Update in-memory data
+                            Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, responseString);
+                            repositoryModules.clear();
+                            for (RepositoryModuleData moduleData : newArray) {
+                                repositoryModules.put(moduleData.name, moduleData);
+                            }
+                            prefsCommon.putLong(PREF_KEY_LAST_CHECK, new Date().getTime()).flush();
+
+                            Gdx.app.log(TAG, "Data was loaded from remote server.");
+
+                            checkingInProgress = false;
+                            eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
+                            eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_SUCCESS));
+                        } catch (Exception e) {
+                            checkingInProgress = false;
+                            eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
+                            eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void onFailed(Throwable t) {
+                        checkingInProgress = false;
+                        eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
+                        eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_ERROR));
+                    }
+
+                    @Override
+                    protected void onCancelled() {
+                        checkingInProgress = false;
+                        eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.REFRESH_FINISHED));
+                        eventDispatcher.postEvent(new ModuleRepositoryRefreshEvent(ModuleRepositoryRefreshEvent.Action.FINISHED_ERROR));
+                    }
+                });
     }
 
     public RepositoryModuleData findModuleData(String moduleId) {

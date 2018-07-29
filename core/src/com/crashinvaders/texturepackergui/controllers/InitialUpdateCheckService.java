@@ -2,7 +2,10 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.crashinvaders.common.Version;
 import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
@@ -17,6 +20,7 @@ import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
+import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 
@@ -74,8 +78,17 @@ public class InitialUpdateCheckService {
         parser.getData().addArgument("newVersionCode", version.getVersion().toString());
         parser.getData().addArgument("newVersionUrl", version.getUrl());
         parser.getData().addActionContainer(ToastActions.class.getSimpleName(), toastActions);
-        Actor content = parser.parseTemplate(Gdx.files.internal("lml/toastNewVersionAvailable.lml")).first();
+        Group content = (Group)parser.parseTemplate(
+                Gdx.files.internal("lml/toastNewVersionAvailable.lml")).first();
         parser.getData().removeActionContainer(ToastActions.class.getSimpleName());
+
+        Actor imgLogo = content.findActor("imgLogo");
+        imgLogo.addAction(Actions.forever(Actions.sequence(
+                Actions.delay(0.5f),
+                Actions.scaleTo(0.8f, 1.2f, 0.1f, Interpolation.exp10Out),
+                Actions.scaleTo(1.1f, 0.9f, 0.1f, Interpolation.exp10Out),
+                Actions.scaleTo(1.0f, 1.0f, 0.5f, Interpolation.exp10Out)
+        )));
 
         ToastTable toastTable = new ToastTable();
         toastTable.add(content).grow();
@@ -106,6 +119,11 @@ public class InitialUpdateCheckService {
 
             prefs.putString(PREF_KEY_IGNORE_NOTIFICATION, versionData.version.toString());
             prefs.flush();
+            dismissToast();
+        }
+
+        @LmlAction("openDownloadPage") void openDownloadPage() {
+            Gdx.net.openURI(versionData.getUrl());
             dismissToast();
         }
 
