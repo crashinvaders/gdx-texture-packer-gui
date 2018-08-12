@@ -18,12 +18,14 @@ import java.io.File;
 class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionListener {
     private static final Color colorFill = new Color(37, 37, 38);
 
+    private final App app;
     private final CustomLwjglCanvas lwjglCanvas;
     private final LwjglCanvasConfiguration lwjglConfig;
     private final JLayeredPane pane;
 
     public MainFrame(App app, final CustomLwjglCanvas lwjglCanvas, LwjglCanvasConfiguration lwjglConfig) {
         super(lwjglConfig.title);
+        this.app = app;
         this.lwjglCanvas = lwjglCanvas;
         this.lwjglConfig = lwjglConfig;
         lwjglCanvas.setUnhandledExceptionListener(this);
@@ -106,12 +108,14 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
     @Override
     public void onGdxException(final Throwable ex) {
-        ErrorReportFrame errorFrame = new ErrorReportFrame(lwjglConfig, ex);
-        // Center error frame
-        errorFrame.setLocation(
-            Math.max(0, (getWidth() - errorFrame.getWidth()) / 2),
-            Math.max(0, (getHeight() - errorFrame.getHeight()) / 2));
-        errorFrame.setVisible(true);
+        if (!app.getParams().debug) {
+            ErrorReportFrame errorFrame = new ErrorReportFrame(lwjglConfig, ex);
+            // Center error frame
+            errorFrame.setLocation(
+                    Math.max(0, (getWidth() - errorFrame.getWidth()) / 2),
+                    Math.max(0, (getHeight() - errorFrame.getHeight()) / 2));
+            errorFrame.setVisible(true);
+        }
 
         this.dispose();
     }
