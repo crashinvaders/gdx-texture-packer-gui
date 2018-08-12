@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.CjkFontExtensionModule;
+import com.crashinvaders.texturepackergui.controllers.main.MainController;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelUtils;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
@@ -31,7 +32,6 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.FocusManager;
 import com.kotcrab.vis.ui.Locales;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
@@ -55,6 +55,7 @@ public class GlobalActions implements ActionContainer {
     @Inject ModelUtils modelUtils;
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
+    @Inject MainController mainController;
     @Inject PackDialogController packDialogController;
     @Inject NinePatchToolController ninePatchToolController;
     @Inject public CommonDialogs commonDialogs;
@@ -324,21 +325,6 @@ public class GlobalActions implements ActionContainer {
         interfaceService.showDialog(InterfaceScalingDialogController.class);
     }
 
-    @LmlAction("changeLanguageEn") public void changeLanguageEn() {
-        changeLanguage(AppConstants.LOCALE_EN);
-    }
-    @LmlAction("changeLanguageDe") public void changeLanguageDe() {
-        changeLanguage(AppConstants.LOCALE_DE);
-    }
-    @LmlAction("changeLanguageRu") public void changeLanguageRu() {
-        changeLanguage(AppConstants.LOCALE_RU);
-    }
-    @LmlAction("changeLanguageZhTw") public void changeLanguageZhTw() {
-        if (commonDialogs.checkExtensionModuleActivated(CjkFontExtensionModule.class)) {
-            changeLanguage(AppConstants.LOCALE_ZH_TW);
-        }
-    }
-
     @LmlAction("restartApplication") public void restartApplication() {
         FileHandle projectFile = modelService.getProject().getProjectFile();
         if (projectFile != null && projectFile.exists()) {
@@ -361,6 +347,33 @@ public class GlobalActions implements ActionContainer {
             Desktop.getDesktop().open(userHotkeyFile.file());
         } catch (IOException e) {
             Gdx.app.error(TAG, "Error opening " + userHotkeyFile, e);
+        }
+    }
+    @LmlAction public void showMenuFile() {
+        mainController.showMenuFile();
+    }
+    @LmlAction public void showMenuPack() {
+        mainController.showMenuPack();
+    }
+    @LmlAction public void showMenuTools() {
+        mainController.showMenuTools();
+    }
+    @LmlAction public void showMenuHelp() {
+        mainController.showMenuHelp();
+    }
+
+    @LmlAction("changeLanguageEn") public void changeLanguageEn() {
+        changeLanguage(AppConstants.LOCALE_EN);
+    }
+    @LmlAction("changeLanguageDe") public void changeLanguageDe() {
+        changeLanguage(AppConstants.LOCALE_DE);
+    }
+    @LmlAction("changeLanguageRu") public void changeLanguageRu() {
+        changeLanguage(AppConstants.LOCALE_RU);
+    }
+    @LmlAction("changeLanguageZhTw") public void changeLanguageZhTw() {
+        if (commonDialogs.checkExtensionModuleActivated(CjkFontExtensionModule.class)) {
+            changeLanguage(AppConstants.LOCALE_ZH_TW);
         }
     }
 

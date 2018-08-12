@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE menubar SYSTEM "/lml.dtd">
 
-<menubar growx="true" style="main-menu">
-    <menu text="@file" style="main-menu">
+<menubar id="menuBarTable" growx="true" style="main-menu">
+    <menu id="muFile" text="@file" style="main-menu">
         <menuitem
                 id="miFileNew"
                 text="@new"
@@ -30,7 +30,7 @@
                 onchange="saveProjectAs"
                 icon="custom/ic-save-aster"/>
     </menu>
-    <menu text="@pack" style="main-menu">
+    <menu id="muPack" text="@pack" style="main-menu">
         <menuitem
                 id="miPackNew"
                 text="@new"
@@ -53,7 +53,7 @@
                 onchange="copySettingsToAllPacks"
                 text="@copySettingsToAllPacks"/>
     </menu>
-    <menu text="@tools" style="main-menu">
+    <menu id="muTools" text="@tools" style="main-menu">
         <menuitem
                 id="miChangeLanguage"
                 text="@changeLanguage"
@@ -107,7 +107,7 @@
                 onchange="launchNinePatchTool"
                 icon="custom/ic-ninepatch"/>
     </menu>
-    <menu text="@help" style="main-menu">
+    <menu id="muHelp" text="@help" style="main-menu">
         <menuitem
                 id="miHelpCheckForUpdates"
                 text="@checkForUpdates"

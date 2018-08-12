@@ -5,9 +5,7 @@ import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuItem;
 
 @SuppressWarnings("WeakerAccess")
-public class HelpMenuActors {
+public class ToolsMenuActors {
 
-    @LmlActor("muHelp") Menu muHelp;
-    @LmlActor("miHelpCheckForUpdates") MenuItem miCheckForUpdates;
-    @LmlActor("miHelpAbout") MenuItem miAbout;
+    @LmlActor("muTools") Menu muTools;
 }

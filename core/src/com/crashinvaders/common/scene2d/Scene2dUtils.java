@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
@@ -22,11 +23,10 @@ public class Scene2dUtils {
     public static final String TAG_INJECT_FIELDS = "InjectActorFields";
     private static final String FILE_PATH_ELLIPSIS = ".../";
     private static final Vector2 tmpVec2 = new Vector2();
-    private static final InputEvent tmpInputEvent = new InputEvent();
     private static final GlyphLayout glyphLayout = new GlyphLayout();
 
-    public static void simulateClick(Actor actor, int button, int pointer) {
-        simulateClick(actor, button, pointer, 0f, 0f);
+    public static void simulateClick(Actor actor) {
+        simulateClick(actor, 0, 0, 0f, 0f);
     }
 
     public static void simulateClick(Actor actor, int button, int pointer, float localX, float localY) {
@@ -35,17 +35,21 @@ public class Scene2dUtils {
     }
 
     public static void simulateClickGlobal(Actor actor, int button, int pointer, float stageX, float stageY) {
-        InputEvent event = tmpInputEvent;
+        InputEvent event = Pools.obtain(InputEvent.class);
         event.setStage(actor.getStage());
-        event.setButton(button);
-        event.setPointer(pointer);
+        event.setRelatedActor(actor);
+        event.setTarget(actor);
         event.setStageX(stageX);
         event.setStageY(stageY);
+        event.setButton(button);
+        event.setPointer(pointer);
+
         event.setType(InputEvent.Type.touchDown);
-        actor.fire(event);
+        actor.notify(event, false);
         event.setType(InputEvent.Type.touchUp);
-        actor.fire(event);
-        event.reset();
+        actor.notify(event, false);
+
+        Pools.free(event);
     }
 
     /**

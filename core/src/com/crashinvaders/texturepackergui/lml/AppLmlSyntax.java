@@ -10,6 +10,7 @@ import com.crashinvaders.texturepackergui.lml.tags.seekbar.IntSeekBarLmlTag;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
+import com.github.czyzby.lml.vis.parser.impl.tag.provider.MenuBarLmlTagProvider;
 
 public class AppLmlSyntax extends VisLmlSyntax {
 
@@ -30,6 +31,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addTagProvider(new PatchedVisTextFieldLmlTag.Provider(), "textField", "visTextField");
         addTagProvider(new IntSeekBarLmlTag.Provider(), "intSeekBar");
         addTagProvider(new FloatSeekBarLmlTag.Provider(), "floatSeekBar");
+        addTagProvider(new MenuBarXLmlTag.Provider(), "menuBar");
     }
 
     @Override

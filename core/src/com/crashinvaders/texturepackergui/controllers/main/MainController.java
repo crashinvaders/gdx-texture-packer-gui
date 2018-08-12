@@ -1,10 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -12,6 +14,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
@@ -47,6 +50,7 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewShower;
 import com.github.czyzby.autumn.mvc.stereotype.View;
+import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -62,6 +66,7 @@ import java.util.Locale;
 @SuppressWarnings("WeakerAccess")
 @View(id = MainController.VIEW_ID, value = "lml/main.lml", first = true)
 public class MainController implements ActionContainer, ViewShower, ViewResizer {
+
     public static final String VIEW_ID = "Main";
     public static final String TAG = MainController.class.getSimpleName();
     public static final String PREF_KEY_PACK_LIST_SPLIT = "pack_list_split";
@@ -87,6 +92,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @LmlActor("toastHostGroup") Group toastHostGroup;
     @LmlActor("canvas") Canvas canvas;
     @LmlActor("packListSplitPane") VisSplitPane packListSplitPane;
+    @LmlActor("menuBarTable") MenuBarX.MenuBarTable menuBarTable;
 
     @LmlActor({"paneLockGlobalSettings",
             "paneLockSettings",
@@ -100,6 +106,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @LmlInject GlobalSettingsActors actorsGlobalSettings;
     @LmlInject FileMenuActors actorsFileMenu;
     @LmlInject PackMenuActors actorsPackMenu;
+    @LmlInject ToolsMenuActors actorsToolsMenu;
     @LmlInject HelpMenuActors actorsHelpMenu;
 
     private final ArrayMap<WidgetData.FileType, FileTypeController> fileTypeControllers = new ArrayMap<>();
@@ -497,6 +504,22 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         scaleFactorsDialogController.setPackModel(pack);
         interfaceService.showDialog(scaleFactorsDialogController.getClass());
     }
+
+    @LmlAction public void showMenuFile() {
+        showMainMenu(actorsFileMenu.muFile);
+    }
+
+    @LmlAction public void showMenuPack() {
+        showMainMenu(actorsPackMenu.muPack);
+    }
+
+    @LmlAction public void showMenuTools() {
+        showMainMenu(actorsToolsMenu.muTools);
+    }
+
+    @LmlAction public void showMenuHelp() {
+        showMainMenu(actorsHelpMenu.muHelp);
+    }
     //endregion
 
     private void updateViewsFromPack(PackModel pack) {
@@ -650,6 +673,13 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                 }
             });
             actorsFileMenu.pmOpenRecent.addItem(menuItem);
+        }
+    }
+
+    private void showMainMenu(Menu menu) {
+        if (menuBarTable.getMenuBar().getCurrentMenu() != menu) {
+            VisTextButton btnOpen = menu.openButton;
+            Scene2dUtils.simulateClick(btnOpen);
         }
     }
 

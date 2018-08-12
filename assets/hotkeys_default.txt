@@ -34,3 +34,8 @@ selectPreviousPack: ALT+UP
 
 packSelected: CTRL+P
 packAll: CTRL+SHIFT+P
+
+showMenuFile: ALT+F
+showMenuPack: ALT+P
+showMenuTools: ALT+T
+showMenuHelp: ALT+H
