@@ -20,6 +20,7 @@
             <linklabel style="orange"
                        text="@toastNvSeeDetails"
                        href="#"
+                       setemptylistener="true"
                        click="openDownloadPage"/>
         </horizontalgroup>
 
@@ -29,6 +30,7 @@
             <linklabel style="light-grey" hexcolor="ffffffcc"
                        text="@toastNvMuteNotification"
                        href="#"
+                       setemptylistener="true"
                        click="muteNotifications"/>
         </horizontalgroup>
     </table>
