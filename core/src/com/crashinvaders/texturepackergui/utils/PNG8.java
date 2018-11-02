@@ -1,6 +1,8 @@
 package com.crashinvaders.texturepackergui.utils;
 
+
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ByteArray;
@@ -17,7 +19,18 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
+import static com.crashinvaders.texturepackergui.utils.PaletteReducer.randomXi;
+
 /** PNG-8 encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
+ * You can configure the target palette and how this can dither colors via the {@link #palette} field, which is a
+ * {@link PaletteReducer} object that is allowed to be null and can be reused. The methods
+ * {@link PaletteReducer#exact(Color[])} or {@link PaletteReducer#analyze(Pixmap)} can be used to make the target
+ * palette match a specific set of colors or the colors in an existing image. You can use
+ * {@link PaletteReducer#setDitherStrength(float)} to reduce (or maybe increase) dither strength; the dithering
+ * algorithm used here is a modified version of the algorithm presented in "Simple gradient-based error-diffusion
+ * method" by Xaingyu Y. Hu in the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated
+ * noise (it is deterministic, and is seeded using the color information) to adjust Floyd-Steinberg dithering. It yields
+ * surprisingly non-random-looking dithers, but still manages to break up artificial patterns most of the time.
  * <br>
  * From LibGDX in the class PixmapIO, with modifications to support indexed-mode files, dithering, and other features.
  * <pre>
@@ -63,7 +76,82 @@ public class PNG8 implements Disposable {
     private int lastLineLen;
 
     public PaletteReducer palette;
-    
+//    /**
+//     * A lookup table from 32 possible levels in the red channel to 6 possible values in the red channel.
+//     */
+//    private static final int[]
+//            redLUT =   {
+//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE00003A,
+//            0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE000074, 0xFE000074,
+//            0xFE000074, 0xFE000074, 0xFE000074, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6,
+//            0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF,};
+//    /**
+//     * The 6 possible values that can be used in the red channel with {@link #redLUT}.
+//     */
+//    private static final byte[] redPossibleLUT = {0x00, 0x3A, 0x74, (byte)0xB6, (byte)0xE0, (byte)0xFF};
+//
+//    /**
+//     * A lookup table from 32 possible levels in the green channel to 7 possible values in the green channel.
+//     */
+//    private static final int[]
+//            greenLUT = {
+//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE003800,
+//            0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE006000, 0xFE006000, 0xFE006000, 0xFE006000,
+//            0xFE006000, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE00C400, 0xFE00C400, 0xFE00C400,
+//            0xFE00C400, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00FF00, 0xFE00FF00, 0xFE00FF00,};
+//    /**
+//     * The 7 possible values that can be used in the green channel with {@link #greenLUT}.
+//     */
+//    private static final byte[] greenPossibleLUT = {0x00, 0x38, 0x60, (byte)0x98, (byte)0xC4, (byte)0xEE, (byte)0xFF};
+//    /**
+//     * A lookup table from 32 possible levels in the blue channel to 6 possible values in the blue channel.
+//     */
+//    private static final int[]
+//            blueLUT =  {
+//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE380000,
+//            0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE760000, 0xFE760000, 0xFE760000,
+//            0xFE760000, 0xFE760000, 0xFE760000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000,
+//            0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000,};
+//    /**
+//     * The 6 possible values that can be used in the blue channel with {@link #blueLUT}.
+//     */
+//    private static final byte[] bluePossibleLUT = {0x00, 0x38, 0x76, (byte)0xAC, (byte)0xEA, (byte)0xFF};
+
+//    public void build253Palette()
+//    {
+//        Arrays.fill(paletteArray, 0);
+//        int i = 0, j, rl, gl, bl, rMin, rMax=0, gMin, gMax, bMin, bMax;
+//        for (int r = 0; r < 6; r++) {
+//            rl = redPossibleLUT[r] & 0xFF;
+//            rMin=rMax;
+//            for (j = rMin; j < 32 && (redLUT[j] & 0xFF) == rl; j++) { }
+//            rMax=j;
+//            gMax = 0;
+//            for (int g = 0; g < 7; g++) {
+//                gl = greenPossibleLUT[g] & 0xFF;
+//                gMin=gMax;
+//                for (j = gMin; j < 32 && (greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
+//                gMax=j;
+//                bMax = 0;
+//                for (int b = 0; b < 6; b++) {
+//                    bl = bluePossibleLUT[b] & 0xFF;
+//                    bMin=bMax;
+//                    for (j = bMin; j < 32 && (blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
+//                    bMax=j;
+//                    paletteArray[++i] =
+//                            (rl << 24
+//                                    | (gl << 16 & 0xFF0000)
+//                                    | (bl << 8 & 0xFF00) | 0xFE);
+//                    for (int rm = rMin; rm < rMax; rm++) {
+//                        for (int gm = gMin; gm < gMax; gm++) {
+//                            Arrays.fill(paletteMapping, (rm << 10) + (gm << 5) + (bMin), (rm << 10) + (gm << 5) + (bMax), (byte)i);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     public PNG8() {
         this(128 * 128);
     }
@@ -116,7 +204,6 @@ public class PNG8 implements Disposable {
             StreamUtils.closeQuietly(output);
         }
     }
-
     /**
      * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
      * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
@@ -153,7 +240,7 @@ public class PNG8 implements Disposable {
      * @param pixmap a Pixmap to write to the given output stream
      * @param computePalette if true, this will analyze the Pixmap and use the most common colors
      */
-    public void write (OutputStream output, Pixmap pixmap, boolean computePalette) throws IOException     
+    public void write (OutputStream output, Pixmap pixmap, boolean computePalette) throws IOException
     {
         write(output, pixmap, computePalette, true);
     }
@@ -250,8 +337,8 @@ public class PNG8 implements Disposable {
                     int gg = ((color >>> 16) & 0xFF);
                     int bb = ((color >>> 8)  & 0xFF);
                     curLine[px] = paletteMapping[((rr << 7) & 0x7C00)
-                                    | ((gg << 2) & 0x3E0)
-                                    | ((bb >>> 3))];
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))];
                 }
             }
 
@@ -271,7 +358,7 @@ public class PNG8 implements Disposable {
                 if (pc < 0) pc = -pc;
                 if (pa <= pb && pa <= pc)
                     c = a;
-                else if (pb <= pc) //
+                else if (pb <= pc)
                     c = b;
                 lineOut[x] = (byte)(curLine[x] - c);
             }
@@ -339,17 +426,17 @@ public class PNG8 implements Disposable {
         buffer.writeInt(IDAT);
         deflater.reset();
 
-        int lineLen = pixmap.getWidth();
+        final int w = pixmap.getWidth(), h = pixmap.getHeight();
         byte[] lineOut, curLine, prevLine;
         byte[] curErrorRed, nextErrorRed, curErrorGreen, nextErrorGreen, curErrorBlue, nextErrorBlue;
         if (lineOutBytes == null) {
-            lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
-            curLine = (curLineBytes = new ByteArray(lineLen)).items;
-            prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
+            lineOut = (lineOutBytes = new ByteArray(w)).items;
+            curLine = (curLineBytes = new ByteArray(w)).items;
+            prevLine = (prevLineBytes = new ByteArray(w)).items;
         } else {
-            lineOut = lineOutBytes.ensureCapacity(lineLen);
-            curLine = curLineBytes.ensureCapacity(lineLen);
-            prevLine = prevLineBytes.ensureCapacity(lineLen);
+            lineOut = lineOutBytes.ensureCapacity(w);
+            curLine = curLineBytes.ensureCapacity(w);
+            prevLine = prevLineBytes.ensureCapacity(w);
             for (int i = 0, n = lastLineLen; i < n; i++)
             {
                 prevLine[i] = 0;
@@ -357,20 +444,20 @@ public class PNG8 implements Disposable {
         }
         if(palette.curErrorRedBytes == null)
         {
-            curErrorRed = (palette.curErrorRedBytes = new ByteArray(lineLen)).items;
-            nextErrorRed = (palette.nextErrorRedBytes = new ByteArray(lineLen)).items;
-            curErrorGreen = (palette.curErrorGreenBytes = new ByteArray(lineLen)).items;
-            nextErrorGreen = (palette.nextErrorGreenBytes = new ByteArray(lineLen)).items;
-            curErrorBlue = (palette.curErrorBlueBytes = new ByteArray(lineLen)).items;
-            nextErrorBlue = (palette.nextErrorBlueBytes = new ByteArray(lineLen)).items;
+            curErrorRed = (palette.curErrorRedBytes = new ByteArray(w)).items;
+            nextErrorRed = (palette.nextErrorRedBytes = new ByteArray(w)).items;
+            curErrorGreen = (palette.curErrorGreenBytes = new ByteArray(w)).items;
+            nextErrorGreen = (palette.nextErrorGreenBytes = new ByteArray(w)).items;
+            curErrorBlue = (palette.curErrorBlueBytes = new ByteArray(w)).items;
+            nextErrorBlue = (palette.nextErrorBlueBytes = new ByteArray(w)).items;
         } else {
-            curErrorRed = palette.curErrorRedBytes.ensureCapacity(lineLen);
-            nextErrorRed = palette.nextErrorRedBytes.ensureCapacity(lineLen);
-            curErrorGreen = palette.curErrorGreenBytes.ensureCapacity(lineLen);
-            nextErrorGreen = palette.nextErrorGreenBytes.ensureCapacity(lineLen);
-            curErrorBlue = palette.curErrorBlueBytes.ensureCapacity(lineLen);
-            nextErrorBlue = palette.nextErrorBlueBytes.ensureCapacity(lineLen);
-            for (int i = 0; i < lineLen; i++) {
+            curErrorRed = palette.curErrorRedBytes.ensureCapacity(w);
+            nextErrorRed = palette.nextErrorRedBytes.ensureCapacity(w);
+            curErrorGreen = palette.curErrorGreenBytes.ensureCapacity(w);
+            nextErrorGreen = palette.nextErrorGreenBytes.ensureCapacity(w);
+            curErrorBlue = palette.curErrorBlueBytes.ensureCapacity(w);
+            nextErrorBlue = palette.nextErrorBlueBytes.ensureCapacity(w);
+            for (int i = 0; i < w; i++) {
                 nextErrorRed[i] = 0;
                 nextErrorGreen[i] = 0;
                 nextErrorBlue[i] = 0;
@@ -379,16 +466,15 @@ public class PNG8 implements Disposable {
         }
 
 
-        lastLineLen = lineLen;
+        lastLineLen = w;
 
-        ByteBuffer pixels = pixmap.getPixels();
-        int oldPosition = pixels.position(), color, used, rdiff, gdiff, bdiff;
+        int color, used, rdiff, gdiff, bdiff, state = 0xFEEDBEEF;
         byte er, eg, eb, paletteIndex;
-        final int w = pixmap.getWidth();
-        for (int y = 0, h = pixmap.getHeight(); y < h; y++) {
+        float xi1, xi2, w1 = palette.ditherStrength * 0.125f, w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
+        for (int y = 0; y < h; y++) {
             int py = flipY ? (h - y - 1) : y;
             int ny = flipY ? (h - y - 2) : y + 1;
-            for (int i = 0; i < lineLen; i++) {
+            for (int i = 0; i < w; i++) {
                 curErrorRed[i] = nextErrorRed[i];
                 curErrorGreen[i] = nextErrorGreen[i];
                 curErrorBlue[i] = nextErrorBlue[i];
@@ -416,23 +502,34 @@ public class PNG8 implements Disposable {
                     rdiff = (color>>>24)-    (used>>>24);
                     gdiff = (color>>>16&255)-(used>>>16&255);
                     bdiff = (color>>>8&255)- (used>>>8&255);
+                    state += (color + 0x41C64E6D) ^ color >>> 7;
+                    state = (state << 21 | state >>> 11);
+                    xi1 = randomXi(state);
+                    state = (state << 15 | state >>> 17) ^ 0x9E3779B9;
+                    xi2 = randomXi(state);
                     if(px < w - 1)
                     {
-                        curErrorRed[px+1]   += rdiff >> 1;
-                        curErrorGreen[px+1] += gdiff >> 1;
-                        curErrorBlue[px+1]  += bdiff >> 1;
+                        curErrorRed[px+1]   += rdiff * w7 * (1f + xi1);
+                        curErrorGreen[px+1] += gdiff * w7 * (1f + xi1);
+                        curErrorBlue[px+1]  += bdiff * w7 * (1f + xi1);
                     }
-                    if(ny >= 0 && ny < h)
+                    if(ny < h)
                     {
                         if(px > 0)
                         {
-                            nextErrorRed[px-1]   += rdiff >> 2;
-                            nextErrorGreen[px-1] += gdiff >> 2;
-                            nextErrorBlue[px-1]  += bdiff >> 2;
+                            nextErrorRed[px-1]   += rdiff * w3 * (1f + xi2);
+                            nextErrorGreen[px-1] += gdiff * w3 * (1f + xi2);
+                            nextErrorBlue[px-1]  += bdiff * w3 * (1f + xi2);
                         }
-                        nextErrorRed[px]   += rdiff >> 2;
-                        nextErrorGreen[px] += gdiff >> 2;
-                        nextErrorBlue[px]  += bdiff >> 2;
+                        if(px < w - 1)
+                        {
+                            nextErrorRed[px+1]   += rdiff * w1 * (1f - xi2);
+                            nextErrorGreen[px+1] += gdiff * w1 * (1f - xi2);
+                            nextErrorBlue[px+1]  += bdiff * w1 * (1f - xi2);
+                        }
+                        nextErrorRed[px]   += rdiff * w5 * (1f - xi1);
+                        nextErrorGreen[px] += gdiff * w5 * (1f - xi1);
+                        nextErrorBlue[px]  += bdiff * w5 * (1f - xi1);
                     }
                 }
             }
@@ -440,7 +537,7 @@ public class PNG8 implements Disposable {
             lineOut[0] = (byte)(curLine[0] - prevLine[0]);
 
             //Paeth
-            for (int x = 1; x < lineLen; x++) {
+            for (int x = 1; x < w; x++) {
                 int a = curLine[x - 1] & 0xff;
                 int b = prevLine[x] & 0xff;
                 int c = prevLine[x - 1] & 0xff;
@@ -453,19 +550,18 @@ public class PNG8 implements Disposable {
                 if (pc < 0) pc = -pc;
                 if (pa <= pb && pa <= pc)
                     c = a;
-                else if (pb <= pc) //
+                else if (pb <= pc)
                     c = b;
                 lineOut[x] = (byte)(curLine[x] - c);
             }
 
             deflaterOutput.write(PAETH);
-            deflaterOutput.write(lineOut, 0, lineLen);
+            deflaterOutput.write(lineOut, 0, w);
 
             byte[] temp = curLine;
             curLine = prevLine;
             prevLine = temp;
         }
-        pixels.position(oldPosition);
         deflaterOutput.finish();
         buffer.endChunk(dataOutput);
 
