@@ -2,6 +2,8 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -71,11 +73,17 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     private Tooltip tooltip;
     private InputFile inputFile;
 
+    private Color colorTextValid;
+    private Color colorTextInvalid;
+
     private boolean ignoreInputFileUpdateEvents = false;
 
     @LmlAfter void init() {
         tooltip = new Tooltip();
         tooltip.setAppearDelayTime(0.25f);
+
+        colorTextValid = interfaceService.getSkin().getColor("white");
+        colorTextInvalid = interfaceService.getSkin().getColor("orange");
 
         mapDataFromModel();
     }
@@ -218,6 +226,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         filePath = Scene2dUtils.colorizeFilePath(filePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white");
 
         lblFilePath.setText(filePath);
+        lblFilePath.setColor(inputFile.getFileHandle().exists() ? colorTextValid : colorTextInvalid);
 
         // Show tooltip only if displayed file name was shortened
         tooltip.setTarget(fileShortened ? lblFilePath : null);
@@ -256,7 +265,6 @@ public class InputFilePropertiesDialogController implements ActionContainer {
             }
             chbNinePatch.setProgrammaticChangeEvents(true);
         }
-
 
         // Ignored file data
         if (inputFile.getType() == InputFile.Type.Ignore) {

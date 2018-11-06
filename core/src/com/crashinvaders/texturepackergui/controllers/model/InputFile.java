@@ -26,7 +26,15 @@ public class InputFile implements StateHashable {
     public InputFile(FileHandle fileHandle, Type type) {
         this.fileHandle = fileHandle;
         this.type = type;
-        this.directory = fileHandle.isDirectory();
+
+        // Determine if the file is a directory.
+        // We cannot use just `fileHandle.isDirectory()`,
+        // because in case the file doesn't exist it always returns `false`.
+        if (fileHandle.exists()) {
+            this.directory = fileHandle.isDirectory();
+        } else {
+            this.directory = fileHandle.extension().length() == 0;
+        }
     }
 
     public void setEventDispatcher(EventDispatcher eventDispatcher) {

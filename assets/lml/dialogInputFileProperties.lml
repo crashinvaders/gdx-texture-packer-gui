@@ -20,7 +20,7 @@
         <visimagebutton image="custom/ic-folder-pick" change="InputFilePropertiesDialogController.showFilePicker" fill="true"/>
     </table>
 
-    <shrinkContainer id="shrinkInputDir" growx="true" fillx="true">
+    <shrinkcontainer id="shrinkInputDir" growx="true" fillx="true">
         <table padtop="2">
             <label text="@dInputFileRegionsPrefix" padright="8" align="right"/>
             <textfield id="edtFilePrefix"
@@ -28,18 +28,18 @@
                        delayedchange="InputFilePropertiesDialogController.onFilePrefixTextChanged"
                        keyboardfocus="InputFilePropertiesDialogController.onFilePrefixTextChanged"/>
             <:row padtop="4"/>
-            <label text="@dInputFileRecursive" vistooltip="@dInputFileTtRecursive" padright="8" align="right"/>
+            <label text="@dInputFileRecursive" delegateinput="chbRecursive" vistooltip="@dInputFileTtRecursive" padright="8" align="right"/>
             <table growx="true" tablealign="left">
                 <checkbox id="chbRecursive" vistooltip="@dInputFileTtRecursive" change="onRecursiveChecked" padright="4"/>
-                <table id="flattenPathContainer" visible="false">
+                <table id="flattenPathContainer" delegateinput="chbFlattenPaths" visible="false">
                     <label text="@dInputFileFlattenPaths" vistooltip="@dInputFileTtFlattenPaths" padright="8"/>
                     <checkbox id="chbFlattenPaths" vistooltip="@dInputFileTtFlattenPaths" change="onFlattenPathsChecked"/>
                 </table>
             </table>
         </table>
-    </shrinkContainer>
+    </shrinkcontainer>
 
-    <shrinkContainer id="shrinkInputFile" growx="true" fillx="true">
+    <shrinkcontainer id="shrinkInputFile" growx="true" fillx="true">
         <table defaultalign="right">
             <label text="@dInputFileRegionName" padright="8"/>
             <textfield id="edtRegionName"
@@ -47,7 +47,7 @@
                        delayedchange="InputFilePropertiesDialogController.onRegionNameTextChanged"
                        keyboardfocus="InputFilePropertiesDialogController.onRegionNameTextChanged"/>
             <:row padtop="4"/>
-            <label text="@ninePatch" padright="8"/>
+            <label text="@ninePatch" delegateinput="chbNinePatch" padright="8"/>
             <table growx="true" tablealign="left">
                 <checkbox id="chbNinePatch" padright="4" change="onNinePatchChecked"/>
                 <visimagetextbutton
@@ -61,7 +61,7 @@
                         padright="4"/>
             </table>
         </table>
-    </shrinkContainer>
+    </shrinkcontainer>
 
     <image style="white" color="dark-grey" growx="true" height="2" padtop="4" padbottom="4" padleft="0" padright="0"/>
 
