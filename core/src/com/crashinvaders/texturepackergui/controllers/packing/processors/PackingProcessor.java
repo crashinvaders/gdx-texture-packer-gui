@@ -69,7 +69,7 @@ public class PackingProcessor implements PackProcessor {
         inputFiles.sort(new Comparator<InputFile>() {
             @Override
             public int compare(InputFile l, InputFile r) {
-                int comparison;
+                int comparison = 0;
 
                 comparison = l.getType().compareTo(r.getType());
                 if (comparison != 0) return comparison;
@@ -144,6 +144,8 @@ public class PackingProcessor implements PackProcessor {
         for (InputFile inputFile : inputFiles) {
             if (inputFile.getType() != InputFile.Type.Ignore || inputFile.isDirectory()) continue;
             FileHandle fileHandle = inputFile.getFileHandle();
+            // Remove input files depending both on file handle and image entry matches.
+            images.remove(fileHandle);
             images.remove(new ImageEntry(fileHandle, fileHandle.nameWithoutExtension()));
         }
 
@@ -278,6 +280,19 @@ public class PackingProcessor implements PackProcessor {
 
         public boolean remove(ImageEntry image) {
             return imageSet.remove(image);
+        }
+
+        public boolean remove(FileHandle fileHandle) {
+            boolean removed = false;
+            ObjectSet.ObjectSetIterator<ImageEntry> iterator = imageSet.iterator();
+            while (iterator.hasNext) {
+                ImageEntry imageEntry = iterator.next();
+                if (imageEntry.fileHandle.equals(fileHandle)) {
+                    iterator.remove();
+                    removed = true;
+                }
+            }
+            return removed;
         }
 
         public boolean contains(ImageEntry image) {

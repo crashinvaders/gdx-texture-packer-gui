@@ -6,6 +6,7 @@
 - Fixed 9-patch editor writes file based images ("*.9.png" extension) with black stroke visual artifacts.
 - Fixed global settings section values get reset upon UI reload (e.g. language change).
 - Fixed global keyboard shortcuts no longer works when there is a modal dialog shown.
+- Fixed exclude files do not work when are under input dir with "recursive" option enabled.
 - Menu bar items (File, Pack, Tools, Help) have got appropriate key shortcuts (ALT+F/P/T/H).
 
 [4.7.3]
