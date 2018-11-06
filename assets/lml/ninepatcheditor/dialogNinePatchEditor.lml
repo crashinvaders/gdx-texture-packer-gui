@@ -79,9 +79,5 @@
             </table>
 
         </vissplitpane>
-        <!--<table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true">-->
-            <!--<textbutton text="@save" change="confirmResult"/>-->
-            <!--<textbutton text="@cancel" change="hide"/>-->
-        <!--</table>-->
     </table>
 </visdialog>

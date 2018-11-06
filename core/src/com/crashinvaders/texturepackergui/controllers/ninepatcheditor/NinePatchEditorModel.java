@@ -87,6 +87,7 @@ public class NinePatchEditorModel implements Disposable {
 
         // Cut off 1-pixel border markup
         Pixmap contentPixmap = new Pixmap(pixmap.getWidth() - 2, pixmap.getHeight() - 2, pixmap.getFormat());
+        contentPixmap.setBlending(Pixmap.Blending.None);
         contentPixmap.drawPixmap(pixmap, 0, 0, 1, 1, contentPixmap.getWidth(), contentPixmap.getHeight());
         pixmap.dispose();
         return contentPixmap;
@@ -195,6 +196,7 @@ public class NinePatchEditorModel implements Disposable {
     /** @return original image pixmap with 1-pixel border 9-patch markup. */
     public Pixmap prepareNinePatchPixmap() {
         Pixmap patchPixmap = new Pixmap(this.pixmap.getWidth() + 2, this.pixmap.getHeight() + 2, this.pixmap.getFormat());
+        patchPixmap.setBlending(Pixmap.Blending.None);
         patchPixmap.drawPixmap(pixmap, 1, 1);
 
         patchPixmap.setColor(0x000000ff);
