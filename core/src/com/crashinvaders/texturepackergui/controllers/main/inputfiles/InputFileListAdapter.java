@@ -186,7 +186,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
             lblName.setText(filePath);
 
             // Show tooltip only if displayed file name was shortened
-            tooltip.setTarget(fileShortened ? lblName : null);
+            tooltip.setTarget(fileShortened ? root : null);
             tooltip.setText(Scene2dUtils.colorizeFilePath(origFilePath, inputFile.getFileHandle().isDirectory(), "light-grey", "white"));
             tooltip.setTouchable(Touchable.disabled);
         }

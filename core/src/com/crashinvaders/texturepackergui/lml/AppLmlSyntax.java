@@ -124,6 +124,13 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new SpinnerSelectAllOnFocusLmlAttribute(), "selectAllOnFocus");
     }
 
+    @Override
+    protected void registerListViewAttributes() {
+        super.registerListViewAttributes();
+
+        addAttributeProcessor(new ListViewOnClickLmlAttribute(), "listViewOnClick");
+    }
+
     protected void registerSeekBarAttributes() {
         addAttributeProcessor(new SeekBarChangePolicyLmlAttribute(), "changePolicy");
     }

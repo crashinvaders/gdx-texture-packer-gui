@@ -2,8 +2,10 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
@@ -111,6 +113,10 @@ public class PackInputFilesController implements ActionContainer {
 
     @LmlAction("createAdapter") InputFileListAdapter createAdapter() {
         return new InputFileListAdapter(interfaceService.getParser());
+    }
+
+    @LmlAction("resetSelection") void resetSelection() {
+        listAdapter.getSelectionManager().deselectAll();
     }
 
     @LmlAction("showContextMenu") void showContextMenu(OnRightClickLmlAttribute.Params params) {
@@ -278,9 +284,5 @@ public class PackInputFilesController implements ActionContainer {
             return null;
         }
         return project.getSelectedPack();
-    }
-
-    private void resetInputFileSelection() {
-        listAdapter.getSelectionManager().deselectAll();
     }
 }

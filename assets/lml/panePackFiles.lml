@@ -51,7 +51,8 @@
                 overscroll="false"
                 flickscroll="false"
                 scrollcapture="true"
-                adapter="PackInputFilesController.createAdapter"/>
+                adapter="PackInputFilesController.createAdapter"
+                listviewonclick="PackInputFilesController.resetSelection"/>
 
     </table>
 

@@ -275,7 +275,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
     @OnEvent(PackListOrderChangedEvent.class) void onEvent(PackListOrderChangedEvent event) {
         if (viewShown) {
-            //TODO rearrange items within adapter (do not recreate items)
+            //TODO Rearrange items within adapter (do not recreate items).
             updatePackList();
         }
     }
@@ -346,6 +346,10 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         menuItem.setDisabled(pack == null);
 
         popupMenu.showMenu(getStage(), params.stageX, params.stageY);
+    }
+
+    @LmlAction("resetPackListSelection") void resetPackListSelection() {
+        getProject().setSelectedPack(null);
     }
 
     @LmlAction("onCanvasRightClick") void onCanvasRightClick(OnRightClickLmlAttribute.Params params) {
