@@ -250,7 +250,11 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         if (!inputFile.isDirectory() && inputFile.getType() == InputFile.Type.Input) {
             dialog.getTitleLabel().setText(localeService.getI18nBundle().get("dInputFileTitleFile"));
             shrinkInputFile.setVisible(true);
-            edtRegionName.setMessageText(inputFile.getFileHandle().nameWithoutExtension());
+            String defaultRegionName = inputFile.getFileHandle().nameWithoutExtension();
+            if (defaultRegionName.endsWith(".9")) {
+                defaultRegionName = defaultRegionName.substring(0, defaultRegionName.length() - 2);
+            }
+            edtRegionName.setMessageText(defaultRegionName);
             edtRegionName.setText(inputFile.getRegionName());
 
             chbNinePatch.setProgrammaticChangeEvents(false);

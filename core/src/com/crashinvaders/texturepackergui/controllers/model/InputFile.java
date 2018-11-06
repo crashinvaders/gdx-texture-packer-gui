@@ -124,11 +124,7 @@ public class InputFile implements StateHashable {
     }
 
     public boolean isFileBasedNinePatch() {
-        if (Strings.isNotEmpty(regionName)) {
-            return regionName.endsWith(".9");
-        } else {
-            return fileHandle.nameWithoutExtension().endsWith(".9");
-        }
+            return fileHandle.name().endsWith(".9.png");
     }
 
     public boolean isNinePatch() {
