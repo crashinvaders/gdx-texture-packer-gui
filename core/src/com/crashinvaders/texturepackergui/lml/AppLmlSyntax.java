@@ -10,7 +10,6 @@ import com.crashinvaders.texturepackergui.lml.tags.seekbar.IntSeekBarLmlTag;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.canvas.Canvas;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
-import com.github.czyzby.lml.vis.parser.impl.tag.provider.MenuBarLmlTagProvider;
 
 public class AppLmlSyntax extends VisLmlSyntax {
 
@@ -122,6 +121,13 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerSpinnerAttributes();
 
         addAttributeProcessor(new SpinnerSelectAllOnFocusLmlAttribute(), "selectAllOnFocus");
+    }
+
+    @Override
+    protected void registerLinkLabelAttributes() {
+        super.registerLinkLabelAttributes();
+
+        addAttributeProcessor(new LinkLabelSetEmptyListenerLmlAttribute(), "setEmptyListener");
     }
 
     @Override

@@ -189,6 +189,7 @@ public class PackDialogController implements ActionContainer {
                 return null;
             }
         });
+
         Actor content = parser.parseTemplate(Gdx.files.internal("lml/toastReopenLastPackingDialog.lml")).first();
         parser.getData().removeActorConsumer(actionName);
         toastTable.add(content).grow();

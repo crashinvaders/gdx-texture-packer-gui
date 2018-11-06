@@ -6,5 +6,6 @@
             style="light-grey"
             text="@dPackingReopenLastDialog"
             href="#"
+            setemptylistener="true"
             click="showLastDialog"/>
 </vistable>
