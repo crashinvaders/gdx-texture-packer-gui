@@ -39,37 +39,27 @@ public class ImageProcessor {
 	static private final BufferedImage emptyImage = new BufferedImage(1, 1, BufferedImage.TYPE_4BYTE_ABGR);
 	static private Pattern indexPattern = Pattern.compile("(.+)_(\\d+)$");
 
-	private String rootPath;
 	private final Settings settings;
 	private final HashMap<String, Rect> crcs = new HashMap();
 	private final Array<Rect> rects = new Array();
 	private float scale = 1;
 	private TexturePacker.Resampling resampling = TexturePacker.Resampling.bicubic;
 
-	/** @param rootDir Used to strip the root directory prefix from image file names, can be null. */
-	public ImageProcessor(File rootDir, Settings settings) {
-		this.settings = settings;
-
-		if (rootDir != null) {
-			rootPath = rootDir.getAbsolutePath().replace('\\', '/');
-			if (!rootPath.endsWith("/")) rootPath += "/";
-		}
-	}
-
 	public ImageProcessor(Settings settings) {
-		this(null, settings);
+		this.settings = settings;
 	}
 
-	/** @see #addImage(File, String) */
-	public Rect addImage (File file) {
-		return addImage(file, null);
+	/** @see #addImage(File, String, String) */
+	public Rect addImage (File file, String rootPath) {
+		return addImage(file, rootPath, null);
 	}
 
 	/**
 	 * The image won't be kept in-memory during packing if {@link Settings#limitMemory} is true.
+	 * @param rootPath Used to strip the root directory prefix from image file names, can be null.
 	 * @param name will overwrite real file name (pass null to keep original name of a file).
 	 */
-	public Rect addImage (File file, String name) {
+	public Rect addImage(File file, String rootPath, String name) {
 		BufferedImage image;
 		try {
 			image = ImageIO.read(file);
@@ -100,7 +90,7 @@ public class ImageProcessor {
 	}
 
 	/** The image will be kept in-memory during packing.
-	 * @see #addImage(File) */
+	 * @see #addImage(File, String) */
 	public Rect addImage (BufferedImage image, String name) {
 		Rect rect = processImage(image, name);
 
@@ -129,9 +119,9 @@ public class ImageProcessor {
 	}
 
 	/** Precomputed ninepatch. */
-	public Rect addImageNinePatch (File file, String name, int[] splits, int[] pads) {
+	public Rect addImageNinePatch(File file, String rootPath, String name, int[] splits, int[] pads) {
 		//TODO Add sanity checks. Probably do not allow "*.9" filenames.
-		Rect rect = addImage(file, name);
+		Rect rect = addImage(file, rootPath, name);
 		// Rect may be null in case the input images is a duplicate (alias).
 		if (rect == null) return null;
 

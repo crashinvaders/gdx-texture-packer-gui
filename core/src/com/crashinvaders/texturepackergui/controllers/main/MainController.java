@@ -420,6 +420,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             case "cbBleeding": settings.bleed = checkBox.isChecked(); break;
             case "cbDuplicatePadding": settings.duplicatePadding = checkBox.isChecked(); break;
             case "cbForcePot": settings.pot = checkBox.isChecked(); break;
+            case "cbForceMof": settings.multipleOfFour = checkBox.isChecked(); break;
             case "cbUseAliases": settings.alias = checkBox.isChecked(); break;
             case "cbIgnoreBlankImages": settings.ignoreBlankImages = checkBox.isChecked(); break;
             case "cbDebug": settings.debug = checkBox.isChecked(); break;
@@ -560,6 +561,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             actorsPackSettings.cbBleeding.setChecked(settings.bleed);
             actorsPackSettings.cbDuplicatePadding.setChecked(settings.duplicatePadding);
             actorsPackSettings.cbForcePot.setChecked(settings.pot);
+            actorsPackSettings.cbForceMof.setChecked(settings.multipleOfFour);
             actorsPackSettings.cbUseAliases.setChecked(settings.alias);
             actorsPackSettings.cbIgnoreBlankImages.setChecked(settings.ignoreBlankImages);
             actorsPackSettings.cbDebug.setChecked(settings.debug);

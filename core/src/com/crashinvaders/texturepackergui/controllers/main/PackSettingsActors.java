@@ -29,6 +29,7 @@ public class PackSettingsActors {
     @LmlActor("cbBleeding") VisCheckBox cbBleeding;
     @LmlActor("cbDuplicatePadding") VisCheckBox cbDuplicatePadding;
     @LmlActor("cbForcePot") VisCheckBox cbForcePot;
+    @LmlActor("cbForceMof") VisCheckBox cbForceMof;
     @LmlActor("cbUseAliases") VisCheckBox cbUseAliases;
     @LmlActor("cbIgnoreBlankImages") VisCheckBox cbIgnoreBlankImages;
     @LmlActor("cbDebug") VisCheckBox cbDebug;

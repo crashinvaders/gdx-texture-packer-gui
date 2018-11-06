@@ -193,6 +193,8 @@
 
                     <vischeckbox id="cbForcePot" onchange="onSettingsCbChecked" tooltip="@psTtPot">@psForcePoT</vischeckbox>
 
+                    <vischeckbox id="cbForceMof" onchange="onSettingsCbChecked" tooltip="@psTtMof">@psForceMoF</vischeckbox>
+
                     <vischeckbox id="cbUseAliases" onchange="onSettingsCbChecked" tooltip="@psTtAlias">@psUseAliases</vischeckbox>
 
                     <vischeckbox id="cbIgnoreBlankImages" onchange="onSettingsCbChecked" tooltip="@psTtIgnoreBlankImages">@psIgnoreBlankImgs</vischeckbox>

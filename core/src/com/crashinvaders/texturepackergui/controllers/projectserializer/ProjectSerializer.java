@@ -140,6 +140,7 @@ public class ProjectSerializer {
         sb.append("paddingX=").append(settings.paddingX).append("\n");
         sb.append("paddingY=").append(settings.paddingY).append("\n");
         sb.append("pot=").append(settings.pot).append("\n");
+        sb.append("mof=").append(settings.multipleOfFour).append("\n");
         sb.append("rotation=").append(settings.rotation).append("\n");
         sb.append("stripWhitespaceX=").append(settings.stripWhitespaceX).append("\n");
         sb.append("stripWhitespaceY=").append(settings.stripWhitespaceY).append("\n");
@@ -276,6 +277,7 @@ public class ProjectSerializer {
         settings.paddingX = find(lines, "paddingX=", defaultSettings.paddingX);
         settings.paddingY = find(lines, "paddingY=", defaultSettings.paddingY);
         settings.pot = find(lines, "pot=", defaultSettings.pot);
+        settings.multipleOfFour = find(lines, "mof=", defaultSettings.multipleOfFour);
         settings.rotation = find(lines, "rotation=", defaultSettings.rotation);
         settings.stripWhitespaceX = find(lines, "stripWhitespaceX=", defaultSettings.stripWhitespaceX);
         settings.stripWhitespaceY = find(lines, "stripWhitespaceY=", defaultSettings.stripWhitespaceY);

@@ -203,7 +203,7 @@ public class PackModel implements StateHashable {
     }
 
     private static int computeSettingsStateHash(Settings s) {
-        int result = Objects.hash(s.pot, s.paddingX, s.paddingY, s.edgePadding, s.duplicatePadding,
+        int result = Objects.hash(s.pot, s.multipleOfFour, s.paddingX, s.paddingY, s.edgePadding, s.duplicatePadding,
                 s.rotation, s.minWidth, s.minHeight, s.maxWidth, s.maxHeight,
                 s.square, s.stripWhitespaceX, s.stripWhitespaceY, s.alphaThreshold,
                 s.filterMin, s.filterMag, s.wrapX, s.wrapY, s.format, s.alias, s.ignoreBlankImages,

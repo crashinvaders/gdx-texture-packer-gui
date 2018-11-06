@@ -1,5 +1,6 @@
 [LATEST]
 - Atlases can be saved as indexed-mode PNG8 image (compression type). Optionally dithering colors that don't match exactly.
+- Multiple of four page size option added.
 - Fixed new version notification occasionally leads to a crash.
 - Fixed programmatic 9-patch pad values are omitted if they are all zero.
 - Fixed 9-patch editor crashes when all patch/content points at the same corner.

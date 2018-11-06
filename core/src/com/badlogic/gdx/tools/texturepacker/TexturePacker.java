@@ -26,21 +26,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData.Region;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.Pools;
-import com.badlogic.gdx.utils.Sort;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 
-import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /** @author Nathan Sweet */
@@ -58,13 +51,12 @@ public class TexturePacker {
 	private final Packer packer;
 	private final ImageProcessor imageProcessor;
 	private final Array<InputImage> inputImages = new Array();
-	private File rootDir;
 
-	/**
-	 * @param rootDir Used to strip the root directory prefix from image file names, can be null.  */
+	private String rootPath;
+
+	/** @param rootDir See {@link #setRootDir(File)}.  */
 	public TexturePacker(Settings settings, PageFileWriter pageFileWriter, File rootDir) {
 		this.pageFileWriter = pageFileWriter;
-		this.rootDir = rootDir;
 		this.settings = settings;
 
 		if (settings.pot) {
@@ -74,15 +66,34 @@ public class TexturePacker {
 				throw new RuntimeException("If pot is true, maxHeight must be a power of two: " + settings.maxHeight);
 		}
 
+		if (settings.multipleOfFour) {
+			if (settings.maxWidth % 4 != 0)
+				throw new RuntimeException("If mod4 is true, maxWidth must be evenly divisible by 4: " + settings.maxWidth);
+			if (settings.maxHeight % 4 != 0)
+				throw new RuntimeException("If mod4 is true, maxHeight must be evenly divisible by 4: " + settings.maxHeight);
+		}
+
 		if (settings.grid)
 			packer = new OrderedGridPacker(settings);
 		else
 			packer = new MaxRectsPacker(settings);
-		imageProcessor = new ImageProcessor(rootDir, settings);
+
+		imageProcessor = new ImageProcessor(settings);
+		setRootDir(rootDir);
 	}
 
 	public TexturePacker(Settings settings, PageFileWriter pageFileWriter) {
 		this(settings, pageFileWriter, null);
+	}
+
+	/** @param rootDir Used to strip the root directory prefix from image file names, can be null. */
+	public void setRootDir (File rootDir) {
+		if (rootDir == null) {
+			rootPath = null;
+			return;
+		}
+		rootPath = rootDir.getAbsolutePath().replace('\\', '/');
+		if (!rootPath.endsWith("/")) rootPath += "/";
 	}
 
 	public void addImage (File file) {
@@ -93,6 +104,7 @@ public class TexturePacker {
 		InputImage inputImage = new InputImage();
 		inputImage.file = file;
 		inputImage.name = name;
+		inputImage.rootPath = rootPath;
 		inputImages.add(inputImage);
 	}
 
@@ -100,6 +112,7 @@ public class TexturePacker {
 		InputImage inputImage = new InputImage();
 		inputImage.image = image;
 		inputImage.name = name;
+		inputImage.rootPath = rootPath;
 		inputImages.add(inputImage);
 	}
 
@@ -108,6 +121,7 @@ public class TexturePacker {
 		InputImage inputImage = new InputImage();
 		inputImage.file = file;
 		inputImage.name = name;
+		inputImage.rootPath = rootPath;
 		inputImage.ninePatchProps = new InputImage.NinePatchProps();
 		inputImage.ninePatchProps.splits = splits;
 		inputImage.ninePatchProps.pads = pads;
@@ -141,10 +155,10 @@ public class TexturePacker {
 			for (InputImage inputImage : inputImages) {
 				if (inputImage.file != null) {
 					if (inputImage.ninePatchProps != null) {
-						imageProcessor.addImageNinePatch(inputImage.file, inputImage.name,
-								inputImage.ninePatchProps.splits, inputImage.ninePatchProps.pads);
+						imageProcessor.addImageNinePatch(inputImage.file, inputImage.rootPath,
+								inputImage.name, inputImage.ninePatchProps.splits, inputImage.ninePatchProps.pads);
 					} else {
-						imageProcessor.addImage(inputImage.file, inputImage.name);
+						imageProcessor.addImage(inputImage.file, inputImage.rootPath, inputImage.name);
 					}
 				} else {
 					imageProcessor.addImage(inputImage.image, inputImage.name);
@@ -189,6 +203,10 @@ public class TexturePacker {
 			if (settings.pot) {
 				width = MathUtils.nextPowerOfTwo(width);
 				height = MathUtils.nextPowerOfTwo(height);
+			}
+			if (settings.multipleOfFour) {
+				width = width % 4 == 0 ? width : width + 4 - (width % 4);
+				height = height % 4 == 0 ? height : height + 4 - (height % 4);
 			}
 			width = Math.max(settings.minWidth, width);
 			height = Math.max(settings.minHeight, height);
@@ -350,7 +368,7 @@ public class TexturePacker {
 	private void writeRect (Writer writer, Page page, Rect rect, String name) throws IOException {
 		writer.write(Rect.getAtlasName(name, settings.flattenPaths) + "\n");
 		writer.write("  rotate: " + rect.rotated + "\n");
-		writer.write("  xy: " + (page.x + rect.x) + ", " + (page.y + page.height - rect.height - rect.y) + "\n");
+		writer.write("  xy: " + (page.x + rect.x) + ", " + (page.y + page.height - rect.y - (rect.height - settings.paddingY)) + "\n");
 
 		writer.write("  size: " + rect.regionWidth + ", " + rect.regionHeight + "\n");
 		if (rect.splits != null) {
@@ -553,6 +571,7 @@ public class TexturePacker {
 	/** @author Nathan Sweet */
 	static public class Settings {
 		public boolean pot = true;
+		public boolean multipleOfFour = false;
 		public int paddingX = 2, paddingY = 2;
 		public boolean edgePadding = true;
 		public boolean duplicatePadding = false;
@@ -597,6 +616,7 @@ public class TexturePacker {
 			fast = settings.fast;
 			rotation = settings.rotation;
 			pot = settings.pot;
+			multipleOfFour = settings.multipleOfFour;
 			minWidth = settings.minWidth;
 			minHeight = settings.minHeight;
 			maxWidth = settings.maxWidth;
@@ -668,6 +688,7 @@ public class TexturePacker {
 	static final class InputImage {
 		File file;
 		String name;
+		String rootPath;
 		BufferedImage image;
 		NinePatchProps ninePatchProps;
 
