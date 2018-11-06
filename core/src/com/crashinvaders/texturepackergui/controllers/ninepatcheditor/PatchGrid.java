@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.MutableInt;
 
@@ -189,6 +190,30 @@ public class PatchGrid extends WidgetGroup {
         for (int i = 0; i < patchLines.size; i++) {
             patchLines.get(i).updateHover(x, y);
         }
+        // Do not allow to select both vertical lines at the same time.
+        if (left.hovered && right.hovered) {
+            float leftDistance = Math.abs(left.getX(Align.center) - x);
+            float rightDistance = Math.abs(right.getX(Align.center) - x);
+            if (leftDistance < rightDistance) {
+                right.hovered = false;
+                right.updateVisualState();
+            } else {
+                left.hovered = false;
+                left.updateVisualState();
+            }
+        }
+        // Do not allow to select both horizontal lines at the same time.
+        if (top.hovered && bottom.hovered) {
+            float topDistance = Math.abs(top.getY(Align.center) - y);
+            float bottomDistance = Math.abs(bottom.getY(Align.center) - y);
+            if (topDistance < bottomDistance) {
+                bottom.hovered = false;
+                bottom.updateVisualState();
+            } else {
+                top.hovered = false;
+                top.updateVisualState();
+            }
+        }
     }
 
     private void updateLinesFromModel() {
@@ -236,7 +261,7 @@ public class PatchGrid extends WidgetGroup {
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             if (button==0) {
                 for (PatchLine patchLine : patchLines) {
-                    if (patchLine.checkHit(x, y)) {
+                    if (patchLine.hovered) {
                         draggingLines.add(patchLine);
                         patchLine.startDragging(x, y);
                     }

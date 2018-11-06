@@ -3,6 +3,7 @@
 - Fixed programmatic 9-patch pad values are omitted if they are all zero.
 - Fixed global settings section values get reset upon UI reload (e.g. language change).
 - Fixed new version notification occasionally leads to crash.
+- Fixed 9-patch editor crashes when all patch/content points at the same corner.
 - Menu bar items (File, Pack, Tools, Help) have got appropriate key shortcuts (ALT+F/P/T/H).
 
 [4.7.3]
