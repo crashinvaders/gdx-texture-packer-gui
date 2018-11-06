@@ -1,10 +1,11 @@
 [LATEST]
 - Atlases can be saved as indexed-mode PNG8 image (compression type). Optionally dithering colors that don't match exactly.
+- Fixed new version notification occasionally leads to a crash.
 - Fixed programmatic 9-patch pad values are omitted if they are all zero.
-- Fixed global settings section values get reset upon UI reload (e.g. language change).
-- Fixed new version notification occasionally leads to crash.
 - Fixed 9-patch editor crashes when all patch/content points at the same corner.
 - Fixed 9-patch editor writes file based images ("*.9.png" extension) with black stroke visual artifacts.
+- Fixed global settings section values get reset upon UI reload (e.g. language change).
+- Fixed global keyboard shortcuts no longer works when there is a modal dialog shown.
 - Menu bar items (File, Pack, Tools, Help) have got appropriate key shortcuts (ALT+F/P/T/H).
 
 [4.7.3]

@@ -1,10 +1,10 @@
 package com.crashinvaders.texturepackergui.lml.attributes;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.tag.LmlAttribute;
 import com.github.czyzby.lml.parser.tag.LmlTag;
@@ -19,8 +19,8 @@ public class DelegateInputEventsLmlAttribute implements LmlAttribute<Actor> {
     @Override
     public void process(final LmlParser parser, LmlTag tag, final Actor actor, String rawAttributeData) {
         final String id = parser.parseString(rawAttributeData);
-        // Post for one frame to let layout be fully parsed (target actor may be parsed after this attribute).
-        Gdx.app.postRunnable(new Runnable() {
+        // Post for one frame to let the layout to be fully parsed (target actor may be parsed after this attribute).
+        actor.addAction(Actions.run(new Runnable() {
             @Override
             public void run() {
                 final Actor targetActor = parser.getActorsMappedByIds().get(id);
@@ -39,6 +39,6 @@ public class DelegateInputEventsLmlAttribute implements LmlAttribute<Actor> {
                     }
                 });
             }
-        });
+        }));
     }
 }

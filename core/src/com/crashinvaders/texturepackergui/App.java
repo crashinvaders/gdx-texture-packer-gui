@@ -99,6 +99,8 @@ public class App implements ApplicationListener {
         initializer.scan(this.getClass(), componentScanner);
         contextDestroyer = initializer.initiate();
 
+        // Load LML template with common values and default attribute setup.
+        interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/common.lml"));
         interfaceService.getParser().getData().addArgument("currentVersionCode", AppConstants.version.toString());
     }
 

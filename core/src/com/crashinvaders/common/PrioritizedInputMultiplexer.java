@@ -4,7 +4,10 @@ import com.badlogic.gdx.InputProcessor;
 
 import java.util.Comparator;
 
-/** Same old InputMultiplexer but it orders processors passed their priorities. */
+/**
+ * Same old InputMultiplexer but it orders processors passed their priorities.
+ * The higher priority, the earlier processor will be called.
+ */
 public class PrioritizedInputMultiplexer implements InputProcessor {
     private final Comparator<Wrapper> comparator;
     private ValueArrayMap<InputProcessor, Wrapper> processors = new ValueArrayMap<>(4);

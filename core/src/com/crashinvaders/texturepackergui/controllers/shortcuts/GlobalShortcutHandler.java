@@ -26,7 +26,7 @@ public class GlobalShortcutHandler extends InputAdapter {
     private final ShortcutParser shortcutParser = new ShortcutParser();
 
     @Initiate void initialize() {
-        App.inst().getInput().addProcessor(this, 1000);
+        App.inst().getInput().addProcessor(this, 10);
 
         // Read shortcut files
         {
