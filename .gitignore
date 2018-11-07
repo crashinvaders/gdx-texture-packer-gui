@@ -68,6 +68,5 @@ build/
 
 ## Resources
 /resources/ignore/
-/secret
 *.psd
 *.orig
