@@ -13,6 +13,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.AtlasModel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.BackgroundWidget;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.InfoPanel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.preview.PreviewHolder;

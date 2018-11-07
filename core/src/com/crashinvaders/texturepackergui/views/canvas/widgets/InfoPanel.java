@@ -1,16 +1,12 @@
 package com.crashinvaders.texturepackergui.views.canvas.widgets;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.views.canvas.AtlasModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.PageModel;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.impl.DefaultLmlParser;
 
@@ -24,7 +20,7 @@ public class InfoPanel extends Container {
     private final Label lblFileSize;
     private final Label lblPageDimens;
 
-    private AtlasModel.Page atlasPage;
+    private PageModel atlasPage;
 
     private int pagesAmount, currentPage;
 
@@ -51,7 +47,7 @@ public class InfoPanel extends Container {
         lblZoom.setText((String.format(Locale.US, "%.0f%%", zoom)));
     }
 
-    public void setAtlasPage(AtlasModel.Page atlasPage) {
+    public void setAtlasPage(PageModel atlasPage) {
         this.atlasPage = atlasPage;
         updatePageInfo();
     }

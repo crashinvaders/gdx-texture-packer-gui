@@ -7,14 +7,18 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
+import com.crashinvaders.common.scene2d.visui.Toast;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
+import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.FileTypeController;
@@ -276,16 +280,33 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         }
     }
 
-    @OnEvent(ShowToastEvent.class) void onEvent(ShowToastEvent event) {
+    //TODO Move out to a dedicated toast controller.
+    @OnEvent(ShowToastEvent.class) void onEvent(final ShowToastEvent event) {
         if (viewShown) {
+            final Toast toast;
             if (event.getContent() != null) {
-                toastManager.show(event.getContent(), event.getDuration());
+                toast = toastManager.show(event.getContent(), event.getDuration());
             } else {
-                toastManager.show(event.getMessage(), event.getDuration());
+                toast = toastManager.show(event.getMessage(), event.getDuration());
+            }
+            // Setup click listener (if provided).
+            if (event.getClickAction() != null) {
+                Table mainTable = toast.getMainTable();
+                mainTable.setTouchable(Touchable.enabled);
+                mainTable.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent e, float x, float y) {
+                        if (e.getTarget() == e.getListenerActor()) {
+                            event.getClickAction().run();
+                            toastManager.remove(toast);
+                        }
+                    }
+                });
             }
         }
     }
 
+    //TODO Move out to a dedicated toast controller.
     @OnEvent(RemoveToastEvent.class) void onEvent(RemoveToastEvent event) {
         if (viewShown) {
             if (event.getToast() != null) {

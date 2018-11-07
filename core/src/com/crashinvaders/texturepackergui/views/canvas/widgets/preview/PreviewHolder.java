@@ -12,7 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.crashinvaders.common.scene2d.ScrollFocusCaptureInputListener;
-import com.crashinvaders.texturepackergui.views.canvas.AtlasModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.AtlasModel;
 
 public class PreviewHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;

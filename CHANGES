@@ -1,6 +1,8 @@
 [LATEST]
 - Atlases can be saved as indexed-mode PNG8 image (compression type). Optionally dithering colors that don't match exactly.
+- Asynchronous (non blocking) page preview loading.
 - Multiple of four page size option added.
+- Menu bar items (File, Pack, Tools, Help) have got appropriate key shortcuts (ALT+F/P/T/H).
 - Fixed new version notification occasionally leads to a crash.
 - Fixed programmatic 9-patch pad values are omitted if they are all zero.
 - Fixed 9-patch editor crashes when all patch/content points at the same corner.
@@ -8,7 +10,6 @@
 - Fixed global settings section values get reset upon UI reload (e.g. language change).
 - Fixed global keyboard shortcuts no longer works when there is a modal dialog shown.
 - Fixed exclude files do not work when are under input dir with "recursive" option enabled.
-- Menu bar items (File, Pack, Tools, Help) have got appropriate key shortcuts (ALT+F/P/T/H).
 
 [4.7.3]
 - Fixed launching of nine patch editor leads to crash.

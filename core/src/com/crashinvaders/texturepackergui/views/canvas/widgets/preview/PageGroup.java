@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -15,16 +14,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.crashinvaders.texturepackergui.views.canvas.AtlasModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.PageModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.RegionModel;
 
 class PageGroup extends Group {
     private static final Vector2 tmpCoords = new Vector2();
     private static final Rectangle tmpBounds = new Rectangle();
 
-    private final AtlasModel.Page page;
+    private final PageModel page;
     private final NinePatchDrawable borderFrame;
 
-    public PageGroup(Skin skin, AtlasModel.Page page) {
+    public PageGroup(Skin skin, PageModel page) {
         this.page = page;
         setTransform(false);
 
@@ -57,7 +57,7 @@ class PageGroup extends Group {
         super.draw(batch, parentAlpha);
     }
 
-    public AtlasModel.Page getPage() {
+    public PageModel getPage() {
         return page;
     }
 
@@ -80,7 +80,7 @@ class PageGroup extends Group {
         private final GlyphLayout glText;
 
         private boolean active;
-        private AtlasModel.Region region;
+        private RegionModel region;
 
         public RegionSpotlight(Skin skin) {
             whiteTex = skin.getRegion("white");
@@ -129,7 +129,7 @@ class PageGroup extends Group {
             }
 
             if (withinPage) {
-                AtlasModel.Region region = hitRegion(pointerPos);
+                RegionModel region = hitRegion(pointerPos);
                 if (region != null) {
                     spotlightRegion(region);
                 }
@@ -145,7 +145,7 @@ class PageGroup extends Group {
             active = false;
         }
 
-        private void spotlightRegion(AtlasModel.Region region) {
+        private void spotlightRegion(RegionModel region) {
             if (this.region == region) return;
 
             this.region = region;
@@ -163,10 +163,10 @@ class PageGroup extends Group {
             glText.setText(font, sb.toString(), Color.WHITE, 0f, Align.left, false);
         }
 
-        private AtlasModel.Region hitRegion(Vector2 position) {
-            Array<AtlasModel.Region> regions = page.getRegions();
+        private RegionModel hitRegion(Vector2 position) {
+            Array<RegionModel> regions = page.getRegions();
             for (int i = 0; i < regions.size; i++) {
-                AtlasModel.Region region = regions.get(i);
+                RegionModel region = regions.get(i);
                 if (tmpBounds.set(
                         region.getX(),
                         region.getPage().getHeight() - region.getY() - region.getHeight(), // Texture region has top-left axis origin

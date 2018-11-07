@@ -18,6 +18,9 @@ package com.crashinvaders.common.scene2d.visui;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.badlogic.gdx.utils.Align;
@@ -66,25 +69,26 @@ public class ToastManager {
 	private ObjectMap<Toast, Timer.Task> timersTasks = new ObjectMap<Toast, Timer.Task>();
 
 	/** Displays basic toast with provided text as message. Toast will be displayed until it is closed by user. */
-	public void show (String text) {
-		show(text, UNTIL_CLOSED);
+	public Toast show (String text) {
+		return show(text, UNTIL_CLOSED);
 	}
 
 	/** Displays basic toast with provided text as message. Toast will be displayed for given amount of seconds. */
-	public void show (String text, float timeSec) {
+	public Toast show (String text, float timeSec) {
 		VisTable table = new VisTable();
-		table.add(text).grow();
-		show(table, timeSec);
+		Cell<Label> cell = table.add(text).grow();
+		cell.getActor().setTouchable(Touchable.disabled);
+		return show(table, timeSec);
 	}
 
 	/** Displays toast with provided table as toast's content. Toast will be displayed until it is closed by user. */
-	public void show (Table table) {
-		show(table, UNTIL_CLOSED);
+	public Toast show (Table table) {
+		return show(table, UNTIL_CLOSED);
 	}
 
 	/** Displays toast with provided table as toast's content. Toast will be displayed for given amount of seconds. */
-	public void show (Table table, float timeSec) {
-		show(new Toast(table), timeSec);
+	public Toast show (Table table, float timeSec) {
+		return show(new Toast(table), timeSec);
 	}
 
 	/**
@@ -92,8 +96,8 @@ public class ToastManager {
 	 * stored {@link Toast} instance.
 	 * Toast will be displayed until it is closed by user.
 	 */
-	public void show (ToastTable toastTable) {
-		show(toastTable, UNTIL_CLOSED);
+	public Toast show (ToastTable toastTable) {
+		return show(toastTable, UNTIL_CLOSED);
 	}
 
 	/**
@@ -101,22 +105,22 @@ public class ToastManager {
 	 * stored {@link Toast} instance.
 	 * Toast will be displayed for given amount of seconds.
 	 */
-	public void show (ToastTable toastTable, float timeSec) {
+	public Toast show (ToastTable toastTable, float timeSec) {
 		Toast toast = toastTable.getToast();
 		if (toast != null) {
-			show(toast, timeSec);
+			return show(toast, timeSec);
 		} else {
-			show(new Toast(toastTable), timeSec);
+			return show(new Toast(toastTable), timeSec);
 		}
 	}
 
 	/** Displays toast. Toast will be displayed until it is closed by user. */
-	public void show (Toast toast) {
-		show(toast, UNTIL_CLOSED);
+	public Toast show (Toast toast) {
+		return show(toast, UNTIL_CLOSED);
 	}
 
 	/** Displays toast. Toast will be displayed for given amount of seconds. */
-	public void show (final Toast toast, float timeSec) {
+	public Toast show (final Toast toast, float timeSec) {
 		Table toastMainTable = toast.getMainTable();
 		if (toastMainTable.getStage() != null) {
 			remove(toast);
@@ -141,6 +145,7 @@ public class ToastManager {
 			timersTasks.put(toast, fadeOutTask);
 			Timer.schedule(fadeOutTask, timeSec);
 		}
+		return toast;
 	}
 
 	/** Must be called after application window resize to properly update toast positions on screen. */
