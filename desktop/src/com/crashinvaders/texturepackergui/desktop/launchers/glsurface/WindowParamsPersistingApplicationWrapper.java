@@ -50,7 +50,7 @@ class WindowParamsPersistingApplicationWrapper extends ApplicationListenerWrappe
         int x = Display.getX();
         int y = Display.getY();
 
-        //FIXME by some reason actual window position shifted by 6 pixels on Windows (by 12 at y when maximized)
+        //FIXME For some reason actual window position shifted by 6 pixels on Windows (by 12 at y when maximized).
         if (LWJGLUtil.getPlatform() == LWJGLUtil.PLATFORM_WINDOWS) {
             x += 6;
             y += 6;

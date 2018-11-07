@@ -151,9 +151,34 @@ public class ConfigurationController {
             BitmapFont.BitmapFontData fontData = font.getData();
             fontData.markupEnabled = true;
             fontData.missingGlyph = fontData.getGlyph(UNKNOWN_CHARACTER);
+
             // If missing glyph is set, bitmap font returns it in place of '\r' character.
             // We forcefully replace it with NBSP glyph for now.
-            fontData.setGlyph('\r', fontData.getGlyph('\u00A0'));
+            if (fontData.getGlyph('\r') == fontData.missingGlyph) {
+                fontData.setGlyph('\r', fontData.getGlyph('\u00A0'));
+            }
+
+            // For some reason TAB glyph doesn't get generated.
+            // So we create it manually using 4 times wider space glyph.
+            if (fontData.getGlyph('\t') == fontData.missingGlyph) {
+                BitmapFont.Glyph spaceGlyph = fontData.getGlyph(' ');
+                BitmapFont.Glyph tabGlyph = new BitmapFont.Glyph();
+                tabGlyph.id = '\t';
+                tabGlyph.srcX = spaceGlyph.srcX;
+                tabGlyph.srcY = spaceGlyph.srcY;
+                tabGlyph.width = spaceGlyph.width;
+                tabGlyph.height = spaceGlyph.height;
+                tabGlyph.u = spaceGlyph.u;
+                tabGlyph.v = spaceGlyph.v;
+                tabGlyph.u2 = spaceGlyph.u2;
+                tabGlyph.v2 = spaceGlyph.v2;
+                tabGlyph.xoffset = spaceGlyph.xoffset;
+                tabGlyph.yoffset = spaceGlyph.yoffset;
+                tabGlyph.xadvance = spaceGlyph.xadvance * 4;
+                tabGlyph.kerning = spaceGlyph.kerning;
+                tabGlyph.fixedWidth = spaceGlyph.fixedWidth;
+                fontData.setGlyph('\t', tabGlyph);
+            }
         }
 
         // Extracting all colors from the skin and importing them into global color collection
