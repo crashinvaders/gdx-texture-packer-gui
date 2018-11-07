@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.views.canvas.AtlasModel;
 
 class PageGroup extends Group {
@@ -28,10 +30,7 @@ class PageGroup extends Group {
 
         borderFrame = new NinePatchDrawable(skin.getPatch("custom/white_frame")).tint(Color.BLACK);
 
-        Texture pageTexture = page.getTexture();
-        pageTexture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
-        setSize(pageTexture.getWidth(), pageTexture.getHeight());
+        setSize(page.getWidth(), page.getHeight());
         setTouchable(Touchable.disabled);
 
         addActor(new RegionSpotlight(skin));
@@ -44,9 +43,12 @@ class PageGroup extends Group {
         float width = getWidth() * getScaleX();
         float height = getHeight() * getScaleY();
 
-        Color col = getColor();
-        batch.setColor(col.r, col.g, col.b, col.a * parentAlpha);
-        batch.draw(page.getTexture(), x, y, width, height);
+        Texture pageTexture = page.getTexture();
+        if (pageTexture != null) {
+            Color col = getColor();
+            batch.setColor(col.r, col.g, col.b, col.a * parentAlpha);
+            batch.draw(pageTexture, x, y, width, height);
+        }
 
         batch.setColor(Color.BLACK);
         borderFrame.draw(batch, x, y, width, height);
@@ -78,7 +80,7 @@ class PageGroup extends Group {
         private final GlyphLayout glText;
 
         private boolean active;
-        private AtlasRegion region;
+        private AtlasModel.Region region;
 
         public RegionSpotlight(Skin skin) {
             whiteTex = skin.getRegion("white");
@@ -96,10 +98,10 @@ class PageGroup extends Group {
 
             // Frame
             float scale = PageGroup.this.getScaleX();
-            float x = getX() + (region.getRegionX() - framePad) * scale;
-            float y = getY() + (region.getTexture().getHeight() - region.getRegionY() - region.getRegionHeight() - framePad) * scale; // Texture region has top-left axis origin
-            float width = (region.getRegionWidth() + framePad*2f) * scale;
-            float height = (region.getRegionHeight() + framePad*2f) * scale;
+            float x = getX() + (region.getX() - framePad) * scale;
+            float y = getY() + (region.getPage().getHeight() - region.getY() - region.getHeight() - framePad) * scale; // Texture region has top-left axis origin
+            float width = (region.getWidth() + framePad*2f) * scale;
+            float height = (region.getHeight() + framePad*2f) * scale;
 
             batch.setColor(colorSpotlight);
             spotlightBorder.draw(batch, x, y, width, height);
@@ -127,7 +129,7 @@ class PageGroup extends Group {
             }
 
             if (withinPage) {
-                AtlasRegion region = hitRegion(pointerPos);
+                AtlasModel.Region region = hitRegion(pointerPos);
                 if (region != null) {
                     spotlightRegion(region);
                 }
@@ -143,35 +145,49 @@ class PageGroup extends Group {
             active = false;
         }
 
-        private void spotlightRegion(AtlasRegion region) {
+        private void spotlightRegion(AtlasModel.Region region) {
             if (this.region == region) return;
 
             this.region = region;
             active = true;
 
-            // You can customize what is shown when user hover on region in here
-            StringBuilder sb = new StringBuilder();
-            sb.append(region.name);
-            if (region.index >= 0) {
-                sb.append("[#fbf236ff] idx:" + region.index);
+            // You can customize what is shown when a user hovers on region in here.
+            final TextureAtlasData.Region regionData = region.getRegionData();
+            final StringBuilder sb = new StringBuilder();
+            sb.append(regionData.name);
+            if (regionData.index >= 0) {
+                sb.append("[#fbf236ff] idx:" + regionData.index);
             }
 
             font.getData().setScale(1f);
             glText.setText(font, sb.toString(), Color.WHITE, 0f, Align.left, false);
         }
 
-        private AtlasRegion hitRegion(Vector2 position) {
-            for (AtlasRegion region : page.getRegions()) {
+        private AtlasModel.Region hitRegion(Vector2 position) {
+            Array<AtlasModel.Region> regions = page.getRegions();
+            for (int i = 0; i < regions.size; i++) {
+                AtlasModel.Region region = regions.get(i);
                 if (tmpBounds.set(
-                        region.getRegionX(),
-                        region.getTexture().getHeight() - region.getRegionY() - region.getRegionHeight(), // Texture region has top-left axis origin
-                        region.getRegionWidth(),
-                        region.getRegionHeight())
+                        region.getX(),
+                        region.getPage().getHeight() - region.getY() - region.getHeight(), // Texture region has top-left axis origin
+                        region.getWidth(),
+                        region.getHeight())
                         .contains(position)) {
                     return region;
                 }
             }
             return null;
+//            for (AtlasRegion region : page.getRegions()) {
+//                if (tmpBounds.set(
+//                        region.getRegionX(),
+//                        region.getTexture().getHeight() - region.getRegionY() - region.getRegionHeight(), // Texture region has top-left axis origin
+//                        region.getRegionWidth(),
+//                        region.getRegionHeight())
+//                        .contains(position)) {
+//                    return region;
+//                }
+//            }
+//            return null;
         }
     }
 }

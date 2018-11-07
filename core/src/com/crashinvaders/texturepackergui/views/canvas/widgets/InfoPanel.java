@@ -59,7 +59,7 @@ public class InfoPanel extends Container {
     private void updatePageInfo() {
         if (atlasPage == null) return;
 
-        setPageDimens(atlasPage.getTexture().getWidth(), atlasPage.getTexture().getHeight());
+        setPageDimens(atlasPage.getWidth(), atlasPage.getHeight());
         setCurrentPage(atlasPage.getPageIndex() + 1);
         setPagesAmount(atlasPage.getAtlasModel().getPages().size);
         setFileSize(atlasPage.getAtlasModel().getAtlasData().getPages().get(atlasPage.getPageIndex()).textureFile.length());
