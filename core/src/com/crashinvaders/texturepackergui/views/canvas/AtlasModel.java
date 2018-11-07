@@ -3,22 +3,23 @@ package com.crashinvaders.texturepackergui.views.canvas;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
-/** This is simple TextureAtlas wrapper that holds some extra info for service use */
+/** This is simple TextureAtlas wrapper that holds some extra info for utility use. */
 public class AtlasModel implements Disposable {
     private final FileHandle atlasFile;
     private final TextureAtlas atlas;
     private final Array<Page> pages = new Array<>(true, 8);
     private final String atlasPath;
-    private final TextureAtlas.TextureAtlasData atlasData;
+    private final TextureAtlasData atlasData;
 
     public AtlasModel(FileHandle atlasFile) {
         this.atlasFile = atlasFile;
-        this.atlasData = new TextureAtlas.TextureAtlasData(atlasFile, atlasFile.parent(), false);
+        this.atlasData = new TextureAtlasData(atlasFile, atlasFile.parent(), false);
         this.atlas = new TextureAtlas(atlasData);
         atlasPath = atlasFile.file().getAbsolutePath();
 
@@ -58,7 +59,7 @@ public class AtlasModel implements Disposable {
         return atlas;
     }
 
-    public TextureAtlas.TextureAtlasData getAtlasData() {
+    public TextureAtlasData getAtlasData() {
         return atlasData;
     }
 

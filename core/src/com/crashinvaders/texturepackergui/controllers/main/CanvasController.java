@@ -8,7 +8,7 @@ import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.views.canvas.Canvas;
+import com.crashinvaders.texturepackergui.views.canvas.PagePreviewCanvas;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
@@ -23,13 +23,13 @@ public class CanvasController {
 	@Inject EventDispatcher eventDispatcher;
 	@Inject ModelService modelService;
 
-	private Canvas canvas;
+	private PagePreviewCanvas canvas;
     private PackModel currentPack;
 
-	public void initialize(Canvas canvas) {
+	public void initialize(PagePreviewCanvas canvas) {
         this.canvas = canvas;
 
-        canvas.setCallback(new Canvas.Callback() {
+        canvas.setCallback(new PagePreviewCanvas.Callback() {
             @Override
             public void atlasLoadError(PackModel pack) {
                 //TODO supply with details

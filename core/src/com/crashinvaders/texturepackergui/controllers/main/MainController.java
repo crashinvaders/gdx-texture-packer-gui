@@ -1,12 +1,10 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -14,7 +12,6 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
@@ -38,7 +35,7 @@ import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
-import com.crashinvaders.texturepackergui.views.canvas.Canvas;
+import com.crashinvaders.texturepackergui.views.canvas.PagePreviewCanvas;
 import com.crashinvaders.texturepackergui.views.seekbar.IntSeekBarModel;
 import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Destroy;
@@ -50,7 +47,6 @@ import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewShower;
 import com.github.czyzby.autumn.mvc.stereotype.View;
-import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -90,7 +86,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
     @LmlActor("mainRoot") Group mainRoot;
     @LmlActor("toastHostGroup") Group toastHostGroup;
-    @LmlActor("canvas") Canvas canvas;
+    @LmlActor("canvas") PagePreviewCanvas canvas;
     @LmlActor("packListSplitPane") VisSplitPane packListSplitPane;
     @LmlActor("menuBarTable") MenuBarX.MenuBarTable menuBarTable;
 

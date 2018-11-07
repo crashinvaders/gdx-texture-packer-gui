@@ -8,7 +8,7 @@ import com.crashinvaders.texturepackergui.lml.tags.*;
 import com.crashinvaders.texturepackergui.lml.tags.seekbar.FloatSeekBarLmlTag;
 import com.crashinvaders.texturepackergui.lml.tags.seekbar.IntSeekBarLmlTag;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
-import com.crashinvaders.texturepackergui.views.canvas.Canvas;
+import com.crashinvaders.texturepackergui.views.canvas.PagePreviewCanvas;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
 
 public class AppLmlSyntax extends VisLmlSyntax {
@@ -18,7 +18,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerActorTags();
 
         addTagProvider(new GroupLmlTag.TagProvider(), "group");
-        addTagProvider(new Canvas.CanvasLmlTagProvider(), "canvas");
+        addTagProvider(new PagePreviewCanvas.CanvasLmlTagProvider(), "canvas");
         addTagProvider(new FixedIntSpinnerLmlTagProvider(), "intSpinner");
         addTagProvider(new FixedFloatSpinnerLmlTagProvider(), "floatSpinner");
         addTagProvider(new ShrinkContainerLmlTag.TagProvider(), "shrinkContainer");

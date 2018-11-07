@@ -25,7 +25,7 @@ import com.github.czyzby.lml.parser.tag.LmlTagProvider;
 import com.kotcrab.vis.ui.widget.VisImageTextButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 
-public class Canvas extends Stack {
+public class PagePreviewCanvas extends Stack {
 
 	private final InterfaceService interfaceService;
 
@@ -42,7 +42,7 @@ public class Canvas extends Stack {
 	private AtlasModel atlas;
 	private int pageIndex = 0;
 
-	public Canvas(Skin skin) {
+	public PagePreviewCanvas(Skin skin) {
 		this.interfaceService = App.inst().getInterfaceService();
 
 		// Layout
@@ -245,7 +245,7 @@ public class Canvas extends Stack {
 
 		@Override
 		protected Actor getNewInstanceOfActor(LmlActorBuilder builder) {
-			return new Canvas(getSkin(builder));
+			return new PagePreviewCanvas(getSkin(builder));
 		}
 	}
 }
