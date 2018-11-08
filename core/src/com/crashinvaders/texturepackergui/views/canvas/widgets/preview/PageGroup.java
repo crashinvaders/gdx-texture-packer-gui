@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -23,6 +25,9 @@ class PageGroup extends Group {
 
     private final PageModel page;
     private final NinePatchDrawable borderFrame;
+
+    private boolean firstPageRender = true;
+    private float pageAlpha = 0f;
 
     public PageGroup(Skin skin, PageModel page) {
         this.page = page;
@@ -45,8 +50,13 @@ class PageGroup extends Group {
 
         Texture pageTexture = page.getTexture();
         if (pageTexture != null) {
+            if (firstPageRender) {
+                firstPageRender = false;
+                startPageAppearAnimation();
+            }
+
             Color col = getColor();
-            batch.setColor(col.r, col.g, col.b, col.a * parentAlpha);
+            batch.setColor(col.r, col.g, col.b, col.a * parentAlpha * pageAlpha);
             batch.draw(pageTexture, x, y, width, height);
         }
 
@@ -59,6 +69,15 @@ class PageGroup extends Group {
 
     public PageModel getPage() {
         return page;
+    }
+
+    private void startPageAppearAnimation() {
+        addAction(new TemporalAction(0.15f) {
+            @Override
+            protected void update(float percent) {
+                pageAlpha = percent;
+            }
+        });
     }
 
     @SuppressWarnings("UnnecessaryLocalVariable")
