@@ -9,7 +9,6 @@ import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.compression.Png8CompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.PNG8;
-import com.crashinvaders.texturepackergui.utils.PaletteReducer;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
@@ -44,8 +43,7 @@ public class Png8CompressingProcessor implements PackProcessor {
                     long preCompressedSize = page.textureFile.length();
                     pm = new Pixmap(page.textureFile);
                     png8.setCompression(compModel.getLevel());
-                    png8.palette = new PaletteReducer(pm, compModel.getThreshold());
-                    png8.write(page.textureFile, pm, false, compModel.isDithering());
+                    png8.writePrecisely(page.textureFile, pm, compModel.isDithering(), compModel.getThreshold());
                     long postCompressedSize = page.textureFile.length();
                     float pageCompression = ((postCompressedSize-preCompressedSize) / (float)preCompressedSize);
                     compressionRateSum += pageCompression;
