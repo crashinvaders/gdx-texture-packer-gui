@@ -91,9 +91,11 @@ public class ExtensionModuleRepositoryService {
                     @Override
                     protected void handleResponseSync(Net.HttpResponse httpResponse) {
                         try {
+                            String responseString = this.responseString;
+                            this.responseString = null;
+
                             // Cache result into local file
                             FileUtils.saveTextToFile(repoCacheFile, responseString);
-                            responseString = null;
 
                             // Update in-memory data
                             Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, responseString);
