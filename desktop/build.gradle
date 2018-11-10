@@ -10,7 +10,6 @@ project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.Applicat
 project.ext.assetsDir = new File("$rootDir/assets");
 project.ext.distOutputDir = "$rootDir/distribution/output"
 project.ext.distFileName = "$project.ext.appName-$project.ext.version"
-project.ext.nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
 project.ext.secretDir = "$rootDir/secret/"
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -58,17 +57,6 @@ task zipRelease(type: Zip) {
 }
 zipRelease.dependsOn distRelease
 
-task nsisInstaller(type: Exec) {
-    workingDir '../distribution'
-
-    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
-        commandLine 'cmd', '/c', "$project.ext.nsisCommand"
-    } else {
-        commandLine "$project.ext.nsisCommand"
-    }
-}
-nsisInstaller.dependsOn zipRelease
-
 eclipse {
     project {
         name = appName + "-desktop"
@@ -77,15 +65,44 @@ eclipse {
 }
 
 task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-  doLast {
-    def classpath = new XmlParser().parse(file(".classpath"))
-    new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
-    def writer = new FileWriter(file(".classpath"))
-    def printer = new XmlNodePrinter(new PrintWriter(writer))
-    printer.setPreserveWhitespace(true)
-    printer.print(classpath)
-  }
+    doLast {
+        def classpath = new XmlParser().parse(file(".classpath"))
+        new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
+        def writer = new FileWriter(file(".classpath"))
+        def printer = new XmlNodePrinter(new PrintWriter(writer))
+        printer.setPreserveWhitespace(true)
+        printer.print(classpath)
+    }
 }
+
+//region NSIS Installer
+/**
+ * Task to create Windows installer using NSIS.
+ *
+ * In order to make it work, you should have:
+ *     1. Windows OS only.
+ *     2. NSIS installed in your system and added to PATH (makensis.exe).
+ *          https://sourceforge.net/projects/nsis/files/
+ *     3. ZipDLL NSIS extension should be installed.
+ *          http://nsis.sourceforge.net/ZipDLL_plug-in
+ *     4. FileAssoc macros should be installed.
+ *          Copy code from http://nsis.sourceforge.net/FileAssoc
+ *          into file "FileAssoc.nsh" and put it under "<NSIS_DIR>/Include/"
+ *
+ * After task execution, the output files can be found under "./distribution/output/".
+ */
+task nsisInstaller(type: Exec) {
+    if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        throw new IllegalStateException("NSIS installer can be created only on Windows.")
+    }
+
+    workingDir '../distribution'
+
+    def nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
+    commandLine 'cmd', '/c', "$nsisCommand"
+}
+nsisInstaller.dependsOn zipRelease
+//endregion
 
 //region Mac App Bundle
 macAppBundle {
