@@ -46,13 +46,13 @@
                     id="lvPacks"
                     scrollcapture="true"
                     adapter="createPacksListAdapter"
-                    listviewonclick="resetPackListSelection"
                     style="custom"
                     grow="true"
                     disabledx="true"
                     fadescrollbars="false"
                     overscroll="false"
                     flickscroll="false"/>
+            <!--listviewonclick="resetPackListSelection"-->
         </vistable>
 
     </vistable>
