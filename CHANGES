@@ -1,4 +1,8 @@
-[LATEST]
+[4.8.1]
+- Fixed texture regions get written with wrong padding.
+- Fixed texture unpacker extracts regions with wrong sizes occasionally.
+
+[4.8.0]
 - Atlases can be saved as indexed-mode PNG8 image (compression type). Optionally dithering colors that don't match exactly.
 - Asynchronous (non blocking) page preview loading.
 - Multiple of four page size option added.
