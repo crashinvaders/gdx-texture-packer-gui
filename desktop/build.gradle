@@ -93,7 +93,8 @@ task afterEclipseImport(description: "Post processing after project generation",
  */
 task nsisInstaller(type: Exec) {
     if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
-        throw new IllegalStateException("NSIS installer can be created only on Windows.")
+        println 'NSIS installer can be created only on Windows.';
+        return;
     }
 
     workingDir '../distribution'
