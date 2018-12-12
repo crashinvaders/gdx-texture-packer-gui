@@ -17,7 +17,7 @@ allprojects {
 
     ext {
         appName = "gdx-texturepacker"
-        version = '4.8.1'
+        version = '4.8.2'
     }
 
     repositories {
@@ -54,6 +54,7 @@ project(":core") {
         compile "com.github.czyzby:gdx-lml:$lmlVersion"
         compile "com.github.czyzby:gdx-lml-vis:$lmlVersion"
         compile "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"
+        compile "com.kotcrab.vis:vis-ui:$visUiVersion"
         compile "commons-io:commons-io:$commonsIoVersion"
         compile "com.github.depsypher:pngtastic:$pngtasticVersion"
         compile "com.tinify:tinify:$tinifyVersion"

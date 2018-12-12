@@ -1,3 +1,5 @@
+[LATEST]
+
 [4.8.1]
 - Fixed texture regions get written with wrong padding.
 - Fixed texture unpacker extracts regions with wrong sizes occasionally.

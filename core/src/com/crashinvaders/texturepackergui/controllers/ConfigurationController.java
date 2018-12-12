@@ -220,7 +220,7 @@ public class ConfigurationController {
 
         LmlParser parser = interfaceService.getParser();
         parser.getData().addArgument("projectExt", "."+AppConstants.PROJECT_FILE_EXT);
-        parser.getData().addArgument("imageExt", "."+Strings.join(" .", AppConstants.IMAGE_FILE_EXT));
+        parser.getData().addArgument("imageExt", "."+Strings.join(" .", (Object[]) AppConstants.IMAGE_FILE_EXT));
 
         interfaceService.setShowingActionProvider(new ActionProvider() {
             @Override
