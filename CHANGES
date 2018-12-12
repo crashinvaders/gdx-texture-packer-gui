@@ -1,4 +1,5 @@
 [LATEST]
+- Fixed high DPI scaling issue.
 
 [4.8.1]
 - Fixed texture regions get written with wrong padding.
