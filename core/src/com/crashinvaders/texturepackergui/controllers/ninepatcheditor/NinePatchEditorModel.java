@@ -73,6 +73,11 @@ public class NinePatchEditorModel implements Disposable {
                 break;
             }
         }
+        // If horizontal pad values are not defined, they equal to the horizontal patch values.
+        if (!padLeftFound) {
+            contentValues.left.set(patchValues.left.get());
+            contentValues.right.set(patchValues.right.get());
+        }
         boolean padTopFound = false;
         for (int y = 1; y < pixmap.getHeight()-1; y++) {
             int color = pixmap.getPixel(pixmap.getWidth()-1, y);
@@ -83,6 +88,11 @@ public class NinePatchEditorModel implements Disposable {
                 contentValues.bottom.set(pixmap.getHeight() - y - 1);
                 break;
             }
+        }
+        // If vertical pad values are not defined, they equal to the vertical patch values.
+        if (!padTopFound) {
+            contentValues.top.set(patchValues.top.get());
+            contentValues.bottom.set(patchValues.bottom.get());
         }
 
         // Cut off 1-pixel border markup
