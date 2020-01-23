@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE container SYSTEM "/lml.dtd">
+
+<container minwidth="160">
+    <table onecolumn="true">
+        <textfield id="edtName" growx="true"/>
+
+        <actor height="4"/>
+
+        <buttontable id="btPlacing" defaultalign="left">
+            <label colspan="2">Place new pack:</label>
+            <:row/>
+            <radiobutton id="rbAbove" text="@dPackPlaceAbove" padright="8"/>
+            <radiobutton id="rbTop" text="@dPackPlaceTop" padright="8"/>
+            <:row/>
+            <radiobutton id="rbBelow" text="@dPackPlaceBelow" checked="true"/>
+            <radiobutton id="rbBottom" text="@dPackPlaceBottom"/>
+        </buttontable>
+    </table>
+</container>

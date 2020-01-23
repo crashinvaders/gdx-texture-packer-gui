@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="dialogRoot"
+        title="@isTitle"
+        closebutton="true"
+        closeonescape="true"
+        resizeable="false"
+        movable="false">
+    <vistable onecolumn="true" defaultalign="center" padleft="8" padright="8"  padtop="8" width="300">
+        <label style="grey" text="@isDescription" growx="true" wrap="true" textalign="center" padbottom="8"/>
+        <vistable growx="true">
+            <visslider id="sliderUiScale" style="seekbar" growx="true"
+                       min="0.5" max="2.0" value="1.0" step="0.01"
+                       change="InterfaceScalingDialogController.onUiScaleChanged"
+                       touchUp="InterfaceScalingDialogController.applyNewUiScale"/>
+            <label id="lblUiScale" text="100%" textalign="right" width="44"/>
+        </vistable>
+    </vistable>
+</visdialog>

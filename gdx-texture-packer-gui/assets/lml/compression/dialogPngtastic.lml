@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        title="@dCompTitle|Pngtastic"
+        closebutton="true"
+        closeonescape="true">
+
+    <table width="320" pad="8" padtop="12" padbottom="4" onecolumn="true" defaultalign="left">
+
+        <label text="@dCompLevel" padbottom="4"/>
+        <intseekbar id="sbCompLevel"
+                    change="onCompLevelChanged"
+                    min="1" max="9" value="5"
+                    growx="true"/>
+
+        <:row padtop="12"/>
+
+        <checkbox id="chbRemoveGamma"
+                  text="@dCompRemoveGamma"
+                  change="onRemoveGammaChanged"/>
+
+        <:row padtop="12"/>
+
+        <separator growx="true" height="1"/>
+
+        <:row padtop="12"/>
+
+        <label growx="true" wrap="true" text="@dCompPngtasticDesc"/>
+
+        <:row padtop="12"/>
+
+        <link style="orange-small"
+              href="https://github.com/depsypher/pngtastic#pngtastic"
+              text="@dCompVisitPage|Pngtastic"
+              align="center"/>
+    </table>
+</visdialog>

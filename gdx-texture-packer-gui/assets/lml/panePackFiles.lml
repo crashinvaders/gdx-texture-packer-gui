@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/lml.dtd">
+
+<stack grow="true">
+
+    <table>
+
+        <table growx="true" tablealign="left" defaultpadright="4" background="button">
+            <:column column="0"/>
+
+            <:macro alias="sidebutton" replace="ignored" id icon tooltip onchange>
+                <visimagebutton
+                        id="{id}"
+                        icon="{icon}"
+                        onchange="{onchange}"
+                        imagescaling="none"
+                        generatedisabled="true"
+                        focusborder="false"
+                        tooltip="{tooltip}"
+                        width="25"
+                        height="25"/>
+            </:macro>
+
+            <:sidebutton id="btnPfAddInput" icon="custom/ic-input-file-add" tooltip="@addInputFiles"
+                         onchange="PackInputFilesController.addInputFiles"/>
+            <:sidebutton id="btnPfAddIgnore" icon="custom/ic-input-file-ignore-add" tooltip="@addIgnoreFiles"
+                         onchange="PackInputFilesController.addIgnoreFiles"/>
+            <:sidebutton id="btnPfRemove" icon="custom/ic-input-file-delete" tooltip="@remove"
+                         onchange="PackInputFilesController.removeSelected"/>
+
+            <separator growy="true" height="0" width="2" padtop="1" padbottom="1"/>
+
+            <:sidebutton id="btnPfProperties" icon="custom/ic-input-file-properties" tooltip="@properties"
+                         onchange="PackInputFilesController.showInputFileDialog"/>
+            <:sidebutton id="btnPfInclude" icon="custom/ic-input-file-include" tooltip="@include"
+                         onchange="PackInputFilesController.includeSelected"/>
+            <:sidebutton id="btnPfExclude" icon="custom/ic-input-file-exclude" tooltip="@exclude"
+                         onchange="PackInputFilesController.excludeSelected"/>
+        </table>
+
+        <:row/>
+
+        <listview
+                id="lvInputFiles"
+                style="custom"
+                colspan="3"
+                pad="4"
+                grow="true"
+                disabledx="true"
+                fadescrollbars="false"
+                overscroll="false"
+                flickscroll="false"
+                scrollcapture="true"
+                adapter="PackInputFilesController.createAdapter"
+                listviewonclick="PackInputFilesController.resetSelection"/>
+
+    </table>
+
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockPackFiles</:import>
+
+</stack>

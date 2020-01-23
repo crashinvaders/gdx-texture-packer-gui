@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/lml.dtd">
+
+<stack fillparent="true" touchable="enabled" click="resetViewFocus" onescape="resetViewFocus">
+    <vistable id="root" bgtiled="custom/background-fill">
+
+        <:import path="lml/mainMenu.lml"/>
+
+        <:row/>
+
+        <vistable grow="true">
+
+            <container growy="true" fill="true" width="320">
+                <:import path="lml/titledPane.lml"/>
+
+                <vissplitpane id="packListSplitPane" vertical="true" min="0.2" max="0.7" value="0.2">
+
+                    <container fill="true">
+                        <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">
+                            <:import path="lml/panePackList.lml"/>
+                        </:titledpane>
+                    </container>
+
+                    <container fill="true">
+                        <table onecolumn="true" transform="false" defaultgrowx="true">
+                            <:titledpane id="titledPanePackGeneral" title="@panelTitlePackGeneral" icon="custom/ic-title-exclamation">
+                                <:import path="lml/panePackGeneral.lml"/>
+                            </:titledpane>
+
+                            <container growy="true" fill="true">
+                                <:titledpane id="titledPanePackFiles" title="@panelTitlePackFiles" icon="custom/ic-title-folder">
+                                    <:import path="lml/panePackFiles.lml"/>
+                                </:titledpane>
+                            </container>
+                        </table>
+                    </container>
+
+                </vissplitpane>
+            </container>
+
+            <separator growy="true"/>
+
+            <vistable align="topleft" onecolumn="true" growy="true">
+                <container growy="false" fill="true">
+                    <:titledpane id="titledPaneGlobalSettings" title="@panelTitleGlobalSettings" icon="custom/ic-title-global-settings">
+                        <:import path="lml/paneGlobalSettings.lml"/>
+                    </:titledpane>
+                </container>
+
+                <container growy="true" fill="true">
+                    <:titledpane id="titledPanePackSettings" title="@panelTitlePackSettings" icon="custom/ic-title-pack-settings">
+                        <:import path="lml/panePackSettings.lml"/>
+                    </:titledpane>
+                </container>
+            </vistable>
+
+            <separator growy="true"/>
+
+            <container grow="true" fill="true" rightclick="onCanvasRightClick">
+                <:titledpane id="titledPaneAtlasPreview" title="@panelTitleAtlasPreview" icon="custom/ic-title-atlas">
+                    <:import path="lml/panePreviewCanvas.lml"/>
+                </:titledpane>
+            </container>
+
+        </vistable>
+
+    </vistable>
+
+    <group id="toastHostGroup" touchable="childrenOnly"/>
+
+    <:import path="lml/drandropOverlay.lml"/>
+</stack>

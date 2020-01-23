@@ -1,0 +1,66 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://plugins.gradle.org/m2/" }
+        jcenter()
+    }
+    dependencies {
+        classpath "edu.sc.seis:macAppBundle:${macAppBundleVersion}"
+    }
+}
+
+allprojects {
+    apply plugin: "eclipse"
+    apply plugin: "idea"
+
+    ext {
+        appName = "gdx-texturepacker"
+        version = '4.8.2'
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+    }
+}
+
+project(":desktop") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        compile "com.github.czyzby:gdx-autumn-fcs:$lmlVersion"
+        compile "args4j:args4j:$args4jVersion"
+        compile "com.github.scribejava:scribejava-core:$scribeJavaVersion"
+        compile "com.github.scribejava:scribejava-apis:$scribeJavaVersion"
+        compile "com.github.scribejava:scribejava-httpclient-okhttp:$scribeJavaVersion"
+    }
+}
+
+project(":core") {
+    apply plugin: "java"
+
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+//        compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use local modified copy of this library
+        compile "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"
+        compile "com.github.czyzby:gdx-lml:$lmlVersion"
+        compile "com.github.czyzby:gdx-lml-vis:$lmlVersion"
+        compile "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"
+        compile "com.kotcrab.vis:vis-ui:$visUiVersion"
+        compile "commons-io:commons-io:$commonsIoVersion"
+        compile "com.github.depsypher:pngtastic:$pngtasticVersion"
+        compile "com.tinify:tinify:$tinifyVersion"
+    }
+}
+
+tasks.eclipse.doLast {
+    delete ".project"
+}

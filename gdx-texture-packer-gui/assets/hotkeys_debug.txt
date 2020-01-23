@@ -1,0 +1,6 @@
+# This is a debug hotkey list.
+# It will be loaded only if the debug configuration is activated.
+
+reloadView: F1
+reloadLocalization: F2
+reloadApp: F8

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="dialog"
+        title="@ninePatchTool"
+        closebutton="true"
+        closeonescape="true"
+        resizable="true"
+        modal="true">
+    <table onecolumn="true" tablepadleft="4" tablepadright="4" grow="true">
+        <vissplitpane grow="true" minwidth="600" minheight="500" padbottom="4" value="0.65" maxsplit="0.65">
+
+            <!--LEFT | Editor-->
+            <table onecolumn="true">
+                <container clip="true" fill="true" grow="true">
+                    <stack>
+                        <image tiled="custom/transparent-light"/>
+                        <:actor id="compositionHolder" method="createCompositionHolder"/>
+                    </stack>
+                </container>
+                <table onecolumn="true" growx="true" padtop="4">
+                    <table padtop="4" padright="4">
+                        <image style="custom/ic-pad-left" scaling="none" padright="2"/>
+                        <intspinner id="spnValueLeft" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateLeftPadFromView"/>
+                        <actor width="8"/>
+                        <image style="custom/ic-pad-right" scaling="none" padright="2"/>
+                        <intspinner id="spnValueRight" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateRightPadFromView"/>
+                        <actor width="8"/>
+                        <image style="custom/ic-pad-bottom" scaling="none" padright="2"/>
+                        <intspinner id="spnValueBottom" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateBottomPadFromView"/>
+                        <actor width="8"/>
+                        <image style="custom/ic-pad-top" scaling="none" padright="2"/>
+                        <intspinner id="spnValueTop" value="0" min="0" max="999999" width="48"
+                                    selectallonfocus="true" change="updateTopPadFromView"/>
+                    </table>
+                    <buttongroup padtop="8">
+                        <visradiobutton text="@ninePatchPatches" change="editPatchGrid"/>
+                        <actor width="16"/>
+                        <visradiobutton text="@ninePatchContent" change="editContentGrid"/>
+                    </buttongroup>
+                    <checkbox id="chbMatchContent" text="@ninePatchKeepContentWithin" padtop="4" change="onMatchContentChanged"/>
+                </table>
+            </table>
+
+            <!--RIGHT | Preview-->
+            <table onecolumn="true">
+                <stack grow="true">
+                    <image id="imgPreviewBackground" tiled="custom/transparent-light"/>
+                    <visscrollpane id="spPreview" style="minimal" scrollcapture="true">
+                        <container pad="8">
+                                <container>
+                                    <transformscalable id="previewTransform">
+                                        <scalarscalable id="previewScalar">
+                                            <image id="previewImage"/>
+                                        </scalarscalable>
+                                    </transformscalable>
+                                </container>
+                        </container>
+                    </visscrollpane>
+                </stack>
+                <table growx="true" padleft="8" padtop="8">
+                    <label text="X" padright="4"/>
+                    <label id="lblPreviewScaleX" style="small-grey" width="32" text="100%" padright="4"/>
+                    <visslider id="sbPreviewScaleX" style="seekbar-small" growx="true" min="0.5" max="4" value="1" step="0.05"/>
+                    <:row padtop="4"/>
+                    <label text="Y" padright="4"/>
+                    <label id="lblPreviewScaleY" style="small-grey" width="32" text="100%" padright="4"/>
+                    <visslider id="sbPreviewScaleY" style="seekbar-small" growx="true" min="0.5" max="4" value="1" step="0.05"/>
+                </table>
+
+                <table defaultuniform="true" defaultfill="true" defaultspaceleft="4" tablealign="right" growx="true" padtop="8">
+                    <textbutton text="@save" change="confirmResult" minwidth="96"/>
+                    <textbutton text="@cancel" change="hide" minwidth="96"/>
+                </table>
+            </table>
+
+        </vissplitpane>
+    </table>
+</visdialog>

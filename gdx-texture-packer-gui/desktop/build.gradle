@@ -1,0 +1,137 @@
+apply plugin: "java"
+apply plugin: "edu.sc.seis.macAppBundle"
+
+targetCompatibility = 1.7
+sourceCompatibility = 1.7
+sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs += ['resources/']
+sourceSets.main.resources.srcDirs += ["$rootDir/secret/"]
+
+project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
+project.ext.assetsDir = new File("$rootDir/assets");
+project.ext.distOutputDir = "$rootDir/distribution/output"
+project.ext.distFileName = "$project.ext.appName-$project.ext.version"
+project.ext.secretDir = "$rootDir/secret/"
+
+task run(dependsOn: classes, type: JavaExec) {
+    doLast {
+        main = project.mainClassName
+        classpath += sourceSets.main.runtimeClasspath
+        standardInput = System.in
+        workingDir = project.assetsDir
+        ignoreExitValue = true
+    }
+}
+
+task dist(type: Jar) {
+    from files(sourceSets.main.output.classesDirs)
+    from files(sourceSets.main.output.resourcesDir)
+    from {configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }}
+    from files(project.assetsDir)
+    from secretDir
+
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+dist.dependsOn classes
+
+task distRelease(type: Jar) {
+    from files(sourceSets.main.output.classesDirs)
+    from files(sourceSets.main.output.resourcesDir)
+    from {configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }}
+    from files(project.assetsDir);
+    from secretDir
+
+    archiveName = "$project.ext.appName.$extension"
+    destinationDir = project.distsDir;
+
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+distRelease.dependsOn classes
+
+task zipRelease(type: Zip) {
+    from distRelease
+    from file("../distribution/files")
+    archiveName = "$project.ext.distFileName.$extension"
+    destinationDir = file("$project.ext.distOutputDir")
+}
+zipRelease.dependsOn distRelease
+
+eclipse {
+    project {
+        name = appName + "-desktop"
+        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/assets'
+    }
+}
+
+task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
+    doLast {
+        def classpath = new XmlParser().parse(file(".classpath"))
+        new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
+        def writer = new FileWriter(file(".classpath"))
+        def printer = new XmlNodePrinter(new PrintWriter(writer))
+        printer.setPreserveWhitespace(true)
+        printer.print(classpath)
+    }
+}
+
+//region NSIS Installer
+/**
+ * Task to create Windows installer using NSIS.
+ *
+ * In order to make it work, you should have:
+ *     1. Windows OS only.
+ *     2. NSIS installed in your system and added to PATH (makensis.exe).
+ *          https://sourceforge.net/projects/nsis/files/
+ *     3. ZipDLL NSIS extension should be installed.
+ *          http://nsis.sourceforge.net/ZipDLL_plug-in
+ *     4. FileAssoc macros should be installed.
+ *          Copy code from http://nsis.sourceforge.net/FileAssoc
+ *          into file "FileAssoc.nsh" and put it under "<NSIS_DIR>/Include/"
+ *
+ * After task execution, the output files can be found under "./distribution/output/".
+ */
+task nsisInstaller(type: Exec) {
+    if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        println 'NSIS installer can be created only on Windows.';
+        return;
+    }
+
+    workingDir '../distribution'
+
+    def nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
+    commandLine 'cmd', '/c', "$nsisCommand"
+}
+nsisInstaller.dependsOn zipRelease
+//endregion
+
+//region Mac App Bundle
+macAppBundle {
+    mainClassName = project.ext.mainClassName
+    javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    bundleJRE = false
+    appName = "GDX Texture Packer"
+    dmgName = "gdx-texturepacker-$project.ext.version"
+    icon = "icons.icns"
+//    backgroundImage = "doc/macbackground.png"
+}
+
+// Since macAppBundle 2.1.6 doesn't let us customize jar assembling. So we will simply swap files by hand.
+task cleanAppJavaDir (type: Delete) {
+    delete fileTree(dir: "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java")
+}
+task copyUberJar (type: Copy) {
+    from 'build/libs/desktop.jar'
+    into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java"
+}
+task copyMacAppFiles (type: Copy) {
+    from '../distribution/macApp'
+    into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents"
+}
+createApp.dependsOn copyUberJar, copyMacAppFiles
+copyUberJar.dependsOn dist, cleanAppJavaDir
+cleanAppJavaDir.dependsOn generatePlist
+//endregion

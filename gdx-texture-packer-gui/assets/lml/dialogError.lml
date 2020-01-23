@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<!-- Default dialog for displaying any kind of an error with stacktrace -->
+
+<visdialog
+        title="@dErrorTitle"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false">
+
+    <scrollpane
+            style="text-output"
+            expand="true"
+            width="480"
+            height="320"
+            fill="true"
+            align="top"
+            disabledx="true"
+            fadescrollbars="false"
+            overscroll="false"
+            flickscroll="false"
+            scrollcapture="true">
+        <label id="lblMessage"
+               style="small"
+               wrap="true"
+               labelalignment="topleft"/>
+    </scrollpane>
+
+    <imagetextbutton
+            id="btnCopyToClipboard"
+            image="custom/ic-clipboard"
+            imagescaling="none"
+            text="@copyToClipboard"
+            change="copyToClipboard"
+            align="right"
+            focusborder="false"/>
+</visdialog>

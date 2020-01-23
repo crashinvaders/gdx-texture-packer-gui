@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "../../../../lml.dtd">
+
+<table id="content">
+    <textfield
+            id="edtSuffix"
+            messagetext="@dSfNoSuffix"
+            growx="true"
+            minwidth="0"
+            align="left"/>
+    <selectbox id="cmbResampling"/>
+    <floatspinner
+            id="spnScale"
+            value="1.00"
+            min="0.01"
+            max="20"
+            step="0.5"
+            width="64"
+            textalign="right"/>
+    <imagebutton
+            change="deleteRecord"
+            icon="custom/ic-scale-del"
+            imagescaling="none"
+            focusborder="false"
+            padleft="8"/>
+</table>

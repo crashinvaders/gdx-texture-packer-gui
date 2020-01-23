@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "/lml.dtd">
+
+<vistable tablealign="top" pad="4">
+    <label align="right" padright="4">@gsEncoding</label>
+    <selectbox id="cboPngEncoding" growx="true" change="ftcPng.onEncodingChanged"/>
+
+    <:row padtop="4"/>
+
+    <label align="right" padright="4">@gsCompression</label>
+    <vistable growx="true">
+        <selectbox id="cboPngCompression" growx="true" change="ftcPng.onCompressionChanged"/>
+        <shrinkcontainer
+                id="containerPngCompSettings"
+                visible="false"
+                containerpadleft="4">
+            <imagebutton
+                    image="custom/ic-settings"
+                    scaling="none"
+                    focusborder="false"
+                    change="ftcPng.showPngCompSettings"/>
+        </shrinkcontainer>
+    </vistable>
+</vistable>

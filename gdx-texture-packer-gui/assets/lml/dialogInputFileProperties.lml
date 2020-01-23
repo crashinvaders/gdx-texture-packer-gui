@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="window"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false">
+
+    <actor height="4"/>
+
+    <table transform="false" width="360">
+        <container growx="true" background="textfield" fill="true">
+            <label id="lblFilePath" text="D:/test/test.png" textalign="left"/>
+        </container>
+        <actor width="4"/>
+        <visimagebutton image="custom/ic-folder-pick" change="InputFilePropertiesDialogController.showFilePicker" fill="true"/>
+    </table>
+
+    <shrinkcontainer id="shrinkInputDir" growx="true" fillx="true">
+        <table padtop="2">
+            <label text="@dInputFileRegionsPrefix" padright="8" align="right"/>
+            <textfield id="edtFilePrefix"
+                       growx="true"
+                       delayedchange="InputFilePropertiesDialogController.onFilePrefixTextChanged"
+                       keyboardfocus="InputFilePropertiesDialogController.onFilePrefixTextChanged"/>
+            <:row padtop="4"/>
+            <label text="@dInputFileRecursive" delegateinput="chbRecursive" vistooltip="@dInputFileTtRecursive" padright="8" align="right"/>
+            <table growx="true" tablealign="left">
+                <checkbox id="chbRecursive" vistooltip="@dInputFileTtRecursive" change="onRecursiveChecked" padright="4"/>
+                <table id="flattenPathContainer" delegateinput="chbFlattenPaths" visible="false">
+                    <label text="@dInputFileFlattenPaths" vistooltip="@dInputFileTtFlattenPaths" padright="8"/>
+                    <checkbox id="chbFlattenPaths" vistooltip="@dInputFileTtFlattenPaths" change="onFlattenPathsChecked"/>
+                </table>
+            </table>
+        </table>
+    </shrinkcontainer>
+
+    <shrinkcontainer id="shrinkInputFile" growx="true" fillx="true">
+        <table defaultalign="right">
+            <label text="@dInputFileRegionName" padright="8"/>
+            <textfield id="edtRegionName"
+                       growx="true"
+                       delayedchange="InputFilePropertiesDialogController.onRegionNameTextChanged"
+                       keyboardfocus="InputFilePropertiesDialogController.onRegionNameTextChanged"/>
+            <:row padtop="4"/>
+            <label text="@ninePatch" delegateinput="chbNinePatch" padright="8"/>
+            <table growx="true" tablealign="left">
+                <checkbox id="chbNinePatch" padright="4" change="onNinePatchChecked"/>
+                <visimagetextbutton
+                        id="btnEditNinePatch"
+                        image="custom/ic-ninepatch"
+                        text="@edit"
+                        tablepadright="8"
+                        visible="false"
+                        focusborder="false"
+                        change="navigateToNinePatchEditor"
+                        padright="4"/>
+            </table>
+        </table>
+    </shrinkcontainer>
+
+    <image style="white" color="dark-grey" growx="true" height="2" padtop="4" padbottom="4" padleft="0" padright="0"/>
+
+    <imagetextbutton
+            id="btnClose"
+            text="@close"
+            minwidth="120"
+            align="right"
+            focusborder="false"
+            change="InputFilePropertiesDialogController.close"/>
+
+</visdialog>

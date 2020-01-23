@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE SYSTEM "/lml.dtd">
+<!-- Global values and default tag attributes. -->
+
+<:style tag="visdialog" attribute="consumeinput" value="true"/>
+<:style tag="viswindow" attribute="consumeinput" value="true"/>

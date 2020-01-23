@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        title="@dCompTitle|PNG8"
+        closebutton="true"
+        closeonescape="true">
+
+    <table width="320" pad="8" padtop="12" padbottom="4" onecolumn="true" defaultalign="left">
+
+        <label text="@dCompLevel" padbottom="4"/>
+        <intseekbar id="sbCompLevel"
+                    change="onCompLevelChanged"
+                    min="1" max="9" value="6"
+                    growx="true"/>
+
+        <:row padtop="12"/>
+
+        <table padbottom="4">
+            <label text="@dCompColorThreshold" padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompColorThresholdDesc" padbottom="1"/>
+        </table>
+        <intseekbar id="sbColorThreshold"
+                    change="onColorThresholdChanged"
+                    growx="true" min="0" max="1000" value="400" step="50"/>
+
+        <:row padtop="12"/>
+
+        <table>
+            <checkbox id="chbDithering"
+                      text="@dCompDithering"
+                      change="onDitheringChanged"
+                      padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompDitheringDesc" padbottom="1"/>
+        </table>
+
+        <:row padtop="12"/>
+
+        <separator growx="true" height="1"/>
+
+        <:row padtop="12"/>
+
+        <label growx="true" wrap="true" text="@dCompPng8Desc0" padbottom="12"/>
+        <label growx="true" wrap="true" text="@dCompPng8Desc1"/>
+
+    </table>
+
+</visdialog>

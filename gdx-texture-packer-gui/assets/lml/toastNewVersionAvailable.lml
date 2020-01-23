@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "/lml.dtd">
+
+<table defaultalign="left" padleft="8">
+    <image id="imgLogo" style="custom/logo64-vec"
+           align="center" origin="center"
+           padleft="8" padtop="12" padbottom="12"
+           touchable="enabled"
+           click="openDownloadPage"/>
+
+    <table onecolumn="true" defaultalign="left" defaultexpandx="true" padleft="16">
+        <horizontalgroup spacing="4">
+            @toastNewVersionAvailable
+            {newVersionCode}
+        </horizontalgroup>
+
+        <:row padtop="4"/>
+
+        <horizontalgroup spacing="6" padleft="0">
+            <linklabel style="orange"
+                       text="@toastNvSeeDetails"
+                       href="#"
+                       setemptylistener="true"
+                       click="openDownloadPage"/>
+        </horizontalgroup>
+
+        <:row padtop="4" padbottom="4"/>
+
+        <horizontalgroup spacing="6" padleft="0">
+            <linklabel style="light-grey" hexcolor="ffffffcc"
+                       text="@toastNvMuteNotification"
+                       href="#"
+                       setemptylistener="true"
+                       click="muteNotifications"/>
+        </horizontalgroup>
+    </table>
+</table>

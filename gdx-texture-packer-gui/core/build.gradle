@@ -1,0 +1,12 @@
+apply plugin: "java"
+
+sourceCompatibility = 1.7
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+sourceSets.main.java.srcDirs = [ 'src/' ]
+sourceSets.main.resources.srcDirs += [ 'libs/' ]
+
+
+eclipse.project {
+    name = appName + "-core"
+}

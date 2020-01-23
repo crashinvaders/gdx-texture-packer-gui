@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/lml.dtd">
+
+<stack grow="true">
+
+    <visscrollpane style="list" disabledx="true" fadescrollbars="false" flickscroll="false" scrollcapture="true">
+
+        <vistable tablealign="top" tablepad="6" onecolumn="true">
+
+            <vistable growx="true" defaultalign="center" tablepadbottom="12">
+
+                <:macro alias="item" replace="content" title>
+                    <label ellipsis="true" align="right" padright="4">{title}</label>
+                    <container growx="true" fillx="true" row="true" minwidth="0">{content}</container>
+                </:macro>
+
+                <:macro alias="separator" replace="content">
+                    <actor growx="true" height="6" colspan="2" row="true"/>
+                </:macro>
+
+                <vistable growx="true" defaultpad="2" defaultminwidth="0">
+                    <:column column="1" prefwidth="150"/>
+
+                    <!--<:item title="@psEncodingFormat">-->
+                        <!--<visselectbox-->
+                                <!--id="cboEncodingFormat"-->
+                                <!--onchange="onSettingsCboChanged"-->
+                                <!--tooltip="@psTtFormat"/>-->
+                    <!--</:item>-->
+
+                    <!--<:item title="@psOutputFormat">-->
+                        <!--<visselectbox-->
+                                <!--id="cboOutputFormat"-->
+                                <!--onchange="onSettingsCboChanged"-->
+                                <!--tooltip="@psTtOutputFormat"/>-->
+                    <!--</:item>-->
+
+                    <!--<:item title="@psJpegQuality">-->
+                        <!--<floatspinner-->
+                                <!--id="skbJpegQuality"-->
+                                <!--onchange="onSettingsFloatSeekBarChanged"-->
+                                <!--tooltip="@psTtJpegQuality"-->
+                                <!--min="0.1"-->
+                                <!--max="1.0"-->
+                                <!--step="0.1"/>-->
+                    <!--</:item>-->
+
+                    <!--<:separator/>-->
+
+                    <:item title="@psMinPageWidth">
+                        <intseekbar
+                                id="skbMinPageWidth"
+                                onchange="onSettingsIntSeekBarChanged"
+                                value="2048"
+                                tooltip="@psTtMinWidth"
+                                min="16"
+                                max="8192"
+                                step="128"/>
+                    </:item>
+
+                    <:item title="@psMinPageHeight">
+                        <intseekbar
+                                id="skbMinPageHeight"
+                                onchange="onSettingsIntSeekBarChanged"
+                                value="2048"
+                                tooltip="@psTtMinHeight"
+                                min="16"
+                                max="8192"
+                                step="128"/>
+                    </:item>
+
+                    <:item title="@psMaxPageWidth">
+                        <intseekbar
+                                id="skbMaxPageWidth"
+                                onchange="onSettingsIntSeekBarChanged"
+                                value="2048"
+                                tooltip="@psTtMaxWidth"
+                                min="16"
+                                max="8192"
+                                step="128"/>
+                    </:item>
+
+                    <:item title="@psMaxPageHeight">
+                        <intseekbar
+                                id="skbMaxPageHeight"
+                                onchange="onSettingsIntSeekBarChanged"
+                                value="2048"
+                                tooltip="@psTtMaxHeight"
+                                min="16"
+                                max="8192"
+                                step="128"/>
+                    </:item>
+
+                    <:separator/>
+
+                    <:item title="@psAlphaThreshold">
+                        <intseekbar
+                                id="skbAlphaThreshold"
+                                onchange="onSettingsIntSeekBarChanged"
+                                tooltip="@psTtAlphaThreshold"
+                                min="0"
+                                max="255"/>
+                    </:item>
+
+                    <:item title="@psMinFilter">
+                        <visselectbox
+                                id="cboMinFilter"
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtFilterMin"/>
+                    </:item>
+
+                    <:item title="@psMagFilter">
+                        <visselectbox
+                                id="cboMagFilter"
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtFilterMag"/>
+                    </:item>
+
+                    <:separator/>
+
+                    <:item title="@psPaddingX">
+                        <intseekbar
+                                id="skbPaddingX"
+                                onchange="onSettingsIntSeekBarChanged"
+                                tooltip="@psTtPaddingX"
+                                min="0"
+                                max="64"/>
+                    </:item>
+
+                    <:item title="@psPaddingY">
+                        <intseekbar
+                                id="skbPaddingY"
+                                onchange="onSettingsIntSeekBarChanged"
+                                tooltip="@psTtPaddingY"
+                                min="0"
+                                max="64"/>
+                    </:item>
+
+                    <:item title="@psWrapX">
+                        <visselectbox
+                                id="cboWrapX"
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtWrapX"/>
+                    </:item>
+
+                    <:item title="@psWrapY">
+                        <visselectbox
+                                id="cboWrapY"
+                                onchange="onSettingsCboChanged"
+                                tooltip="@psTtWrapY"/>
+                    </:item>
+
+                    <:item title="@psScaleFactors">
+                        <expandedittextbutton
+                                id="eetbScaleFactors"
+                                change="onScalesBtnClick"
+                                tooltip="@psTtScale"/>
+                    </:item>
+
+                </vistable>
+
+            </vistable>
+
+            <vistable growx="true" defaultalign="left" padleft="8" padright="8">
+
+                <vistable onecolumn="true" align="top" defaultalign="left" defaultpadbottom="4">
+
+                    <vischeckbox id="cbUseFastAlgorithm" onchange="onSettingsCbChecked" tooltip="@psTtFast">@psUseFastAlgorithm</vischeckbox>
+
+                    <vischeckbox id="cbEdgePadding" onchange="onSettingsCbChecked" tooltip="@psTtEdgePadding">@psEdgePadding</vischeckbox>
+
+                    <vischeckbox id="cbStripWhitespaceX" onchange="onSettingsCbChecked" tooltip="@psTtStripWhitespaceX">@psStripWhitespaceX</vischeckbox>
+
+                    <vischeckbox id="cbStripWhitespaceY" onchange="onSettingsCbChecked" tooltip="@psTtStripWhitespaceY">@psStripWhitespaceY</vischeckbox>
+
+                    <vischeckbox id="cbAllowRotation" onchange="onSettingsCbChecked" tooltip="@psTtRotation">@psAllowRotation</vischeckbox>
+
+                    <!--<vischeckbox id="cbIncludeSubdirs" onchange="onSettingsCbChecked" tooltip="@psTtCombineSubdirectories">@psIncludeSubdirs</vischeckbox>-->
+
+                    <vischeckbox id="cbBleeding" onchange="onSettingsCbChecked" tooltip="@psTtBleed">@psBleeding</vischeckbox>
+
+                    <vischeckbox id="cbSquare" onchange="onSettingsCbChecked" tooltip="@psTtSquare">@psSquare</vischeckbox>
+
+                    <vischeckbox id="cbGrid" onchange="onSettingsCbChecked" tooltip="@psTtGrid">@psGrid</vischeckbox>
+
+                </vistable>
+
+                <actor width="12"/>
+
+                <vistable onecolumn="true" align="top" defaultalign="left" defaultpadbottom="4">
+
+                    <vischeckbox id="cbDuplicatePadding" onchange="onSettingsCbChecked" tooltip="@psTtDuplicatePadding">@psDuplicatePadding</vischeckbox>
+
+                    <vischeckbox id="cbForcePot" onchange="onSettingsCbChecked" tooltip="@psTtPot">@psForcePoT</vischeckbox>
+
+                    <vischeckbox id="cbForceMof" onchange="onSettingsCbChecked" tooltip="@psTtMof">@psForceMoF</vischeckbox>
+
+                    <vischeckbox id="cbUseAliases" onchange="onSettingsCbChecked" tooltip="@psTtAlias">@psUseAliases</vischeckbox>
+
+                    <vischeckbox id="cbIgnoreBlankImages" onchange="onSettingsCbChecked" tooltip="@psTtIgnoreBlankImages">@psIgnoreBlankImgs</vischeckbox>
+
+                    <vischeckbox id="cbDebug" onchange="onSettingsCbChecked" tooltip="@psTtDebug">@psDebug</vischeckbox>
+
+                    <!--<vischeckbox id="cbFlattenPaths" onchange="onSettingsCbChecked" tooltip="@psTtFlattenPaths">@psFlattenPaths</vischeckbox>-->
+
+                    <vischeckbox id="cbUseIndices" onchange="onSettingsCbChecked" tooltip="@psTtUseIndexes">@psUseIndices</vischeckbox>
+
+                    <vischeckbox id="cbPremultiplyAlpha" onchange="onSettingsCbChecked" tooltip="@psTtPremultiplyAlpha">@psPremultiplyAlpha</vischeckbox>
+
+                    <vischeckbox id="cbLimitMemory" onchange="onSettingsCbChecked" tooltip="@psTtLimitMemory">@psLimitMemory</vischeckbox>
+
+                </vistable>
+
+            </vistable>
+        </vistable>
+    </visscrollpane>
+
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockSettings</:import>
+
+</stack>

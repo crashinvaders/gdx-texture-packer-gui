@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE viswindow SYSTEM "/lml.dtd">
+
+<viswindow
+        id="dialog"
+        title=""
+        modal="true"
+        movable="false"
+        closebutton="true"
+        closeonescape="false"
+        resizable="false">
+
+    <stack
+            padleft="16"
+            padright="16"
+            padbottom="20"
+            width="144"
+            height="40">
+
+        <vistable
+                id="groupChecking"
+                onecolumn="true">
+            <animatedimage
+                    delay="0.1"
+                    scaling="none"
+                    frames="custom/ic-sandglass0;custom/ic-sandglass1;custom/ic-sandglass2;custom/ic-sandglass3;custom/ic-sandglass4;custom/ic-sandglass5;custom/ic-sandglass6;custom/ic-sandglass7"/>
+            <vislabel
+                    text="@pleaseWait"/>
+        </vistable>
+
+        <vistable
+                id="groupValid"
+                visible="false">
+            <label>[text-green]API key is valid!</label>
+        </vistable>
+
+        <vistable
+                id="groupInvalid"
+                visible="false">
+            <label>[text-red]API key is invalid!</label>
+        </vistable>
+
+    </stack>
+</viswindow>

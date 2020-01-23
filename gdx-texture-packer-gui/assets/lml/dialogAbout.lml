@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog title="@dAboutTitle" closebutton="true" closeonescape="true">
+    <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
+
+        <vistable onecolumn="true" growx="true" background="packingItemBg" padleft="-32" padright="-32">
+
+            <actor height="16"/>
+
+            <vistable onecolumn="true" align="center">
+                <image style="custom/app-logo-2x" scaling="none"/>
+                <horizontalgroup align="right" spacing="4" padright="10" padtop="-2">
+                    <label style="small" text="@dAboutVersion" color="orange"/>
+                    <label style="small" text="{currentVersionCode}" color="orange"/>
+                </horizontalgroup>
+            </vistable>
+
+            <actor height="8"/>
+
+        </vistable>
+
+        <actor height="16"/>
+
+        <label>@dAboutAuthors</label>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://crashinvaders.com">@dAboutAChekulaev</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutAChekulaevDesc</label>
+        </horizontalgroup>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://www.aurelienribon.com">@dAboutARibon</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutARibonDesc</label>
+        </horizontalgroup>
+
+        <actor height="16"/>
+
+        <label>@dAboutContributors</label>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="https://github.com/tommyettinger">@dAboutTommyEttinger</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutTommyEttingerDesc</label>
+        </horizontalgroup>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="https://github.com/Tokenyet">@dAboutTeraFog</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutTeraFogDesc</label>
+        </horizontalgroup>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://www.terafog.de">@dAboutTokenyet</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutTokenyetFogDesc</label>
+        </horizontalgroup>
+
+        <actor height="16"/>
+
+        <label>@dAboutLinks</label>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="http://github.com/crashinvaders/gdx-texture-packer-gui">@dAboutGitHubProject</linklabel>
+        </horizontalgroup>
+
+        <actor height="16"/>
+
+        <container growx="true" fill="true">
+            <vislabel style="small-grey" wrap="true" multiline="true" a="0.8">@dAboutLicenseInfo</vislabel>
+        </container>
+    </vistable>
+</visdialog>

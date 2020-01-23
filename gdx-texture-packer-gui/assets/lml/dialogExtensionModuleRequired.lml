@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="dialog"
+        title=""
+        modal="true"
+        movable="false"
+        closebutton="false"
+        closeonescape="false"
+        resizable="false"
+        padtop="4">
+    <vistable onecolumn="true" minwidth="300">
+        <vislabel text="@emRequiredToBeInstalled|{moduleName}" growx="true" wrap="true" align="center" textalign="center"/>
+        <:row padtop="4"/>
+        <textbutton text="@ok" change="ExtensionModuleRequiredDialog.onOkClicked" minwidth="96"/>
+    </vistable>
+</visdialog>

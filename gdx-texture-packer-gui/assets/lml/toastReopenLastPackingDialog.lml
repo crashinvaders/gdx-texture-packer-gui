@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "/lml.dtd">
+
+<vistable onecolumn="true" defaultalign="left" defaultgrowx="true" padleft="8">
+    <linklabel
+            style="light-grey"
+            text="@dPackingReopenLastDialog"
+            href="#"
+            setemptylistener="true"
+            click="showLastDialog"/>
+</vistable>

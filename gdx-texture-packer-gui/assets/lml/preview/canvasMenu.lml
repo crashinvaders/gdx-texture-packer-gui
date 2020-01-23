@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE popupmenu SYSTEM "/lml.dtd">
+
+<popupmenu>
+    <menuitem
+            id="miRepack"
+            text="@repack"
+            onchange="packSelected"
+            icon="custom/ic-process"/>
+    <menuitem
+            id="miChangeBackground"
+            text="@dPbChangeBackground"
+            onchange="changePreviewBackground"
+            icon="custom/ic-bucket"/>
+</popupmenu>

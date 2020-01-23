@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="dialog"
+        title="@dVersionTitle"
+        closebutton="true"
+        closeonescape="true"
+        resizable="false">
+    <vistable
+        onecolumn="true"
+        padleft="16"
+        padright="16"
+        width="320"
+        height="120">
+
+        <stack grow="true">
+
+            <vistable
+                    id="groupError"
+                    onecolumn="true"
+                    visible="false">
+
+                <vislabel
+                        id="lblErrorDetails"
+                        wrap="true"
+                        growx="true"
+                        text="@dVersion"
+                        textalign="center"/>
+
+                <actor height="4"/>
+
+                <visimagetextbutton
+                        id="btnRetry"
+                        text="@dVersionRetry"
+                        tablepadleft="24"
+                        tablepadright="32"
+                        tablepadbottom="4"
+                        image="custom/ic-refresh"
+                        imagescaling="none"
+                        onchange="launchVersionCheck"/>
+            </vistable>
+
+            <vistable
+                    id="groupChecking"
+                    onecolumn="true"
+                    visible="false">
+                <animatedimage
+                        delay="0.1"
+                        frames="custom/ic-sandglass0;custom/ic-sandglass1;custom/ic-sandglass2;custom/ic-sandglass3;custom/ic-sandglass4;custom/ic-sandglass5;custom/ic-sandglass6;custom/ic-sandglass7"/>
+                <vislabel
+                        text="@dVersionChecking"/>
+            </vistable>
+
+            <vistable
+                    id="groupUpdateDetails"
+                    onecolumn="true"
+                    visible="false">
+
+                <vistable>
+                    <vislabel
+                            text="@dVersionUpdateAvailable"
+                            padright="6"/>
+                    <vislabel
+                            id="lblVersionNew"/>
+                </vistable>
+
+                <vistable padtop="-4">
+                    <vislabel
+                            text="@dVersionCurrent"
+                            style="grey"
+                            padright="6"/>
+                    <vislabel
+                            id="lblVersionCurrent"
+                            style="grey"/>
+                </vistable>
+
+                <actor height="8"/>
+
+                <vistextbutton
+                        id="btnVisitUpdatePage"
+                        text="@dVersionVisitDownloadPage"
+                        tablepadleft="12"
+                        tablepadright="12"
+                        onchange="navigateToUpdatePage"/>
+            </vistable>
+
+            <vistable
+                    id="groupUpToDate"
+                    onecolumn="true"
+                    visible="true">
+                <visimage
+                        style="custom/img-version-up-to-date"
+                        scaling="none"/>
+                <actor height="4"/>
+                <vislabel
+                        text="@dVersionUpToDate"
+                        padright="2"
+                        textalign="center"/>
+            </vistable>
+
+        </stack>
+
+        <vistable>
+            <vislabel
+                    style="grey"
+                    text="@dVersionAllVersions" padright="4"/>
+            <linklabel
+                    style="orange"
+                    text="@dVersionHere"
+                    href="$getReleasesPageUrl"/>
+        </vistable>
+    </vistable>
+</visdialog>

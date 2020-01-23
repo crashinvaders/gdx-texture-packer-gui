@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE popupmenu SYSTEM "/lml.dtd">
+
+<popupmenu>
+    <menuitem
+            id="miNew"
+            text="@new"
+            onchange="newPack"
+            icon="custom/ic-file-new"/>
+    <menuitem
+            id="miDelete"
+            text="@delete"
+            onchange="deletePack"
+            icon="custom/ic-file-delete"/>
+    <menuitem
+            id="miRename"
+            text="@rename"
+            onchange="renamePack"
+            icon="custom/ic-file-edit"/>
+    <menuitem
+            id="miCopy"
+            text="@makeCopy"
+            onchange="copyPack"
+            icon="custom/ic-file-copy"/>
+    <menuseparator/>
+    <menuitem
+            id="miMoveUp"
+            text="@movePackUp"
+            onchange="movePackUp"
+            icon="custom/ic-move-up"/>
+    <menuitem
+            id="miMoveDown"
+            text="@movePackDown"
+            onchange="movePackDown"
+            icon="custom/ic-move-down"/>
+    <menuseparator/>
+    <menuitem
+            id="miPackSelected"
+            text="@packSelected"
+            onchange="packSelected"
+            icon="custom/ic-process"/>
+    <menuitem
+            id="miPackAll"
+            text="@packAll"
+            onchange="packAll"
+            icon="custom/ic-process-all"/>
+    <menuseparator/>
+    <menuitem
+            id="miCopySettingsToAllPacks"
+            text="@copySettingsToAllPacks"
+            onchange="copySettingsToAllPacks"/>
+</popupmenu>

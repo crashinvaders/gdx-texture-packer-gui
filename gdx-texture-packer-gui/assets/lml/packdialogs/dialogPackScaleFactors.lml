@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../../lml.dtd">
+
+<visdialog
+        id="dialog"
+        title="@dSfTitle"
+        closebutton="true"
+        closeonescape="true">
+    <vistable width="302" height="224" onecolumn="true">
+
+        <container background="button" minheight="64" grow="true" fill="true">
+            <listview
+                    id="listScales"
+                    adapter="$obtainListAdapter"
+                    disabledx="true"
+                    scrollcapture="true">
+                <table footer="true" tablealign="right">
+                    <imagebutton
+                            change="createScaleRecord"
+                            icon="custom/ic-scale-add"
+                            imagescaling="none"
+                            tablealign="right"
+                            focusborder="false"/>
+                </table>
+            </listview>
+        </container>
+
+        <shrinkcontainer id="errorContainer" fillx="true" expandx="true" visible="false">
+            <label id="lblError" color="orange" textalign="center" wrap="true"/>
+        </shrinkcontainer>
+
+        <:row padtop="4"/>
+
+        <vistable growx="true" defaultuniform="true" defaultgrowx="true">
+            <textbutton change="saveAndCloseDialog" focusborder="false" padright="4">@save</textbutton>
+            <textbutton change="closeDialog" focusborder="false">@cancel</textbutton>
+        </vistable>
+    </vistable>
+</visdialog>

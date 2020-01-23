@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/lml.dtd">
+
+<stack growx="true">
+
+    <vistable onecolumn="true" defaultgrowx="true" padbottom="4">
+
+        <vistable tablealign="top" tablepad="8" tablepadbottom="0" defaultpadbottom="4">
+
+            <label align="right" padright="4">@gsFileType</label>
+            <selectbox id="cboFileType" growx="true" change="onFileTypeChanged"/>
+
+        </vistable>
+
+        <shrinkcontainer id="ftcPng" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
+            <:import path="lml/fileTypeConfigPng.lml"/>
+        </shrinkcontainer>
+
+        <shrinkcontainer id="ftcJpeg" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
+            <:import path="lml/fileTypeConfigJpeg.lml"/>
+        </shrinkcontainer>
+
+        <shrinkcontainer id="ftcKtx" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
+            <:import path="lml/fileTypeConfigKtx.lml"/>
+        </shrinkcontainer>
+
+    </vistable>
+
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockGlobalSettings</:import>
+</stack>

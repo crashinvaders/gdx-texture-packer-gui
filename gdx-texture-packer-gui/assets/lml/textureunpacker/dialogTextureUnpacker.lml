@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        title="@dTuTitle"
+        closebutton="true"
+        closeonescape="true">
+    <vistable minwidth="360" onecolumn="true">
+
+        <label wrap="true" growx="true" color="light-grey" labelalignment="left">@dTuDescription</label>
+
+        <:row padtop="4"/>
+
+        <vistable
+                growx="true"
+                defaultalign="left"
+                defaultpadright="4">
+
+            <label>@dTuAtlasPath</label>
+            <textfield
+                    id="edtAtlasPath"
+                    change="onAtlasPathChanged"
+                    growx="true"/>
+            <visimagebutton
+                    onchange="pickAtlasPath"
+                    image="custom/ic-folder-pick"
+                    imagescaling="none"
+                    width="22"
+                    padright="0"
+                    filly="true"
+                    focusborderenabled="false"/>
+
+            <:row padtop="4"/>
+
+            <label>@dTuOutputDir</label>
+            <textfield
+                    id="edtOutputDir"
+                    change="onOutputDirChanged"
+                    growx="true"/>
+            <visimagebutton
+                    onchange="pickOutputDir"
+                    image="custom/ic-folder-pick"
+                    imagescaling="none"
+                    width="22"
+                    padright="0"
+                    filly="true"
+                    focusborderenabled="false"/>
+        </vistable>
+
+        <:row padtop="4"/>
+
+        <textbutton change="launchUnpackProcess" text="@dTuProcess" align="right" tablepadleft="16" tablepadright="16"/>
+
+    </vistable>
+</visdialog>

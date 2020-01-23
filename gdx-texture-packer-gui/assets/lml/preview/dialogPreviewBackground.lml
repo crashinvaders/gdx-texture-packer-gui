@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "../../../../lml.dtd">
+
+<visdialog
+        id="root"
+        title="@dPbTitle"
+        closebutton="true">
+
+    <vistable onecolumn="true">
+
+        <basiccolorpicker id="colorPicker" listener="onColorChanged" defaultgrowx="true"/>
+
+        <vistable growx="true" defaultuniform="true" defaultgrowx="true" padtop="8">
+            <vistextbutton change="onOkPressed" focusborder="false" padright="8">@ok</vistextbutton>
+            <vistextbutton change="onCancelPressed" focusborder="false">@cancel</vistextbutton>
+        </vistable>
+
+    </vistable>
+</visdialog>

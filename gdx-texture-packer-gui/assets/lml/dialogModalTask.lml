@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="dialog"
+        closebutton="false"
+        closeonescape="false"
+        resizable="false"
+        modal="true"
+        padtop="4"
+        padleft="3"
+        padbottom="0">
+    <vistable onecolumn="true" id="contentTable" minwidth="400" defaultgrowx="true">
+        <vistable onecolumn="true">
+            <label id="lblMessage" text="Removing [text-red]CJK Font[] extension module" padleft="16" padright="16" padtop="4" padbottom="6"/>
+            <busybar growx="true" hexcolor="eb5c4980" pad="0"/>
+        </vistable>
+
+        <shrinkcontainer id="cancelContainer" visible="false">
+            <vistable onecolumn="true">
+                <actor height="8"/>
+                <textbutton text="@cancel" minwidth="128" minheight="24" focusborderenabled="false" change="onCancelClicked" padtop="4" padbottom="4"/>
+            </vistable>
+        </shrinkcontainer>
+    </vistable>
+</visdialog>

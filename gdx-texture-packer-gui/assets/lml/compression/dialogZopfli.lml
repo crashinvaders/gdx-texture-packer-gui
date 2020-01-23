@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog title="@dCompTitle|Zopfli" closebutton="true" closeonescape="true">
+    <vistable
+            minwidth="256"
+            defaultalign="left"
+            padtop="8">
+
+        <label padright="4">@dCompLevel</label>
+        <intspinner
+                id="spnLevel"
+                change="onLevelValueChanged"
+                growx="true"
+                min="1"
+                max="9"
+                step="1"
+                value="5"
+                padright="2"/>
+
+        <:row padtop="4"/>
+
+        <label padright="4">@dIterations</label>
+        <intspinner
+                id="spnIterations"
+                change="onIterationsValueChanged"
+                growx="true"
+                min="1"
+                max="30"
+                step="1"
+                value="15"
+                padright="2"/>
+
+        <:row padtop="4"/>
+
+        <label wrap="true" growx="true" colspan="2" linealign="center">
+            @dCompZopfliWarning
+        </label>
+
+        <:row padtop="4"/>
+
+        <link
+                style="orange"
+                href="https://en.wikipedia.org/wiki/Zopfli"
+                text="@dCompAbout|Zopfli"
+                colspan="2"
+                align="center"/>
+    </vistable>
+</visdialog>

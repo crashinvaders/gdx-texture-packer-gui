@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        id="window"
+        title="@dialogTitlePackProcessing"
+        closebutton="true"
+        closeonescape="false"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="true">
+
+    <:calculate key="contetnMaxHeight" value="({stageHeight} - 64)" />
+
+    <table grow="true" onecolumn="true" maxheight="{contetnMaxHeight}">
+
+        <listview
+                id="listItems"
+                adapter="$obtainListAdapter"
+                grow="true"
+                minheight="240"
+                minwidth="360"
+                align="top"
+                disabledx="true"
+                fadescrollbars="false"
+                overscroll="false"
+                flickscroll="false"
+                scrollcapture="true"/>
+
+        <actor padtop="2"/>
+
+        <vischeckbox
+                id="cbAutoClose"
+                align="left"
+                text="@dPackingAutoCloseCb"
+                change="onAutoCloseChecked"/>
+
+        <actor padtop="2"/>
+
+        <progressbar
+                id="progressBar"
+                style="narrow-horizontal"
+                growx="true"/>
+
+    </table>
+
+</visdialog>

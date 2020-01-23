@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/lml.dtd">
+
+<stack grow="true">
+
+    <vistable tablealign="topleft" onecolumn="true" tablepad="0">
+
+        <vistable growx="true" tablealign="left" defaultpadright="4" background="button" >
+            <:column column="0"/>
+
+            <:macro alias="sidebutton" replace="ignored" id icon onchange tooltip style="default">
+                <visimagebutton
+                        id="{id}"
+                        icon="{icon}"
+                        onchange="{onchange}"
+                        imagescaling="none"
+                        generatedisabled="true"
+                        focusborder="false"
+                        tooltip="{tooltip}"
+                        width="25"
+                        height="25"
+                        style="{style}"/>
+            </:macro>
+
+            <:sidebutton id="btnSpNew" icon="custom/ic-file-new" onchange="newPack" tooltip="@newPack"/>
+            <:sidebutton id="btnSpDelete" icon="custom/ic-file-delete" onchange="deletePack" tooltip="@deletePack"/>
+
+            <:sidebutton id="btnSpRename" icon="custom/ic-file-edit" onchange="renamePack" tooltip="@renamePack"/>
+            <:sidebutton id="btnSpCopy" icon="custom/ic-file-copy" onchange="copyPack" tooltip="@makeCopy"/>
+
+            <separator growy="true" height="0" width="2" padtop="1" padbottom="1"/>
+
+            <:sidebutton id="btnSpMoveUp" icon="custom/ic-move-up" onchange="movePackUp" tooltip="@movePackUp"/>
+            <:sidebutton id="btnSpMoveDown" icon="custom/ic-move-down" onchange="movePackDown" tooltip="@movePackDown"/>
+
+            <separator growy="true" height="0" width="2" padtop="1" padbottom="1"/>
+            <!--<actor growx="true"/>-->
+
+            <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected" tooltip="@packSelected" style="accent"/>
+            <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll" tooltip="@packAll" style="accent"/>
+
+        </vistable>
+
+        <vistable grow="true" pad="4">
+            <listview
+                    id="lvPacks"
+                    scrollcapture="true"
+                    adapter="createPacksListAdapter"
+                    style="custom"
+                    grow="true"
+                    disabledx="true"
+                    fadescrollbars="false"
+                    overscroll="false"
+                    flickscroll="false"/>
+            <!--listviewonclick="resetPackListSelection"-->
+        </vistable>
+
+    </vistable>
+
+</stack>

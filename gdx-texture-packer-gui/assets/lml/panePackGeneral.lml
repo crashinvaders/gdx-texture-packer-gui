@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/lml.dtd">
+
+<stack growx="true" growy="true">
+
+    <table tablealign="top" tablepad="8" defaultpadbottom="4" defaultpadright="4">
+
+        <label
+                align="right"
+                text="@packGeneralOutputDir"
+                tooltip="@packGeneralTtOutputDir"/>
+        <!--Tooltip will be assigned dynamically from the code-->
+        <textfield
+                id="edtOutputDir"
+                minwidth="24"
+                growx="true"
+                onchange="onOutputDirTextChanged"/>
+        <imagebutton
+                image="custom/ic-folder-pick"
+                imagescaling="none"
+                width="22"
+                padright="0"
+                filly="true"
+                onchange="pickOutputDir"
+                focusborderenabled="false"/>
+
+        <:row/>
+
+        <label
+                align="right"
+                text="@packGeneralFileName"
+                tooltip="@packGeneralTtFileName"/>
+        <textfield
+                id="edtFileName"
+                minwidth="24"
+                growx="true"
+                padright="0"
+                colspan="2"
+                padbottom="0"
+                tooltip="@packGeneralTtFileName"
+                onchange="onPackFilenameTextChanged"/>
+
+    </table>
+
+    <:import path="lml/paneLockPack.lml" replace="id">paneLockPackGeneral</:import>
+
+</stack>
