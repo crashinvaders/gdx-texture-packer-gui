@@ -108,6 +108,7 @@ nsisInstaller.dependsOn zipRelease
 //region Mac App Bundle
 macAppBundle {
     mainClassName = project.ext.mainClassName
+    bundleIdentifier = 'com.crashinvaders.texturepackergui'
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     bundleJRE = false
     appName = "GDX Texture Packer"
