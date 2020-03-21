@@ -25,7 +25,7 @@ public class KtxFileTypeController implements FileTypeController {
 
     @LmlActor("ftcKtx") ShrinkContainer container;
     @LmlActor("cboKtxFormat") VisSelectBox<KtxFileTypeModel.Format> cboFormat;
-    @LmlActor("cboKtxEncoding") VisSelectBox cboEncoding;
+    @LmlActor("cboKtxEncoding") VisSelectBox<Object> cboEncoding;
     @LmlActor("chbKtxZipping") VisCheckBox chbZipping;
 
     private KtxFileTypeModel model;

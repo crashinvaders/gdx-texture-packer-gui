@@ -72,7 +72,7 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
     //TODO replace with LML code when the issue gets resolved https://github.com/czyzby/gdx-lml/issues/36
     @LmlAction("getImageFilesHint") String getImageFilesHint() {
         return localeService.getI18nBundle().format("dndImageFilesHint",
-                "."+ Strings.join(" .", AppConstants.IMAGE_FILE_EXT));
+                "."+ Strings.join(" .", (Object[]) AppConstants.IMAGE_FILE_EXT));
     }
 
     @Override

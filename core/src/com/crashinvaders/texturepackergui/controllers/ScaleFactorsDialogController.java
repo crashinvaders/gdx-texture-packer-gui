@@ -150,7 +150,7 @@ public class ScaleFactorsDialogController implements ActionContainer {
         @LmlActor("content") VisTable content;
         @LmlActor("edtSuffix") VisTextField edtSuffix;
         @LmlActor("spnScale") Spinner spnScale;
-        @LmlActor("cmbResampling") VisSelectBox cmbResampling;
+        @LmlActor("cmbResampling") VisSelectBox<ResamplingOption> cmbResampling;
 
         private FloatSpinnerModel spnScaleModel;
 
