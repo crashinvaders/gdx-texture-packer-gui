@@ -41,8 +41,7 @@ public class GitHubApiHelper implements Closeable {
         // Request access to interact with public repos.
         apiService = new ServiceBuilder("466a909f95b8e2789a5e")
                 .apiSecret(apiSecret)
-                .state("authorized")
-                .scope("public_repo")   // Request access to interact with public repos.
+                .defaultScope("public_repo")    // Request access to interact with public repos.
                 .callback(AuthCallbackHandler.CALLBACK_URL)
                 .build(GitHubApi.instance());
 

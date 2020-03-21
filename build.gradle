@@ -7,7 +7,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "gradle.plugin.edu.sc.seis:macAppBundle:${macAppBundleVersion}"
+        classpath "edu.sc.seis:macAppBundle:${macAppBundleVersion}"
     }
 }
 

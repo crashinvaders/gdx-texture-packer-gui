@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
@@ -42,6 +43,10 @@ public class GlobalDebugActions implements ActionContainer {
                 App.inst().restart();
             }
         });
+    }
+
+    @LmlAction("simulateCrash") public void simulateCrash() {
+        throw new GdxRuntimeException("This is simulated debug exception.");
     }
 
     /** @return localized string */

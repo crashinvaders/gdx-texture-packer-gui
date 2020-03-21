@@ -1,6 +1,7 @@
-# This is a debug hotkey list.
-# It will be loaded only if the debug configuration is activated.
+# This is the debug hotkey list.
+# It will be loaded only if the debug flag is activated (AppParams#debug).
 
 reloadView: F1
 reloadLocalization: F2
 reloadApp: F8
+simulateCrash: F12
