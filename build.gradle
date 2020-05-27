@@ -12,7 +12,6 @@ buildscript {
 }
 
 allprojects {
-    apply plugin: "eclipse"
     apply plugin: "idea"
 
     ext {
@@ -59,8 +58,4 @@ project(":core") {
         compile "com.github.depsypher:pngtastic:$pngtasticVersion"
         compile "com.tinify:tinify:$tinifyVersion"
     }
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }

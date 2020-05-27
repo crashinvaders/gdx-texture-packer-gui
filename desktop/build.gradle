@@ -1,7 +1,11 @@
 apply plugin: "java"
 apply plugin: "edu.sc.seis.macAppBundle"
 
-sourceCompatibility = 1.7
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_7
+    targetCompatibility = JavaVersion.VERSION_1_7
+}
+
 sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs += ['resources/']
 sourceSets.main.resources.srcDirs += ["$rootDir/secret/"]
@@ -18,10 +22,14 @@ task run(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+
+    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+        jvmArgs += ['-XstartOnFirstThread']
+    }
 }
 
 task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
     from files(project.assetsDir)
@@ -34,7 +42,7 @@ task dist(type: Jar) {
 dist.dependsOn classes
 
 task distRelease(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
+    from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
     from files(project.assetsDir);
@@ -56,24 +64,6 @@ task zipRelease(type: Zip) {
     destinationDir = file("$project.ext.distOutputDir")
 }
 zipRelease.dependsOn distRelease
-
-eclipse {
-    project {
-        name = appName + "-desktop"
-        linkedResource name: 'assets', type: '2', location: 'PARENT-1-PROJECT_LOC/assets'
-    }
-}
-
-task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
-    doLast {
-        def classpath = new XmlParser().parse(file(".classpath"))
-        new Node(classpath, "classpathentry", [ kind: 'src', path: 'assets' ]);
-        def writer = new FileWriter(file(".classpath"))
-        def printer = new XmlNodePrinter(new PrintWriter(writer))
-        printer.setPreserveWhitespace(true)
-        printer.print(classpath)
-    }
-}
 
 //region NSIS Installer
 /**
