@@ -121,6 +121,8 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
     }
 
     private static class FileDropTarget extends DropTarget {
+        private static final int[] TMP_VEC2 = new int[2];
+
         private final DragDropManager dragDropManager;
         private final FileDropTarget.DragOverRunnable dragOverRunnable;
 
@@ -141,8 +143,8 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
             dragHandling = true;
 
-            final int x = evt.getLocation().x;
-            final int y = evt.getLocation().y;
+            final int x = toGdxScreenX(evt.getLocation().x);
+            final int y = toGdxScreenY(evt.getLocation().y);
             Gdx.app.postRunnable(new Runnable() {
                 @Override
                 public void run() {
@@ -157,8 +159,9 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
             if (!dragHandling) return;
 
-            dragOverRunnable.x = evt.getLocation().x;
-            dragOverRunnable.y = evt.getLocation().y;
+            dragOverRunnable.x = toGdxScreenX(evt.getLocation().x);
+            dragOverRunnable.y = toGdxScreenY(evt.getLocation().y);
+
             if (!dragOverRunnable.scheduled) {
                 dragOverRunnable.scheduled = true;
                 Gdx.app.postRunnable(dragOverRunnable);
@@ -181,9 +184,10 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
             try {
                 evt.acceptDrop(DnDConstants.ACTION_COPY);
-                final java.util.List<File> droppedFiles = (java.util.List<File>) evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                final int x = evt.getLocation().x;
-                final int y = evt.getLocation().y;
+                final java.util.List<File> droppedFiles = (java.util.List<File>)
+                        evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                final int x = toGdxScreenX(evt.getLocation().x);
+                final int y = toGdxScreenY(evt.getLocation().y);
                 Gdx.app.postRunnable(new Runnable() {
                     @Override
                     public void run() {
@@ -207,11 +211,19 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
             });
         }
 
+        private int toGdxScreenX(int componentX) {
+            return (componentX * Gdx.graphics.getWidth()) / getComponent().getWidth();
+        }
+
+        private int toGdxScreenY(int componentY) {
+            return (componentY * Gdx.graphics.getHeight()) / getComponent().getHeight();
+        }
+
         private static class DragOverRunnable implements Runnable {
             final DragDropManager dragDropManager;
-            int x;
-            int y;
-            boolean scheduled;
+            volatile int x;
+            volatile int y;
+            volatile boolean scheduled;
 
             public DragOverRunnable(DragDropManager dragDropManager) {
                 this.dragDropManager = dragDropManager;
