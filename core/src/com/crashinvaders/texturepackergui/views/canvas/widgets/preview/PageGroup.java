@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -63,7 +64,7 @@ class PageGroup extends Group {
         batch.setColor(Color.BLACK);
         borderFrame.draw(batch, x, y, width, height);
 
-        // Draws children after all
+        // Draws children after everything else.
         super.draw(batch, parentAlpha);
     }
 
@@ -119,20 +120,20 @@ class PageGroup extends Group {
             float scale = PageGroup.this.getScaleX();
             float x = getX() + (region.getX() - framePad) * scale;
             float y = getY() + (region.getPage().getHeight() - region.getY() - region.getHeight() - framePad) * scale; // Texture region has top-left axis origin
-            float width = (region.getWidth() + framePad*2f) * scale;
-            float height = (region.getHeight() + framePad*2f) * scale;
+            float width = (region.getWidth() + framePad * 2f) * scale;
+            float height = (region.getHeight() + framePad * 2f) * scale;
 
             batch.setColor(colorSpotlight);
             spotlightBorder.draw(batch, x, y, width, height);
 
             // Text
-            float textX = x + width*0.5f - glText.width*0.5f;
+            float textX = x + width * 0.5f - glText.width * 0.5f;
             float textY = y - glText.height - 4f;
             batch.setColor(colorTextFrame);
-            batch.draw(whiteTex, textX-10f, textY - 6f, glText.width+20f, glText.height + 10f);
+            batch.draw(whiteTex, textX - 10f, textY - 6f, glText.width + 20f, glText.height + 10f);
             batch.setColor(Color.WHITE);
             font.getData().setScale(1f);
-            font.draw(batch, glText, textX, textY + glText.height);
+            font.draw(batch, glText, x + width * 0.5f, textY + glText.height);
         }
 
         @Override
@@ -170,16 +171,17 @@ class PageGroup extends Group {
             this.region = region;
             active = true;
 
-            // You can customize what is shown when a user hovers on region in here.
+            // You can customize what is shown when a user hovers over a region in here.
             final TextureAtlasData.Region regionData = region.getRegionData();
             final StringBuilder sb = new StringBuilder();
             sb.append(regionData.name);
             if (regionData.index >= 0) {
-                sb.append("[#fbf236ff] idx:" + regionData.index);
+                sb.append("[#fbf236ff][[").append(regionData.index).append("][]");
             }
+            sb.append("\n[#ddddddff]").append(regionData.width).append("[#aaaaaaff]x[]").append(regionData.height);
 
             font.getData().setScale(1f);
-            glText.setText(font, sb.toString(), Color.WHITE, 0f, Align.left, false);
+            glText.setText(font, sb.toString(), Color.WHITE, 0f, Align.center, false);
         }
 
         private RegionModel hitRegion(Vector2 position) {
