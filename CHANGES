@@ -1,4 +1,5 @@
 [LATEST]
+- JRE 8+ is required to run the app now.
 - Fixed high DPI scaling issue.
 - Fixed file based 9-patch pad values get displayed wrong (in case they are not defined explicitly in the input image).
 - Show region size on preview hover.
