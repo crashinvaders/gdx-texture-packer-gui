@@ -15,20 +15,24 @@
         <label padright="8">@dCompApiKey</label>
         <textfield id="edtApiKey" change="onApiKeyChanged" textalign="center" growx="true"/>
 
-        <:row padtop="8"/>
+        <:row padtop="16"/>
 
         <table defaultalign="center" onecolumn="true" defaultfillx="true">
             <imagetextbutton
                     image="custom/ic-key-shield"
                     imagescaling="none"
                     change="validateApiKey"
-                    text="@dCompValidateApiKey"/>
+                    text="@dCompValidateApiKey"
+                    tablepadleft="24"
+                    tablepadright="24"/>
             <:row padtop="8"/>
             <imagetextbutton
                     image="custom/ic-register-user"
                     imagescaling="none"
                     change="registerNewUser"
-                    text="@dCompSignUp"/>
+                    text="@dCompSignUp"
+                    tablepadleft="24"
+                    tablepadright="24"/>
         </table>
 
         <:row padtop="4"/>
