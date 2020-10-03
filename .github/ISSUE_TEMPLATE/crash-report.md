@@ -8,7 +8,7 @@ assignees: ''
 ---
 
 **Description/steps to reproduce.**
-> if possible provide any information that may help to reproduce the issue.
+> If possible provide any information that may help to reproduce the issue.
 
 **Crash log**
 > Please paste the crash log copied from the app here.
