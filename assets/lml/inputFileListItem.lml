@@ -6,7 +6,7 @@
        rightclick="PackInputFilesController.showContextMenu"
        doubleclick="PackInputFilesController.showInputFileDialog">
 
-    <!-- The image will be used for highlight indication animation (like when the file is added it will create flash effect). -->
+    <!-- This image will be used for highlight indication animation (like when the file is added it creates flash effect). -->
     <image id="imgHighlight" style="orange" touchable="disabled" visible="false"/>
 
     <table id="contentTable" padleft="4" padright="4" touchable="disabled" transform="false">

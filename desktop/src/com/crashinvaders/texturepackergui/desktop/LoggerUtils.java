@@ -26,6 +26,7 @@ public class LoggerUtils {
                     try { oldLogFile.delete(); } catch (SecurityException ignored) { }
                 }
             }
+            System.out.println("External log file: " + logFile.getAbsolutePath());
             FileOutputStream logFileOutputStream = new FileOutputStream(logFile);
             System.setOut(new PrintStream(new OutputStreamMultiplexer(
                     new FileOutputStream(FileDescriptor.out),
@@ -38,7 +39,6 @@ public class LoggerUtils {
             System.out.println("Version: " + AppConstants.version);
             System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
             System.out.println("JRE: " + System.getProperty("java.version") + " " + System.getProperty("java.vendor"));
-            System.out.println("External log file: " + logFile.getAbsolutePath());
             return logFile;
         } catch (FileNotFoundException e) {
             System.err.println("Can't setup logging to external file.");

@@ -2,25 +2,33 @@ apply plugin: "java"
 apply plugin: "edu.sc.seis.macAppBundle"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+compileJava.options.incremental = true
 
 sourceSets.main.java.srcDirs = [ "src/" ]
-sourceSets.main.resources.srcDirs += ['resources/']
-sourceSets.main.resources.srcDirs += ["$rootDir/secret/"]
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
-project.ext.assetsDir = new File("$rootDir/assets");
-project.ext.distOutputDir = "$rootDir/distribution/output"
-project.ext.distFileName = "$project.ext.appName-$project.ext.version"
-project.ext.secretDir = "$rootDir/secret/"
+project.ext.distFileName = "$project.appName-$project.ext.version"
+project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
+
+dependencies {
+    runtime files(project.resourceDirs)
+    implementation project(":core")
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+    implementation "com.github.czyzby:gdx-autumn-fcs:$lmlVersion"
+    implementation "args4j:args4j:$args4jVersion"
+}
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
+    classpath(project.resourceDirs)
     standardInput = System.in
-    workingDir = project.assetsDir
     ignoreExitValue = true
 
     if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
@@ -29,39 +37,45 @@ task run(dependsOn: classes, type: JavaExec) {
 }
 
 task dist(type: Jar) {
-    from files(sourceSets.main.output.classesDirs)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir)
-    from secretDir
+    dependsOn configurations.runtimeClasspath
+    from configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) } with jar
+
+    // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
+    // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
+    exclude(
+            "/gson-*.jar",
+            "/okhttp-*.jar",
+            "/okio-*.jar")
 
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
 }
-dist.dependsOn classes
 
 task distRelease(type: Jar) {
-    from files(sourceSets.main.output.classesDirs)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir);
-    from secretDir
+    dependsOn configurations.runtimeClasspath
+    from configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) } with jar
 
-    archiveName = "$project.ext.appName.$extension"
-    destinationDir = project.distsDir;
+    // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
+    // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
+    exclude(
+            "/gson-*.jar",
+            "/okhttp-*.jar",
+            "/okio-*.jar")
 
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
+
+    archiveFileName = "$project.appName.$extension"
+    destinationDirectory = file("$rootDir/distribution/output")
 }
-distRelease.dependsOn classes
 
 task zipRelease(type: Zip) {
     from distRelease
     from file("../distribution/files")
-    archiveName = "$project.ext.distFileName.$extension"
-    destinationDir = file("$project.ext.distOutputDir")
+    archiveFileName = "$project.distFileName.$extension"
+    destinationDirectory = file("$rootDir/distribution/output")
 }
 zipRelease.dependsOn distRelease
 
@@ -69,9 +83,9 @@ zipRelease.dependsOn distRelease
 /**
  * Task to create Windows installer using NSIS.
  *
- * In order to make it work, you should have:
+ * In order to make it work, you need:
  *     1. Windows OS only.
- *     2. NSIS installed in your system and added to PATH (makensis.exe).
+ *     2. NSIS installed on your system and added to PATH (makensis.exe).
  *          https://sourceforge.net/projects/nsis/files/
  *     3. ZipDLL NSIS extension should be installed.
  *          http://nsis.sourceforge.net/ZipDLL_plug-in
@@ -89,7 +103,7 @@ task nsisInstaller(type: Exec) {
 
     workingDir '../distribution'
 
-    def nsisCommand = "makensis /DFILENAME=\"$project.ext.distFileName\" installer-nsis.nsi"
+    def nsisCommand = "makensis /DFILENAME=\"$project.distFileName\" installer-nsis.nsi"
     commandLine 'cmd', '/c', "$nsisCommand"
 }
 nsisInstaller.dependsOn zipRelease
@@ -97,7 +111,7 @@ nsisInstaller.dependsOn zipRelease
 
 //region Mac App Bundle
 macAppBundle {
-    mainClassName = project.ext.mainClassName
+    mainClassName = project.mainClassName
     bundleIdentifier = 'com.crashinvaders.texturepackergui'
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     bundleJRE = false

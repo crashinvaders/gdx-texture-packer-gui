@@ -1,11 +1,24 @@
-apply plugin: "java"
+apply plugin: "java-library"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
 }
-
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+compileJava.options.incremental = true
 
 sourceSets.main.java.srcDirs = [ 'src/' ]
 sourceSets.main.resources.srcDirs += [ 'libs/' ]
+
+dependencies {
+    api "com.badlogicgames.gdx:gdx:$gdxVersion"
+//        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use local modified copy of this library.
+    api "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"
+    api "com.github.czyzby:gdx-lml:$lmlVersion"
+    api "com.github.czyzby:gdx-lml-vis:$lmlVersion"
+    api "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"
+    api "com.kotcrab.vis:vis-ui:$visUiVersion"
+    api "commons-io:commons-io:$commonsIoVersion"
+    api "com.github.depsypher:pngtastic:$pngtasticVersion"
+    api "com.tinify:tinify:$tinifyVersion"
+}

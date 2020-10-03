@@ -25,30 +25,27 @@ public class AwtFrameLauncher {
 	}
 
 	public static void start(final Arguments arguments) {
-		EventQueue.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
+		EventQueue.invokeLater(() -> {
+			AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
 
-				final LwjglCanvasConfiguration config = new LwjglCanvasConfiguration();
-				config.title = AppConstants.APP_TITLE;
-				config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
-				config.iconFilePath = "icon128.png";
-				config.width = 1024;
-				config.height = 600;
-				config.allowSoftwareMode = arguments.softOpenGL;
-				config.useHDPI = true;
+			final LwjglCanvasConfiguration config = new LwjglCanvasConfiguration();
+			config.title = AppConstants.APP_TITLE;
+			config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
+			config.iconFilePath = "icon128.png";
+			config.width = 1024;
+			config.height = 600;
+			config.allowSoftwareMode = arguments.softOpenGL;
+			config.useHDPI = true;
 
-				AppParams appParams = new AppParams();
-				appParams.startupProject = arguments.project;
-				appParams.debug = arguments.debug;
+			AppParams appParams = new AppParams();
+			appParams.startupProject = arguments.project;
+			appParams.debug = arguments.debug;
 
-				App app = new App(new DesktopClassScanner(), appParams);
-				CustomLwjglCanvas canvas = new CustomLwjglCanvas(app, config);
+			App app = new App(new DesktopClassScanner(), appParams);
+			CustomLwjglCanvas canvas = new CustomLwjglCanvas(app, config);
 
-				MainFrame mainFrame = new MainFrame(app, canvas, config);
-				mainFrame.setVisible(true);
-			}
+			MainFrame mainFrame = new MainFrame(app, canvas, config);
+			mainFrame.setVisible(true);
 		});
 
 	}
