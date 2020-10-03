@@ -15,7 +15,7 @@ Just download the most recent version of installer distribution matching your OS
 The app can run on any desktop OS (Linux, MacOS, Windows), where Java is available.
 
 The requirements are as follows:
-1. Java Runtime Environment (JRE 7.0 and up) should be installed on your system (`java` command is available from the command-line interface).
+1. Java Runtime Environment (JRE 8.0 and up) should be installed on your system (`java` command is available from the command-line interface).
 2. OpenGL (2.0 and up) compatible video drivers. 
 
 ### Backlog
