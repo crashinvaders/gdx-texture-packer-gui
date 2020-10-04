@@ -2,9 +2,7 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -12,6 +10,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
+import com.crashinvaders.texturepackergui.events.InputFileHoverEvent;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -23,10 +23,12 @@ import com.kotcrab.vis.ui.widget.VisTable;
 class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
 
     private final LmlParser lmlParser;
+    private final EventDispatcher eventDispatcher;
 
-    public InputFileListAdapter(LmlParser lmlParser) {
+    public InputFileListAdapter(LmlParser lmlParser, EventDispatcher eventDispatcher) {
         super(new Array<InputFile>());
         this.lmlParser = lmlParser;
+        this.eventDispatcher = eventDispatcher;
 
         setSelectionMode(SelectionMode.MULTIPLE);
         setItemsSorter(new InputFileComparator());
@@ -63,7 +65,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
 
     @Override
     protected Stack createView(InputFile item) {
-        ViewHolder viewHolder = new ViewHolder(lmlParser.getData().getDefaultSkin(), item);
+        ViewHolder viewHolder = new ViewHolder(eventDispatcher, lmlParser.getData().getDefaultSkin(), item);
         lmlParser.createView(viewHolder, Gdx.files.internal("lml/inputFileListItem.lml"));
         viewHolder.root.setUserObject(viewHolder);
         return viewHolder.root;
@@ -97,6 +99,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
         @LmlActor("imgTypeIndicator") Image imgTypeIndicator;
         @LmlActor("imgHighlight") Image imgHighlight;
 
+        private final EventDispatcher eventDispatcher;
         private final Skin skin;
         private final InputFile inputFile;
         private final Tooltip tooltip;
@@ -106,9 +109,10 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
 
         private Action highlightAction = null;
 
-        public ViewHolder(Skin skin, InputFile inputFile) {
+        public ViewHolder(EventDispatcher eventDispatcher, Skin skin, InputFile inputFile) {
             this.skin = skin;
             this.inputFile = inputFile;
+            this.eventDispatcher = eventDispatcher;
 
             tooltip = new Tooltip();
             tooltip.setAppearDelayTime(0.25f);
@@ -117,6 +121,17 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
         @LmlAfter void initView() {
             root.pack();
             updateViewData();
+
+            root.addListener(new InputListener() {
+                @Override
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    eventDispatcher.postEvent(new InputFileHoverEvent(inputFile, InputFileHoverEvent.Action.ENTER));
+                }
+                @Override
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    eventDispatcher.postEvent(new InputFileHoverEvent(inputFile, InputFileHoverEvent.Action.EXIT));
+                }
+            });
         }
 
         public void remapData() {
@@ -166,6 +181,10 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
             imgHighlight.addAction(highlightAction = Actions.sequence(
                     Actions.alpha(1f),
                     Actions.visible(true),
+                    Actions.repeat(3, Actions.sequence(
+                            Actions.delay(0.1f, Actions.fadeOut(0.2f)),
+                            Actions.alpha(1f)
+                    )),
                     Actions.fadeOut(5f, Interpolation.pow3Out),
                     Actions.visible(false)
             ));

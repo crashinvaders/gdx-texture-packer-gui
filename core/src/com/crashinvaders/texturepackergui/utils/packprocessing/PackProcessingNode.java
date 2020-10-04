@@ -23,7 +23,7 @@ public class PackProcessingNode {
     private final ProjectModel project;
     private final PackModel pack;
     private PackModel origPack;
-    private PageFileWriter pageFileWriter;  // Should be set by other processors before PackingProcessor gets to the work
+    private PageFileWriter pageFileWriter;  // Should be set by other processors before PackingProcessor kicks in.
     private String log = "";
 
     public PackProcessingNode(ProjectModel project, PackModel pack) {

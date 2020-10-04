@@ -4,20 +4,30 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Null;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.views.canvas.model.AtlasModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.PageModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.RegionModel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.BackgroundWidget;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.InfoPanel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.preview.PreviewHolder;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.autumn.processor.event.EventListener;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.impl.tag.AbstractNonParentalActorLmlTag;
 import com.github.czyzby.lml.parser.tag.LmlActorBuilder;
@@ -40,7 +50,7 @@ public class PagePreviewCanvas extends Stack {
 
 	private Callback callback;
 
-	private AtlasModel atlas;
+	private AtlasModel atlas = null;
 	private int pageIndex = 0;
 
 	public PagePreviewCanvas(Skin skin) {
@@ -188,6 +198,32 @@ public class PagePreviewCanvas extends Stack {
 
 	public void setCallback(Callback callback) {
 		this.callback = callback;
+	}
+
+	public void setHighlightRegion(@Null String regionName, int index) {
+		if (atlas == null) return;
+
+		if (regionName == null) {
+			previewHolder.setForceHighlightRegion(null);
+		} else {
+			RegionModel regionModel = findAtlasRegionByName(regionName, index);
+			previewHolder.setForceHighlightRegion(regionModel);
+		}
+	}
+
+	private @Null RegionModel findAtlasRegionByName(String regionName, int index) {
+		Array<PageModel> pages = atlas.getPages();
+		for (int i = 0; i < pages.size; i++) {
+			Array<RegionModel> regions = pages.get(i).getRegions();
+			for (int j = 0; j < regions.size; j++) {
+				RegionModel regionModel = regions.get(j);
+				TextureAtlas.TextureAtlasData.Region regionData = regionModel.getRegionData();
+				if (regionData.name.equals(regionName) && (index < 0 || regionData.index == index)) {
+					return regionModel;
+				}
+			}
+		}
+		return null;
 	}
 
 	private void showNextPage() {

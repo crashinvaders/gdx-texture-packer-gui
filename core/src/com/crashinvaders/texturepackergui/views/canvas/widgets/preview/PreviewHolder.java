@@ -13,6 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.crashinvaders.common.scene2d.ScrollFocusCaptureInputListener;
 import com.crashinvaders.texturepackergui.views.canvas.model.AtlasModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.PageModel;
+import com.crashinvaders.texturepackergui.views.canvas.model.RegionModel;
 
 public class PreviewHolder extends WidgetGroup {
     private static final float SAVE_PADDING = 24f;
@@ -86,6 +88,14 @@ public class PreviewHolder extends WidgetGroup {
             pageGroup = null;
         }
         noPageHint.setVisible(true);
+    }
+
+    public PageModel getPage() {
+        return pageGroup.getPage();
+    }
+
+    public void setForceHighlightRegion(RegionModel region) {
+        pageGroup.setForceHighlightRegion(region);
     }
 
     private void setZoomIndex(int zoomIndex) {

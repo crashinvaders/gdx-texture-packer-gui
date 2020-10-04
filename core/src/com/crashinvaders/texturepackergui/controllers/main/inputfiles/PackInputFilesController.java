@@ -18,6 +18,7 @@ import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
@@ -30,6 +31,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 public class PackInputFilesController implements ActionContainer {
     private static final String TAG = PackInputFilesController.class.getSimpleName();
 
+    @Inject EventDispatcher eventDispatcher;
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
@@ -112,7 +114,7 @@ public class PackInputFilesController implements ActionContainer {
     }
 
     @LmlAction("createAdapter") InputFileListAdapter createAdapter() {
-        return new InputFileListAdapter(interfaceService.getParser());
+        return new InputFileListAdapter(interfaceService.getParser(), eventDispatcher);
     }
 
     @LmlAction("resetSelection") void resetSelection() {

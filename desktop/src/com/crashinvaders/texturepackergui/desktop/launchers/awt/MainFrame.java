@@ -108,9 +108,9 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
     @Override
     public void onGdxException(final Throwable ex) {
-        ex.printStackTrace();
-
         if (!app.getParams().debug) {
+            ex.printStackTrace();
+
             ErrorReportFrame errorFrame = new ErrorReportFrame(lwjglConfig, ex);
             // Center error frame
             errorFrame.setLocation(

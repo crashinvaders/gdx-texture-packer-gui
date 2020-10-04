@@ -128,6 +128,11 @@ public class Scene2dUtils {
         if (lastSlashIndex > 0) {
             int dotLastIndex = filePath.lastIndexOf(".");
 
+            // Cut ".9" suffix along with the extension.
+            if (dotLastIndex > 2 && filePath.startsWith(".9", dotLastIndex-2)) {
+                dotLastIndex -= 2;
+            }
+
             StringBuilder sb = new StringBuilder();
             sb.append("[").append(colorPath).append("]");
             sb.append(filePath.substring(0, lastSlashIndex + 1));

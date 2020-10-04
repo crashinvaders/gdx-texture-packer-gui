@@ -7,13 +7,11 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.TextureAtlasData;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -26,6 +24,7 @@ class PageGroup extends Group {
 
     private final PageModel page;
     private final NinePatchDrawable borderFrame;
+    private final RegionSpotlight regionSpotlight;
 
     private boolean firstPageRender = true;
     private float pageAlpha = 0f;
@@ -39,7 +38,8 @@ class PageGroup extends Group {
         setSize(page.getWidth(), page.getHeight());
         setTouchable(Touchable.disabled);
 
-        addActor(new RegionSpotlight(skin));
+        regionSpotlight = new RegionSpotlight(skin);
+        addActor(regionSpotlight);
     }
 
     @Override
@@ -72,6 +72,10 @@ class PageGroup extends Group {
         return page;
     }
 
+    public void setForceHighlightRegion(RegionModel region) {
+        regionSpotlight.setForceHighlightRegion(region);
+    }
+
     private void startPageAppearAnimation() {
         addAction(new TemporalAction(0.15f) {
             @Override
@@ -100,7 +104,8 @@ class PageGroup extends Group {
         private final GlyphLayout glText;
 
         private boolean active;
-        private RegionModel region;
+        private RegionModel hoverRegion = null;
+        private boolean forceHighlight = false;
 
         public RegionSpotlight(Skin skin) {
             whiteTex = skin.getRegion("white");
@@ -114,12 +119,13 @@ class PageGroup extends Group {
 
         @Override
         public void draw(Batch batch, float parentAlpha) {
+            RegionModel region = hoverRegion;
             if (region == null) return;
 
             // Frame
             float scale = PageGroup.this.getScaleX();
             float x = getX() + (region.getX() - framePad) * scale;
-            float y = getY() + (region.getPage().getHeight() - region.getY() - region.getHeight() - framePad) * scale; // Texture region has top-left axis origin
+            float y = getY() + (region.getPage().getHeight() - region.getY() - hoverRegion.getHeight() - framePad) * scale; // Texture region has top-left axis origin
             float width = (region.getWidth() + framePad * 2f) * scale;
             float height = (region.getHeight() + framePad * 2f) * scale;
 
@@ -139,6 +145,9 @@ class PageGroup extends Group {
         @Override
         public void act(float delta) {
             super.act(delta);
+
+            // Do not detect hover if there's a force highlight region set.
+            if (forceHighlight) return;
 
             PageGroup pp = PageGroup.this;
             Vector2 pointerPos = pp.screenToLocal(Gdx.input.getX(), Gdx.input.getY());
@@ -160,15 +169,23 @@ class PageGroup extends Group {
             }
         }
 
+        public void setForceHighlightRegion(RegionModel region) {
+            forceHighlight = region != null;
+            if (region != null) {
+                spotlightRegion(region);
+            }
+        }
+
         private void clearSpotlight() {
-            region = null;
+            hoverRegion = null;
             active = false;
+            forceHighlight = false;
         }
 
         private void spotlightRegion(RegionModel region) {
-            if (this.region == region) return;
+            if (this.hoverRegion == region) return;
 
-            this.region = region;
+            this.hoverRegion = region;
             active = true;
 
             // You can customize what is shown when a user hovers over a region in here.
@@ -198,17 +215,6 @@ class PageGroup extends Group {
                 }
             }
             return null;
-//            for (AtlasRegion region : page.getRegions()) {
-//                if (tmpBounds.set(
-//                        region.getRegionX(),
-//                        region.getTexture().getHeight() - region.getRegionY() - region.getRegionHeight(), // Texture region has top-left axis origin
-//                        region.getRegionWidth(),
-//                        region.getRegionHeight())
-//                        .contains(position)) {
-//                    return region;
-//                }
-//            }
-//            return null;
         }
     }
 }
