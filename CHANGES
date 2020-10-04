@@ -2,7 +2,7 @@
 - JRE 8+ is required to run the app now.
 - Fixed high DPI scaling issue.
 - Fixed file based 9-patch pad values get displayed wrong (in case they are not defined explicitly in the input image).
-- Show region size on preview hover.
+- Show atlas region size on preview hover.
 - Highlight a related atlas region on input file list mouse hover.
 
 [4.8.1]
