@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.desktoplwjgl3.errorreport;
+package com.crashinvaders.texturepackergui.desktoplwjgl3;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;

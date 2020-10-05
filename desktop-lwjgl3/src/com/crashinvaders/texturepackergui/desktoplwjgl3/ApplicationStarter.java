@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.glutils.HdpiMode;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
-import com.crashinvaders.texturepackergui.desktoplwjgl3.errorreport.ErrorReportFrame;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
 import org.kohsuke.args4j.*;
 
@@ -41,13 +40,12 @@ public class ApplicationStarter {
         App app = new App(new DesktopClassScanner(), appParams);
 
         try {
-            new Lwjgl3Application(new WindowParamsPersistingApplicationWrapper(app, configuration), configuration);
+            new Lwjgl3Application(new Lwjgl3AppWrapper(app, configuration), configuration);
         } catch (Exception e) {
             if (appParams.debug) throw e;
 
             e.printStackTrace();
 
-            //TODO Probably need to spawn Swing loop here.
             ErrorReportFrame errorReport = new ErrorReportFrame(configuration, e);
             errorReport.setVisible(true);
         }

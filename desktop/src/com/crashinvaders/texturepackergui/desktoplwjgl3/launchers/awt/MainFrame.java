@@ -1,6 +1,8 @@
 package com.crashinvaders.texturepackergui.desktoplwjgl3.launchers.awt;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
 import com.crashinvaders.texturepackergui.controllers.GlobalActions;
@@ -14,6 +16,7 @@ import java.awt.dnd.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.ArrayList;
 
 class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionListener {
     private static final Color colorFill = new Color(37, 37, 38);
@@ -147,12 +150,7 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
 
             final int x = toGdxScreenX(evt.getLocation().x);
             final int y = toGdxScreenY(evt.getLocation().y);
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    dragDropManager.onDragStarted(x, y);
-                }
-            });
+            Gdx.app.postRunnable(() -> dragDropManager.onDragStarted(x, y));
         }
 
         @Override
@@ -190,11 +188,9 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
                         evt.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                 final int x = toGdxScreenX(evt.getLocation().x);
                 final int y = toGdxScreenY(evt.getLocation().y);
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        dragDropManager.handleFileDrop(x, y, droppedFiles);
-                    }
+                Gdx.app.postRunnable(() -> {
+                    FileHandle[] fileArray = (FileHandle[]) droppedFiles.stream().map(FileHandle::new).toArray();
+                    dragDropManager.handleFileDrop(x, y, new Array<>(fileArray));
                 });
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -205,12 +201,7 @@ class MainFrame extends JFrame implements CustomLwjglCanvas.UnhandledExceptionLi
             if (!dragHandling) return;
 
             dragHandling = false;
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    dragDropManager.onDragFinished();
-                }
-            });
+            Gdx.app.postRunnable(() -> dragDropManager.onDragFinished());
         }
 
         private int toGdxScreenX(int componentX) {

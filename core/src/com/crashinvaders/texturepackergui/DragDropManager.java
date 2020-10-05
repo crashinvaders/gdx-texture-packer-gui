@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.List;
 
 public class DragDropManager {
-    private static final Array<FileHandle> tmpFiles = new Array<>();
 
     private final Array<Listener> listeners = new Array<>();
 
@@ -37,14 +36,10 @@ public class DragDropManager {
         }
     }
 
-    public void handleFileDrop(int screenX, int screenY, List<File> files) {
-        for (File file : files) {
-            tmpFiles.add(new FileHandle(file));
-        }
+    public void handleFileDrop(int screenX, int screenY, Array<FileHandle> files) {
         for (int i = 0; i < listeners.size; i++) {
-            listeners.get(i).handleFileDrop(screenX, screenY, tmpFiles);
+            listeners.get(i).handleFileDrop(screenX, screenY, files);
         }
-        tmpFiles.clear();
     }
 
     public interface Listener {

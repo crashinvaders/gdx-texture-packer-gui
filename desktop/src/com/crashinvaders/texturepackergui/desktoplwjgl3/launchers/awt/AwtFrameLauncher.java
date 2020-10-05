@@ -47,6 +47,5 @@ public class AwtFrameLauncher {
 			MainFrame mainFrame = new MainFrame(app, canvas, config);
 			mainFrame.setVisible(true);
 		});
-
 	}
 }

@@ -5,23 +5,60 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.DragDropManager;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
+import org.lwjgl.glfw.GLFWDropCallback;
 
 import java.awt.*;
 import java.nio.IntBuffer;
 
 /**
- * Saves/loads window position and size on startup/shutdown respectively.
+ * Handles any specific desktop oriented functionality for the {@link App}.
+ * <ol>
+ * <li>Saves/loads window position and size on startup/shutdown respectively.</li>
+ * <li>Set up file drag-n-drop handling.</li>
+ * </ol>
  */
-class WindowParamsPersistingApplicationWrapper extends ApplicationListenerWrapper {
+class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
     private static final IntBuffer tmpBuffer0 = BufferUtils.createIntBuffer(1);
     private static final IntBuffer tmpBuffer1 = BufferUtils.createIntBuffer(1);
 
-    public WindowParamsPersistingApplicationWrapper(App app, Lwjgl3ApplicationConfigurationX configuration) {
+    public Lwjgl3AppWrapper(App app, Lwjgl3ApplicationConfigurationX configuration) {
         super(app);
         loadWindowParams(configuration);
+    }
+
+    @Override
+    public void create() {
+        super.create();
+
+        // Register drag-n-drop handler.
+        long windowHandle = ((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle();
+        GLFW.glfwSetDropCallback(windowHandle, (window, count, names) -> {
+            Array<FileHandle> files = new Array<>(count);
+            for (int i = 0; i < count; i++) {
+                FileHandle fileHandle = new FileHandle(GLFWDropCallback.getName(names, i));
+                files.add(fileHandle);
+            }
+
+            final int mouseX = Gdx.input.getX();
+            final int mouseY = Gdx.input.getY();
+
+            //TODO Implement another drag-n-drop overlay that doesn't need mouse dragging events.
+            DragDropManager dragDropManager = App.inst().getDragDropManager();
+            dragDropManager.onDragStarted(mouseX, mouseY);
+            new Timer().scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    dragDropManager.handleFileDrop(mouseX, mouseY, files);
+                    dragDropManager.onDragFinished();
+                }
+            }, 0.5f);
+        });
     }
 
     @Override
