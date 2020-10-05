@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
+import com.crashinvaders.texturepackergui.controllers.GlobalActions;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWDropCallback;
@@ -21,6 +22,7 @@ import java.nio.IntBuffer;
  * <ol>
  * <li>Saves/loads window position and size on startup/shutdown respectively.</li>
  * <li>Set up file drag-n-drop handling.</li>
+ * <li>Check if there are any unsaved project changes on window close event.</li>
  * </ol>
  */
 class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
@@ -36,9 +38,37 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
     public void create() {
         super.create();
 
+        Lwjgl3Window window = ((Lwjgl3Graphics) Gdx.graphics).getWindow();
+
+        // Check for unsaved changes on window close attempt.
+        window.setWindowListener(new Lwjgl3WindowAdapter() {
+            boolean safeToCloseWindow = false;
+            boolean closeHandling = false;
+
+            @Override
+            public boolean closeRequested() {
+                if (safeToCloseWindow) return true;
+                if (closeHandling) return false;
+
+                closeHandling = true;
+
+                GlobalActions globalActions = (GlobalActions) App.inst().getContext().getComponent(GlobalActions.class);
+                globalActions.commonDialogs.checkUnsavedChanges(
+                        () -> {
+                            safeToCloseWindow = true;
+                            closeHandling = false;
+                            Gdx.app.exit();
+
+                        }, () -> closeHandling = false);
+
+                // Never close the window instantly.
+                // Only if there are no unsaved changes or the user has confirmed it explicitly.
+                return false;
+            }
+        });
+
         // Register drag-n-drop handler.
-        long windowHandle = ((Lwjgl3Graphics) Gdx.graphics).getWindow().getWindowHandle();
-        GLFW.glfwSetDropCallback(windowHandle, (window, count, names) -> {
+        GLFW.glfwSetDropCallback(window.getWindowHandle(), (wnd, count, names) -> {
             Array<FileHandle> files = new Array<>(count);
             for (int i = 0; i < count; i++) {
                 FileHandle fileHandle = new FileHandle(GLFWDropCallback.getName(names, i));
