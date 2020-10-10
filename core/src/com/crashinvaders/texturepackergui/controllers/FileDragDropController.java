@@ -1,24 +1,20 @@
 package com.crashinvaders.texturepackergui.controllers;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.DragDropManager;
-import com.crashinvaders.texturepackergui.controllers.GlobalActions;
 import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.events.FileDragDropEvent;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Destroy;
@@ -26,7 +22,6 @@ import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
-import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -39,15 +34,14 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
-    @Inject EventDispatcher eventDispatcher;
     @Inject GlobalActions globalActions;
     @Inject ModelService modelService;
 
     @LmlActor("dragndropOverlay") Group overlayRoot;
-    @LmlActor("btnDragndropInclude") Button btnInclude;
-    @LmlActor("btnDragndropExclude") Button btnExclude;
 
     private Stage stage;
+
+    private boolean hintVisible = false;
 
     @Initiate void initialize() {
         interfaceService.getParser().getData().addActionContainer(TAG, this);
@@ -75,14 +69,15 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
                 "."+ Strings.join(" .", (Object[]) AppConstants.IMAGE_FILE_EXT));
     }
 
-    @Override
-    public void onDragStarted(int screenX, int screenY) {
-        eventDispatcher.postEvent(new FileDragDropEvent(FileDragDropEvent.Action.START_DRAGGING));
+    @LmlAction("showDragndropHint") void showDragndropHint() {
+        if (hintVisible) return;
+        hintVisible = true;
 
         overlayRoot.clearActions();
         overlayRoot.addAction(Actions.sequence(
                 Actions.scaleTo(1.5f, 1.5f),
                 Actions.visible(true),
+                Actions.touchable(Touchable.enabled),
                 Actions.parallel(
                         Actions.fadeIn(0.5f, Interpolation.pow5Out),
                         Actions.scaleTo(1f, 1f, 0.5f, Interpolation.pow5Out)
@@ -90,25 +85,23 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
         ));
     }
 
-    @Override
-    public void onDragFinished() {
-        eventDispatcher.postEvent(new FileDragDropEvent(FileDragDropEvent.Action.STOP_DRAGGING));
+    @LmlAction("hideDragndropHint") void hideDragndropHint() {
+        if (!hintVisible) return;
+        hintVisible = false;
 
         overlayRoot.clearActions();
         overlayRoot.addAction(Actions.sequence(
+                Actions.touchable(Touchable.disabled),
                 Actions.fadeOut(0.35f),
                 Actions.visible(false)
         ));
-
-    }
-
-    @Override
-    public void onDragMoved(int screenX, int screenY) {
-        stage.mouseMoved(screenX, screenY);
     }
 
     @Override
     public void handleFileDrop(int screenX, int screenY, Array<FileHandle> files) {
+        // Reset visual hint.
+        hideDragndropHint();
+
         // Look for a project file. If found, load first and return.
         for (FileHandle file : files) {
             if (AppConstants.PROJECT_FILE_EXT.equals(file.extension())) {
@@ -117,12 +110,7 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
             }
         }
 
-        stage.screenToStageCoordinates(tmpVec2.set(screenX, screenY));
-        Actor hit = stage.hit(tmpVec2.x, tmpVec2.y, true);
-        boolean include = hit == btnInclude;
-        boolean exclude = hit == btnExclude;
-
-        // If there is no selected pack, we will either select first or create new one
+        // If there is no selected pack, select first or create a new one.
         ProjectModel project = modelService.getProject();
         PackModel pack = project.getSelectedPack();
         if (pack == null) {
@@ -136,30 +124,24 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
             project.setSelectedPack(pack);
         }
 
-        // Look for a project file. If found, load first and return.
+        boolean anyFilesAdded = false;
         for (FileHandle file : files) {
-            if (file.isDirectory()) {
-                if (include) { pack.addInputFile(file, InputFile.Type.Input); }
-            } else {
-                if (CommonUtils.contains(AppConstants.IMAGE_FILE_EXT, file.extension(), false)) {
-                    InputFile inputFile = null;
+            if (file.isDirectory() || CommonUtils.contains(AppConstants.IMAGE_FILE_EXT, file.extension(), false)) {
+                InputFile inputFile = new InputFile(file, InputFile.Type.Input);
 
-                    if (include) { inputFile = new InputFile(file, InputFile.Type.Input); }
-                    if (exclude) { inputFile = new InputFile(file, InputFile.Type.Ignore); }
-
-                    if (inputFile == null) {
-                        Gdx.app.error(TAG, "Can't add input file: " + file);
-                        continue;
-                    }
-
-                    // If there is any record with same file handle, we will replace it
-                    if (pack.getInputFiles().contains(inputFile, false)) {
-                        pack.removeInputFile(inputFile);
-                    }
-
-                    pack.addInputFile(inputFile);
+                // If there is any record with same file handle, we will simply re-add it (just to highlight).
+                int existingEntryIdx = pack.getInputFiles().indexOf(inputFile, false);
+                if (existingEntryIdx != -1) {
+                    inputFile = pack.getInputFiles().get(existingEntryIdx);
+                    pack.removeInputFile(inputFile);
                 }
+
+                pack.addInputFile(inputFile);
+                anyFilesAdded = true;
             }
         }
+
+        // In case no supported files were recognized - show drag-n-drop hint.
+        if (!anyFilesAdded) showDragndropHint();
     }
 }

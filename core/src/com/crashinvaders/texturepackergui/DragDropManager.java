@@ -18,24 +18,6 @@ public class DragDropManager {
         listeners.removeValue(listener, true);
     }
 
-    public void onDragStarted(int screenX, int screenY) {
-        for (int i = 0; i < listeners.size; i++) {
-            listeners.get(i).onDragStarted(screenX, screenY);
-        }
-    }
-
-    public void onDragMoved(int screenX, int screenY) {
-        for (int i = 0; i < listeners.size; i++) {
-            listeners.get(i).onDragMoved(screenX, screenY);
-        }
-    }
-
-    public void onDragFinished() {
-        for (int i = 0; i < listeners.size; i++) {
-            listeners.get(i).onDragFinished();
-        }
-    }
-
     public void handleFileDrop(int screenX, int screenY, Array<FileHandle> files) {
         for (int i = 0; i < listeners.size; i++) {
             listeners.get(i).handleFileDrop(screenX, screenY, files);
@@ -43,19 +25,10 @@ public class DragDropManager {
     }
 
     public interface Listener {
-        void onDragStarted(int screenX, int screenY);
-        void onDragMoved(int screenX, int screenY);
-        void onDragFinished();
         void handleFileDrop(int screenX, int screenY, Array<FileHandle> files);
     }
 
     public static abstract class ListenerAdapter implements Listener {
-        @Override
-        public void onDragStarted(int screenX, int screenY) { }
-        @Override
-        public void onDragMoved(int screenX, int screenY) { }
-        @Override
-        public void onDragFinished() { }
         @Override
         public void handleFileDrop(int screenX, int screenY, Array<FileHandle> files) { }
     }

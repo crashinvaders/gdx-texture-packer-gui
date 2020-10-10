@@ -195,7 +195,7 @@ public class App implements ApplicationListener {
     public I18NBundle getI18n() { return localeService.getI18nBundle(); }
     //endregion
 
-    /** This is utility component class that helps to get access to some system components for App class */
+    /** This is utility component class that helps to get access to some system components for the {@link App} instance */
     @SuppressWarnings("WeakerAccess")
     private class ComponentExtractor {
         @Initiate() void extractComponents(Context context, EventDispatcher eventDispatcher, MessageDispatcher messageDispatcher) {

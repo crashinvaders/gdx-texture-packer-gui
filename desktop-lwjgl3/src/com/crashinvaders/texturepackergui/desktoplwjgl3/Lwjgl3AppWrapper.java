@@ -81,16 +81,10 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
             final int mouseX = Gdx.input.getX();
             final int mouseY = Gdx.input.getY();
 
-            //TODO Implement another drag-n-drop overlay that doesn't need mouse dragging events.
-            DragDropManager dragDropManager = App.inst().getDragDropManager();
-            dragDropManager.onDragStarted(mouseX, mouseY);
-            new Timer().scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    dragDropManager.handleFileDrop(mouseX, mouseY, files);
-                    dragDropManager.onDragFinished();
-                }
-            }, 0.5f);
+            Gdx.app.postRunnable(() -> {
+                DragDropManager dragDropManager = App.inst().getDragDropManager();
+                dragDropManager.handleFileDrop(mouseX, mouseY, files);
+            });
         });
     }
 

@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <!DOCTYPE vistable SYSTEM "/lml.dtd">
-<vistable id="dragndropOverlay" background="dragndropDim" onecolumn="true" scale="1.5" padbottom="96" origin="center" transform="true" visible="false">
+
+<vistable id="dragndropOverlay" background="dragndropDim" onecolumn="true"
+          scale="1.5" padbottom="96" origin="center"
+          transform="true" visible="false" click="$FileDragDropController.hideDragndropHint">
+
     <:assign key="fontScale" value="1.5"/>
 
     <image style="custom/dragndrop" hexcolor="ffffff40"/>
@@ -9,17 +13,17 @@
     <actor height="8"/>
     <label style="big" text="$FileDragDropController.getImageFilesHint"/>
 
-    <actor height="16"/>
+<!--    <actor height="16"/>-->
 
-    <table>
-        <stack width="300" height="150">
-            <button id="btnDragndropInclude" style="dragndrop" hexcolor="ffffff40" />
-            <label style="big" text="@include" textalign="center" touchable="disabled"/>
-        </stack>
-        <actor width="24"/>
-        <stack width="300" height="150">
-            <button id="btnDragndropExclude" style="dragndrop" hexcolor="ffffff40" />
-            <label style="big" text="@exclude" textalign="center" touchable="disabled"/>
-        </stack>
-    </table>
+<!--    <table>-->
+<!--        <stack width="300" height="150">-->
+<!--            <button id="btnDragndropInclude" style="dragndrop" hexcolor="ffffff40" />-->
+<!--            <label style="big" text="@include" textalign="center" touchable="disabled"/>-->
+<!--        </stack>-->
+<!--        <actor width="24"/>-->
+<!--        <stack width="300" height="150">-->
+<!--            <button id="btnDragndropExclude" style="dragndrop" hexcolor="ffffff40" />-->
+<!--            <label style="big" text="@exclude" textalign="center" touchable="disabled"/>-->
+<!--        </stack>-->
+<!--    </table>-->
 </vistable>
