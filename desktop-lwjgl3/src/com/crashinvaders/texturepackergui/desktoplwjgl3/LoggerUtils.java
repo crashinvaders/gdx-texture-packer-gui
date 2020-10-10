@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class LoggerUtils {
     private static final long EXPIRATION_THRESHOLD = 7 * 24 * 60 * 60 * 1000; // 7 days
-    private static final String LOG_FILE_EXTENSION = ".log";
+    private static final String LOG_FILE_EXTENSION = ".txt";
 
     public static File setupExternalFileOutput() {
 
