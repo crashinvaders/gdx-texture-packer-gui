@@ -12,9 +12,11 @@ import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.*;
 
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_OWNER;
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
+
 public class ErrorReportFrame extends JDialog {
     private static final String STRING_ENCODING = "UTF-8";
-    private static final String PLACEHOLDER_LOG = "$log_placeholder";
 
     public ErrorReportFrame(LwjglCanvasConfiguration config, final Throwable ex) {
         super((Dialog)null);
@@ -136,6 +138,6 @@ public class ErrorReportFrame extends JDialog {
     }
 
     private static void createGithubIssueWithBrowser() {
-        Gdx.app.getNet().openURI("https://github.com/crashinvaders/gdx-texture-packer-gui/issues/new?template=crash-report.md&title=Crash+report");
+        Gdx.app.getNet().openURI("https://github.com/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/issues/new?template=crash-report.md&title=Crash+report");
     }
 }

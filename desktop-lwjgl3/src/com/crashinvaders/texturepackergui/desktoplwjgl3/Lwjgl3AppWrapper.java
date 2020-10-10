@@ -23,6 +23,7 @@ import java.nio.IntBuffer;
  * <li>Saves/loads window position and size on startup/shutdown respectively.</li>
  * <li>Set up file drag-n-drop handling.</li>
  * <li>Check if there are any unsaved project changes on window close event.</li>
+ * <li>Some extra info logging.</li>
  * </ol>
  */
 class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
@@ -36,6 +37,8 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
 
     @Override
     public void create() {
+        LoggerUtils.printGpuInfo();
+
         super.create();
 
         Lwjgl3Window window = ((Lwjgl3Graphics) Gdx.graphics).getWindow();

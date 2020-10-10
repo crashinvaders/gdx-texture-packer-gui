@@ -27,5 +27,6 @@ public class AppConstants {
     public static final Locale LOCALE_ZH_TW = LocaleService.toLocale("zh_TW");
     public static final Locale LOCALE_DEFAULT = LOCALE_EN;
 
-    public static File logFile;
+    /** The file that is currently configured to capture all the application output. May be null if not set up. */
+    public static File logFile = null;
 }

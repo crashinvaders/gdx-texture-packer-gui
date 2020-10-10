@@ -25,6 +25,7 @@ public class ApplicationStarter {
 
     public static void start(Arguments arguments) {
         AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
+        LoggerUtils.printGeneralInfo();
 
         final Lwjgl3ApplicationConfigurationX configuration = new Lwjgl3ApplicationConfigurationX();
         configuration.setTitle(AppConstants.APP_TITLE);

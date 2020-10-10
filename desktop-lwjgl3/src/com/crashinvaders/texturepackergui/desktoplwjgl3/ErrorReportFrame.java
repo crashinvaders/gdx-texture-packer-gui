@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_OWNER;
+import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
+
 public class ErrorReportFrame extends JDialog {
     private static final String STRING_ENCODING = "UTF-8";
 
@@ -113,7 +116,6 @@ public class ErrorReportFrame extends JDialog {
 
     private static String retrieveAppLog() {
         try {
-
             if (AppConstants.logFile != null && AppConstants.logFile.exists()) {
                 return IOUtils.toString(new FileInputStream(AppConstants.logFile.toString()), STRING_ENCODING).trim();
             } else {
@@ -139,6 +141,6 @@ public class ErrorReportFrame extends JDialog {
     }
 
     private static void createGithubIssueWithBrowser() {
-        Gdx.app.getNet().openURI("https://github.com/crashinvaders/gdx-texture-packer-gui/issues/new?template=crash-report.md&title=Crash+report");
+        Gdx.app.getNet().openURI("https://github.com/" + GITHUB_OWNER + "/" + GITHUB_REPO + "/issues/new?template=crash-report.md&title=Crash+report");
     }
 }
