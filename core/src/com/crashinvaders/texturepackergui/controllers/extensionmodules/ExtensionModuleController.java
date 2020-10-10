@@ -80,6 +80,10 @@ public abstract class ExtensionModuleController {
     abstract void prepareInstallationJob(JobTaskQueue taskQueue, String fileUrl);
     abstract void prepareUninstallationJob(JobTaskQueue taskQueue);
 
+    /** If the module is registered as installed, this method should check
+     * if it's valid (check file integrity, specific conditions, etc). */
+    abstract boolean validateInstalledModule();
+
     public enum Status {
         NOT_INSTALLED, INSTALLED, UPDATE_REQUIRED
     }

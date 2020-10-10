@@ -48,6 +48,11 @@ public class ExtensionModuleManagerService {
             ExtensionModuleController module = moduleControllers.getValueAt(i);
             int installedRevision = prefsInstalledModules.getInteger(module.getModuleId(), -1);
             if (installedRevision >= 0) {
+                if (!module.validateInstalledModule()) {
+                    Gdx.app.error(TAG, "Validation for the installed module \""+ module.getModuleId() +"\" has failed. It will be disabled.");
+                    continue;
+                }
+
                 if (installedRevision == module.getRequiredRevision()) {
                     module.setStatus(Status.INSTALLED, false);
                     module.setActivated(true, false);
