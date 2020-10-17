@@ -27,8 +27,8 @@ public class ProjectModel implements StateHashable {
     public void setEventDispatcher(EventDispatcher eventDispatcher) {
         this.eventDispatcher = eventDispatcher;
         fileType.setEventDispatcher(eventDispatcher);
-        for (PackModel pack : packs) {
-            pack.setEventDispatcher(eventDispatcher);
+        for (int i = 0; i < packs.size; i++) {
+            packs.get(i).setEventDispatcher(eventDispatcher);
         }
     }
 
@@ -83,6 +83,7 @@ public class ProjectModel implements StateHashable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends FileTypeModel> T getFileType() {
         return (T)fileType;
     }

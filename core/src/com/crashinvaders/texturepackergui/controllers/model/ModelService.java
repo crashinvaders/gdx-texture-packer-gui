@@ -33,6 +33,10 @@ public class ModelService {
         if (projectModel == null) throw new NullPointerException("projectModel cannot be null");
         if (this.projectModel == projectModel) return;
 
+        if (this.projectModel != null) {
+            this.projectModel.setEventDispatcher(null);
+        }
+
         projectModel.setEventDispatcher(eventDispatcher);
         this.projectModel = projectModel;
 
