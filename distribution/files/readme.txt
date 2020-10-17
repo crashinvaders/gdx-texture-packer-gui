@@ -11,8 +11,11 @@ How to launch:
 Application is packed into JAR executable file. To launch it, issue next command
 java -jar gdx-texturepacker.jar
 
-MacOS and Linux
-You may execute launch.sh bash script to launch application
+MacOS
+Execute launch_macos.sh bash script to launch the application
+
+Linux
+Execute launch_linux.sh bash script to launch the application
 
 Windows
 launch.bat - starts application
