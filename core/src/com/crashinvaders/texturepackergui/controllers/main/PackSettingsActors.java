@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -14,12 +15,12 @@ public class PackSettingsActors {
     @LmlActor("skbMaxPageWidth") SeekBar skbMaxPageWidth;
     @LmlActor("skbMaxPageHeight") SeekBar skbMaxPageHeight;
     @LmlActor("skbAlphaThreshold") SeekBar skbAlphaThreshold;
-    @LmlActor("cboMinFilter") VisSelectBox cboMinFilter;
-    @LmlActor("cboMagFilter") VisSelectBox cboMagFilter;
+    @LmlActor("cboMinFilter") VisSelectBox<Texture.TextureFilter> cboMinFilter;
+    @LmlActor("cboMagFilter") VisSelectBox<Texture.TextureFilter> cboMagFilter;
     @LmlActor("skbPaddingX") SeekBar skbPaddingX;
     @LmlActor("skbPaddingY") SeekBar skbPaddingY;
-    @LmlActor("cboWrapX") VisSelectBox cboWrapX;
-    @LmlActor("cboWrapY") VisSelectBox cboWrapY;
+    @LmlActor("cboWrapX") VisSelectBox<Texture.TextureWrap> cboWrapX;
+    @LmlActor("cboWrapY") VisSelectBox<Texture.TextureWrap> cboWrapY;
     @LmlActor("eetbScaleFactors") ExpandEditTextButton eetbScaleFactors;
     @LmlActor("cbUseFastAlgorithm") VisCheckBox cbUseFastAlgorithm;
     @LmlActor("cbEdgePadding") VisCheckBox cbEdgePadding;

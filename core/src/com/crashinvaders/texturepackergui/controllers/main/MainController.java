@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.visui.Toast;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
-import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.FileTypeController;
@@ -135,7 +134,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         }
     }
 
-    @SuppressWarnings("unchecked")
     @LmlAfter
     void initializeView() {
         fileTypeControllers.put(WidgetData.FileType.PNG, ftPngController);
@@ -385,12 +383,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
         final String text = textField.getText();
         final PackModel pack = getSelectedPack();
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                pack.setOutputDir(text);
-            }
-        });
+        Gdx.app.postRunnable(() -> pack.setOutputDir(text));
 
         // Tooltip update
         boolean textFit = Scene2dUtils.isTextFitTextField(textField, text);
@@ -415,12 +408,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
         final String text = textField.getText();
         final PackModel pack = getSelectedPack();
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                pack.setFilename(text);
-            }
-        });
+        Gdx.app.postRunnable(() -> pack.setFilename(text));
     }
 
     @LmlAction("onSettingsCbChecked") void onSettingsCbChecked(VisCheckBox checkBox) {
@@ -466,18 +454,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         }
     }
 
-//    @LmlAction("onSettingsFloatSpinnerChanged") void onSettingsFloatSpinnerChanged(SeekBar seekBar) {
-//        PackModel pack = getSelectedPack();
-//        if (pack == null) return;
-//
-//        TexturePacker.Settings settings = pack.getSettings();
-//        FloatSeekBarModel model = (FloatSeekBarModel) seekBar.getModel();
-//        switch (spinner.getName()) {
-//            case "skbJpegQuality": settings.jpegQuality = model.getValue().floatValue(); break;
-//        }
-//    }
-
-    @LmlAction("onSettingsCboChanged") void onSettingsCboChanged(VisSelectBox selectBox) {
+    @LmlAction("onSettingsCboChanged") void onSettingsCboChanged(VisSelectBox<Object> selectBox) {
         if (!viewShown) return;
 
         PackModel pack = getSelectedPack();
@@ -615,8 +592,8 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         }
 
         // Update pane lockers
-        for (Actor locker : packPaneLockers) {
-            locker.setVisible(pack == null);
+        for (int i = 0; i < packPaneLockers.size; i++) {
+            packPaneLockers.get(i).setVisible(pack == null);
         }
     }
 
@@ -667,7 +644,8 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         Array<FileHandle> recentProjects = this.recentProjects.getRecentProjects();
         actorsFileMenu.miOpenRecent.setDisabled(recentProjects.size == 0);
         actorsFileMenu.pmOpenRecent.clear();
-        for (final FileHandle file : recentProjects) {
+        for (int i = 0; i < recentProjects.size; i++) {
+            final FileHandle file = recentProjects.get(i);
             if (file.equals(getProject().getProjectFile())) continue;
 
             MenuItem menuItem = new MenuItem(file.nameWithoutExtension());
@@ -728,27 +706,9 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     private ProjectModel getProject() {
         return modelService.getProject();
     }
-
-//    @SuppressWarnings("unchecked")
-//    private <T extends Actor> T parseLml(FileHandle fileHandle) {
-//        LmlParser parser = interfaceService.getParser();
-//        String actionContainerId = interfaceService.getController(this.getClass()).getViewId();
-//        boolean explicitAddActionContainer = parser.getData().getActionContainer(actionContainerId) == null;
-//
-//        if (explicitAddActionContainer) {
-//            parser.getData().addActionContainer(actionContainerId, this);
-//        }
-//
-//        T actor = (T) parser.parseTemplate(fileHandle).first();
-//
-//        if (explicitAddActionContainer) {
-//            parser.getData().removeActionContainer(actionContainerId);
-//        }
-//        return actor;
-//    }
     //endregion
 
-    private Runnable normalizePackListScrollRunnable = new Runnable() {
+    private final Runnable normalizePackListScrollRunnable = new Runnable() {
         @Override
         public void run() {
             PackModel pack = getSelectedPack();

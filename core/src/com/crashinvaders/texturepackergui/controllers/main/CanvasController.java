@@ -1,6 +1,7 @@
 
 package com.crashinvaders.texturepackergui.controllers.main;
 
+import com.badlogic.gdx.Gdx;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
@@ -29,13 +30,9 @@ public class CanvasController {
 	public void initialize(PagePreviewCanvas canvas) {
         this.canvas = canvas;
 
-        canvas.setCallback(new PagePreviewCanvas.Callback() {
-            @Override
-            public void atlasLoadError(PackModel pack) {
-                //TODO supply with details
-                eventDispatcher.postEvent(new ShowToastEvent().message(getString("toastPackLoadError", pack.getName())));
-            }
-        });
+        canvas.setCallback(pack -> Gdx.app.postRunnable(() -> eventDispatcher.postEvent(
+                new ShowToastEvent().message(getString("toastPackLoadError", pack.getName()))
+        )));
 
         currentPack = getSelectedPack();
         canvas.reloadPack(currentPack);
