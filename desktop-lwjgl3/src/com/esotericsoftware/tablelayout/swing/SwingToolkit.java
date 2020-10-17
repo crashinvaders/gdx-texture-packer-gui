@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 
 class SwingToolkit extends Toolkit<Component, Table, TableLayout> {
 	static Timer timer;
-	static ArrayList<TableLayout> debugLayouts = new ArrayList(0);
+	static ArrayList<TableLayout> debugLayouts = new ArrayList<>(0);
 
 	public Cell obtainCell (TableLayout layout) {
 		Cell cell = new Cell();
@@ -77,7 +77,7 @@ class SwingToolkit extends Toolkit<Component, Table, TableLayout> {
 
 	public void addDebugRectangle (TableLayout layout, Debug type, float x, float y, float w, float h) {
 		if (layout.debugRects == null) {
-			layout.debugRects = new ArrayList();
+			layout.debugRects = new ArrayList<>();
 			debugLayouts.add(layout);
 		}
 		layout.debugRects.add(new DebugRect(type, x, y, w, h));

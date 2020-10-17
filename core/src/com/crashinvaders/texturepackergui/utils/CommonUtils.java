@@ -161,7 +161,7 @@ public class CommonUtils {
 
    /** Thread safe approach.
     * @see Array#sort() */
-    public static void sort(Array array) {
+    public static <T> void sort(Array<T> array) {
         Sort sort = sortPool.obtain();
         sort.sort(array.items, 0, array.size);
         sortPool.free(sort);
@@ -169,7 +169,7 @@ public class CommonUtils {
 
    /** Thread safe approach.
     * @see Array#sort(Comparator) */
-    public static void sort(Array array, Comparator comparator) {
+    public static <T> void sort(Array<T> array, Comparator<T> comparator) {
         Sort sort = sortPool.obtain();
         sort.sort(array.items, comparator, 0, array.size);
         sortPool.free(sort);

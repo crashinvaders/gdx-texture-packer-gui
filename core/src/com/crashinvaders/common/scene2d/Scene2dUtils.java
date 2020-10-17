@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.Field;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.kotcrab.vis.ui.util.adapter.ItemAdapter;
+import com.kotcrab.vis.ui.util.adapter.ListAdapter;
 import com.kotcrab.vis.ui.widget.ListView;
 import com.kotcrab.vis.ui.widget.VisTextField;
 
@@ -69,8 +70,12 @@ public class Scene2dUtils {
      * @param listView should has {@link ItemAdapter}
      * @param item to scroll to
      */
-    public static void scrollDownToSelectedListItem(ListView listView, Object item) {
-        ItemAdapter adapter = (ItemAdapter) listView.getAdapter();
+    public static <T> void scrollDownToSelectedListItem(ListView<T> listView, T item) {
+        ListAdapter<T> rawAdapter = listView.getAdapter();
+        if (!(rawAdapter instanceof ItemAdapter)) return;
+
+        @SuppressWarnings("unchecked")
+        ItemAdapter<T> adapter = (ItemAdapter<T>) rawAdapter;
         Actor itemView = adapter.getView(item);
         listView.getScrollPane().scrollTo(0, itemView.getY(), 0, itemView.getHeight());
     }

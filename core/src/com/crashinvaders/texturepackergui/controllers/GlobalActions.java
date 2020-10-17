@@ -326,16 +326,12 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("restartApplication") public void restartApplication() {
+        Gdx.app.log(TAG, "Restarting the application...");
         FileHandle projectFile = modelService.getProject().getProjectFile();
         if (projectFile != null && projectFile.exists()) {
             App.inst().getParams().startupProject = projectFile.file();
         }
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                App.inst().restart();
-            }
-        });
+        Gdx.app.postRunnable(() -> App.inst().restart());
     }
 
     @LmlAction("editCustomHotkeys") void editCustomHotkeys() {

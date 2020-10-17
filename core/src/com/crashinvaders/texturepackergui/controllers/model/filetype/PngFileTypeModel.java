@@ -36,6 +36,7 @@ public class PngFileTypeModel extends FileTypeModel {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends PngCompressionModel> T getCompression() {
         return (T)compression;
     }

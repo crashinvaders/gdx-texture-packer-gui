@@ -292,6 +292,7 @@ public class ProjectSerializer {
 
         String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
         if (scaleFactorsSerialized != null) {
+            @SuppressWarnings("unchecked")
             Array<ScaleFactorModel> scaleFactors = json.fromJson(Array.class, ScaleFactorModel.class, scaleFactorsSerialized);
             pack.setScaleFactors(scaleFactors);
         }
@@ -299,6 +300,7 @@ public class ProjectSerializer {
         String inputFilesSerialized = find(lines, "inputFiles=", null);
         inputFileSerializer.setRoot(root.file());
         if (inputFilesSerialized != null) {
+            @SuppressWarnings("unchecked")
             Array<InputFile> inputFiles = json.fromJson(Array.class, InputFile.class, inputFilesSerialized);
             for (InputFile inputFile : inputFiles) {
                 pack.addInputFile(inputFile);

@@ -115,11 +115,11 @@ public class KtxFileTypeController implements FileTypeController {
         ignoreEncodingChangeEvent = true;
         switch (format) {
             case ETC1:
-                cboEncoding.setItems(KtxFileTypeModel.EncodingETC1.values());
+                cboEncoding.setItems((Object[])KtxFileTypeModel.EncodingETC1.values());
                 cboEncoding.setSelected(model.getEncodingEtc1());
                 break;
             case ETC2:
-                cboEncoding.setItems(KtxFileTypeModel.EncodingETC2.values());
+                cboEncoding.setItems((Object[])KtxFileTypeModel.EncodingETC2.values());
                 cboEncoding.setSelected(model.getEncodingEtc2());
                 break;
         }

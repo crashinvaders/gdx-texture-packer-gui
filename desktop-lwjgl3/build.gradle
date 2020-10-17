@@ -15,7 +15,7 @@ project.ext.distFileName = "$project.appName-$project.ext.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
 dependencies {
-    runtime files(project.resourceDirs)
+    runtimeOnly files(project.resourceDirs)
     implementation project(":core")
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
@@ -67,14 +67,14 @@ task distRelease(type: Jar) {
         attributes 'Main-Class': project.mainClassName
     }
 
-    archiveFileName = "$project.appName.$extension"
+    archiveFileName = "$project.appName.$archiveExtension"
     destinationDirectory = file("$rootDir/distribution/output")
 }
 
 task zipRelease(type: Zip) {
     from distRelease
     from file("../distribution/files")
-    archiveFileName = "$project.distFileName.$extension"
+    archiveFileName = "$project.distFileName.$archiveExtension"
     destinationDirectory = file("$rootDir/distribution/output")
 }
 zipRelease.dependsOn distRelease

@@ -29,8 +29,8 @@ public class ContentDialog extends VisDialog {
 		centerWindow();
 	}
 
+    @SuppressWarnings("unchecked")
     public <T extends Actor> T getContent() {
-        //noinspection unchecked
         return (T)content;
     }
 }

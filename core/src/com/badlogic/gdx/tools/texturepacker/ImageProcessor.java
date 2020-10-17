@@ -40,8 +40,8 @@ public class ImageProcessor {
 	static private Pattern indexPattern = Pattern.compile("(.+)_(\\d+)$");
 
 	private final Settings settings;
-	private final HashMap<String, Rect> crcs = new HashMap();
-	private final Array<Rect> rects = new Array();
+	private final HashMap<String, Rect> crcs = new HashMap<>();
+	private final Array<Rect> rects = new Array<>();
 	private float scale = 1;
 	private TexturePacker.Resampling resampling = TexturePacker.Resampling.bicubic;
 

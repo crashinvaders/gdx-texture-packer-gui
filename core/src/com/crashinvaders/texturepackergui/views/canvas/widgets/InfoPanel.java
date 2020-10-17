@@ -12,7 +12,7 @@ import com.github.czyzby.lml.parser.impl.DefaultLmlParser;
 
 import java.util.Locale;
 
-public class InfoPanel extends Container {
+public class InfoPanel extends Container<Group> {
 
     private final I18NBundle i18nBundle = App.inst().getInterfaceService().getParser().getData().getDefaultI18nBundle();
     private final Label lblPages;

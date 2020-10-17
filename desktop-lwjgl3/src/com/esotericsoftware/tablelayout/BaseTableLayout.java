@@ -34,6 +34,7 @@ import java.util.List;
 
 /** Base layout functionality.
  * @author Nathan Sweet */
+@SuppressWarnings("unchecked")
 abstract public class BaseTableLayout<C, T extends C, L extends BaseTableLayout, K extends Toolkit<C, T, L>> {
 	static public final int CENTER = 1 << 0;
 	static public final int TOP = 1 << 1;

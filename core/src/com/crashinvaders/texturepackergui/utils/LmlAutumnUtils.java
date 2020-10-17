@@ -11,7 +11,7 @@ public class LmlAutumnUtils {
     public static <T extends Actor> T parseLml(InterfaceService interfaceService, String actionContainerName, ActionContainer actionContainer, FileHandle fileHandle) {
         boolean containerRegistered = registerActionContainer(interfaceService, actionContainerName, actionContainer);
 
-        //noinspection unchecked
+        @SuppressWarnings("unchecked")
         T actor = (T) interfaceService.getParser().parseTemplate(fileHandle).first();
 
         if (containerRegistered) {

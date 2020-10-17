@@ -31,6 +31,7 @@ package com.esotericsoftware.tablelayout;
  * size taking into consideration the size of the table or the widget in the cell. Some values may be only valid for use with
  * either call.
  * @author Nathan Sweet */
+@SuppressWarnings("unchecked")
 abstract public class Value {
 	/** Returns the value in the context of the specified table. */
 	abstract public float get (Object table);

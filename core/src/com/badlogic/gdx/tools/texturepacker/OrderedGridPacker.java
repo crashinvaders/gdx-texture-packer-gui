@@ -60,7 +60,7 @@ public class OrderedGridPacker implements Packer {
 		});
 		inputRects.reverse();
 
-		Array<Page> pages = new Array();
+		Array<Page> pages = new Array<>();
 		while (inputRects.size > 0) {
 			Page result = packPage(inputRects, cellWidth, cellHeight);
 			pages.add(result);
@@ -70,7 +70,7 @@ public class OrderedGridPacker implements Packer {
 
 	private Page packPage (Array<Rect> inputRects, int cellWidth, int cellHeight) {
 		Page page = new Page();
-		page.outputRects = new Array();
+		page.outputRects = new Array<>();
 
 		int maxWidth = settings.maxWidth, maxHeight = settings.maxHeight;
 		if (settings.edgePadding) {

@@ -8,6 +8,7 @@ import com.github.czyzby.lml.parser.tag.LmlTag;
 import com.github.czyzby.lml.util.LmlUtilities;
 
 public abstract class ContainerPadLmlAttribute implements LmlAttribute<Container<?>> {
+    @SuppressWarnings("unchecked")
     @Override
     public Class<Container<?>> getHandledType() {
         // Double cast as there were a problem with generics - SomeClass.class cannot be returned as

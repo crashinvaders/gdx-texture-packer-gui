@@ -112,7 +112,8 @@ public class Table extends JComponent {
 
 	/** Positions and sizes children of the Component being laid out using the cell associated with each child.
 	 * @see TableLayout#layout() */
-	public void layout () {
+	@Override
+	public void doLayout() {
 		layout.layout();
 	}
 

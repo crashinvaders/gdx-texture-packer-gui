@@ -9,10 +9,7 @@ import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.ThreadPrintStream;
 import org.apache.commons.io.IOUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -53,28 +50,26 @@ public class PackProcessingManager {
         origStdErr = System.err;
         ThreadPrintStream.replaceSystemOut();
 
-        for (final PackProcessingNode processingNode : processingNodes) {
-            executorService.submit(new Runnable() {
-                @Override
-                public void run() {
-                    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    ThreadPrintStream.setThreadLocalSystemOut(new PrintStream(outputStream));
-                    try {
-                        listener.onBegin(processingNode);
-                        processor.processPackage(processingNode);
-                        processingNode.setLog(outputStream.toString());
-                        listener.onSuccess(processingNode);
-                    } catch (Exception e) {
-                        String message = CommonUtils.fetchMessageStack(e);
-                        System.err.println("[text-red]Exception occurred:[] " + message);
-                        System.err.println("[text-red]Stack trace:[] ");
-                        e.printStackTrace();
-                        processingNode.setLog(outputStream.toString());
-                        listener.onError(processingNode, e);
-                    } finally {
-                        nodeProcessed(processingNode);
-                        IOUtils.closeQuietly(outputStream);
-                    }
+        for (int i = 0; i < processingNodes.size; i++) {
+            final PackProcessingNode processingNode = processingNodes.get(i);
+            executorService.submit(() -> {
+                final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ThreadPrintStream.setThreadLocalSystemOut(new PrintStream(outputStream));
+                try {
+                    listener.onBegin(processingNode);
+                    processor.processPackage(processingNode);
+                    processingNode.setLog(outputStream.toString());
+                    listener.onSuccess(processingNode);
+                } catch (Exception e) {
+                    String message = CommonUtils.fetchMessageStack(e);
+                    System.err.println("[text-red]Exception occurred:[] " + message);
+                    System.err.println("[text-red]Stack trace:[] ");
+                    e.printStackTrace();
+                    processingNode.setLog(outputStream.toString());
+                    listener.onError(processingNode, e);
+                } finally {
+                    nodeProcessed(processingNode);
+                    try { outputStream.close(); } catch (IOException ignore) { }
                 }
             });
         }
@@ -93,8 +88,8 @@ public class PackProcessingManager {
         System.setOut(origStdOut);
         System.setErr(origStdErr);
         // Print out each log to the output
-        for (PackProcessingNode node : processingNodes) {
-            System.out.println(node.getLog());
+        for (int i = 0; i < processingNodes.size; i++) {
+            System.out.println(processingNodes.get(i).getLog());
         }
         processingNodes.clear();
         processedCount.set(0);
@@ -112,49 +107,24 @@ public class PackProcessingManager {
 
         @Override
         public void onProcessingStarted() {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onProcessingStarted();
-                }
-            });
+            Gdx.app.postRunnable(() -> listener.onProcessingStarted());
         }
         @Override
         public void onProcessingFinished() {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onProcessingFinished();
-                }
-            });
+            Gdx.app.postRunnable(() -> listener.onProcessingFinished());
         }
 
         @Override
         public void onBegin(final PackProcessingNode node) {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onBegin(node);
-                }
-            });
+            Gdx.app.postRunnable(() -> listener.onBegin(node));
         }
         @Override
         public void onError(final PackProcessingNode node, final Exception e) {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onError(node, e);
-                }
-            });
+            Gdx.app.postRunnable(() -> listener.onError(node, e));
         }
         @Override
         public void onSuccess(final PackProcessingNode node) {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    listener.onSuccess(node);
-                }
-            });
+            Gdx.app.postRunnable(() -> listener.onSuccess(node));
         }
     }
 

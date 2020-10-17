@@ -43,6 +43,7 @@ public class ExtensionModuleRepositoryService {
         modulesDir.mkdirs();
 
         if (repoCacheFile.exists()) {
+            @SuppressWarnings("unchecked")
             Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, repoCacheFile);
             repositoryModules.clear();
             for (RepositoryModuleData moduleData : newArray) {
@@ -98,6 +99,7 @@ public class ExtensionModuleRepositoryService {
                             FileUtils.saveTextToFile(repoCacheFile, responseString);
 
                             // Update in-memory data
+                            @SuppressWarnings("unchecked")
                             Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, responseString);
                             repositoryModules.clear();
                             for (RepositoryModuleData moduleData : newArray) {

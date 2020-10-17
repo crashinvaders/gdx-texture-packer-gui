@@ -363,7 +363,7 @@ public class TexturePacker {
 			CommonUtils.sort(page.outputRects);
 			for (Rect rect : page.outputRects) {
 				writeRect(writer, page, rect, rect.name);
-				Array<Alias> aliases = new Array(rect.aliases.toArray());
+				Array<Alias> aliases = new Array<>(rect.aliases.toArray(new Alias[0]));
 				CommonUtils.sort(aliases);
 				for (Alias alias : aliases) {
 					Rect aliasRect = new Rect();

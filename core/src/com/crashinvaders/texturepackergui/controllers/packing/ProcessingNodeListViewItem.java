@@ -82,7 +82,7 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
         if (Strings.isEmpty(log)) return;
 
         VisDialog dialog = (VisDialog)App.inst().getInterfaceService().getParser().parseTemplate(Gdx.files.internal("lml/dialogPackingLog.lml")).first();
-        Container containerLog = dialog.findActor("containerLog");
+        Container<Actor> containerLog = dialog.findActor("containerLog");
         final VisScrollPane scrLog = dialog.findActor("scrLog");
         final Button btnCopyToClipboard = dialog.findActor("btnCopyToClipboard");
 
