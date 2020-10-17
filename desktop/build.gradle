@@ -11,7 +11,7 @@ compileJava.options.incremental = true
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
-project.ext.distFileName = "$project.appName-$project.version"
+project.ext.distFileName = "$project.appName-$project.ext.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
 dependencies {
