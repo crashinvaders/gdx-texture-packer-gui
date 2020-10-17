@@ -58,7 +58,6 @@ public class LoggerUtils {
         System.out.println("Version: " + AppConstants.version);
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
         System.out.println("JRE: " + System.getProperty("java.version") + " " + System.getProperty("java.vendor"));
-        System.out.println("CPU arch: " + System.getProperty("sun.cpu.isalist"));
     }
 
     public static void printGpuInfo() {
