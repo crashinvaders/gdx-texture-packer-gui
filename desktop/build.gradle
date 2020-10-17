@@ -11,7 +11,7 @@ compileJava.options.incremental = true
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
-project.ext.distFileName = "$project.appName-$project.ext.version"
+project.ext.distFileName = "$project.appName-$project.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
 dependencies {
@@ -67,14 +67,14 @@ task distRelease(type: Jar) {
         attributes 'Main-Class': project.mainClassName
     }
 
-    archiveFileName = "$project.appName.$archiveExtension"
+    archiveFileName = "$project.appName.$extension"
     destinationDirectory = file("$rootDir/distribution/output")
 }
 
 task zipRelease(type: Zip) {
     from distRelease
     from file("../distribution/files")
-    archiveFileName = "$project.distFileName.$archiveExtension"
+    archiveFileName = "$project.distFileName.$extension"
     destinationDirectory = file("$rootDir/distribution/output")
 }
 zipRelease.dependsOn distRelease
@@ -87,8 +87,9 @@ zipRelease.dependsOn distRelease
  *     1. Windows OS only.
  *     2. NSIS installed on your system and added to PATH (makensis.exe).
  *          https://sourceforge.net/projects/nsis/files/
- *     3. ZipDLL NSIS extension should be installed.
- *          http://nsis.sourceforge.net/ZipDLL_plug-in
+ *     3. NSISUnz plugin should be installed.
+ *          Extract "nsisunz\Release\nsisunz.dll" to "<NSIS_DIR>/Plugins/unicode/"
+ *          https://nsis.sourceforge.io/mediawiki/images/1/1c/Nsisunz.zip
  *     4. FileAssoc macros should be installed.
  *          Copy code from http://nsis.sourceforge.net/FileAssoc
  *          into file "FileAssoc.nsh" and put it under "<NSIS_DIR>/Include/"
@@ -97,8 +98,8 @@ zipRelease.dependsOn distRelease
  */
 task nsisInstaller(type: Exec) {
     if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
-        println 'NSIS installer can be created only on Windows.';
-        return;
+        println 'NSIS installer can be created only on Windows.'
+        return
     }
 
     workingDir '../distribution'

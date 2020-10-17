@@ -1,3 +1,5 @@
+Unicode True
+
 ;--------------------------------
 ;Include Modern UI
 
@@ -8,7 +10,6 @@
 ;--------------------------------
 ;Other DLLs
 
-  !include "ZipDLL.nsh"
   !include "FileAssoc.nsh"
 
 ;--------------------------------
@@ -54,10 +55,12 @@
 Section "GdxTexturePacker" AppInstall
 SectionIn RO
 
+  InitPluginsDir
+
   SetOutPath "$INSTDIR"
 
   File "output\${FILENAME}.zip"
-  ZipDLL::extractall "$INSTDIR\${FILENAME}.zip" "$INSTDIR"
+  nsisunz::UnzipToLog "$INSTDIR\${FILENAME}.zip" "$INSTDIR"
   Delete "$INSTDIR\${FILENAME}.zip"
   
   ;Store installation folder
