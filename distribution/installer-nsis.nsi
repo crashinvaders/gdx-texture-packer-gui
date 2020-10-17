@@ -16,7 +16,7 @@ Unicode True
 ;General
 
   ;Name and file
-  Name "GdxTexturePacker"
+  Name "GDX Texture Packer GUI"
   OutFile "output/${FILENAME}.exe"
 
   ;Default installation folder
