@@ -50,7 +50,7 @@ public class TexturePacker {
 	private final Settings settings;
 	private final Packer packer;
 	private final ImageProcessor imageProcessor;
-	private final Array<InputImage> inputImages = new Array();
+	private final Array<InputImage> inputImages = new Array<>();
 
 	private String rootPath;
 
@@ -92,8 +92,17 @@ public class TexturePacker {
 			rootPath = null;
 			return;
 		}
-		rootPath = rootDir.getAbsolutePath().replace('\\', '/');
+		try {
+			rootPath = rootDir.getCanonicalPath();
+		} catch (IOException ex) {
+			rootPath = rootDir.getAbsolutePath();
+		}
+		rootPath = rootPath.replace('\\', '/');
 		if (!rootPath.endsWith("/")) rootPath += "/";
+	}
+
+	public String getRootPath () {
+		return rootPath;
 	}
 
 	public void addImage (File file) {
@@ -184,21 +193,22 @@ public class TexturePacker {
 		String imageName = packFileNoExt.getName();
 
 		int fileIndex = 0;
-		for (Page page : pages) {
+		for (int p = 0, pn = pages.size; p < pn; p++) {
+			Page page = pages.get(p);
+
 			int width = page.width, height = page.height;
-			int paddingX = settings.paddingX;
-			int paddingY = settings.paddingY;
-			if (settings.duplicatePadding) {
-				paddingX /= 2;
-				paddingY /= 2;
-			}
-			width -= settings.paddingX;
-			height -= settings.paddingY;
+			int edgePadX = 0, edgePadY = 0;
 			if (settings.edgePadding) {
-				page.x = paddingX;
-				page.y = paddingY;
-				width += paddingX * 2;
-				height += paddingY * 2;
+				edgePadX = settings.paddingX;
+				edgePadY = settings.paddingY;
+				if (settings.duplicatePadding) {
+					edgePadX /= 2;
+					edgePadY /= 2;
+				}
+				page.x = edgePadX;
+				page.y = edgePadY;
+				width += edgePadX * 2;
+				height += edgePadY * 2;
 			}
 			if (settings.pot) {
 				width = MathUtils.nextPowerOfTwo(width);
@@ -226,11 +236,12 @@ public class TexturePacker {
 
 			if (!settings.silent) System.out.println("Writing " + canvas.getWidth() + "x" + canvas.getHeight() + ": " + outputFile);
 
-			for (Rect rect : page.outputRects) {
+			for (int r = 0, rn = page.outputRects.size; r < rn; r++) {
+				Rect rect = page.outputRects.get(r);
 				BufferedImage image = rect.getImage(imageProcessor);
 				int iw = image.getWidth();
 				int ih = image.getHeight();
-				int rectX = page.x + rect.x, rectY = page.y + page.height - rect.y - rect.height;
+				int rectX = page.x + rect.x, rectY = page.y + page.height - rect.y - (rect.height - settings.paddingY);
 				if (settings.duplicatePadding) {
 					int amountX = settings.paddingX / 2;
 					int amountY = settings.paddingY / 2;
@@ -368,12 +379,12 @@ public class TexturePacker {
 	private void writeRect (Writer writer, Page page, Rect rect, String name) throws IOException {
 		writer.write(Rect.getAtlasName(name, settings.flattenPaths) + "\n");
 		writer.write("  rotate: " + rect.rotated + "\n");
-		writer.write("  xy: " + (page.x + rect.x) + ", " + (page.y + page.height - rect.height - rect.y) + "\n");
+		writer.write("  xy: " + (page.x + rect.x) + ", " + (page.y + page.height - rect.y - (rect.height - settings.paddingY)) + "\n");
 
 		writer.write("  size: " + rect.regionWidth + ", " + rect.regionHeight + "\n");
 		if (rect.splits != null) {
 			writer.write("  split: " //
-				+ rect.splits[0] + ", " + rect.splits[1] + ", " + rect.splits[2] + ", " + rect.splits[3] + "\n");
+					+ rect.splits[0] + ", " + rect.splits[1] + ", " + rect.splits[2] + ", " + rect.splits[3] + "\n");
 		}
 		if (rect.pads != null) {
 			if (rect.splits == null) writer.write("  split: 0, 0, 0, 0\n");

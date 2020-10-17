@@ -69,7 +69,12 @@ public class ImageProcessor {
 		if (image == null) throw new RuntimeException("Unable to read image: " + file);
 
 		if (name == null || name.trim().length() == 0) {
-			name = file.getAbsolutePath().replace('\\', '/');
+			try {
+				name = file.getCanonicalPath();
+			} catch (IOException ex) {
+				name = file.getAbsolutePath();
+			}
+			name = name.replace('\\', '/');
 
 			// Strip root dir off front of image path.
 			if (rootPath != null) {

@@ -182,7 +182,10 @@ public class PagePreviewCanvas extends Stack {
 //					infoPanel.setPagesAmount(atlas.getPages().size);
 //					infoPanel.updatePageInfo();
 
-				} catch (GdxRuntimeException ex) {
+				} catch (Exception ex) {
+					System.err.println("Failed to load an atlas preview for the file: " + packFile.toString());
+					ex.printStackTrace(System.err);
+
 					if (atlas != null) {
 						atlas.dispose();
 						atlas = null;

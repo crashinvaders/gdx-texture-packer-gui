@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,6 +16,8 @@
 
 package com.badlogic.gdx.tools.texturepacker;
 
+import java.util.Comparator;
+
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Packer;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Page;
@@ -23,8 +25,6 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Rect;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Sort;
-
-import java.util.Comparator;
 
 /** Packs pages of images using the maximal rectangles bin packing algorithm by Jukka Jylänki. A brute force binary search is
  * used to pack into the smallest bin possible.
@@ -36,7 +36,7 @@ public class MaxRectsPacker implements Packer {
 	private final Sort sort = new Sort();
 
 	private final Comparator<Rect> rectComparator = new Comparator<Rect>() {
-		public int compare(Rect o1, Rect o2) {
+		public int compare (Rect o1, Rect o2) {
 			return Rect.getAtlasName(o1.name, settings.flattenPaths).compareTo(Rect.getAtlasName(o2.name, settings.flattenPaths));
 		}
 	};
@@ -49,7 +49,8 @@ public class MaxRectsPacker implements Packer {
 	}
 
 	public Array<Page> pack (Array<Rect> inputRects) {
-		for (int i = 0, nn = inputRects.size; i < nn; i++) {
+		int n = inputRects.size;
+		for (int i = 0; i < n; i++) {
 			Rect rect = inputRects.get(i);
 			rect.width += settings.paddingX;
 			rect.height += settings.paddingY;
@@ -88,17 +89,17 @@ public class MaxRectsPacker implements Packer {
 	private Page packPage (Array<Rect> inputRects) {
 		int paddingX = settings.paddingX, paddingY = settings.paddingY;
 		float maxWidth = settings.maxWidth, maxHeight = settings.maxHeight;
-		int edgePaddingX = 0, edgePaddingY = 0;
+		boolean edgePadX = false, edgePadY = false;
 		if (settings.edgePadding) {
-			if (settings.duplicatePadding) { // If duplicatePadding, edges get only half padding.
+			if (settings.duplicatePadding) {
 				maxWidth -= paddingX;
 				maxHeight -= paddingY;
 			} else {
 				maxWidth -= paddingX * 2;
 				maxHeight -= paddingY * 2;
-				edgePaddingX = paddingX;
-				edgePaddingY = paddingY;
 			}
+			edgePadX = paddingX > 0;
+			edgePadY = paddingY > 0;
 		}
 
 		// Find min size.
@@ -110,43 +111,51 @@ public class MaxRectsPacker implements Packer {
 			minHeight = Math.min(minHeight, height);
 			if (settings.rotation) {
 				if ((width > maxWidth || height > maxHeight) && (width > maxHeight || height > maxWidth)) {
-					String paddingMessage = (edgePaddingX > 0 || edgePaddingY > 0) ? (" and edge padding " + paddingX + "," + paddingY)
-						: "";
+					String paddingMessage = (edgePadX || edgePadY) ? (" and edge padding " + paddingX + "*2," + paddingY + "*2") : "";
 					throw new RuntimeException("Image does not fit with max page size " + settings.maxWidth + "x" + settings.maxHeight
-						+ paddingMessage + ": " + rect.name + "[" + width + "," + height + "]");
+							+ paddingMessage + ": " + rect.name + "[" + width + "," + height + "]");
 				}
 			} else {
 				if (width > maxWidth) {
-					String paddingMessage = edgePaddingX > 0 ? (" and X edge padding " + paddingX) : "";
+					String paddingMessage = edgePadX ? (" and X edge padding " + paddingX + "*2") : "";
 					throw new RuntimeException("Image does not fit with max page width " + settings.maxWidth + paddingMessage + ": "
-						+ rect.name + "[" + width + "," + height + "]");
+							+ rect.name + "[" + width + "," + height + "]");
 				}
 				if (height > maxHeight && (!settings.rotation || width > maxHeight)) {
-					String paddingMessage = edgePaddingY > 0 ? (" and Y edge padding " + paddingY) : "";
+					String paddingMessage = edgePadY ? (" and Y edge padding " + paddingY + "*2") : "";
 					throw new RuntimeException("Image does not fit in max page height " + settings.maxHeight + paddingMessage + ": "
-						+ rect.name + "[" + width + "," + height + "]");
+							+ rect.name + "[" + width + "," + height + "]");
 				}
 			}
 		}
 		minWidth = Math.max(minWidth, settings.minWidth);
 		minHeight = Math.max(minHeight, settings.minHeight);
 
-		if (!settings.silent) System.out.print("Packing");
+		// BinarySearch uses the max size. Rects are packed with right and top padding, so the max size is increased to match.
+		// After packing the padding is subtracted from the page size.
+		int adjustX = paddingX, adjustY = paddingY;
+		if (settings.edgePadding) {
+			if (settings.duplicatePadding) {
+				adjustX -= paddingX;
+				adjustY -= paddingY;
+			} else {
+				adjustX -= paddingX * 2;
+				adjustY -= paddingY * 2;
+			}
+		}
 
-		//FIXME These two lines cause wrong page size in some cases.
-		//FIXME Resolve https://github.com/libgdx/libgdx/commit/68264cb9f90a39f82a06b88dc3f5f295440e3ceb
-//		edgePaddingX = Math.max(0, edgePaddingX - settings.paddingX);
-//		edgePaddingY = Math.max(0, edgePaddingY - settings.paddingY);
+		if (!settings.silent) System.out.print("Packing");
 
 		// Find the minimal page size that fits all rects.
 		Page bestResult = null;
 		if (settings.square) {
 			int minSize = Math.max(minWidth, minHeight);
 			int maxSize = Math.min(settings.maxWidth, settings.maxHeight);
-			BinarySearch sizeSearch = new BinarySearch(minSize, maxSize, settings.fast ? 25 : 15, settings.pot, settings.multipleOfFour);
+			BinarySearch sizeSearch = new BinarySearch(minSize, maxSize, settings.fast ? 25 : 15, settings.pot,
+					settings.multipleOfFour);
 			int size = sizeSearch.reset(), i = 0;
 			while (size != -1) {
-				Page result = packAtSize(true, size - edgePaddingX, size - edgePaddingY, inputRects);
+				Page result = packAtSize(true, size + adjustX, size + adjustY, inputRects);
 				if (!settings.silent) {
 					if (++i % 70 == 0) System.out.println();
 					System.out.print(".");
@@ -156,20 +165,22 @@ public class MaxRectsPacker implements Packer {
 			}
 			if (!settings.silent) System.out.println();
 			// Rects don't fit on one page. Fill a whole page and return.
-			if (bestResult == null) bestResult = packAtSize(false, maxSize - edgePaddingX, maxSize - edgePaddingY, inputRects);
+			if (bestResult == null) bestResult = packAtSize(false, maxSize + adjustX, maxSize + adjustY, inputRects);
 			sort.sort(bestResult.outputRects, rectComparator);
-			bestResult.width = Math.max(bestResult.width, bestResult.height);
-			bestResult.height = Math.max(bestResult.width, bestResult.height);
+			bestResult.width = Math.max(bestResult.width, bestResult.height) - paddingX;
+			bestResult.height = Math.max(bestResult.width, bestResult.height) - paddingY;
 			return bestResult;
 		} else {
-			BinarySearch widthSearch = new BinarySearch(minWidth, settings.maxWidth, settings.fast ? 25 : 15, settings.pot, settings.multipleOfFour);
-			BinarySearch heightSearch = new BinarySearch(minHeight, settings.maxHeight, settings.fast ? 25 : 15, settings.pot, settings.multipleOfFour);
+			BinarySearch widthSearch = new BinarySearch(minWidth, settings.maxWidth, settings.fast ? 25 : 15, settings.pot,
+					settings.multipleOfFour);
+			BinarySearch heightSearch = new BinarySearch(minHeight, settings.maxHeight, settings.fast ? 25 : 15, settings.pot,
+					settings.multipleOfFour);
 			int width = widthSearch.reset(), i = 0;
 			int height = settings.square ? width : heightSearch.reset();
 			while (true) {
 				Page bestWidthResult = null;
 				while (width != -1) {
-					Page result = packAtSize(true, width - edgePaddingX, height - edgePaddingY, inputRects);
+					Page result = packAtSize(true, width + adjustX, height + adjustY, inputRects);
 					if (!settings.silent) {
 						if (++i % 70 == 0) System.out.println();
 						System.out.print(".");
@@ -187,8 +198,10 @@ public class MaxRectsPacker implements Packer {
 			if (!settings.silent) System.out.println();
 			// Rects don't fit on one page. Fill a whole page and return.
 			if (bestResult == null)
-				bestResult = packAtSize(false, settings.maxWidth - edgePaddingX, settings.maxHeight - edgePaddingY, inputRects);
+				bestResult = packAtSize(false, settings.maxWidth + adjustX, settings.maxHeight + adjustY, inputRects);
 			sort.sort(bestResult.outputRects, rectComparator);
+			bestResult.width -= paddingX;
+			bestResult.height -= paddingY;
 			return bestResult;
 		}
 	}
@@ -399,22 +412,22 @@ public class MaxRectsPacker implements Packer {
 
 			Rect newNode = null;
 			switch (method) {
-			case BestShortSideFit:
-				newNode = findPositionForNewNodeBestShortSideFit(width, height, rotatedWidth, rotatedHeight, rotate);
-				break;
-			case BottomLeftRule:
-				newNode = findPositionForNewNodeBottomLeft(width, height, rotatedWidth, rotatedHeight, rotate);
-				break;
-			case ContactPointRule:
-				newNode = findPositionForNewNodeContactPoint(width, height, rotatedWidth, rotatedHeight, rotate);
-				newNode.score1 = -newNode.score1; // Reverse since we are minimizing, but for contact point score bigger is better.
-				break;
-			case BestLongSideFit:
-				newNode = findPositionForNewNodeBestLongSideFit(width, height, rotatedWidth, rotatedHeight, rotate);
-				break;
-			case BestAreaFit:
-				newNode = findPositionForNewNodeBestAreaFit(width, height, rotatedWidth, rotatedHeight, rotate);
-				break;
+				case BestShortSideFit:
+					newNode = findPositionForNewNodeBestShortSideFit(width, height, rotatedWidth, rotatedHeight, rotate);
+					break;
+				case BottomLeftRule:
+					newNode = findPositionForNewNodeBottomLeft(width, height, rotatedWidth, rotatedHeight, rotate);
+					break;
+				case ContactPointRule:
+					newNode = findPositionForNewNodeContactPoint(width, height, rotatedWidth, rotatedHeight, rotate);
+					newNode.score1 = -newNode.score1; // Reverse since we are minimizing, but for contact point score bigger is better.
+					break;
+				case BestLongSideFit:
+					newNode = findPositionForNewNodeBestLongSideFit(width, height, rotatedWidth, rotatedHeight, rotate);
+					break;
+				case BestAreaFit:
+					newNode = findPositionForNewNodeBestAreaFit(width, height, rotatedWidth, rotatedHeight, rotate);
+					break;
 			}
 
 			// Cannot fit the current rectangle.
@@ -470,7 +483,7 @@ public class MaxRectsPacker implements Packer {
 		}
 
 		private Rect findPositionForNewNodeBestShortSideFit (int width, int height, int rotatedWidth, int rotatedHeight,
-			boolean rotate) {
+															 boolean rotate) {
 			Rect bestNode = new Rect();
 			bestNode.score1 = Integer.MAX_VALUE;
 
@@ -500,7 +513,7 @@ public class MaxRectsPacker implements Packer {
 					int flippedLongSideFit = Math.max(flippedLeftoverHoriz, flippedLeftoverVert);
 
 					if (flippedShortSideFit < bestNode.score1
-						|| (flippedShortSideFit == bestNode.score1 && flippedLongSideFit < bestNode.score2)) {
+							|| (flippedShortSideFit == bestNode.score1 && flippedLongSideFit < bestNode.score2)) {
 						bestNode.x = freeRectangles.get(i).x;
 						bestNode.y = freeRectangles.get(i).y;
 						bestNode.width = rotatedWidth;
@@ -516,7 +529,7 @@ public class MaxRectsPacker implements Packer {
 		}
 
 		private Rect findPositionForNewNodeBestLongSideFit (int width, int height, int rotatedWidth, int rotatedHeight,
-			boolean rotate) {
+															boolean rotate) {
 			Rect bestNode = new Rect();
 
 			bestNode.score2 = Integer.MAX_VALUE;
@@ -561,7 +574,7 @@ public class MaxRectsPacker implements Packer {
 		}
 
 		private Rect findPositionForNewNodeBestAreaFit (int width, int height, int rotatedWidth, int rotatedHeight,
-			boolean rotate) {
+														boolean rotate) {
 			Rect bestNode = new Rect();
 
 			bestNode.score1 = Integer.MAX_VALUE; // best area fit, score2 is best short side fit
@@ -629,7 +642,7 @@ public class MaxRectsPacker implements Packer {
 		}
 
 		private Rect findPositionForNewNodeContactPoint (int width, int height, int rotatedWidth, int rotatedHeight,
-			boolean rotate) {
+														 boolean rotate) {
 
 			Rect bestNode = new Rect();
 			bestNode.score1 = -1; // best contact score
@@ -667,7 +680,7 @@ public class MaxRectsPacker implements Packer {
 		private boolean splitFreeNode (Rect freeNode, Rect usedNode) {
 			// Test with SAT if the rectangles even intersect.
 			if (usedNode.x >= freeNode.x + freeNode.width || usedNode.x + usedNode.width <= freeNode.x
-				|| usedNode.y >= freeNode.y + freeNode.height || usedNode.y + usedNode.height <= freeNode.y) return false;
+					|| usedNode.y >= freeNode.y + freeNode.height || usedNode.y + usedNode.height <= freeNode.y) return false;
 
 			if (usedNode.x < freeNode.x + freeNode.width && usedNode.x + usedNode.width > freeNode.x) {
 				// New node at the top side of the used node.
