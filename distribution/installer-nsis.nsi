@@ -16,7 +16,7 @@ Unicode True
 ;General
 
   ;Name and file
-  Name "GDX Texture Packer GUI"
+  Name "GDX Texture Packer"
   OutFile "output/${FILENAME}.exe"
 
   ;Default installation folder
@@ -52,7 +52,7 @@ Unicode True
 ;--------------------------------
 ;Installer Sections
 
-Section "GdxTexturePacker" AppInstall
+Section "Main application" AppInstall
 SectionIn RO
 
   InitPluginsDir
@@ -107,7 +107,7 @@ Section "Uninstall"
   ;Legacy link files
   Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
   Delete "$DESKTOP\GdxTexturePacker.lnk"
-  ;Actual link files
+  ;Modern link files
   Delete "$SMPROGRAMS\GDX Texture Packer.lnk"
   Delete "$DESKTOP\GDX Texture Packer.lnk"
 
@@ -122,9 +122,9 @@ SectionEnd
 ;Descriptions
 
   ;Language strings
-  LangString DESC_AppInstall ${LANG_ENGLISH} "Installs the GdxTexturePacker application."
-  LangString DESC_StartMenuShortcuts ${LANG_ENGLISH} "Places a GdxTexturePacker folder containing shortcuts in the start menu."
-  LangString DESC_DesktopShortcuts ${LANG_ENGLISH} "Places a GdxTexturePacker shortcut on the desktop."
+  LangString DESC_AppInstall ${LANG_ENGLISH} "Installs the GDX Texture Packer application."
+  LangString DESC_StartMenuShortcuts ${LANG_ENGLISH} "Places a GDX Texture Packer folder containing shortcuts in the start menu."
+  LangString DESC_DesktopShortcuts ${LANG_ENGLISH} "Places a GDX Texture Packer shortcut on the desktop."
 
   ;Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
