@@ -65,6 +65,6 @@ public class LoggerUtils {
 
         System.out.println("GPU: " + Gdx.gl.glGetString( GL20.GL_RENDERER));
         System.out.println("OpenGL vendor: " + Gdx.gl.glGetString( GL20.GL_VENDOR));
-        System.out.println("OpenGL version = " + Gdx.gl.glGetString( GL20.GL_VERSION));
+        System.out.println("OpenGL version: " + Gdx.gl.glGetString( GL20.GL_VERSION));
     }
 }
