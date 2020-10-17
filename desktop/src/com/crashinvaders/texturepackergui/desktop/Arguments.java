@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.desktoplwjgl3;
+package com.crashinvaders.texturepackergui.desktop;
 
 import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;

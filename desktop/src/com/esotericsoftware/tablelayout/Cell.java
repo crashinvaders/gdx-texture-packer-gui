@@ -117,6 +117,7 @@ public class Cell<C> {
 	}
 
 	/** Sets the widget in this cell and adds the widget to the cell's table. If null, removes any current widget. */
+	@SuppressWarnings("unchecked")
 	public Cell setWidget (C widget) {
 		layout.toolkit.setWidget(layout, this, widget);
 		return this;

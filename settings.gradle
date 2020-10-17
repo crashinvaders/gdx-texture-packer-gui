@@ -1,1 +1,1 @@
-include 'core', 'desktop', 'desktop-lwjgl3'
+include 'core', 'desktop'

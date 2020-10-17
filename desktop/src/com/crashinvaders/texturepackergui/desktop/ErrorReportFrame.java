@@ -1,8 +1,9 @@
-package com.crashinvaders.texturepackergui.desktoplwjgl3.errorreport;
+package com.crashinvaders.texturepackergui.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfigurationX;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.desktoplwjgl3.launchers.awt.LwjglCanvasConfiguration;
 import com.esotericsoftware.tablelayout.swing.Table;
 import org.apache.commons.io.IOUtils;
 
@@ -10,7 +11,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_OWNER;
 import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
@@ -18,14 +22,14 @@ import static com.crashinvaders.texturepackergui.AppConstants.GITHUB_REPO;
 public class ErrorReportFrame extends JDialog {
     private static final String STRING_ENCODING = "UTF-8";
 
-    public ErrorReportFrame(LwjglCanvasConfiguration config, final Throwable ex) {
+    public ErrorReportFrame(Lwjgl3ApplicationConfigurationX config, final Throwable ex) {
         super((Dialog)null);
 
         // Set icon.
         try {
-            if (config.iconFilePath != null) {
+            if (config.getWindowIconFileType() == Files.FileType.Classpath && config.getWindowIconPaths() != null) {
                 setIconImage(ImageIO.read((ErrorReportFrame.class.getClassLoader()
-                        .getResourceAsStream(config.iconFilePath))));
+                        .getResourceAsStream(config.getWindowIconPaths()[0]))));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +116,6 @@ public class ErrorReportFrame extends JDialog {
 
     private static String retrieveAppLog() {
         try {
-
             if (AppConstants.logFile != null && AppConstants.logFile.exists()) {
                 return IOUtils.toString(new FileInputStream(AppConstants.logFile.toString()), STRING_ENCODING).trim();
             } else {

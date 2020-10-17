@@ -1,4 +1,4 @@
-package com.crashinvaders.texturepackergui.desktoplwjgl3;
+package com.crashinvaders.texturepackergui.desktop;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Timer;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.DragDropManager;
 import com.crashinvaders.texturepackergui.controllers.GlobalActions;

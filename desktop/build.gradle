@@ -17,7 +17,7 @@ project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 dependencies {
     runtimeOnly files(project.resourceDirs)
     implementation project(":core")
-    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+    implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     implementation "com.github.czyzby:gdx-autumn-fcs:$lmlVersion"
