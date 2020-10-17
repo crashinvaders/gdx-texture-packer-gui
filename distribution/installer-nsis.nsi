@@ -70,7 +70,7 @@ SectionIn RO
   WriteUninstaller "$INSTDIR\Uninstall.exe"
 
   ;Create files association (http://nsis.sourceforge.net/FileAssoc)
-  !insertmacro APP_ASSOCIATE "tpproj" "GdxTexturePacker.Project" "GDX Texture Packer project" "$INSTDIR\icon.ico,0" "Open with GDX Texture Packer" "$INSTDIR\launcher.bat $\"%1$\""
+  !insertmacro APP_ASSOCIATE "tpproj" "GdxTexturePacker.Project" "GDX Texture Packer project" "$INSTDIR\icon.ico,0" "Open with GDX Texture Packer" "$INSTDIR\launcher_win.bat $\"%1$\""
 
   ;Delete legacy symlink files
   IfFileExists "$SMPROGRAMS\GdxTexturePacker.lnk" DeleteOldSymlinkPrograms

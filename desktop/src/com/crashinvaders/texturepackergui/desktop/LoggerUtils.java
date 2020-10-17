@@ -58,7 +58,6 @@ public class LoggerUtils {
         System.out.println("Version: " + AppConstants.version);
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
         System.out.println("JRE: " + System.getProperty("java.version") + " " + System.getProperty("java.vendor"));
-        System.out.println("CPU arch: " + System.getProperty("sun.cpu.isalist"));
     }
 
     public static void printGpuInfo() {
@@ -66,6 +65,6 @@ public class LoggerUtils {
 
         System.out.println("GPU: " + Gdx.gl.glGetString( GL20.GL_RENDERER));
         System.out.println("OpenGL vendor: " + Gdx.gl.glGetString( GL20.GL_VENDOR));
-        System.out.println("OpenGL version = " + Gdx.gl.glGetString( GL20.GL_VERSION));
+        System.out.println("OpenGL version: " + Gdx.gl.glGetString( GL20.GL_VERSION));
     }
 }
