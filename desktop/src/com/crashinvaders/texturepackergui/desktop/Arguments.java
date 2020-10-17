@@ -9,9 +9,6 @@ public class Arguments {
     @Argument
     public File project;
 
-    @Option(name = "-softopengl")
-    public boolean softOpenGL;
-
     @Option(name = "-debug")
     public boolean debug;
 }
