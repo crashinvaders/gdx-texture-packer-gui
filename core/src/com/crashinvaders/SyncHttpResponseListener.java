@@ -14,41 +14,21 @@ public abstract class SyncHttpResponseListener implements HttpResponseListener {
         try {
             handleResponseAsync(httpResponse);
         } catch (final Exception e) {
-            Gdx.app.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    onFailed(e);
-                }
-            });
+            Gdx.app.postRunnable(() -> onFailed(e));
             return;
         }
 
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                handleResponseSync(httpResponse);
-            }
-        });
+        Gdx.app.postRunnable(() -> handleResponseSync(httpResponse));
     }
 
     @Override
     public void failed(final Throwable t) {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                onFailed(t);
-            }
-        });
+        Gdx.app.postRunnable(() -> onFailed(t));
     }
 
     @Override
     public void cancelled() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                onCancelled();
-            }
-        });
+        Gdx.app.postRunnable(() -> onCancelled());
     }
 
     /** Called in an async thread.
