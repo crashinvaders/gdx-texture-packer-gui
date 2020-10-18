@@ -12,11 +12,11 @@ import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
 import java.util.Locale;
 
-public class TinifyCompressingProcessor implements PackProcessor {
+public class TinifyCompressionProcessor implements PackProcessor {
 
     private final TinifyService tinifyService;
 
-    public TinifyCompressingProcessor(TinifyService tinifyService) {
+    public TinifyCompressionProcessor(TinifyService tinifyService) {
         this.tinifyService = tinifyService;
     }
 

@@ -94,6 +94,9 @@ public class PngFileTypeModel extends FileTypeModel {
                 case PNG8:
                     compModel = new Png8CompressionModel();
                     break;
+                case PNGQUANT:
+                    compModel = new PngQuantCompressionModel();
+                    break;
                 default:
                     Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compType);
             }

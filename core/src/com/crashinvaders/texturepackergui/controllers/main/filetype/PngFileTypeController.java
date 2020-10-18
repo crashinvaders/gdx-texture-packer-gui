@@ -115,6 +115,9 @@ public class PngFileTypeController implements FileTypeController {
                 case PNG8:
                     model.setCompression(new Png8CompressionModel());
                     break;
+                case PNGQUANT:
+                    model.setCompression(new PngQuantCompressionModel());
+                    break;
                 default:
                     Gdx.app.error(TAG, "Unexpected compression type: " + compType);
                     model.setCompression(null);
@@ -142,6 +145,9 @@ public class PngFileTypeController implements FileTypeController {
             case PNG8:
                 interfaceService.showDialog(Png8CompDialogController.class);
                 break;
+//            case PNGQUANT:
+//                //TODO Implement it
+//                break;
             default:
                 Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
         }

@@ -14,7 +14,7 @@ import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
 import java.util.Locale;
 
-public class Png8CompressingProcessor implements PackProcessor {
+public class Png8CompressionProcessor implements PackProcessor {
 
     @Override
     public void processPackage(PackProcessingNode node) throws Exception {
