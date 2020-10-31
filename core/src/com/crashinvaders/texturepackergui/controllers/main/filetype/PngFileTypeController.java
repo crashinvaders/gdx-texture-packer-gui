@@ -6,10 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
-import com.crashinvaders.texturepackergui.controllers.Png8CompDialogController;
-import com.crashinvaders.texturepackergui.controllers.PngtasticCompDialogController;
-import com.crashinvaders.texturepackergui.controllers.TinifyCompDialogController;
-import com.crashinvaders.texturepackergui.controllers.ZopfliCompDialogController;
+import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.main.WidgetData;
 import com.crashinvaders.texturepackergui.controllers.model.compression.*;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
@@ -112,11 +109,11 @@ public class PngFileTypeController implements FileTypeController {
                 case TINY_PNG:
                     model.setCompression(new TinyPngCompressionModel());
                     break;
-                case PNG8:
+                case TE_PNG8:
                     model.setCompression(new Png8CompressionModel());
                     break;
                 case PNGQUANT:
-                    model.setCompression(new PngQuantCompressionModel());
+                    model.setCompression(new PngquantCompressionModel());
                     break;
                 default:
                     Gdx.app.error(TAG, "Unexpected compression type: " + compType);
@@ -142,12 +139,12 @@ public class PngFileTypeController implements FileTypeController {
             case TINY_PNG:
                 interfaceService.showDialog(TinifyCompDialogController.class);
                 break;
-            case PNG8:
-                interfaceService.showDialog(Png8CompDialogController.class);
+            case TE_PNG8:
+                interfaceService.showDialog(TePng8CompDialogController.class);
                 break;
-//            case PNGQUANT:
-//                //TODO Implement it
-//                break;
+            case PNGQUANT:
+                interfaceService.showDialog(PngquantCompDialogController.class);
+                break;
             default:
                 Gdx.app.error(TAG, "Unexpected PngCompressionType: " + compression.getType(), new IllegalStateException());
         }

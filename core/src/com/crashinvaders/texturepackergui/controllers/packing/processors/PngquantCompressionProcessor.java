@@ -7,7 +7,7 @@ import com.badlogicgames.libimagequant.*;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.PngQuantCompressionModel;
+import com.crashinvaders.texturepackergui.controllers.model.compression.PngquantCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.IndexedPng;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
@@ -15,9 +15,8 @@ import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
 import java.io.OutputStream;
 import java.util.Locale;
-import java.util.zip.Deflater;
 
-public class ImageQuantCompressionProcessor implements PackProcessor {
+public class PngquantCompressionProcessor implements PackProcessor {
 
     private static boolean nativeLibLoaded = false;
 
@@ -32,9 +31,9 @@ public class ImageQuantCompressionProcessor implements PackProcessor {
 
         if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.PNGQUANT) return;
 
-        System.out.println("ImageQuant compression started");
+        System.out.println("Pngquant compression started");
 
-        PngQuantCompressionModel compModel = fileType.getCompression();
+        PngquantCompressionModel compModel = fileType.getCompression();
 
         float compressionRateSum = 0f;
         {
@@ -42,16 +41,27 @@ public class ImageQuantCompressionProcessor implements PackProcessor {
                             Gdx.files.absolute(pack.getOutputDir()).child(pack.getCanonicalFilename()),
                             Gdx.files.absolute(pack.getOutputDir()), false);
             for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
-                Pixmap pm = null;
+                Pixmap pixmap = null;
                 try {
                     long preCompressedSize = page.textureFile.length();
-                    pm = new Pixmap(page.textureFile);
+                    pixmap = new Pixmap(page.textureFile);
 
-                    QuantizedData quantizedData = quantizePixmap(pm, compModel.getMaxColors(), compModel.getMinQuality(), compModel.getMaxQuality());
+                    QuantizedData quantizedData = quantizePixmap(
+                            pixmap,
+                            compModel.getMaxColors(),
+                            compModel.getMinQuality(),
+                            compModel.getMaxQuality(),
+                            compModel.isDitheringEnabled());
                     System.out.println("Page \"" + page.textureFile.name() + "\" quantized with " + quantizedData.palette.length + " colors.");
 
                     try (OutputStream os = page.textureFile.write(false)) {
-                        IndexedPng.write(os, pm.getWidth(), pm.getHeight(), quantizedData.palette, quantizedData.pixelIndices, compModel.getDeflateLevel());
+                        IndexedPng.write(
+                                os,
+                                pixmap.getWidth(),
+                                pixmap.getHeight(),
+                                quantizedData.palette,
+                                quantizedData.pixelIndices,
+                                compModel.getDeflateLevel());
                     }
 
                     long postCompressedSize = page.textureFile.length();
@@ -60,8 +70,8 @@ public class ImageQuantCompressionProcessor implements PackProcessor {
 
                     System.out.printf(Locale.US, "%s compressed for %+.2f%%%n", page.textureFile.name(), pageCompression*100f);
                 } finally {
-                    if (pm != null) {
-                        pm.dispose();
+                    if (pixmap != null) {
+                        pixmap.dispose();
                     }
                 }
             }
@@ -71,7 +81,7 @@ public class ImageQuantCompressionProcessor implements PackProcessor {
         System.out.println("PNG8 compression finished");
     }
 
-    private static QuantizedData quantizePixmap(Pixmap pixmap, int maxColors, int minQuality, int maxQuality) {
+    private static QuantizedData quantizePixmap(Pixmap pixmap, int maxColors, int minQuality, int maxQuality, boolean useDithering) {
         if (!nativeLibLoaded) {
             new SharedLibraryLoader().load("imagequant-java");
             nativeLibLoaded = true;
@@ -81,7 +91,7 @@ public class ImageQuantCompressionProcessor implements PackProcessor {
         int height = pixmap.getHeight();
         int size = width * height;
 
-        // All the image pixels written as R0, G0, B0, A0, R1, G1, ... component bytes.
+        // Collect all the image pixels written as R0, G0, B0, A0, R1, G1, ... component bytes.
         byte[] rawPixels = new byte[size * 4];
         for (int i = 0; i < size; i++) {
             int x = i % width;
@@ -98,6 +108,10 @@ public class ImageQuantCompressionProcessor implements PackProcessor {
         liqAttribute.setQuality(minQuality, maxQuality);
         LiqImage liqImage = new LiqImage(liqAttribute, rawPixels, width, height, 0);
         LiqResult liqResult = liqImage.quantize();
+
+        if (useDithering) {
+            liqResult.setDitheringLevel(0.5f);
+        }
 
         byte[] quantizedPixels = new byte[size];
         liqImage.remap(liqResult, quantizedPixels);

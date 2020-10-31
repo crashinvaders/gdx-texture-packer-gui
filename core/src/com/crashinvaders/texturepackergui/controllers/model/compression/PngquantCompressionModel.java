@@ -7,14 +7,15 @@ import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 import java.io.StringWriter;
 import java.util.zip.Deflater;
 
-public class PngQuantCompressionModel extends PngCompressionModel {
+public class PngquantCompressionModel extends PngCompressionModel {
 
     private int deflateLevel = Deflater.BEST_COMPRESSION;
     private int maxColors = 256;
     private int minQuality = 65;
     private int maxQuality = 80;
+    private boolean ditheringEnabled = false;
 
-    public PngQuantCompressionModel() {
+    public PngquantCompressionModel() {
         super(PngCompressionType.PNGQUANT);
     }
 
@@ -50,6 +51,14 @@ public class PngQuantCompressionModel extends PngCompressionModel {
         this.maxQuality = maxQuality;
     }
 
+    public boolean isDitheringEnabled() {
+        return ditheringEnabled;
+    }
+
+    public void setDitheringEnabled(boolean ditheringEnabled) {
+        this.ditheringEnabled = ditheringEnabled;
+    }
+
     @Override
     public String serializeState() {
         StringWriter buffer = new StringWriter();
@@ -61,6 +70,7 @@ public class PngQuantCompressionModel extends PngCompressionModel {
             json.writeValue("maxColors", maxColors);
             json.writeValue("minQuality", minQuality);
             json.writeValue("maxQuality", maxQuality);
+            json.writeValue("dithering", ditheringEnabled);
             json.writeObjectEnd();
             return buffer.toString();
         } finally {
@@ -77,10 +87,11 @@ public class PngQuantCompressionModel extends PngCompressionModel {
         minQuality = jsonValue.getInt("maxColors", maxColors);
         minQuality = jsonValue.getInt("minQuality", minQuality);
         maxQuality = jsonValue.getInt("maxQuality", maxQuality);
+        ditheringEnabled = jsonValue.getBoolean("dithering", ditheringEnabled);
     }
 
     @Override
     public int computeStateHash() {
-        return StateHashUtils.computeHash(super.computeStateHash(), deflateLevel, maxColors, minQuality, maxQuality);
+        return StateHashUtils.computeHash(super.computeStateHash(), deflateLevel, maxColors, minQuality, maxQuality, ditheringEnabled);
     }
 }

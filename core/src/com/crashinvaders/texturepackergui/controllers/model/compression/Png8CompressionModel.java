@@ -13,7 +13,7 @@ public class Png8CompressionModel extends PngCompressionModel {
     private boolean dithering = true;
     
     public Png8CompressionModel() {
-        super(PngCompressionType.PNG8);
+        super(PngCompressionType.TE_PNG8);
     }
 
     public int getLevel() {

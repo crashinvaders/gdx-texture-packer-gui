@@ -239,7 +239,7 @@ public class SeekBar extends Table implements Focusable, BorderOwner {
     /** @see Spinner.TextFieldEventPolicy */
     public enum ChangeEventPolicy {
         /**
-         * Spinner change event will be only fired after user has pressed enter in text field.
+         * Seek bar change event will be only fired after user has pressed enter in text field.
          */
         ON_ENTER_ONLY,
         /**

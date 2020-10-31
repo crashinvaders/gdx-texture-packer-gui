@@ -1,7 +1,8 @@
 [LATEST]
 - JRE 8+ is required to run the app.
-- LWJGL3 is the default desktop backend.
-- Simplified drag-n-drop. No visible overlay during the file drag action.
+- Migrated to LWJGL3 desktop backend. Expect lots of compatibility fixes.
+- Simplified drag-n-drop. No visible overlay during the file drag action anymore.
+- Pngquant (Imagequant) added as a PNG compression option.
 - Show atlas region size on preview hover.
 - Highlight a related atlas region on input file list mouse hover.
 - Fixed high DPI scaling issue.
