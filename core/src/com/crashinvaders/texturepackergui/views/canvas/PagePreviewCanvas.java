@@ -210,6 +210,10 @@ public class PagePreviewCanvas extends Stack {
 			previewHolder.setForceHighlightRegion(null);
 		} else {
 			RegionModel regionModel = findAtlasRegionByName(regionName, index);
+			// Check if the region is on the current page.
+			if (regionModel != null && regionModel.getPage().getPageIndex() != pageIndex) {
+				regionModel = null;
+			}
 			previewHolder.setForceHighlightRegion(regionModel);
 		}
 	}
