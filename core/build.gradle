@@ -8,7 +8,7 @@ java {
 compileJava.options.incremental = true
 
 sourceSets.main.java.srcDirs = [ 'src/' ]
-sourceSets.main.resources.srcDirs += [ 'libs/' ]
+sourceSets.main.resources.srcDirs = [ 'resources/' ]
 
 dependencies {
     implementation files('libs/libimagequant-java.jar')

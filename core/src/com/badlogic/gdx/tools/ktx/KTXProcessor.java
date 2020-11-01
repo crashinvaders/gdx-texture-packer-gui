@@ -15,7 +15,6 @@ import com.badlogic.gdx.graphics.glutils.ETC1.ETC1Data;
 import com.badlogic.gdx.graphics.glutils.KTXTextureData;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.SharedLibraryLoader;
 
@@ -34,9 +33,9 @@ public class KTXProcessor {
     private final static int DISPOSE_LEVEL = 4;
 
     private static final TempFileAccessor fileAccessorEtcTools = new TempExecutableFileAccessor(
-            SharedLibraryLoader.isWindows ? "etctool/etctool.exe" :
-            SharedLibraryLoader.isLinux ? "etctool/etctool-linux" :
-            SharedLibraryLoader.isMac ? "etctool/etctool-mac" : null
+            SharedLibraryLoader.isWindows ? "resources/etctool/etctool.exe" :
+            SharedLibraryLoader.isLinux ? "resources/etctool/etctool-linux" :
+            SharedLibraryLoader.isMac ? "resources/etctool/etctool-mac" : null
             , 0);
 
     public static void convert(String input, String output, String ETC1comp, String ETC2comp) throws Exception {
