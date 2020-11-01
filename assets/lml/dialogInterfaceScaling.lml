@@ -12,7 +12,7 @@
         <label style="grey" text="@isDescription" growx="true" wrap="true" textalign="center" padbottom="8"/>
         <vistable growx="true">
             <visslider id="sliderUiScale" style="seekbar" growx="true"
-                       min="0.5" max="2.0" value="1.0" step="0.01"
+                       min="0.5" max="2.0" value="1.0" step="0.1"
                        change="InterfaceScalingDialogController.onUiScaleChanged"
                        touchUp="InterfaceScalingDialogController.applyNewUiScale"/>
             <label id="lblUiScale" text="100%" textalign="right" width="44"/>

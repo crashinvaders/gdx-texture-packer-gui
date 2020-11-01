@@ -31,7 +31,7 @@ public class ApplicationStarter {
         configuration.setTitle(AppConstants.APP_TITLE);
         configuration.setWindowIcon(Files.FileType.Classpath, "icon128.png", "icon32.png", "icon16.png");
         configuration.setPreferencesConfig(AppConstants.EXTERNAL_DIR, Files.FileType.External);
-        configuration.setWindowedMode(1024, 600);
+        configuration.setWindowedMode(1280, 800);
         configuration.setHdpiMode(HdpiMode.Logical);
 
         AppParams appParams = new AppParams();
