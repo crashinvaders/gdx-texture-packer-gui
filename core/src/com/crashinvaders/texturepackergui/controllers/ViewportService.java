@@ -20,7 +20,8 @@ import static com.github.czyzby.autumn.mvc.config.AutumnActionPriority.*;
 
 @Component
 public class ViewportService {
-    private static final String PREF_KEY_UI_SCALE = "ui_scale";
+
+    public static final String PREF_KEY_UI_SCALE = "ui_scale";
 
     @StageViewport
     ObjectProvider<Viewport> viewportProvider = new ObjectProvider<Viewport>() {
@@ -73,11 +74,6 @@ public class ViewportService {
             currentController.getStage().cancelTouchFocus();
         }
 
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                app.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-            }
-        });
+        Gdx.app.postRunnable(() -> app.resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
     }
 }

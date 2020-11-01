@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.main;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -51,6 +52,7 @@ import com.github.czyzby.autumn.mvc.component.ui.controller.ViewResizer;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewShower;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
@@ -69,7 +71,9 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     public static final String VIEW_ID = "Main";
     public static final String TAG = MainController.class.getSimpleName();
     public static final String PREF_KEY_PACK_LIST_SPLIT = "pack_list_split";
+    public static final String PREF_KEY_UI_SCALE_PROMPT_PASSED = "ui_scale_prompt_passed";
 
+    @Inject EventDispatcher eventDispatcher;
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
     @Inject LocaleService localeService;
@@ -107,6 +111,8 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @LmlInject PackMenuActors actorsPackMenu;
     @LmlInject ToolsMenuActors actorsToolsMenu;
     @LmlInject HelpMenuActors actorsHelpMenu;
+
+    private final Array<ShowToastEvent> postponedToastEvenets = new Array<>();
 
     private final ArrayMap<WidgetData.FileType, FileTypeController> fileTypeControllers = new ArrayMap<>();
     private FileTypeController activeFileTypeController;
@@ -185,12 +191,16 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     public void show(Stage stage, Action action) {
         InterfaceService.DEFAULT_VIEW_SHOWER.show(stage, action);
 
+        showScalingPromtToNewUsers();
+
         viewShown = true;
 
         updatePackList();
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
         updateFileType();
+
+        Gdx.app.postRunnable(this::processPostponedToastEvents);
     }
 
     @Override
@@ -280,27 +290,31 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
     //TODO Move out to a dedicated toast controller.
     @OnEvent(ShowToastEvent.class) void onEvent(final ShowToastEvent event) {
-        if (viewShown) {
-            final Toast toast;
-            if (event.getContent() != null) {
-                toast = toastManager.show(event.getContent(), event.getDuration());
-            } else {
-                toast = toastManager.show(event.getMessage(), event.getDuration());
-            }
-            // Setup click listener (if provided).
-            if (event.getClickAction() != null) {
-                Table mainTable = toast.getMainTable();
-                mainTable.setTouchable(Touchable.enabled);
-                mainTable.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent e, float x, float y) {
-                        if (e.getTarget() == e.getListenerActor()) {
-                            event.getClickAction().run();
-                            toastManager.remove(toast);
-                        }
+        // Postpone toast events until the view is shown.
+        if (!viewShown) {
+            postponedToastEvenets.add(event);
+            return;
+        }
+
+        final Toast toast;
+        if (event.getContent() != null) {
+            toast = toastManager.show(event.getContent(), event.getDuration());
+        } else {
+            toast = toastManager.show(event.getMessage(), event.getDuration());
+        }
+        // Setup click listener (if provided).
+        if (event.getClickAction() != null) {
+            Table mainTable = toast.getMainTable();
+            mainTable.setTouchable(Touchable.enabled);
+            mainTable.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent e, float x, float y) {
+                    if (e.getTarget() == e.getListenerActor()) {
+                        event.getClickAction().run();
+                        toastManager.remove(toast);
                     }
-                });
-            }
+                }
+            });
         }
     }
 
@@ -682,6 +696,38 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             VisTextButton btnOpen = menu.openButton;
             Scene2dUtils.simulateClick(btnOpen);
         }
+    }
+
+    private void processPostponedToastEvents() {
+        for (int i = 0; i < this.postponedToastEvenets.size; i++) {
+            onEvent(this.postponedToastEvenets.get(i));
+        }
+        this.postponedToastEvenets.clear();
+    }
+
+    /**
+     * Shows a toast with navigation to the UI scaling dialog, if run on the hi-res display.
+     * Only executes this check ones.
+     */
+    private void showScalingPromtToNewUsers() {
+        Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+
+        // Only do show this toast once.
+        boolean checkPassed = prefs.getBoolean(PREF_KEY_UI_SCALE_PROMPT_PASSED, false);
+        if (checkPassed) return;
+        prefs.putBoolean(PREF_KEY_UI_SCALE_PROMPT_PASSED, true).flush();
+
+        // Check if scale has been already set.
+        if (prefs.getFloat(ViewportService.PREF_KEY_UI_SCALE, -1f) != -1f) return;
+
+        // If the display resolution is WUXGA or lower - let it be.
+        Graphics.DisplayMode dm = Gdx.graphics.getDisplayMode();
+        if (dm.width <= 1920 || dm.height <= 1200) return;
+
+        eventDispatcher.postEvent(new ShowToastEvent()
+                .message(getString("isInitUiScalePrompt"))
+                .duration(ShowToastEvent.DURATION_INDEFINITELY)
+                .click(globalActions::showUiScalingDialog));
     }
 
     //region Utility methods

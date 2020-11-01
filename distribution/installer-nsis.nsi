@@ -55,14 +55,10 @@ Unicode True
 Section "Main application" AppInstall
 SectionIn RO
 
-  InitPluginsDir
+  SetOutpath "$INSTDIR"
+  File "output\gdx-texturepacker.jar"
+  File /r /x "*.sh" "files\*.*"
 
-  SetOutPath "$INSTDIR"
-
-  File "output\${FILENAME}.zip"
-  nsisunz::UnzipToLog "$INSTDIR\${FILENAME}.zip" "$INSTDIR"
-  Delete "$INSTDIR\${FILENAME}.zip"
-  
   ;Store installation folder
   WriteRegStr HKCU "Software\GdxTexturePacker" "" $INSTDIR
   
@@ -73,12 +69,11 @@ SectionIn RO
   !insertmacro APP_ASSOCIATE "tpproj" "GdxTexturePacker.Project" "GDX Texture Packer project" "$INSTDIR\icon.ico,0" "Open with GDX Texture Packer" "$INSTDIR\launcher_win.bat $\"%1$\""
 
   ;Delete legacy symlink files
-  IfFileExists "$SMPROGRAMS\GdxTexturePacker.lnk" DeleteOldSymlinkPrograms
-  DeleteOldSymlinkPrograms:
-    Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
-  IfFileExists "$DESKTOP\GdxTexturePacker.lnk" DeleteOldSymlinkDesktop
-  DeleteOldSymlinkDesktop:
-    Delete "$DESKTOP\GdxTexturePacker.lnk"
+  Delete "$SMPROGRAMS\GdxTexturePacker.lnk"
+  Delete "$DESKTOP\GdxTexturePacker.lnk"
+  ;;Delete legacy run script files
+  Delete "$INSTDIR\launcher.bat"
+  Delete "$INSTDIR\launcher.sh"
 
 SectionEnd
 

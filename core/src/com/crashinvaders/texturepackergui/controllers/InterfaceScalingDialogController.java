@@ -1,8 +1,11 @@
 package com.crashinvaders.texturepackergui.controllers;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnMessage;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewDialogShower;
@@ -55,7 +58,7 @@ public class InterfaceScalingDialogController implements ActionContainer, ViewDi
         viewportService.setScale(uiScale);
     }
 
-    private String formatScaleValue(float uiScale) {
+    private static String formatScaleValue(float uiScale) {
         return String.format("%.0f%%", uiScale*100f);
     }
 }
