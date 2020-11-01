@@ -87,10 +87,7 @@ zipRelease.dependsOn distRelease
  *     1. Windows OS only.
  *     2. NSIS installed on your system and added to PATH (makensis.exe).
  *          https://sourceforge.net/projects/nsis/files/
- *     3. NSISUnz plugin should be installed.
- *          Extract "nsisunz\Release\nsisunz.dll" to "<NSIS_DIR>/Plugins/unicode/"
- *          https://nsis.sourceforge.io/mediawiki/images/1/1c/Nsisunz.zip
- *     4. FileAssoc macros should be installed.
+ *     3. FileAssoc macros should be installed.
  *          Copy code from http://nsis.sourceforge.net/FileAssoc
  *          into file "FileAssoc.nsh" and put it under "<NSIS_DIR>/Include/"
  *
@@ -107,7 +104,7 @@ task nsisInstaller(type: Exec) {
     def nsisCommand = "makensis /DFILENAME=\"$project.distFileName\" installer-nsis.nsi"
     commandLine 'cmd', '/c', "$nsisCommand"
 }
-nsisInstaller.dependsOn zipRelease
+nsisInstaller.dependsOn distRelease
 //endregion
 
 //region Mac App Bundle
