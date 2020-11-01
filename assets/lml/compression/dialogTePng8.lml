@@ -2,7 +2,7 @@
 <!DOCTYPE visdialog SYSTEM "/lml.dtd">
 
 <visdialog
-        title="@dCompTitle|PNG8"
+        title="@dCompTitle|@tommyEttingerPng8"
         closebutton="true"
         closeonescape="true">
 
@@ -40,8 +40,8 @@
 
         <:row padtop="12"/>
 
-        <label growx="true" wrap="true" text="@dCompPng8Desc0" padbottom="12"/>
-        <label growx="true" wrap="true" text="@dCompPng8Desc1"/>
+        <label growx="true" wrap="true" text="@dCompTePng8Desc0" padbottom="12"/>
+        <label growx="true" wrap="true" text="@dCompTePng8Desc1"/>
 
     </table>
 

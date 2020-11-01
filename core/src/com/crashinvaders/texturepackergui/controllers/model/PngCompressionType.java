@@ -2,9 +2,13 @@ package com.crashinvaders.texturepackergui.controllers.model;
 
 public enum PngCompressionType {
     PNGTASTIC("pngtastic"),
+    @Deprecated
     ZOPFLI("zopfli"),
     TINY_PNG("tinify"),
-    PNG8("png8");
+    /** Tommy Ettinger's image quantization algorithm implementation. */
+    TE_PNG8("png8"),
+    PNGQUANT("pngquant"),
+    ;
 
     public final String key;
 

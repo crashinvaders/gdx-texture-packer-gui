@@ -8,14 +8,13 @@ import com.badlogic.gdx.utils.SharedLibraryLoader;
 
 import java.io.*;
 import java.net.URI;
-import java.util.zip.GZIPOutputStream;
 
 public class KtxEtc2Processor {
 
     private static final TempFileAccessor fileAccessorEtcTools = new TempExecutableFileAccessor(
-            SharedLibraryLoader.isWindows ? "etctool/etctool.exe" :
-            SharedLibraryLoader.isLinux ? "etctool/etctool-linux" :
-            SharedLibraryLoader.isMac ? "etctool/etctool-mac" : null
+            SharedLibraryLoader.isWindows ? "resources/etctool/etctool.exe" :
+            SharedLibraryLoader.isLinux ? "resources/etctool/etctool-linux" :
+            SharedLibraryLoader.isMac ? "resources/etctool/etctool-mac" : null
             , 0);
 
     public static void process(FileHandle input, FileHandle output, PixelFormat format) {

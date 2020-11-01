@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog
+        title="@dCompTitle|@pngquant"
+        closebutton="true"
+        closeonescape="true">
+
+    <table width="320" pad="8" padtop="12" padbottom="4" onecolumn="true" defaultalign="left">
+
+        <:row padtop="12"/>
+
+        <table padbottom="4">
+            <label text="@dCompMinImageQuality" padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompImageQualityDesc" padbottom="1"/>
+        </table>
+        <intseekbar id="sbMinQuality"
+                    change="onMinQualityChanged"
+                    changepolicy="ON_TEXT_SLIDER_CHANGED"
+                    min="0" max="100" value="65" step="5"
+                    growx="true"/>
+
+        <:row padtop="12"/>
+
+        <table padbottom="4">
+            <label text="@dCompMaxImageQuality" padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompImageQualityDesc" padbottom="1"/>
+        </table>
+        <intseekbar id="sbMaxQuality"
+                    change="onMaxQualityChanged"
+                    changepolicy="ON_TEXT_SLIDER_CHANGED"
+                    min="0" max="100" value="80" step="5"
+                    growx="true"/>
+
+        <:row padtop="12"/>
+
+        <table padbottom="4">
+            <label text="@dCompMaxColors" padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompMaxColorsDesc" padbottom="1"/>
+        </table>
+        <intseekbar id="sbMaxColors"
+                    change="onMaxColorsChanged"
+                    min="2" max="256" value="256" step="32"
+                    growx="true"/>
+
+        <:row padtop="12"/>
+
+        <table padbottom="4">
+            <label text="@dCompDataCompLevel" padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompDataCompLevelDesc" padbottom="1"/>
+        </table>
+        <intseekbar id="sbCompLevel"
+                    change="onCompLevelChanged"
+                    min="1" max="9" value="9"
+                    growx="true"/>
+
+        <:row padtop="12"/>
+
+        <table>
+            <checkbox id="chbDithering"
+                      text="@dCompDithering"
+                      change="onDitheringChanged"
+                      padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompDitheringDesc" padbottom="1"/>
+        </table>
+
+        <:row padtop="20"/>
+
+        <separator growx="true" height="1"/>
+
+        <:row padtop="12"/>
+
+        <label growx="true" wrap="true" text="@dCompPngquantDesc0" padbottom="8"/>
+        <label growx="true" wrap="true" text="@dCompPngquantDesc1" padbottom="8"/>
+        <link style="orange-small" href="https://pngquant.org/" text="@dCompVisitPage|Pngquant" align="center"/>
+
+    </table>
+
+</visdialog>

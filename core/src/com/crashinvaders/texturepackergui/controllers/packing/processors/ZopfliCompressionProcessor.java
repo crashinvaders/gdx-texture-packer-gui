@@ -5,17 +5,14 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.controllers.model.compression.PngtasticCompressionModel;
+import com.crashinvaders.texturepackergui.controllers.model.compression.ZopfliCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 import com.googlecode.pngtastic.core.PngImage;
 import com.googlecode.pngtastic.core.PngOptimizer;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-
-public class PngtasticCompressingProcessor implements PackProcessor {
+public class ZopfliCompressionProcessor implements PackProcessor {
     private static final String LOG_LEVEL = "INFO";
 
     @Override
@@ -27,12 +24,13 @@ public class PngtasticCompressingProcessor implements PackProcessor {
 
         PngFileTypeModel fileType = (PngFileTypeModel) project.getFileType();
 
-        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.PNGTASTIC) return;
+        if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.ZOPFLI) return;
 
-        System.out.println("Pngtastic compression started");
+        System.out.println("Zopfli compression started");
 
-        PngtasticCompressionModel compModel = fileType.getCompression();
+        ZopfliCompressionModel compModel = fileType.getCompression();
         PngOptimizer pngOptimizer = new PngOptimizer(LOG_LEVEL);
+        pngOptimizer.setCompressor("zopfli", compModel.getIterations());
 
         // Compression section
         {
@@ -41,22 +39,12 @@ public class PngtasticCompressingProcessor implements PackProcessor {
                             Gdx.files.absolute(pack.getOutputDir()), false);
 
             for (TextureAtlas.TextureAtlasData.Page page : atlasData.getPages()) {
-                BufferedInputStream bis = null;
-                try {
-                    String fileName = page.textureFile.file().getAbsolutePath();
-                    bis = new BufferedInputStream(new FileInputStream(fileName));
-                    PngImage image = new PngImage(bis, LOG_LEVEL);
-                    image.setFileName(fileName);
-                    pngOptimizer.optimize(
-                            image,
-                            fileName,
-                            compModel.isRemoveGamma(),
-                            compModel.getLevel());
-                } finally {
-                    if (bis != null) {
-                        bis.close();
-                    }
-                }
+                PngImage image = new PngImage(page.textureFile.file().getAbsolutePath(), LOG_LEVEL);
+                pngOptimizer.optimize(
+                        image,
+                        page.textureFile.file().getAbsolutePath(),
+                        false,
+                        compModel.getLevel());
             }
         }
 
@@ -70,6 +58,6 @@ public class PngtasticCompressingProcessor implements PackProcessor {
             node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRate);
         }
 
-        System.out.println("Pngtastic compression finished");
+        System.out.println("Zopfli compression finished");
     }
 }

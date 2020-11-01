@@ -8,11 +8,13 @@ java {
 compileJava.options.incremental = true
 
 sourceSets.main.java.srcDirs = [ 'src/' ]
-sourceSets.main.resources.srcDirs += [ 'libs/' ]
+sourceSets.main.resources.srcDirs = [ 'resources/' ]
 
 dependencies {
+    implementation files('libs/libimagequant-java.jar')
+
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
-//        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use local modified copy of this library.
+//        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use locally modified copy of this library.
     api "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"
     api "com.github.czyzby:gdx-lml:$lmlVersion"
     api "com.github.czyzby:gdx-lml-vis:$lmlVersion"

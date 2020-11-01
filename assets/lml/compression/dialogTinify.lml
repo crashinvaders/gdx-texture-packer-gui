@@ -39,9 +39,13 @@
 
         <label id="lblCompressionCount">@dCompCompressionCount|2</label>
 
+        <:row padtop="20"/>
+
+        <separator growx="true" height="1"/>
+
         <:row padtop="12"/>
 
-        <label wrap="true" growx="true" linealign="center">
+        <label wrap="true" growx="true" linealign="left">
             @dCompTinifyDescription
         </label>
 

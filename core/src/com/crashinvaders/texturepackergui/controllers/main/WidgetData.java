@@ -40,8 +40,10 @@ public class WidgetData {
         NONE (null, "none", false),
         PNGTASTIC (PngCompressionType.PNGTASTIC, "pngtastic", true),
         TINY_PNG (PngCompressionType.TINY_PNG, "tinyPng", true),
-        PNG8(PngCompressionType.PNG8, "png8", true);
-//        ZOPFLI (PngCompressionType.ZOPFLI, "zopfli", true);
+        TE_PNG8(PngCompressionType.TE_PNG8, "tommyEttingerPng8", true),
+        PNGQUANT(PngCompressionType.PNGQUANT, "pngquant", true),
+//        ZOPFLI (PngCompressionType.ZOPFLI, "zopfli", true),
+        ;
 
         public final PngCompressionType type;
         public final String nameKey;

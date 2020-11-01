@@ -17,9 +17,9 @@ import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 
-@ViewDialog(id = "dialog_comp_png8", value = "lml/compression/dialogPng8.lml")
-public class Png8CompDialogController implements ActionContainer {
-    private static final String TAG = Png8CompDialogController.class.getSimpleName();
+@ViewDialog(id = "dialog_comp_te_png8", value = "lml/compression/dialogTePng8.lml")
+public class TePng8CompDialogController implements ActionContainer {
+    private static final String TAG = TePng8CompDialogController.class.getSimpleName();
 
     @Inject ModelService modelService;
 
