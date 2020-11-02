@@ -112,6 +112,7 @@ macAppBundle {
     mainClassName = project.mainClassName
     bundleIdentifier = 'com.crashinvaders.texturepackergui'
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
+    javaExtras.put("-XstartOnFirstThread",null)
     bundleJRE = false
     appName = "GDX Texture Packer"
     dmgName = "gdx-texturepacker-$project.ext.version"
