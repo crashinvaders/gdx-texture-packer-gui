@@ -121,7 +121,6 @@ public class ApplicationStarter {
                 System.out.println(line);
             }
             process.waitFor();
-            System.out.println("The JVM has successfully restarted.");
         } catch (Exception e) {
             System.err.println("There was a problem restarting the JVM");
             e.printStackTrace();
