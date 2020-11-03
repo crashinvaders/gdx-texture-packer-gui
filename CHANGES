@@ -8,6 +8,7 @@
 - Show atlas region size on preview hover.
 - Highlight a related atlas region on input file list mouse hover.
 - "startOnFirstThread" JVM argument is no longer required on MacOS.
+- Linux DEB & RPM distribution packages.
 - Fixed high DPI scaling issue.
 - Fixed file based 9-patch pad values get displayed wrong (in case they are not defined explicitly in the input image).
 - Fixed startup crash when an installed module's local files deleted on the file system.
