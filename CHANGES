@@ -1,4 +1,5 @@
 [LATEST]
+- Fixed KTX(ETC1/ETC2) compression fails with NPE.
 
 [4.9.0]
 - JRE 8+ is required to run the app.
