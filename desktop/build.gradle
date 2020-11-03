@@ -141,6 +141,7 @@ cleanAppJavaDir.dependsOn generatePlist
 //region Linux distribution (ospackage).
 // https://github.com/nebula-plugins/gradle-ospackage-plugin/wiki
 ospackage {
+    release = 1
     version = project.ext.version
     packageName = project.appName
     os = 'LINUX' // only applied to RPM
@@ -156,6 +157,10 @@ ospackage {
     // JRE 8 is the minimum supported runtime.
     requires "java8-runtime"
 
+    postInstall '#!/usr/bin/env bash\n' +
+            'sudo update-mime-database /usr/share/mime\n' +
+            'sudo update-icon-caches /usr/share/icons/hicolor'
+
     ext.installationDir = '/opt/gdx-texture-packer'
     into ext.installationDir
 
@@ -164,7 +169,15 @@ ospackage {
     from("$rootDir/distribution/files/readme.txt")
     from("$rootDir/distribution/files/readme_hotkeys.txt")
     from("$rootDir/distribution/license.txt")
-    from("$rootDir/resources/icon256.png")
+
+    from("$rootDir/resources/icon256.png") {
+        into '/usr/share/icons/hicolor/256x256/mimetypes'
+        rename { 'application-gdx-tp-project.png' }
+    }
+    from("$rootDir/resources/icon256.png") {
+        into '/usr/share/icons/hicolor/256x256/apps'
+        rename { 'gdx-texture-packer.png' }
+    }
 
     from(new File("$project.buildDir/tmp", 'gdx-texture-packer.desktop').with {
         parentFile.mkdirs()
@@ -179,10 +192,15 @@ ospackage {
                 |MimeType=application/gdx-tp-project;
                 |Terminal=false
                 |Exec=${ext.installationDir}/launcher_linux.sh %U
-                |Icon=${ext.installationDir}/icon256.png""".stripMargin()
+                |Icon=gdx-texture-packer""".stripMargin()
         return absolutePath
     }) {
         into '/usr/share/applications/'
+    }
+
+    from("$rootDir/distribution/linux-packages/project-mime-type.xml") {
+        rename { 'gdx-texture-packer.xml' }
+        into '/usr/share/mime/packages/'
     }
 }
 
