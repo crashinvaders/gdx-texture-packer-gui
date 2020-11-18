@@ -1,8 +1,11 @@
 package com.crashinvaders.texturepackergui.controllers.model.compression;
 
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
 import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
+import com.github.tommyettinger.anim8.Dithered;
+import com.github.tommyettinger.anim8.Dithered.DitherAlgorithm;
 
 import java.io.StringWriter;
 
@@ -10,7 +13,7 @@ public class Png8CompressionModel extends PngCompressionModel {
 
     private int level = 6;
     private int threshold = 400;
-    private boolean dithering = true;
+    private DitherAlgorithm ditherAlgorithm = DitherAlgorithm.SCATTER;
     
     public Png8CompressionModel() {
         super(PngCompressionType.TE_PNG8);
@@ -32,12 +35,12 @@ public class Png8CompressionModel extends PngCompressionModel {
         this.threshold = threshold;
     }
 
-    public boolean isDithering() {
-        return dithering;
+    public DitherAlgorithm getDitherAlgorithm() {
+        return ditherAlgorithm;
     }
 
-    public void setDithering(boolean dithering) {
-        this.dithering = dithering;
+    public void setDitherAlgorithm(DitherAlgorithm algorithm) {
+        this.ditherAlgorithm = algorithm;
     }
 
     @Override
@@ -49,7 +52,7 @@ public class Png8CompressionModel extends PngCompressionModel {
             json.writeObjectStart();
             json.writeValue("level", level);
             json.writeValue("threshold", threshold);
-            json.writeValue("dithering", dithering);
+            json.writeValue("ditherAlgorithm", ditherAlgorithm.ordinal());
             json.writeObjectEnd();
             return buffer.toString();
         } finally {
@@ -64,11 +67,14 @@ public class Png8CompressionModel extends PngCompressionModel {
         JsonValue jsonValue = new JsonReader().parse(data);
         level = jsonValue.getInt("level", level);
         threshold = jsonValue.getInt("threshold", threshold);
-        dithering = jsonValue.getBoolean("dithering", dithering);
+
+        int ditherAlgorithmOrdinal = jsonValue.getInt("ditherAlgorithm", ditherAlgorithm.ordinal());
+        ditherAlgorithmOrdinal = MathUtils.clamp(ditherAlgorithmOrdinal, 0, DitherAlgorithm.values().length - 1);
+        ditherAlgorithm = DitherAlgorithm.values()[ditherAlgorithmOrdinal];
     }
 
     @Override
     public int computeStateHash() {
-        return StateHashUtils.computeHash(super.computeStateHash(), level, threshold, dithering);
+        return StateHashUtils.computeHash(super.computeStateHash(), level, threshold, ditherAlgorithm);
     }
 }

@@ -109,13 +109,13 @@ public class PngquantCompDialogController implements ActionContainer {
         FileTypeModel fileType = project.getFileType();
 
         if (!(fileType instanceof PngFileTypeModel)) {
-            Gdx.app.error(TAG, "Project isn't set to PNG file type");
+            Gdx.app.error(TAG, "Project isn't set to PNG file type.");
             return null;
         }
 
         PngCompressionModel compression = ((PngFileTypeModel) project.getFileType()).getCompression();
         if (!(compression instanceof PngquantCompressionModel)) {
-            Gdx.app.error(TAG, "Project isn't set to PNG8 (Pngquant) compression");
+            Gdx.app.error(TAG, "Project isn't set to Pngquant compression.");
             return null;
         }
 

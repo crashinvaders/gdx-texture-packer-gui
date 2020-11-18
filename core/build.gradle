@@ -23,4 +23,5 @@ dependencies {
     api "commons-io:commons-io:$commonsIoVersion"
     api "com.github.depsypher:pngtastic:$pngtasticVersion"
     api "com.tinify:tinify:$tinifyVersion"
+    api "com.github.tommyettinger:anim8-gdx:$anim8Version"
 }

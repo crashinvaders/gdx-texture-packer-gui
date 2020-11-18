@@ -2,7 +2,9 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
+import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -41,5 +43,17 @@ public class ErrorDialogController implements ActionContainer {
 
     @LmlAction("copyToClipboard") void copyToClipboard() {
         Gdx.app.getClipboard().setContents(errorMessage);
+    }
+
+    /** Displays the dialog if the InterfaceService is initialized. */
+    public static void show(Exception e) {
+        InterfaceService interfaceService = App.inst().getInterfaceService();
+        if (interfaceService == null) {
+            return;
+        }
+
+        ErrorDialogController errorDialog = (ErrorDialogController)App.inst().getContext().getComponent(ErrorDialogController.class);
+        errorDialog.setError(e);
+        interfaceService.showDialog(ErrorDialogController.class);
     }
 }

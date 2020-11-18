@@ -26,22 +26,33 @@
 
         <:row padtop="12"/>
 
-        <table>
-            <checkbox id="chbDithering"
-                      text="@dCompDithering"
-                      change="onDitheringChanged"
-                      padright="6"/>
-            <image style="custom/help-small" vistooltip="@dCompDitheringDesc" padbottom="1"/>
+        <table padbottom="4">
+            <label text="@dCompDithering" padright="6"/>
+            <image style="custom/help-small" vistooltip="@dCompTePng8DitherDesc" padbottom="1"/>
         </table>
+        <selectbox id="cboDitherAlgorithm"
+                   growx="true"
+                   change="onDitherAlgorithmChanged"/>
 
         <:row padtop="12"/>
+
+<!--        <table>-->
+<!--            <checkbox id="chbDithering"-->
+<!--                      text="@dCompDithering"-->
+<!--                      change="onDitheringChanged"-->
+<!--                      padright="6"/>-->
+<!--            <image style="custom/help-small" vistooltip="@dCompDitheringDesc" padbottom="1"/>-->
+<!--        </table>-->
+
+<!--        <:row padtop="12"/>-->
 
         <separator growx="true" height="1"/>
 
         <:row padtop="12"/>
 
         <label growx="true" wrap="true" text="@dCompTePng8Desc0" padbottom="12"/>
-        <label growx="true" wrap="true" text="@dCompTePng8Desc1"/>
+        <label growx="true" wrap="true" text="@dCompTePng8Desc1" padbottom="12"/>
+        <link style="white" growx="true" wrap="true" text="@dCompTePng8Desc2"/>
 
     </table>
 

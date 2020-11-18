@@ -8,9 +8,10 @@ import com.crashinvaders.texturepackergui.controllers.model.PngCompressionType;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.compression.Png8CompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
-import com.crashinvaders.texturepackergui.utils.PNG8;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
+import com.github.tommyettinger.anim8.Dithered;
+import com.github.tommyettinger.anim8.PNG8;
 
 import java.util.Locale;
 
@@ -23,11 +24,11 @@ public class TePng8CompressionProcessor implements PackProcessor {
 
         if (project.getFileType().getClass() != PngFileTypeModel.class) return;
 
-        PngFileTypeModel fileType = (PngFileTypeModel) project.getFileType();
+        PngFileTypeModel fileType = project.getFileType();
 
         if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.TE_PNG8) return;
 
-        System.out.println("PNG8 compression started");
+        System.out.println("anim8-gdx (PNG8) compression started");
 
         Png8CompressionModel compModel = fileType.getCompression();
         PNG8 png8 = new PNG8();
@@ -43,7 +44,9 @@ public class TePng8CompressionProcessor implements PackProcessor {
                     long preCompressedSize = page.textureFile.length();
                     pm = new Pixmap(page.textureFile);
                     png8.setCompression(compModel.getLevel());
-                    png8.writePrecisely(page.textureFile, pm, compModel.isDithering(), compModel.getThreshold());
+                    png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+                    png8.setFlipY(false);
+                    png8.writePrecisely(page.textureFile, pm, true, compModel.getThreshold());
                     long postCompressedSize = page.textureFile.length();
                     float pageCompression = ((postCompressedSize-preCompressedSize) / (float)preCompressedSize);
                     compressionRateSum += pageCompression;
