@@ -7,6 +7,7 @@ import com.crashinvaders.texturepackergui.controllers.model.compression.PngCompr
 import com.crashinvaders.texturepackergui.controllers.model.compression.PngquantCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
+import com.crashinvaders.texturepackergui.views.seekbar.FloatSeekBarModel;
 import com.crashinvaders.texturepackergui.views.seekbar.IntSeekBarModel;
 import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -26,8 +27,9 @@ public class PngquantCompDialogController implements ActionContainer {
     @LmlActor SeekBar sbMaxColors;
     @LmlActor SeekBar sbMinQuality;
     @LmlActor SeekBar sbMaxQuality;
+    @LmlActor SeekBar sbCompSpeed;
+    @LmlActor SeekBar sbDithering;
     @LmlActor SeekBar sbCompLevel;
-    @LmlActor VisCheckBox chbDithering;
 
     private PngquantCompressionModel compressionModel;
 
@@ -39,6 +41,13 @@ public class PngquantCompDialogController implements ActionContainer {
         if (compressionModel == null) return;
 
         updateValuesFromModel();
+    }
+
+    @LmlAction void onCompSpeedChanged() {
+        if (ignoreChangeEvents) return;
+
+        int speed = ((IntSeekBarModel) sbCompSpeed.getModel()).getValue();
+        compressionModel.setSpeed(speed);
     }
 
     @LmlAction void onMinQualityChanged() {
@@ -80,17 +89,18 @@ public class PngquantCompDialogController implements ActionContainer {
     @LmlAction void onDitheringChanged() {
         if (ignoreChangeEvents) return;
 
-        boolean ditheringEnabled = chbDithering.isChecked();
-        compressionModel.setDitheringEnabled(ditheringEnabled);
+        float ditheringLevel = ((FloatSeekBarModel) sbDithering.getModel()).getValue();
+        compressionModel.setDitheringLevel(ditheringLevel);
     }
 
     private void updateValuesFromModel() {
         ignoreChangeEvents = true;
+        ((IntSeekBarModel) sbCompSpeed.getModel()).setValue(compressionModel.getSpeed());
         ((IntSeekBarModel) sbMaxColors.getModel()).setValue(compressionModel.getMaxColors());
         ((IntSeekBarModel) sbMinQuality.getModel()).setValue(compressionModel.getMinQuality());
         ((IntSeekBarModel) sbMaxQuality.getModel()).setValue(compressionModel.getMaxQuality());
         ((IntSeekBarModel) sbCompLevel.getModel()).setValue(compressionModel.getDeflateLevel());
-        chbDithering.setChecked(compressionModel.isDitheringEnabled());
+        ((FloatSeekBarModel) sbDithering.getModel()).setValue(compressionModel.getDitheringLevel());
         ignoreChangeEvents = false;
     }
 

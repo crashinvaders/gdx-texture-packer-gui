@@ -209,6 +209,7 @@
 		orange-small: {fontColor: orange, underline: white, font: small-font }
 		grey: {fontColor: grey, underline: white, font: default-font }
 		white: {fontColor: white, underline: white, font: default-font }
+		white-small: {fontColor: white, underline: orange, font: small-font }
 		light-grey: {fontColor: light-grey, underline: white, font: default-font }
 	}
 	com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle: {

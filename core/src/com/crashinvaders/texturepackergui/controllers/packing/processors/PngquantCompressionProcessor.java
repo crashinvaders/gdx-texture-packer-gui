@@ -48,10 +48,11 @@ public class PngquantCompressionProcessor implements PackProcessor {
 
                     QuantizedData quantizedData = quantizePixmap(
                             pixmap,
+                            compModel.getSpeed(),
                             compModel.getMaxColors(),
                             compModel.getMinQuality(),
                             compModel.getMaxQuality(),
-                            compModel.isDitheringEnabled());
+                            compModel.getDitheringLevel());
                     System.out.println("Page \"" + page.textureFile.name() + "\" quantized with " + quantizedData.palette.length + " colors.");
 
                     try (OutputStream os = page.textureFile.write(false)) {
@@ -81,7 +82,7 @@ public class PngquantCompressionProcessor implements PackProcessor {
         System.out.println("PNG8 compression finished");
     }
 
-    private static QuantizedData quantizePixmap(Pixmap pixmap, int maxColors, int minQuality, int maxQuality, boolean useDithering) {
+    private static QuantizedData quantizePixmap(Pixmap pixmap, int speed, int maxColors, int minQuality, int maxQuality, float ditheringLevel) {
         if (!nativeLibLoaded) {
             new SharedLibraryLoader().load("imagequant-java");
             nativeLibLoaded = true;
@@ -104,14 +105,12 @@ public class PngquantCompressionProcessor implements PackProcessor {
         }
 
         LiqAttribute liqAttribute = new LiqAttribute();
+        liqAttribute.setSpeed(speed);
         liqAttribute.setMaxColors(maxColors);
         liqAttribute.setQuality(minQuality, maxQuality);
         LiqImage liqImage = new LiqImage(liqAttribute, rawPixels, width, height, 0);
         LiqResult liqResult = liqImage.quantize();
-
-        if (useDithering) {
-            liqResult.setDitheringLevel(0.5f);
-        }
+        liqResult.setDitheringLevel(ditheringLevel);
 
         byte[] quantizedPixels = new byte[size];
         liqImage.remap(liqResult, quantizedPixels);

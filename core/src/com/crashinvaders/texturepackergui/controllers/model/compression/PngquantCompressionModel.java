@@ -9,11 +9,12 @@ import java.util.zip.Deflater;
 
 public class PngquantCompressionModel extends PngCompressionModel {
 
-    private int deflateLevel = Deflater.BEST_COMPRESSION;
-    private int maxColors = 256;
-    private int minQuality = 65;
-    private int maxQuality = 80;
-    private boolean ditheringEnabled = false;
+    private int deflateLevel = Deflater.BEST_COMPRESSION; // [0..9]
+    private int speed = 4; // [1..10]
+    private int maxColors = 256; // [0..256]
+    private int minQuality = 65; // [0..100]
+    private int maxQuality = 80; // [0..100]
+    private float ditheringLevel = 0.0f; // [0..1]
 
     public PngquantCompressionModel() {
         super(PngCompressionType.PNGQUANT);
@@ -25,6 +26,14 @@ public class PngquantCompressionModel extends PngCompressionModel {
 
     public void setDeflateLevel(int deflateLevel) {
         this.deflateLevel = deflateLevel;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
     }
 
     public int getMaxColors() {
@@ -51,12 +60,12 @@ public class PngquantCompressionModel extends PngCompressionModel {
         this.maxQuality = maxQuality;
     }
 
-    public boolean isDitheringEnabled() {
-        return ditheringEnabled;
+    public float getDitheringLevel() {
+        return ditheringLevel;
     }
 
-    public void setDitheringEnabled(boolean ditheringEnabled) {
-        this.ditheringEnabled = ditheringEnabled;
+    public void setDitheringLevel(float ditheringLevel) {
+        this.ditheringLevel = ditheringLevel;
     }
 
     @Override
@@ -67,10 +76,11 @@ public class PngquantCompressionModel extends PngCompressionModel {
             json.setWriter(new JsonWriter(buffer));
             json.writeObjectStart();
             json.writeValue("deflateLevel", deflateLevel);
+            json.writeValue("speed", speed);
             json.writeValue("maxColors", maxColors);
             json.writeValue("minQuality", minQuality);
             json.writeValue("maxQuality", maxQuality);
-            json.writeValue("dithering", ditheringEnabled);
+            json.writeValue("ditheringLevel", ditheringLevel);
             json.writeObjectEnd();
             return buffer.toString();
         } finally {
@@ -84,14 +94,16 @@ public class PngquantCompressionModel extends PngCompressionModel {
 
         JsonValue jsonValue = new JsonReader().parse(data);
         deflateLevel = jsonValue.getInt("deflateLevel", deflateLevel);
+        maxQuality = jsonValue.getInt("speed", speed);
         minQuality = jsonValue.getInt("maxColors", maxColors);
         minQuality = jsonValue.getInt("minQuality", minQuality);
         maxQuality = jsonValue.getInt("maxQuality", maxQuality);
-        ditheringEnabled = jsonValue.getBoolean("dithering", ditheringEnabled);
+        ditheringLevel = jsonValue.getFloat("ditheringLevel", ditheringLevel);
     }
 
     @Override
     public int computeStateHash() {
-        return StateHashUtils.computeHash(super.computeStateHash(), deflateLevel, maxColors, minQuality, maxQuality, ditheringEnabled);
+        return StateHashUtils.computeHash(super.computeStateHash(),
+                deflateLevel, speed, maxColors, minQuality, maxQuality, deflateLevel);
     }
 }
