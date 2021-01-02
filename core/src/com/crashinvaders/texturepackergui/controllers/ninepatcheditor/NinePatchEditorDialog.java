@@ -116,9 +116,9 @@ public class NinePatchEditorDialog implements ActionContainer {
         });
         spPreview.addListener(new InputListener() {
             @Override
-            public boolean scrolled(InputEvent event, float x, float y, int amount) {
+            public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
                 int zoomIndex = model.zoomModel.getIndex();
-                model.zoomModel.setIndex(zoomIndex - amount);
+                model.zoomModel.setIndex((int) (zoomIndex - amountY));
                 return true;
             }
         });

@@ -191,7 +191,7 @@ class CompositionHolder extends WidgetGroup {
 
     private class ZoomListener extends InputListener {
         @Override
-        public boolean scrolled(InputEvent event, float x, float y, int amount) {
+        public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
 
             float preWidth = sourceImage.getPrefWidth();
             float preHeight = sourceImage.getPrefHeight();
@@ -203,7 +203,7 @@ class CompositionHolder extends WidgetGroup {
             }
 
             int zoomIndex = model.zoomModel.getIndex();
-            model.zoomModel.setIndex(zoomIndex - amount);
+            model.zoomModel.setIndex((int) (zoomIndex - amountY));
 
             float postWidth = sourceImage.getPrefWidth();
             float postHeight = sourceImage.getPrefHeight();

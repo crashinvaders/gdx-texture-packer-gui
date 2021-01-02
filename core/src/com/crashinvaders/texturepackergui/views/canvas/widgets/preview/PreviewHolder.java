@@ -201,7 +201,7 @@ public class PreviewHolder extends WidgetGroup {
         }
 
         @Override
-        public boolean scrolled(InputEvent event, float x, float y, int amount) {
+        public boolean scrolled (InputEvent event, float x, float y, float amountX, float amountY) {
             if (pageGroup == null) return false;
 
             float preWidth = pageGroup.getWidth() * pageGroup.getScaleX();
@@ -209,7 +209,7 @@ public class PreviewHolder extends WidgetGroup {
             float xNormalized = x < pageGroup.getX() ? 0f : x > pageGroup.getX()+preWidth ? 1f : (x- pageGroup.getX())/preWidth;
             float yNormalized = y < pageGroup.getY() ? 0f : y > pageGroup.getY()+preHeight ? 1f : (y- pageGroup.getY())/preHeight;
 
-            setZoomIndex(Math.max(0, Math.min(ZOOM_LEVELS.length-1, zoomIndex - amount)));
+            setZoomIndex(Math.max(0, Math.min(ZOOM_LEVELS.length-1, (int) (zoomIndex - amountY))));
 
             float postWidth = pageGroup.getWidth() * pageGroup.getScaleX();
             float postHeight = pageGroup.getHeight() * pageGroup.getScaleY();

@@ -666,7 +666,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             menuItem.setShortcut(CommonUtils.ellipsize(file.path(), 72)); // Will use shortcut label to display file path
             menuItem.getShortcutCell().left().expandX();
             menuItem.getLabelCell().expand(false, false).left();
-            menuItem.getImageCell().width(0); // Shrink image cell to zero, we don't need it
+//            menuItem.getImageCell().width(0); // Shrink image cell to zero, we don't need it
             menuItem.pack();
             menuItem.addListener(new ChangeListener() {
                 @Override
