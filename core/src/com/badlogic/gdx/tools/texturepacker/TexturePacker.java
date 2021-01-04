@@ -700,8 +700,8 @@ public class TexturePacker {
 		public String[] scaleSuffix = {""};
 		public Resampling[] scaleResampling = {Resampling.bicubic};
 		public String atlasExtension = ".atlas";
-		public boolean prettyPrint = false;
-		public boolean legacyOutput = false;
+		public boolean prettyPrint = false; //TODO: does this need a UI setting?
+		public boolean legacyOutput = false; //TODO: this needs a UI setting.
 
 		public Settings () {
 		}

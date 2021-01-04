@@ -2,6 +2,8 @@
 - Fixed KTX(ETC1/ETC2) compression fails with NPE.
 - Old PNG8 compression is replaced with anim8-gdx implementation (https://github.com/tommyettinger/anim8-gdx).
 - General project save/load errors now gracefully handled and crash log is available.
+- Updated to libGDX 1.9.13, which enables the much-smaller new atlas format.
+- Updated to visUI 1.4.8.
 
 [4.9.0]
 - JRE 8+ is required to run the app.
