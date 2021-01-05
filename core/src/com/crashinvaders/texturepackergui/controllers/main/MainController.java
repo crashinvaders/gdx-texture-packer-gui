@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -448,6 +449,12 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             case "cbGrid": settings.grid = checkBox.isChecked(); break;
             case "cbSquare": settings.square = checkBox.isChecked(); break;
             case "cbLimitMemory": settings.limitMemory = checkBox.isChecked(); break;
+            case "cbLegacyOutput": {
+                settings.legacyOutput = checkBox.isChecked();
+                actorsPackSettings.cbPrettyPrint.setDisabled(checkBox.isChecked());
+                break;
+            }
+            case "cbPrettyPrint": settings.prettyPrint = checkBox.isChecked(); break;
         }
     }
 
@@ -578,6 +585,8 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             actorsPackSettings.cbGrid.setChecked(settings.grid);
             actorsPackSettings.cbSquare.setChecked(settings.square);
             actorsPackSettings.cbLimitMemory.setChecked(settings.limitMemory);
+            actorsPackSettings.cbLegacyOutput.setChecked(settings.legacyOutput);
+            actorsPackSettings.cbPrettyPrint.setChecked(settings.prettyPrint);
 
             ((IntSeekBarModel) actorsPackSettings.skbMinPageWidth.getModel()).setValue(settings.minWidth, false);
             ((IntSeekBarModel) actorsPackSettings.skbMinPageHeight.getModel()).setValue(settings.minHeight, false);
@@ -662,11 +671,11 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             final FileHandle file = recentProjects.get(i);
             if (file.equals(getProject().getProjectFile())) continue;
 
-            MenuItem menuItem = new MenuItem(file.nameWithoutExtension());
+            MenuItem menuItem = new MenuItem(file.nameWithoutExtension(), new Image());
             menuItem.setShortcut(CommonUtils.ellipsize(file.path(), 72)); // Will use shortcut label to display file path
             menuItem.getShortcutCell().left().expandX();
             menuItem.getLabelCell().expand(false, false).left();
-//            menuItem.getImageCell().width(0); // Shrink image cell to zero, we don't need it
+            menuItem.getImageCell().width(0); // Shrink image cell to zero, we don't need it
             menuItem.pack();
             menuItem.addListener(new ChangeListener() {
                 @Override

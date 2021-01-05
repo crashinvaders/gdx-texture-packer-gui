@@ -183,6 +183,10 @@
 
                     <vischeckbox id="cbGrid" onchange="onSettingsCbChecked" tooltip="@psTtGrid">@psGrid</vischeckbox>
 
+                    <vischeckbox id="cbLegacyOutput" onchange="onSettingsCbChecked" tooltip="@psTtLegacyOutput">@psLegacyOutput</vischeckbox>
+
+                    <vischeckbox id="cbPrettyPrint" onchange="onSettingsCbChecked" tooltip="@psTtPrettyPrint">@psPrettyPrint</vischeckbox>
+
                 </vistable>
 
                 <actor width="12"/>

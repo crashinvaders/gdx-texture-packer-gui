@@ -170,7 +170,7 @@
 		menu-button: {down: button-down, up: button, over: button-over, disabled: button, font: small-font, fontColor: white, disabledFontColor: grey, focusBorder: border }
 	}
 	com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle: {
-		default: {checkBackground: vis-check, checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: grey }
+		default: {checkBackground: vis-check, checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: light-grey }
 		small: {checkBackground: vis-check, checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: small-font, fontColor: white, disabledFontColor: grey }
 		radio: {checkBackground: vis-radio, checkBackgroundOver: vis-radio-over, checkBackgroundDown: vis-radio-down, tick: vis-radio-tick, tickDisabled: vis-radio-tick-disabled, focusBorder: border-circle, errorBorder: border-circle-error, font: default-font, fontColor: white, disabledFontColor: grey }
 	}

@@ -39,4 +39,6 @@ public class PackSettingsActors {
     @LmlActor("cbGrid") VisCheckBox cbGrid;
     @LmlActor("cbSquare") VisCheckBox cbSquare;
     @LmlActor("cbLimitMemory") VisCheckBox cbLimitMemory;
+    @LmlActor("cbLegacyOutput") VisCheckBox cbLegacyOutput;
+    @LmlActor("cbPrettyPrint") VisCheckBox cbPrettyPrint;
 }

@@ -669,39 +669,39 @@ public class TexturePacker {
 	/** @author Nathan Sweet */
 	static public class Settings {
 		public boolean pot = true;
-		public boolean multipleOfFour;
+		public boolean multipleOfFour = false;
 		public int paddingX = 2, paddingY = 2;
 		public boolean edgePadding = true;
 		public boolean duplicatePadding = false;
-		public boolean rotation;
+		public boolean rotation = false;
 		public int minWidth = 16, minHeight = 16;
-		public int maxWidth = 1024, maxHeight = 1024;
+		public int maxWidth = 2048, maxHeight = 2048;
 		public boolean square = false;
 		public boolean stripWhitespaceX, stripWhitespaceY;
-		public int alphaThreshold;
+		public int alphaThreshold = 0;
 		public TextureFilter filterMin = TextureFilter.Nearest, filterMag = TextureFilter.Nearest;
 		public TextureWrap wrapX = TextureWrap.ClampToEdge, wrapY = TextureWrap.ClampToEdge;
 		public Format format = Format.RGBA8888;
 		public boolean alias = true;
 		public boolean ignoreBlankImages = true;
-		public boolean fast;
-		public boolean debug;
-		public boolean silent;
-		public boolean combineSubdirectories;
-		public boolean ignore;
-		public boolean flattenPaths;
-		public boolean premultiplyAlpha;
+		public boolean fast = false;
+		public boolean debug = false;
+		public boolean silent = false;
+		public boolean combineSubdirectories = false;
+		public boolean ignore = false;
+		public boolean flattenPaths = false;
+		public boolean premultiplyAlpha = false;
 		public boolean useIndexes = true;
 		public boolean bleed = true;
 		public int bleedIterations = 2;
 		public boolean limitMemory = true;
-		public boolean grid;
+		public boolean grid = false;
 		public float[] scale = {1};
 		public String[] scaleSuffix = {""};
 		public Resampling[] scaleResampling = {Resampling.bicubic};
 		public String atlasExtension = ".atlas";
-		public boolean prettyPrint = false; //TODO: does this need a UI setting?
-		public boolean legacyOutput = false; //TODO: this needs a UI setting.
+		public boolean prettyPrint = false;
+		public boolean legacyOutput = true;
 
 		public Settings () {
 		}
