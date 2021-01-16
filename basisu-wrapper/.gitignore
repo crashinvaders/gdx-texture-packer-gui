@@ -1,0 +1,11 @@
+/obj
+/test-output
+/jni/jni-headers
+/jni/target
+/jni/build
+/jni/*.mk
+/jni/*.xml
+/jni/com_crashinvaders_basisu_wrapper_*.cpp
+/jni/com_crashinvaders_basisu_wrapper_*.h
+/jni/robovm.xml
+/jni/memcpy_wrap.c

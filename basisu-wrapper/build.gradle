@@ -1,0 +1,197 @@
+apply plugin: 'java-library'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+compileJava.options.incremental = true
+compileJava.options.headerOutputDirectory.set(file('jni'))
+
+sourceSets.main.java.srcDirs += ['src']
+sourceSets.test.java.srcDirs += ['test']
+sourceSets.test.resources.srcDirs += ['test-resources']
+
+dependencies {
+    testImplementation "junit:junit:$junitVersion"
+    testImplementation "com.badlogicgames.gdx:gdx-jnigen-loader:$jnigenVersion"
+    // Desktop natives should be build and packed as jar for this dependency to work.
+    // ./gradlew jnigen jnigenBuild<platform> jnigenJarNativesDesktop
+    testRuntimeOnly files("$buildDir/libs/basisu-wrapper-natives-desktop.jar")
+}
+
+test {
+    useJUnit()
+    maxHeapSize = '1G'
+}
+
+//region jnigen configuration
+apply plugin: 'com.badlogicgames.gdx.gdx-jnigen'
+
+def nativeSrcFiles = [
+        // Basis Universal files.
+        'basis_universal/transcoder/basisu_transcoder.cpp',
+        'basis_universal/encoder/basisu_backend.cpp',
+        'basis_universal/encoder/basisu_basis_file.cpp',
+        'basis_universal/encoder/basisu_comp.cpp',
+        'basis_universal/encoder/basisu_enc.cpp',
+        'basis_universal/encoder/basisu_etc.cpp',
+        'basis_universal/encoder/basisu_frontend.cpp',
+        'basis_universal/encoder/basisu_global_selector_palette_helpers.cpp',
+        'basis_universal/encoder/basisu_gpu_texture.cpp',
+        'basis_universal/encoder/basisu_pvrtc1_4.cpp',
+        'basis_universal/encoder/basisu_resampler.cpp',
+        'basis_universal/encoder/basisu_resample_filters.cpp',
+        'basis_universal/encoder/basisu_ssim.cpp',
+        'basis_universal/encoder/basisu_astc_decomp.cpp',
+        'basis_universal/encoder/basisu_uastc_enc.cpp',
+        'basis_universal/encoder/basisu_bc7enc.cpp',
+        'basis_universal/encoder/lodepng.cpp',
+        'basis_universal/encoder/apg_bmp.c',
+        'basis_universal/encoder/jpgd.cpp',
+
+        // Local JNI files.
+        'basisu_native_utils.cpp',
+        'basisu_wrapper.cpp',
+
+        // Auto generated JNI classes.
+        'com_crashinvaders_basisu_BasisuWrapper.cpp',
+]
+
+jnigen {
+    sharedLibName = 'basisu-wrapper'
+
+    nativeCodeGenerator {
+        sourceDir = '/src'
+    }
+
+    all {
+        headerDirs = ['include', 'basis_universal/encoder', 'basis_universal/transcoder']
+        cExcludes = cppExcludes = ['build/**',]
+
+        cppIncludes = nativeSrcFiles
+
+        def commonFlags =
+                '-fvisibility=hidden -fPIC -fno-strict-aliasing -pthread ' +
+                '-D_LARGEFILE64_SOURCE=1 -D_FILE_OFFSET_BITS=64 ' +
+                '-Wall -Wextra -Wno-unused-local-typedefs ' +
+                '-Wno-unused-value -Wno-unused-parameter -Wno-unused-variable ' +
+                '-g0 -Os'
+
+        // Those are the same defines used for WebGL build optimization
+        // https://github.com/BinomialLLC/basis_universal/blob/master/webgl/encoder/CMakeLists.txt
+        def transcoderDefines =
+                '-DBASISD_SUPPORT_UASTC=1 ' +
+                '-DBASISD_SUPPORT_BC7=1 ' +
+                '-DBASISD_SUPPORT_ATC=0 ' +
+                '-DBASISD_SUPPORT_ASTC_HIGHER_OPAQUE_QUALITY=0 ' +
+                '-DBASISD_SUPPORT_PVRTC2=0 ' +
+                '-DBASISD_SUPPORT_FXT1=0 ' +
+                '-DBASISD_SUPPORT_ETC2_EAC_RG11=0 ' +
+                '-DBASISU_SUPPORT_ENCODING=1 '
+
+        cFlags +=      " -std=c11   $commonFlags $transcoderDefines "
+        cppFlags +=    " -std=c++11 $commonFlags $transcoderDefines "
+        linkerFlags += "            $commonFlags "
+
+        // Disable texture formats we don't support at all.
+        // Macros reference - https://github.com/BinomialLLC/basis_universal/wiki/Transcoder-details-and-shrinking-the-compiled-size-of-the-transcoder#shrinking-the-transcoders-compiled-size
+        cppFlags += ' -DBASISD_SUPPORT_FXT1=0 '
+
+        // Enable for Basis Universal debug messages.
+        // cppFlags += ' -DBASISU_FORCE_DEVEL_MESSAGES=1 '
+    }
+    //FIXME Win32 is not supported due to MinGW is missing some posix thread classes implementation.
+//    add(Windows, x32) {
+//        compilerPrefix = 'mingw32-'
+//        compilerSuffix = '.exe'
+//
+//        // MinGW STL doesn't have the posix thread implementation. Lets give it one.
+//        // https://github.com/meganz/mingw-std-threads
+//        headerDirs += 'mingw_std_threads'
+//
+//        linkerFlags += ' -s '   // Strip debug symbols.
+//
+//    }
+    add(Windows, x64) {
+        compilerSuffix = '.exe'
+
+        linkerFlags += ' -s '   // Strip debug symbols.
+    }
+    add(Linux, x32) {
+
+    }
+    add(Linux, x64) {
+
+    }
+    add(Linux, x32, ARM) {
+
+    }
+    add(Linux, x64, ARM) {
+
+    }
+    add(MacOsX, x64) {
+
+    }
+//    add(Android) {
+//        linkerFlags += ' -llog '  // We use "log.h" lib and should explicitly declare it.
+//
+//        // Android
+//        // SUPPORTED TEXTURES: [ASTC, ETC1, ETC2, DXT, ATC, PVRTC1 and PVRTC2]
+//        cppFlags += ' -DBASISD_SUPPORT_BC7=0 '
+//        cppFlags += ' -DBASISD_SUPPORT_BC7_MODE5=0 '
+//
+//        // Should be in sync with the official supported ABI list.
+//        // https://developer.android.com/ndk/guides/abis#sa
+//        androidABIs = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64']
+//    }
+//    add(IOS) {
+//        cppFlags += ' -stdlib=libc++ '  // iOS compiler toolchain is pretty whiny about this...
+//
+//
+//        // iOS
+//        // SUPPORTED TEXTURES: [ASTC, ETC1, ETC2, PVRTC1]
+//        cppFlags += ' -DBASISD_SUPPORT_DXT1=0 '
+//        cppFlags += ' -DBASISD_SUPPORT_DXT5A=0 '
+//        cppFlags += ' -DBASISD_SUPPORT_BC7=0 '
+//        cppFlags += ' -DBASISD_SUPPORT_BC7_MODE5=0 '
+//        cppFlags += ' -DBASISD_SUPPORT_ATC=0 '
+//        cppFlags += ' -DBASISD_SUPPORT_PVRTC2=0 '
+//    }
+}
+
+getTasksByName('jnigen', false).first().doLast {
+    //FIXME Remove this once "jnigen" task creates "libs" under the respected module (currently it writes to the root project dir).
+    if (file("${rootDir}/libs").exists()) {
+        println "Applying libs dir fix..."
+        ant.move file: "${rootDir}/libs",
+                todir: "${projectDir}"
+    }
+
+    // Update "ndkSuffix" Android build property with platform specific file suffix.
+    if (org.gradle.internal.os.OperatingSystem.current().isWindows()) {
+        ant.replaceregexp(
+                match: '<property name="ndkSuffix" value="" />',
+                replace: '<property name="ndkSuffix" value=".cmd" />',
+                flags: 'g',
+                byline: true) {
+            fileset(dir: 'jni', includes: 'build-android32.xml')
+        }
+    }
+
+    // Fix missing source files in Android.mk.
+    ant.replaceregexp(
+            match: 'LOCAL_SRC_FILES :=  ',
+            replace: "LOCAL_SRC_FILES := ${String.join(' ', nativeSrcFiles)}\n",
+            flags: 'g',
+            byline: true) {
+        fileset(dir: 'jni', includes: 'Android.mk')
+    }
+}
+
+//endregion
+
+// Define all the natives jars so Maven can pickup those and publish.
+artifacts {
+    archives jnigenJarNativesDesktop
+}

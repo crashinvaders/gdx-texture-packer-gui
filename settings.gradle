@@ -1,1 +1,3 @@
-include 'core', 'desktop'
+include 'core'
+include 'desktop'
+include 'basisu-wrapper'

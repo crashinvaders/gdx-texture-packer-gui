@@ -1,0 +1,4 @@
+basisu-wrapper/libs/**/*.dll filter=lfs diff=lfs merge=lfs -text
+basisu-wrapper/libs/**/*.dylib filter=lfs diff=lfs merge=lfs -text
+basisu-wrapper/libs/**/*.so filter=lfs diff=lfs merge=lfs -text
+*.basis filter=lfs diff=lfs merge=lfs -text
