@@ -13,6 +13,11 @@ sourceSets.main.resources.srcDirs = [ 'resources/' ]
 dependencies {
     implementation files('libs/libimagequant-java.jar')
 
+    api project(':basisu-wrapper')
+    // Desktop natives should be build and packed as jar for this dependency to work.
+    // ./gradlew jnigen jnigenBuild<platform> jnigenJarNativesDesktop
+    runtimeOnly files("${project(':basisu-wrapper').buildDir}/libs/basisu-wrapper-natives-desktop.jar")
+
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
 //        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use locally modified copy of this library.
     api "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"

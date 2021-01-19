@@ -123,6 +123,7 @@ public class PackDialogController implements ActionContainer {
                         new PngFileTypeProcessor(),
                         new JpegFileTypeProcessor(),
                         new KtxFileTypeProcessor(),
+                        new BasisuFileTypeProcessor(),
 
                         // Packing
                         new PackingProcessor(),

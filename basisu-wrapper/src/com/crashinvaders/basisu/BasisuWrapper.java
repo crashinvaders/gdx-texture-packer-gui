@@ -19,6 +19,34 @@ public class BasisuWrapper {
 
     */
 
+    public static int getTotalImages(Buffer data) {
+        return getTotalImagesNative(data, data.capacity());
+    }
+    private static native int getTotalImagesNative(Buffer data, int dataSize); /*
+        return basisuWrapper::getTotalImages((uint8_t*)data, dataSize);
+    */
+
+    public static int getTotalMipmapLevels(Buffer data, int imageIndex) {
+        return getTotalMipmapLevelsNative(data, data.capacity(), imageIndex);
+    }
+    private static native int getTotalMipmapLevelsNative(Buffer data, int dataSize, int imageIndex); /*
+        return basisuWrapper::getTotalMipmapLevels((uint8_t*)data, dataSize, imageIndex);
+    */
+
+    public static int getImageWidth(Buffer data, int imageIndex, int levelIndex) {
+        return getImageWidthNative(data, data.capacity(), imageIndex, levelIndex);
+    }
+    private static native int getImageWidthNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
+        return basisuWrapper::getImageWidth((uint8_t*)data, dataSize, imageIndex, levelIndex);
+    */
+
+    public static int getImageHeight(Buffer data, int imageIndex, int levelIndex) {
+        return getImageHeightNative(data, data.capacity(), imageIndex, levelIndex);
+    }
+    private static native int getImageHeightNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
+        return basisuWrapper::getImageHeight((uint8_t*)data, dataSize, imageIndex, levelIndex);
+    */
+
     /**
      * Quick header validation - no crc16 checks.
      */

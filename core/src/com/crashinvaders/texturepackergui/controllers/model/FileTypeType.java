@@ -4,7 +4,9 @@ package com.crashinvaders.texturepackergui.controllers.model;
 public enum FileTypeType {
     PNG("png"),
     JPEG("jpeg"),
-    KTX("ktx");
+    KTX("ktx"),
+    BASIS("basis"),
+    ;
 
     public final String key;
 

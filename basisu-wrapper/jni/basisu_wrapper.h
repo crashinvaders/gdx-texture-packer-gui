@@ -8,6 +8,14 @@
 
 namespace basisuWrapper {
 
+    uint32_t getTotalImages(uint8_t *data, uint32_t dataSize);
+
+    uint32_t getTotalMipmapLevels(uint8_t *data, uint32_t dataSize, uint32_t imageIndex);
+
+    uint32_t getImageWidth(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex);
+
+    uint32_t getImageHeight(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex);
+
     bool validateHeader(uint8_t *data, uint32_t dataSize);
 
     bool validateChecksum(uint8_t *data, uint32_t dataSize, bool fullValidation);

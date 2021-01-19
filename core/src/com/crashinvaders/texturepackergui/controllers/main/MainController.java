@@ -16,25 +16,20 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.visui.Toast;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.*;
-import com.crashinvaders.texturepackergui.controllers.main.filetype.FileTypeController;
-import com.crashinvaders.texturepackergui.controllers.main.filetype.JpegFileTypeController;
-import com.crashinvaders.texturepackergui.controllers.main.filetype.KtxFileTypeController;
-import com.crashinvaders.texturepackergui.controllers.main.filetype.PngFileTypeController;
+import com.crashinvaders.texturepackergui.controllers.main.filetype.*;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.ScaleFactorModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.JpegFileTypeModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.KtxFileTypeModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
 import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
@@ -89,6 +84,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @Inject @LmlInject PngFileTypeController ftPngController;
     @Inject @LmlInject JpegFileTypeController ftJpegController;
     @Inject @LmlInject KtxFileTypeController ftKtxController;
+    @Inject @LmlInject BasisuFileTypeController ftBasisuController;
 
     @ViewStage Stage stage;
 
@@ -146,6 +142,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         fileTypeControllers.put(WidgetData.FileType.PNG, ftPngController);
         fileTypeControllers.put(WidgetData.FileType.JPEG, ftJpegController);
         fileTypeControllers.put(WidgetData.FileType.KTX, ftKtxController);
+        fileTypeControllers.put(WidgetData.FileType.BASIS, ftBasisuController);
         for (int i = 0; i < fileTypeControllers.size; i++) {
             FileTypeController ftc = fileTypeControllers.getValueAt(i);
             ftc.onViewCreated(stage);
@@ -511,6 +508,11 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                 case KTX:
                     project.setFileType(new KtxFileTypeModel());
                     break;
+                case BASIS:
+                    project.setFileType(new BasisuFileTypeModel());
+                    break;
+                default:
+                    Gdx.app.error(TAG, "Unexpected file type value: " + fileType.modelType, new RuntimeException());
             }
         }
     }

@@ -33,6 +33,44 @@ namespace basisuWrapper {
         codebook.init(g_global_selector_cb_size, g_global_selector_cb);
     }
 
+    uint32_t getTotalImages(uint8_t *data, uint32_t dataSize) {
+        initBasisu();
+        basisu_transcoder transcoder(&codebook);
+        return transcoder.get_total_images(data, dataSize);
+    }
+
+    uint32_t getTotalMipmapLevels(uint8_t *data, uint32_t dataSize, uint32_t imageIndex) {
+        initBasisu();
+        basisu_transcoder transcoder(&codebook);
+        return transcoder.get_total_image_levels(data, dataSize, imageIndex);
+    }
+
+    uint32_t getImageWidth(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
+        initBasisu();
+        basisu_transcoder transcoder(&codebook);
+        uint32_t width;
+        uint32_t height;
+        uint32_t totalBlocks;
+        if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, width, height, totalBlocks)) {
+            basisuUtils::logError(LOG_TAG, "Failed to retrieve image info.");
+            return -1;
+        }
+        return width;
+    }
+
+    uint32_t getImageHeight(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
+        initBasisu();
+        basisu_transcoder transcoder(&codebook);
+        uint32_t width;
+        uint32_t height;
+        uint32_t totalBlocks;
+        if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, width, height, totalBlocks)) {
+            basisuUtils::logError(LOG_TAG, "Failed to retrieve image info.");
+            return -1;
+        }
+        return height;
+    }
+
     bool validateHeader(uint8_t *data, uint32_t dataSize) {
         initBasisu();
         basisu_transcoder transcoder(&codebook);

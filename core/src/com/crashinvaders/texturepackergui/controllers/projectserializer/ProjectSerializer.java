@@ -12,13 +12,10 @@ import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
 import com.crashinvaders.texturepackergui.controllers.TePng8CompDialogController;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.controllers.model.*;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.FileTypeModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.JpegFileTypeModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.KtxFileTypeModel;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -216,6 +213,9 @@ public class ProjectSerializer {
                         break;
                     case KTX:
                         fileTypeModel = new KtxFileTypeModel();
+                        break;
+                    case BASIS:
+                        fileTypeModel = new BasisuFileTypeModel();
                         break;
                     default:
                         Gdx.app.error(TAG, "Unexpected FileTypeType: " + fileTypeType);

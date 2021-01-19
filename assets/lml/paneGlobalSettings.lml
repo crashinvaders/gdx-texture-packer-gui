@@ -24,6 +24,10 @@
             <:import path="lml/fileTypeConfigKtx.lml"/>
         </shrinkcontainer>
 
+        <shrinkcontainer id="ftcBasisu" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
+            <:import path="lml/fileTypeConfigBasisu.lml"/>
+        </shrinkcontainer>
+
     </vistable>
 
     <:import path="lml/paneLockPack.lml" replace="id">paneLockGlobalSettings</:import>

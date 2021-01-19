@@ -1,11 +1,7 @@
 package com.crashinvaders.basisu;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -147,9 +143,9 @@ public class TestUtils {
         // RGBA bytes.
         byte[] bytes = new byte[image.getWidth() * image.getHeight() * 4];
 
-        for (int y = 0; y < image.getWidth(); y++) {
+        for (int y = 0; y < image.getHeight(); y++) {
             final int rowStartIdx = y * image.getWidth() * 4;
-            for (int x = 0; x < image.getHeight(); x++) {
+            for (int x = 0; x < image.getWidth(); x++) {
                 int pixelIndex = rowStartIdx + x * 4;
 
                 int argb = image.getRGB(x, y);

@@ -35,6 +35,14 @@ public class BasisuWrapperTest {
     }
 
     @Test
+    public void testImageInfo() {
+        assertEquals(1, BasisuWrapper.getTotalImages(basisBuffer));
+        assertEquals(1, BasisuWrapper.getTotalMipmapLevels(basisBuffer, 0));
+        assertEquals(IMAGE_WIDTH, BasisuWrapper.getImageWidth(basisBuffer, 0, 0));
+        assertEquals(IMAGE_HEIGHT, BasisuWrapper.getImageHeight(basisBuffer, 0, 0));
+    }
+
+    @Test
     public void testValidateHeader() {
         assertTrue(BasisuWrapper.validateHeader(basisBuffer));
     }
@@ -44,7 +52,7 @@ public class BasisuWrapperTest {
         ByteBuffer rgba8888 = BasisuWrapper.transcodeRgba32(basisBuffer, 0, 0);
 
         // Check if encoding is correct.
-        assertEquals(rgba8888.capacity(), IMAGE_WIDTH * IMAGE_HEIGHT * 4);
+        assertEquals(IMAGE_WIDTH * IMAGE_HEIGHT * 4, rgba8888.capacity());
 
         BufferedImage bufferedImage = TestUtils.fromRgba8888(rgba8888, IMAGE_WIDTH, IMAGE_HEIGHT);
         TestUtils.saveImagePng(bufferedImage, IMAGE_FILE + ".rgba32");

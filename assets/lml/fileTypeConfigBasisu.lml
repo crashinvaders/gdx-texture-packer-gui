@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE vistable SYSTEM "/lml.dtd">
+
+<vistable tablealign="top" pad="4">
+    <label align="right" padright="4">TO BE ADDED SOON!"</label>
+
+
+<!--    <label align="right" padright="4">@gsTextureFormat</label>-->
+<!--    <selectbox id="cboKtxFormat" growx="true" change="ftcKtx.onFormatChanged"/>-->
+
+<!--    <:row padtop="4"/>-->
+
+<!--    <label align="right" padright="4">@gsEncoding</label>-->
+<!--    <selectbox id="cboKtxEncoding" growx="true" change="ftcKtx.onEncodingChanged"/>-->
+
+<!--    <:row padtop="4"/>-->
+
+<!--    <label align="right" padright="4">@gsZKTX</label>-->
+<!--    <vischeckbox id="chbKtxZipping" align="left" change="ftcKtx.onZippingChanged"/>-->
+</vistable>

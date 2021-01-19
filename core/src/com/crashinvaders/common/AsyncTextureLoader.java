@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.Disposable;
+import com.crashinvaders.common.basisu.BasisuTextureData;
+import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 
 /** Simple utility class that starts loading texture asynchronously immediately after creation. */
 public class AsyncTextureLoader implements Disposable {
@@ -28,49 +30,46 @@ public class AsyncTextureLoader implements Disposable {
     }
 
     private void startLoadingProcess() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (disposed) {
-                    reportListenerError(null);
-                    return;
-                }
+        new Thread(() -> {
+            if (disposed) {
+                reportListenerError(null);
+                return;
+            }
 
-                final TextureData textureData;
+            final TextureData textureData;
 
-                try {
+            try {
+                if (FileTypeType.BASIS.key.equals(textureFile.extension())) {
+                    textureData = new BasisuTextureData(textureFile, 0, 0);
+                } else {
                     textureData = TextureData.Factory
                             .loadFromFile(textureFile, Pixmap.Format.RGBA8888, false);
-
-                    if (!textureData.isPrepared()) textureData.prepare();
-                } catch (Exception e) {
-                    reportListenerError(e);
-                    return;
                 }
+                if (!textureData.isPrepared()) textureData.prepare();
+            } catch (Exception e) {
+                reportListenerError(e);
+                return;
+            }
 
+            if (disposed) {
+                textureData.disposePixmap();
+                reportListenerError(null);
+                return;
+            }
+
+            Gdx.app.postRunnable(() -> {
                 if (disposed) {
                     textureData.disposePixmap();
-                    reportListenerError(null);
+                    listener.onTextureLoadFailed(null);
                     return;
                 }
 
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (disposed) {
-                            textureData.disposePixmap();
-                            listener.onTextureLoadFailed(null);
-                            return;
-                        }
+                Texture texture = new Texture(textureData);
+                texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+                texture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
 
-                        Texture texture = new Texture(textureData);
-                        texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-                        texture.setWrap(Texture.TextureWrap.ClampToEdge, Texture.TextureWrap.ClampToEdge);
-
-                        listener.onTextureLoaded(texture);
-                    }
-                });
-            }
+                listener.onTextureLoaded(texture);
+            });
         }).start();
     }
 

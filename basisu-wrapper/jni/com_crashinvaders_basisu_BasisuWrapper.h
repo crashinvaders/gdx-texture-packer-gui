@@ -9,6 +9,38 @@ extern "C" {
 #endif
 /*
  * Class:     com_crashinvaders_basisu_BasisuWrapper
+ * Method:    getTotalImagesNative
+ * Signature: (Ljava/nio/Buffer;I)I
+ */
+JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getTotalImagesNative
+  (JNIEnv *, jclass, jobject, jint);
+
+/*
+ * Class:     com_crashinvaders_basisu_BasisuWrapper
+ * Method:    getTotalMipmapLevelsNative
+ * Signature: (Ljava/nio/Buffer;II)I
+ */
+JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getTotalMipmapLevelsNative
+  (JNIEnv *, jclass, jobject, jint, jint);
+
+/*
+ * Class:     com_crashinvaders_basisu_BasisuWrapper
+ * Method:    getImageWidthNative
+ * Signature: (Ljava/nio/Buffer;III)I
+ */
+JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getImageWidthNative
+  (JNIEnv *, jclass, jobject, jint, jint, jint);
+
+/*
+ * Class:     com_crashinvaders_basisu_BasisuWrapper
+ * Method:    getImageHeightNative
+ * Signature: (Ljava/nio/Buffer;III)I
+ */
+JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getImageHeightNative
+  (JNIEnv *, jclass, jobject, jint, jint, jint);
+
+/*
+ * Class:     com_crashinvaders_basisu_BasisuWrapper
  * Method:    validateHeaderNative
  * Signature: (Ljava/nio/Buffer;I)Z
  */

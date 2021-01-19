@@ -106,6 +106,7 @@ public class WidgetData {
         PNG("fileTypePng", FileTypeType.PNG),
         JPEG("fileTypeJpeg", FileTypeType.JPEG),
         KTX("fileTypeKtx", FileTypeType.KTX),
+        BASIS("fileTypeBasisu", FileTypeType.BASIS),
         ;
 
         public final String nameKey;
