@@ -91,19 +91,43 @@ public class BasisuWrapper {
         return byteArray;
     */
 
-    public static ByteBuffer encode(Buffer rgbaData, int width, int height) {
+    /**
+     *
+     * @param uastc True to generate UASTC .basis file data, otherwise ETC1S
+     * @param flipY Flip images across Y axis
+     * @param compressionLevel Compression level, from 0 to 5 (BASISU_MAX_COMPRESSION_LEVEL, higher is slower)
+     * @param perceptual Use perceptual sRGB colorspace metrics (for normal maps, etc.)
+     * @param forceAlpha Always put alpha slices in the output basis file, even when the input doesn't have alpha
+     * @param mipEnabled If mipmaps should be generated
+     * @param mipScale The mipmap scale step
+     * @param qualityLevel Controls the quality level. It ranges from [1,255]
+     * @param userdata0 Goes directly into the Basis file header
+     * @param userdata1 Goes directly into the Basis file header
+     */
+    public static ByteBuffer encode(Buffer rgbaData, int width, int height,
+                                    boolean uastc, boolean flipY, int compressionLevel,
+                                    boolean perceptual, boolean forceAlpha,
+                                    boolean mipEnabled, float mipScale, int qualityLevel,
+                                    int userdata0, int userdata1) {
         if (rgbaData.capacity() != width * height * 4) {
             throw new BasisuWrapperException("The input data size doesn't match to a an expected RGBA8888 width*height image size.");
         }
 
-        byte[] encodedBytes = encodeNative(rgbaData, width, height);
+        byte[] encodedBytes = encodeNative(rgbaData, width, height,
+                uastc, flipY, compressionLevel, perceptual, forceAlpha,
+                mipEnabled, mipScale, qualityLevel, userdata0, userdata1);
         return wrapIntoBuffer(encodedBytes);
     }
-    private static native byte[] encodeNative(Buffer dataRaw, int width, int height); /*MANUAL
+    private static native byte[] encodeNative(Buffer dataRaw, int width, int height,
+                                              boolean uastc, boolean flipY, int compressionLevel, boolean perceptual, boolean forceAlpha,
+                                              boolean mipEnabled, float mipScale, int qualityLevel,
+                                              int userdata0, int userdata1); /*MANUAL
         uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
         std::vector<uint8_t> encodedData;
 
-        if (!basisuWrapper::encode(encodedData, data, width, height)) {
+        if (!basisuWrapper::encode(encodedData, data, width, height,
+                                   uastc, flipY, compressionLevel, perceptual, forceAlpha,
+                                   mipEnabled, mipScale, qualityLevel, (uint32_t)userdata0, (uint32_t)userdata1)) {
             basisuUtils::throwException(env, "Error during image transcoding.");
             return 0;
         };

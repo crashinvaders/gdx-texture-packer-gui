@@ -71,7 +71,7 @@ public class BasisuWrapperTest {
             rgbaBuffer = TestUtils.asByteBuffer(bytes);
         }
 
-        ByteBuffer basisBuffer = BasisuWrapper.encode(rgbaBuffer, width, height);
+        ByteBuffer basisBuffer = BasisuWrapper.encode(rgbaBuffer, width, height, false, false, 1, false, false, false, 2f, 128, 0, 0);
 
 
         assertTrue(BasisuWrapper.validateHeader(basisBuffer));

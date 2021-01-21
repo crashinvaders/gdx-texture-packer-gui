@@ -6,12 +6,16 @@ import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.BasisuFileTypeModel;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
+import com.crashinvaders.texturepackergui.views.seekbar.IntSeekBarModel;
+import com.crashinvaders.texturepackergui.views.seekbar.SeekBar;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewActionContainer;
+import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
 
 @Component
 @ViewActionContainer("ftcBasisu")
@@ -21,14 +25,17 @@ public class BasisuFileTypeController implements FileTypeController {
     @Inject ModelService modelService;
 
     @LmlActor("ftcBasisu") ShrinkContainer container;
+    @LmlActor("cboBasisInterFormat") VisSelectBox<IntermediateFormat> cboInterFormat;
+    @LmlActor("sbBasisQualityLevel") SeekBar sbQualityLevel;
+    @LmlActor("sbBasisCompLevel") SeekBar sbCompLevel;
 
     private BasisuFileTypeModel model;
     private boolean ignoreViewChangeEvents = false;
-    private boolean ignoreEncodingChangeEvent = false;
 
     @Override
     public void onViewCreated(Stage stage) {
         ignoreViewChangeEvents = true;
+        cboInterFormat.setItems(IntermediateFormat.values());
         ignoreViewChangeEvents = false;
     }
 
@@ -37,9 +44,9 @@ public class BasisuFileTypeController implements FileTypeController {
         model = modelService.getProject().getFileType();
         container.setVisible(true);
 
-        updateFormat();
-        updateEncoding();
-        updateZipping();
+        updateInterFormat();
+        updateQualityLevel();
+        updateCompressionLevel();
     }
 
     @Override
@@ -49,95 +56,71 @@ public class BasisuFileTypeController implements FileTypeController {
     }
 
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
-        updateFormat();
-        updateEncoding();
-        updateZipping();
+        updateInterFormat();
+        updateQualityLevel();
+        updateCompressionLevel();
     }
 
     @OnEvent(FileTypePropertyChangedEvent.class) void onEvent(FileTypePropertyChangedEvent event) {
-//        switch (event.getProperty()) {
-//            case KTX_FORMAT:
-//                updateFormat();
-//                break;
-//            case KTX_ENCODING:
-//                updateEncoding();
-//                break;
-//            case KTX_ZIPPING:
-//                updateZipping();
-//                break;
-//        }
+        switch (event.getProperty()) {
+            case BASIS_UASTC:
+                updateInterFormat();
+                break;
+            case BASIS_QUALITY_LEVEL:
+                updateQualityLevel();
+                break;
+            case BASIS_COMPRESSION_LEVEL:
+                updateCompressionLevel();
+                break;
+        }
     }
 
-//    @LmlAction("onFormatChanged") void onFormatChanged() {
-//        if (model == null) return;
-//        if (ignoreViewChangeEvents) return;
-//
-//        KtxFileTypeModel.Format format = cboFormat.getSelected();
-//        model.setFormat(format);
-//    }
-//
-//    @LmlAction("onEncodingChanged") void onEncodingChanged() {
-//        if (model == null) return;
-//        if (ignoreViewChangeEvents) return;
-//        if (ignoreEncodingChangeEvent) return;
-//
-//        Object encoding = cboEncoding.getSelected();
-//        switch (model.getFormat()) {
-//            case ETC1:
-//                model.setEncodingEtc1((KtxFileTypeModel.EncodingETC1) encoding);
-//                break;
-//            case ETC2:
-//                model.setEncodingEtc2((KtxFileTypeModel.EncodingETC2) encoding);
-//                break;
-//        }
-//    }
-//
-//    @LmlAction("onZippingChanged") void onZippingChanged() {
-//        if (model == null) return;
-//
-//        boolean zipping = chbZipping.isChecked();
-//        model.setZipping(zipping);
-//    }
+    @LmlAction("onInterFormatChanged") void onInterFormatChanged() {
+        if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
-    private void updateFormat() {
+        IntermediateFormat format = cboInterFormat.getSelected();
+        model.setUastc(format == IntermediateFormat.UASTC);
+    }
+
+    @LmlAction("onQualityLevelChanged") void onQualityLevelChanged() {
+        if (model == null) return;
+        if (ignoreViewChangeEvents) return;
+
+        int qualityLevel = ((IntSeekBarModel) sbQualityLevel.getModel()).getValue();
+        model.setQualityLevel(qualityLevel);
+    }
+
+    @LmlAction("onCompLevelChanged") void onCompLevelChanged() {
+        if (model == null) return;
+        if (ignoreViewChangeEvents) return;
+
+        int compLevel = ((IntSeekBarModel) sbCompLevel.getModel()).getValue();
+        model.setCompressionLevel(compLevel);
+    }
+
+    private void updateInterFormat() {
         if (model == null) return;
 
-//        KtxFileTypeModel.Format format = model.getFormat();
-//        cboFormat.setSelected(format);
-//
-//        ignoreEncodingChangeEvent = true;
-//        switch (format) {
-//            case ETC1:
-//                cboEncoding.setItems((Object[])KtxFileTypeModel.EncodingETC1.values());
-//                cboEncoding.setSelected(model.getEncodingEtc1());
-//                break;
-//            case ETC2:
-//                cboEncoding.setItems((Object[])KtxFileTypeModel.EncodingETC2.values());
-//                cboEncoding.setSelected(model.getEncodingEtc2());
-//                break;
-//        }
-//        ignoreEncodingChangeEvent = false;
+        IntermediateFormat format = model.isUastc() ? IntermediateFormat.UASTC : IntermediateFormat.ETC1S;
+        cboInterFormat.setSelected(format);
     }
 
-    private void updateEncoding() {
-//        if (model == null) return;
-//
-//        ignoreEncodingChangeEvent = true;
-//        switch (model.getFormat()) {
-//            case ETC1:
-//                cboEncoding.setSelected(model.getEncodingEtc1());
-//                break;
-//            case ETC2:
-//                cboEncoding.setSelected(model.getEncodingEtc2());
-//                break;
-//        }
-//        ignoreEncodingChangeEvent = false;
+    private void updateQualityLevel() {
+        if (model == null) return;
+
+        int qualityLevel = model.getQualityLevel();
+        ((IntSeekBarModel) sbQualityLevel.getModel()).setValue(qualityLevel);
     }
 
-    private void updateZipping() {
-//        if (model == null) return;
-//
-//        boolean zipping = model.isZipping();
-//        chbZipping.setChecked(zipping);
+    private void updateCompressionLevel() {
+        if (model == null) return;
+
+        int compLevel = model.getCompressionLevel();
+        ((IntSeekBarModel) sbCompLevel.getModel()).setValue(compLevel);
+    }
+
+    public enum IntermediateFormat {
+        ETC1S, UASTC
     }
 }

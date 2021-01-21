@@ -7,6 +7,7 @@
 #include "basisu_transcoder.h"
 #include "basisu_enc.h"
 #include "basisu_comp.h"
+#include "basisu_frontend.h"
 
 using namespace basist;
 using namespace basisu;
@@ -126,21 +127,40 @@ namespace basisuWrapper {
         return status;
     }
 
-    bool encode(std::vector<uint8_t> &out, uint8_t *rgbaData, uint32_t width, uint32_t height) {
+    bool encode(std::vector<uint8_t> &out, uint8_t *rgbaData, uint32_t width, uint32_t height,
+                    bool uastc, bool flipY, int compressionLevel, bool perceptual, bool forceAlpha,
+                    bool mipEnabled, float mipScale, int qualityLevel,
+                    uint32_t userdata0, uint32_t userdata1) {
+
+        // Some sanity checks...
+        if (compressionLevel < 0 || compressionLevel > (int)basisu::BASISU_MAX_COMPRESSION_LEVEL) {
+            basisuUtils::logError(LOG_TAG, "The compression level value should fall in the range 0..5");
+            return false;
+        }
+        if (qualityLevel < (int)basisu::BASISU_QUALITY_MIN || qualityLevel > (int)basisu::BASISU_QUALITY_MAX) {
+            basisuUtils::logError(LOG_TAG, "The quality level value should fall in the range 1..255");
+            return false;
+        }
+
         initBasisu();
-
-        etc1_global_selector_codebook selectorCodebook(
-                basist::g_global_selector_cb_size,
-                basist::g_global_selector_cb);
-
 
         image imageEntry(rgbaData, width, height, 4);
 
         basis_compressor_params params;
         params.m_source_images.push_back(imageEntry);
-        params.m_pSel_codebook = &selectorCodebook;
+        params.m_pSel_codebook = &codebook;
         params.m_multithreading = false;
-        params.m_quality_level = 128;   // Should be a parameter.
+
+        params.m_uastc = uastc;
+        params.m_y_flip = flipY;
+        params.m_compression_level = compressionLevel;
+        params.m_perceptual = perceptual;
+        params.m_force_alpha = forceAlpha;
+        params.m_mip_gen = mipEnabled;
+        params.m_mip_scale = mipScale;
+        params.m_quality_level = qualityLevel;
+        params.m_userdata0 = userdata0;
+        params.m_userdata1 = userdata1;
 
         params.m_status_output = true;
 #ifdef DEBUG

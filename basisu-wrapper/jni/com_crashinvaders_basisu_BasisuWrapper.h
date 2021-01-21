@@ -66,10 +66,10 @@ JNIEXPORT jbyteArray JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_transco
 /*
  * Class:     com_crashinvaders_basisu_BasisuWrapper
  * Method:    encodeNative
- * Signature: (Ljava/nio/Buffer;II)[B
+ * Signature: (Ljava/nio/Buffer;IIZZIZZZFIII)[B
  */
 JNIEXPORT jbyteArray JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_encodeNative
-  (JNIEnv *, jclass, jobject, jint, jint);
+  (JNIEnv *, jclass, jobject, jint, jint, jboolean, jboolean, jint, jboolean, jboolean, jboolean, jfloat, jint, jint, jint);
 
 #ifdef __cplusplus
 }

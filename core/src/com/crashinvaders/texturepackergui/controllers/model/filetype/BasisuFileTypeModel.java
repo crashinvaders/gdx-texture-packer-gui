@@ -5,12 +5,64 @@ import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent.Property;
-import com.crashinvaders.texturepackergui.utils.CommonUtils;
-import com.crashinvaders.texturepackergui.utils.KtxEtc2Processor;
 
 import java.io.StringWriter;
 
 public class BasisuFileTypeModel extends FileTypeModel {
+
+    /** True to generate UASTC .basis file data, otherwise ETC1S */
+    private boolean uastc = false;
+    /** Compression level, from 0 to 5 (higher is slower) */
+    private int compressionLevel = 1;
+    /** Controls the quality level. It ranges from [1,255] */
+    private int qualityLevel = 128;
+
+    public boolean isUastc() {
+        return uastc;
+    }
+
+    public void setUastc(boolean uastc) {
+        if (this.uastc == uastc) return;
+        this.uastc = uastc;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new FileTypePropertyChangedEvent(this, Property.BASIS_UASTC));
+        }
+    }
+
+    public int getCompressionLevel() {
+        return compressionLevel;
+    }
+
+    public void setCompressionLevel(int compressionLevel) {
+        if (compressionLevel < 0 || compressionLevel > 5) {
+            throw new IllegalArgumentException("Compression level should be in range of 0..5. Current value: " + compressionLevel);
+        }
+
+        if (this.compressionLevel == compressionLevel) return;
+        this.compressionLevel = compressionLevel;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new FileTypePropertyChangedEvent(this, Property.BASIS_COMPRESSION_LEVEL));
+        }
+    }
+
+    public int getQualityLevel() {
+        return qualityLevel;
+    }
+
+    public void setQualityLevel(int qualityLevel) {
+        if (qualityLevel < 1 || qualityLevel > 255) {
+            throw new IllegalArgumentException("Quality level should be in range of 1..255. Current value: " + qualityLevel);
+        }
+
+        if (this.qualityLevel == qualityLevel) return;
+        this.qualityLevel = qualityLevel;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new FileTypePropertyChangedEvent(this, Property.BASIS_QUALITY_LEVEL));
+        }
+    }
 
     @Override
     public FileTypeType getType() {
@@ -24,10 +76,9 @@ public class BasisuFileTypeModel extends FileTypeModel {
             Json json = new Json();
             json.setWriter(new JsonWriter(buffer));
             json.writeObjectStart();
-//            json.writeValue("format", format.name());
-//            json.writeValue("encodingEtc1", encodingEtc1.name());
-//            json.writeValue("encodingEtc2", encodingEtc2.name());
-//            json.writeValue("zipping", zipping);
+            json.writeValue("uastc", uastc);
+            json.writeValue("compressionLevel", compressionLevel);
+            json.writeValue("qualityLevel", qualityLevel);
             json.writeObjectEnd();
             return buffer.toString();
         } finally {
@@ -40,17 +91,13 @@ public class BasisuFileTypeModel extends FileTypeModel {
         if (data == null) return;
 
         JsonValue jsonValue = new JsonReader().parse(data);
-//        this.format = CommonUtils.findEnumConstantSafe(Format.class,
-//                jsonValue.getString("format", null), this.format);
-//        this.encodingEtc1 = CommonUtils.findEnumConstantSafe(EncodingETC1.class,
-//                jsonValue.getString("encodingEtc1", null), this.encodingEtc1);
-//        this.encodingEtc2 = CommonUtils.findEnumConstantSafe(EncodingETC2.class,
-//                jsonValue.getString("encodingEtc2", null), this.encodingEtc2);
-//        this.zipping = jsonValue.getBoolean("zipping", this.zipping);
+        this.uastc = jsonValue.getBoolean("uastc", this.uastc);
+        this.compressionLevel = jsonValue.getInt("compressionLevel", this.compressionLevel);
+        this.qualityLevel = jsonValue.getInt("qualityLevel", this.qualityLevel);
     }
 
     @Override
     public int computeStateHash() {
-        return StateHashUtils.computeHash(/*format, encodingEtc1, encodingEtc2, zipping*/);
+        return StateHashUtils.computeHash(uastc, compressionLevel, qualityLevel);
     }
 }

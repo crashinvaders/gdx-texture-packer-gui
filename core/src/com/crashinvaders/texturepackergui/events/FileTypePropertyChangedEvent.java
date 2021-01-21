@@ -29,6 +29,11 @@ public class FileTypePropertyChangedEvent {
 
         KTX_FORMAT,
         KTX_ENCODING,
-        KTX_ZIPPING
+        KTX_ZIPPING,
+
+        BASIS_UASTC,
+        BASIS_COMPRESSION_LEVEL,
+        BASIS_QUALITY_LEVEL,
+        ;
     }
 }

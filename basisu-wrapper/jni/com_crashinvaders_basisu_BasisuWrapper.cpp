@@ -15,7 +15,7 @@
     static inline jint wrapped_Java_com_crashinvaders_basisu_BasisuWrapper_getTotalImagesNative
 (JNIEnv* env, jclass clazz, jobject obj_data, jint dataSize, unsigned char* data) {
 
-//@line:27
+//@line:25
 
         return basisuWrapper::getTotalImages((uint8_t*)data, dataSize);
     
@@ -33,7 +33,7 @@ JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getTotalImage
 static inline jint wrapped_Java_com_crashinvaders_basisu_BasisuWrapper_getTotalMipmapLevelsNative
 (JNIEnv* env, jclass clazz, jobject obj_data, jint dataSize, jint imageIndex, unsigned char* data) {
 
-//@line:34
+//@line:32
 
         return basisuWrapper::getTotalMipmapLevels((uint8_t*)data, dataSize, imageIndex);
     
@@ -51,7 +51,7 @@ JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getTotalMipma
 static inline jint wrapped_Java_com_crashinvaders_basisu_BasisuWrapper_getImageWidthNative
 (JNIEnv* env, jclass clazz, jobject obj_data, jint dataSize, jint imageIndex, jint levelIndex, unsigned char* data) {
 
-//@line:41
+//@line:39
 
         return basisuWrapper::getImageWidth((uint8_t*)data, dataSize, imageIndex, levelIndex);
     
@@ -69,7 +69,7 @@ JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getImageWidth
 static inline jint wrapped_Java_com_crashinvaders_basisu_BasisuWrapper_getImageHeightNative
 (JNIEnv* env, jclass clazz, jobject obj_data, jint dataSize, jint imageIndex, jint levelIndex, unsigned char* data) {
 
-//@line:48
+//@line:46
 
         return basisuWrapper::getImageHeight((uint8_t*)data, dataSize, imageIndex, levelIndex);
     
@@ -87,7 +87,7 @@ JNIEXPORT jint JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_getImageHeigh
 static inline jboolean wrapped_Java_com_crashinvaders_basisu_BasisuWrapper_validateHeaderNative
 (JNIEnv* env, jclass clazz, jobject obj_data, jint dataSize, unsigned char* data) {
 
-//@line:58
+//@line:56
 
         return basisuWrapper::validateHeader((uint8_t*)data, dataSize);
     
@@ -105,7 +105,7 @@ JNIEXPORT jboolean JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_validateH
 static inline jboolean wrapped_Java_com_crashinvaders_basisu_BasisuWrapper_validateChecksumNative
 (JNIEnv* env, jclass clazz, jobject obj_data, jint dataSize, jboolean fullValidation, unsigned char* data) {
 
-//@line:68
+//@line:66
 
         return basisuWrapper::validateChecksum((uint8_t*)data, dataSize, fullValidation);
     
@@ -122,7 +122,7 @@ JNIEXPORT jboolean JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_validateC
 
 JNIEXPORT jbyteArray JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_transcodeRgba32Native(JNIEnv* env, jclass clazz, jobject dataRaw, jint dataSize, jint imageIndex, jint levelIndex) {
 
-//@line:82
+//@line:80
 
         uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
         std::vector<uint8_t> transcodedData;
@@ -138,14 +138,16 @@ JNIEXPORT jbyteArray JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_transco
     
 }
 
-JNIEXPORT jbyteArray JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_encodeNative(JNIEnv* env, jclass clazz, jobject dataRaw, jint width, jint height) {
+JNIEXPORT jbyteArray JNICALL Java_com_crashinvaders_basisu_BasisuWrapper_encodeNative(JNIEnv* env, jclass clazz, jobject dataRaw, jint width, jint height, jboolean uastc, jboolean flipY, jint compressionLevel, jboolean perceptual, jboolean forceAlpha, jboolean mipEnabled, jfloat mipScale, jint qualityLevel, jint userdata0, jint userdata1) {
 
-//@line:104
+//@line:124
 
         uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
         std::vector<uint8_t> encodedData;
 
-        if (!basisuWrapper::encode(encodedData, data, width, height)) {
+        if (!basisuWrapper::encode(encodedData, data, width, height,
+                                   uastc, flipY, compressionLevel, perceptual, forceAlpha,
+                                   mipEnabled, mipScale, qualityLevel, (uint32_t)userdata0, (uint32_t)userdata1)) {
             basisuUtils::throwException(env, "Error during image transcoding.");
             return 0;
         };

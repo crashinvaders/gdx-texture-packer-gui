@@ -101,6 +101,7 @@ public class KtxFileTypeController implements FileTypeController {
 
     @LmlAction("onZippingChanged") void onZippingChanged() {
         if (model == null) return;
+        if (ignoreViewChangeEvents) return;
 
         boolean zipping = chbZipping.isChecked();
         model.setZipping(zipping);

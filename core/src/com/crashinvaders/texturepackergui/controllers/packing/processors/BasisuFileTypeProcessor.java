@@ -36,10 +36,24 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
         pack.getSettings().format = Pixmap.Format.RGBA8888;
 
-        node.setPageFileWriter(new BasisPageFileWriter());
+        node.setPageFileWriter(new BasisPageFileWriter(
+                fileType.isUastc(),
+                fileType.getCompressionLevel(),
+                fileType.getQualityLevel()
+        ));
     }
 
     public static class BasisPageFileWriter extends PngPageFileWriter {
+
+        private final boolean uastc;
+        private final int compressionLevel;
+        private final int qualityLevel;
+
+        public BasisPageFileWriter(boolean uastc, int compressionLevel, int qualityLevel) {
+            this.uastc = uastc;
+            this.compressionLevel = compressionLevel;
+            this.qualityLevel = qualityLevel;
+        }
 
         @Override
         public String getFileExtension() {
@@ -62,7 +76,8 @@ public class BasisuFileTypeProcessor implements PackProcessor {
             rgbaBuffer.put(rgbaBytes);
 
             BasisuNativeLibLoader.loadIfNeeded();
-            ByteBuffer encodedBuffer = BasisuWrapper.encode(rgbaBuffer, image.getWidth(), image.getHeight());
+            ByteBuffer encodedBuffer = BasisuWrapper.encode(rgbaBuffer, image.getWidth(), image.getHeight(),
+                    uastc, false, compressionLevel, false, false, false, 2f, qualityLevel, 0, 0);
 
             BufferUtils.disposeUnsafeByteBuffer(rgbaBuffer);
 
