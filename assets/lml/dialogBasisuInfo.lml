@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<visdialog title="Basis Universal" closebutton="true" closeonescape="true">
+    <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
+        <label>Hello friend!</label>
+    </vistable>
+</visdialog>
