@@ -10,13 +10,17 @@ compileJava.options.incremental = true
 sourceSets.main.java.srcDirs = [ 'src/' ]
 sourceSets.main.resources.srcDirs = [ 'resources/' ]
 
-dependencies {
-    implementation files('libs/libimagequant-java.jar')
+// Add all basisu-wrapper module natives.
+fileTree("${project(':basisu-wrapper').projectDir}/libs").matching {
+    include '**/*.so'
+    include '**/*.dll'
+    include '**/*.dylib'
+}.each {
+    sourceSets.main.resources.srcDirs += it.parent
+}
 
+dependencies {
     api project(':basisu-wrapper')
-    // Desktop natives should be build and packed as jar for this dependency to work.
-    // ./gradlew jnigen jnigenBuild<platform> jnigenJarNativesDesktop
-    runtimeOnly files("${project(':basisu-wrapper').buildDir}/libs/basisu-wrapper-natives-desktop.jar")
 
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
 //        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use locally modified copy of this library.
@@ -29,4 +33,6 @@ dependencies {
     api "com.github.depsypher:pngtastic:$pngtasticVersion"
     api "com.tinify:tinify:$tinifyVersion"
     api "com.github.tommyettinger:anim8-gdx:$anim8Version"
+
+    api files('libs/libimagequant-java.jar')
 }

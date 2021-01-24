@@ -43,8 +43,7 @@ task dist(type: Jar) {
 
     // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
     // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
-    exclude(
-            "/gson-*.jar",
+    exclude("/gson-*.jar",
             "/okhttp-*.jar",
             "/okio-*.jar")
 
@@ -59,8 +58,7 @@ task distRelease(type: Jar) {
 
     // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
     // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
-    exclude(
-            "/gson-*.jar",
+    exclude("/gson-*.jar",
             "/okhttp-*.jar",
             "/okio-*.jar")
 
