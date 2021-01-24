@@ -27,5 +27,5 @@
 
     <:row padtop="4"/>
 
-    <linklabel style="orange" colspan="2" align="center" click="ftcBasisu.showBasisuInfo">About Basis Universal</linklabel>
+    <linklabel style="orange" colspan="2" align="center" href="#" click="show:dialog_basisu_info">About Basis Universal</linklabel>
 </vistable>

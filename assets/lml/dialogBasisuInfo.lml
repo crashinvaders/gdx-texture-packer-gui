@@ -1,8 +1,18 @@
 <?xml version="1.0"?>
 <!DOCTYPE visdialog SYSTEM "/lml.dtd">
 
-<visdialog title="Basis Universal" closebutton="true" closeonescape="true">
-    <vistable onecolumn="true" defaultalign="left" padleft="16" padright="16">
-        <label>Hello friend!</label>
+<visdialog title="@dBasisuAboutTitle" closebutton="true" closeonescape="true" padleft="8" padright="8">
+    <vistable onecolumn="true" defaultalign="left" padleft="0" padright="0" width="480">
+
+        <:row padtop="12"/>
+        <linklabel style="orange" align="left" padbottom="2"
+                   href="https://github.com/BinomialLLC/basis_universal">@dBasisuAboutHead0</linklabel>
+        <label wrap="true" growx="true">@dBasisuAboutDesc0</label>
+
+        <:row padtop="16"/>
+        <linklabel style="orange" align="left" padbottom="2"
+                   href="https://github.com/crashinvaders/gdx-basis-universal">@dBasisuAboutHead1</linklabel>
+        <label wrap="true" growx="true">@dBasisuAboutDesc1</label>
+
     </vistable>
 </visdialog>

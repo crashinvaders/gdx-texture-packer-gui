@@ -5,7 +5,7 @@
 /jni/build
 /jni/*.mk
 /jni/*.xml
-/jni/com_crashinvaders_basisu_wrapper_*.cpp
-/jni/com_crashinvaders_basisu_wrapper_*.h
+/jni/com_crashinvaders_basisu_*.cpp
+/jni/com_crashinvaders_basisu_*.h
 /jni/robovm.xml
 /jni/memcpy_wrap.c

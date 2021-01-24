@@ -99,10 +99,6 @@ public class BasisuFileTypeController implements FileTypeController {
         model.setCompressionLevel(compLevel);
     }
 
-    @LmlAction("showBasisuInfo") void showBasisuInfo() {
-        //TODO Show a popup with general information.
-    }
-
     private void updateInterFormat() {
         if (model == null) return;
 
