@@ -209,7 +209,7 @@ public class PackModel implements StateHashable {
                 s.filterMin, s.filterMag, s.wrapX, s.wrapY, s.format, s.alias, s.ignoreBlankImages,
                 s.fast, s.debug, s.silent, s.combineSubdirectories, s.ignore, s.flattenPaths,
                 s.premultiplyAlpha, s.useIndexes, s.bleed, s.bleedIterations, s.limitMemory,
-                s.grid, s.atlasExtension);
+                s.grid, s.atlasExtension, s.prettyPrint, s.legacyOutput);
         result = 31 * result + Arrays.hashCode(s.scale);
         result = 31 * result + Arrays.hashCode(s.scaleSuffix);
         result = 31 * result + Arrays.hashCode(s.scaleResampling);
