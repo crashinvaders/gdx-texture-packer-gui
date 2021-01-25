@@ -15,12 +15,10 @@ import com.crashinvaders.texturepackergui.controllers.model.filetype.BasisuFileT
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 
 public class BasisuFileTypeProcessor implements PackProcessor {
@@ -62,16 +60,9 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
         @Override
         public void saveToFile(TexturePacker.Settings settings, BufferedImage image, File file) throws IOException {
-            //TODO Simplify and use BufferImage instance's raster data to transcode to Basis format.
-            FileHandle tmpPngFile = new FileHandle(File.createTempFile(file.getName(), null));
             FileHandle output = new FileHandle(file);
 
-            super.saveToFile(settings, image, tmpPngFile.file());
-
-            final byte[] rgbaBytes;
-            try (InputStream io = tmpPngFile.read()) {
-                rgbaBytes = pngToRgbaBytes(io);
-            }
+            final byte[] rgbaBytes = bufferedImageToRgbaBytes(image);
             ByteBuffer rgbaBuffer = BufferUtils.newUnsafeByteBuffer(rgbaBytes.length);
             rgbaBuffer.put(rgbaBytes);
 
@@ -82,13 +73,9 @@ public class BasisuFileTypeProcessor implements PackProcessor {
             BufferUtils.disposeUnsafeByteBuffer(rgbaBuffer);
 
             saveFile(encodedBuffer, output);
-
-            tmpPngFile.delete();
         }
 
-        private static byte[] pngToRgbaBytes(InputStream is) throws IOException {
-            BufferedImage image = ImageIO.read(is);
-
+        private static byte[] bufferedImageToRgbaBytes(BufferedImage image) {
             // RGBA bytes.
             byte[] bytes = new byte[image.getWidth() * image.getHeight() * 4];
 
