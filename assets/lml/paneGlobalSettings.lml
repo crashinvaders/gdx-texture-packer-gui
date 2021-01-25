@@ -12,21 +12,23 @@
 
         </vistable>
 
-        <shrinkcontainer id="ftcPng" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
-            <:import path="lml/fileTypeConfigPng.lml"/>
-        </shrinkcontainer>
+        <stack pad="4" padtop="0" padbottom="0" growx="true">
+            <shrinkcontainer id="ftcPng" background="listBorder" fillx="true" visible="false">
+                <:import path="lml/fileTypeConfigPng.lml"/>
+            </shrinkcontainer>
 
-        <shrinkcontainer id="ftcJpeg" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
-            <:import path="lml/fileTypeConfigJpeg.lml"/>
-        </shrinkcontainer>
+            <shrinkcontainer id="ftcJpeg" background="listBorder" fillx="true" visible="false">
+                <:import path="lml/fileTypeConfigJpeg.lml"/>
+            </shrinkcontainer>
 
-        <shrinkcontainer id="ftcKtx" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
-            <:import path="lml/fileTypeConfigKtx.lml"/>
-        </shrinkcontainer>
+            <shrinkcontainer id="ftcKtx" background="listBorder" fillx="true" visible="false">
+                <:import path="lml/fileTypeConfigKtx.lml"/>
+            </shrinkcontainer>
 
-        <shrinkcontainer id="ftcBasisu" pad="4" padtop="0" padbottom="0" background="listBorder" fillx="true" visible="false">
-            <:import path="lml/fileTypeConfigBasisu.lml"/>
-        </shrinkcontainer>
+            <shrinkcontainer id="ftcBasisu" background="listBorder" fillx="true" visible="false">
+                <:import path="lml/fileTypeConfigBasisu.lml"/>
+            </shrinkcontainer>
+        </stack>
 
     </vistable>
 
