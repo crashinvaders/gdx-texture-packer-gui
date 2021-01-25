@@ -3,6 +3,7 @@
 - Support for the new (LibGDX 1.9.13) texture atlas format. Which outputs much smaller data files.
 - Old PNG8 compression is replaced with anim8-gdx implementation (https://github.com/tommyettinger/anim8-gdx).
 - General project save/load errors now gracefully handled and crash log is available.
+- Fixed the main application window sometimes doesn't appear on startup on MacOS devices.
 - Fixed KTX(ETC1/ETC2) compression fails with NPE.
 
 [4.9.0]

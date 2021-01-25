@@ -33,7 +33,7 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 
     if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
-        jvmArgs += ['-XstartOnFirstThread']
+        jvmArgs '-XstartOnFirstThread'
     }
 }
 

@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.desktop;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.backends.lwjgl3.*;
 import com.badlogic.gdx.files.FileHandle;
@@ -98,9 +99,8 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
         FileHandle file = new FileHandle(Lwjgl3Files.externalPath + configuration.getPreferencesDirectory() + "/window_params.xml");
         if (!file.exists()) return;
 
-        DisplayMode displayMode = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDisplayMode();
-        int screenWidth = displayMode.getWidth();
-        int screenHeight = displayMode.getHeight();
+        int screenWidth = configuration.getWindowWidth();
+        int screenHeight = configuration.getWindowHeight();
 
         Preferences prefs = new Lwjgl3Preferences(file);
         configuration.setWindowedMode(
