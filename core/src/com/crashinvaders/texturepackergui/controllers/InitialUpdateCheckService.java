@@ -114,7 +114,7 @@ public class InitialUpdateCheckService {
             this.toastTable = toastTable;
         }
 
-        @LmlAction("muteNotifications") void muteNotifications() {
+        @LmlAction("muteNewVersionNotifications") void muteNewVersionNotifications() {
             Gdx.app.log(TAG, "Muting notifications for version: " + versionData.version);
 
             prefs.putString(PREF_KEY_IGNORE_NOTIFICATION, versionData.version.toString());

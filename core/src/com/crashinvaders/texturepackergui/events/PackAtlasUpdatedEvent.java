@@ -3,7 +3,7 @@ package com.crashinvaders.texturepackergui.events;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 
 /**
- * Usually fires when texture packing was successful
+ * Fires when texture packing operation has finished successfully.
  */
 public class PackAtlasUpdatedEvent {
 

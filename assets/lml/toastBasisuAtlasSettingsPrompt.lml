@@ -2,26 +2,19 @@
 <!DOCTYPE table SYSTEM "/lml.dtd">
 
 <table defaultalign="left" padleft="8">
-    <image id="imgLogo" style="custom/logo64-vec"
-           align="center" origin="center"
-           padleft="8" padtop="12" padbottom="12"
-           touchable="enabled"
-           click="openDownloadPage"/>
-
-    <table onecolumn="true" defaultalign="left" defaultexpandx="true" padleft="16">
-        <horizontalgroup spacing="4">
-            @toastNewVersionAvailable
-            {newVersionCode}
-        </horizontalgroup>
+    <table onecolumn="true" defaultalign="left" defaultexpandx="true" width="480">
+        <label growx="true" wrap="true">
+            @toastBasisuCompatNote|{toastBasisuPackName}
+        </label>
 
         <:row padtop="4"/>
 
         <horizontalgroup spacing="6" padleft="0">
             <linklabel style="orange"
-                       text="@toastNvSeeDetails"
+                       text="@toastBasisuEnableRepack"
                        href="#"
                        setemptylistener="true"
-                       click="openDownloadPage"/>
+                       click="toastBasisuUpdateRepack"/>
         </horizontalgroup>
 
         <:row padtop="4" padbottom="4"/>
@@ -31,7 +24,7 @@
                        text="@toastNvMuteNotification"
                        href="#"
                        setemptylistener="true"
-                       click="muteNewVersionNotifications"/>
+                       click="toastBasisuMuteCompatNotif"/>
         </horizontalgroup>
     </table>
 </table>

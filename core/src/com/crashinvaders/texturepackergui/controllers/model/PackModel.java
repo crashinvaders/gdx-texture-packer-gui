@@ -191,6 +191,15 @@ public class PackModel implements StateHashable {
         }
     }
 
+    /**
+     * Manually fires an event about data change for any of {@link #settings} fields.
+     */
+    public void fireSettingsChangedEvent() {
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.SETTINGS));
+        }
+    }
+
     @Override
     public String toString() {
         return name;

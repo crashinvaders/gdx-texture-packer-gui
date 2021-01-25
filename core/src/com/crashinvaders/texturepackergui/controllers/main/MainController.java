@@ -251,6 +251,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             switch (event.getProperty()) {
                 case NAME:
                 case SCALE_FACTORS:
+                case SETTINGS:
                     if (event.getPack() == getSelectedPack()) {
                         updateViewsFromPack(event.getPack());
                     }
