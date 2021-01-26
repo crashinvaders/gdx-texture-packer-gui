@@ -99,16 +99,13 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
         FileHandle file = new FileHandle(Lwjgl3Files.externalPath + configuration.getPreferencesDirectory() + "/window_params.xml");
         if (!file.exists()) return;
 
-        int screenWidth = configuration.getWindowWidth();
-        int screenHeight = configuration.getWindowHeight();
-
         Preferences prefs = new Lwjgl3Preferences(file);
         configuration.setWindowedMode(
-                MathUtils.clamp(prefs.getInteger("width", configuration.getWindowWidth()), 320, screenWidth),
-                MathUtils.clamp(prefs.getInteger("height", configuration.getWindowHeight()), 320, screenHeight));
+                Math.max(prefs.getInteger("width", configuration.getWindowWidth()), 320),
+                Math.max(prefs.getInteger("height", configuration.getWindowHeight()), 320));
         configuration.setWindowPosition(
-                MathUtils.clamp(prefs.getInteger("x", configuration.getWindowX()), 0, screenWidth - configuration.getWindowWidth()),
-                MathUtils.clamp(prefs.getInteger("y", configuration.getWindowY()), 0, screenHeight - configuration.getWindowHeight()));
+                prefs.getInteger("x", configuration.getWindowX()),
+                prefs.getInteger("y", configuration.getWindowY()));
     }
 
     private void saveWindowParams() {
