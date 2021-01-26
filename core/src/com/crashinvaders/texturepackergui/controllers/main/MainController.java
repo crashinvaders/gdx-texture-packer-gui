@@ -295,26 +295,30 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             return;
         }
 
-        final Toast toast;
-        if (event.getContent() != null) {
-            toast = toastManager.show(event.getContent(), event.getDuration());
-        } else {
-            toast = toastManager.show(event.getMessage(), event.getDuration());
-        }
-        // Setup click listener (if provided).
-        if (event.getClickAction() != null) {
-            Table mainTable = toast.getMainTable();
-            mainTable.setTouchable(Touchable.enabled);
-            mainTable.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent e, float x, float y) {
-                    if (e.getTarget() == e.getListenerActor()) {
-                        event.getClickAction().run();
-                        toastManager.remove(toast);
+        //FIXME The very first toast events are not getting shown even so "viewShown" is set to "true".
+        // Thus there is a post to the next frame...
+        Gdx.app.postRunnable(() -> {
+            final Toast toast;
+            if (event.getContent() != null) {
+                toast = toastManager.show(event.getContent(), event.getDuration());
+            } else {
+                toast = toastManager.show(event.getMessage(), event.getDuration());
+            }
+            // Setup click listener (if provided).
+            if (event.getClickAction() != null) {
+                Table mainTable = toast.getMainTable();
+                mainTable.setTouchable(Touchable.enabled);
+                mainTable.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent e, float x, float y) {
+                        if (e.getTarget() == e.getListenerActor()) {
+                            event.getClickAction().run();
+                            toastManager.remove(toast);
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
+        });
     }
 
     //TODO Move out to a dedicated toast controller.

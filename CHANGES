@@ -5,6 +5,7 @@
 - General project save/load errors now gracefully handled and crash log is available.
 - Fixed the main application window sometimes doesn't appear on startup on MacOS devices.
 - Fixed KTX(ETC1/ETC2) compression fails with NPE.
+- Fixed crash when a project fails to load on startup.
 
 [4.9.0]
 - JRE 8+ is required to run the app.

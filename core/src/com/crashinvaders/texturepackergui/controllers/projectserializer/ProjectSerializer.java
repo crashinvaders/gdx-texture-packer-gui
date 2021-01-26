@@ -56,8 +56,10 @@ public class ProjectSerializer {
         try {
             saveTextToFile(file, serialized);
         } catch (Exception e) {
+            Gdx.app.error(TAG, "Error during project saving.", e);
             eventDispatcher.postEvent(new ShowToastEvent()
                     .message(localeService.getI18nBundle().format("toastProjectSaveError", project.getProjectFile().path()))
+                    .duration(ShowToastEvent.DURATION_LONG)
                     .click(() -> ErrorDialogController.show(e))
             );
             return;
@@ -72,8 +74,10 @@ public class ProjectSerializer {
             String serialized = loadTextFromFile(file);
             project = deserializeProject(serialized, file.parent());
         } catch (Exception e) {
+            Gdx.app.error(TAG, "Error during project loading.", e);
             eventDispatcher.postEvent(new ShowToastEvent()
                     .message(localeService.getI18nBundle().format("toastProjectLoadError", file.path()))
+                    .duration(ShowToastEvent.DURATION_LONG)
                     .click(() -> ErrorDialogController.show(e))
             );
             return null;

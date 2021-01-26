@@ -255,18 +255,22 @@ public class ConfigurationController {
     // Try load initial project
     @Initiate(priority = -1000)
     public void setupInitialProject(ModelService modelService, ProjectSerializer projectSerializer) {
-        AppParams params = App.inst().getParams();
-        if (params.startupProject == null) return;
+        // Post to the next frame to make sure all the systems/controllers are initialized.
+        Gdx.app.postRunnable(() -> {
+            AppParams params = App.inst().getParams();
+            if (params.startupProject == null) return;
 
-        FileHandle projectFile = FileUtils.toFileHandle(params.startupProject);
-        if (!projectFile.exists()) {
-            Gdx.app.error(TAG, "Project file: " + projectFile + " doesn't exists.");
-            return;
-        }
+            FileHandle projectFile = FileUtils.toFileHandle(params.startupProject);
+            if (!projectFile.exists()) {
+                Gdx.app.error(TAG, "Project file: " + projectFile + " doesn't exists.");
+                return;
+            }
 
-        ProjectModel project = projectSerializer.loadProject(projectFile);
-        project.setProjectFile(projectFile);
-
-        modelService.setProject(project);
+            ProjectModel project = projectSerializer.loadProject(projectFile);
+            if (project != null) {
+                project.setProjectFile(projectFile);
+                modelService.setProject(project);
+            }
+        });
     }
 }
