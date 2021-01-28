@@ -261,6 +261,10 @@ public class ConfigurationController {
             if (params.startupProject == null) return;
 
             FileHandle projectFile = FileUtils.toFileHandle(params.startupProject);
+            if (projectFile.isDirectory()) {
+                Gdx.app.error(TAG, "Project file: " + projectFile + " is a directory and cannot be loaded.");
+                return;
+            }
             if (!projectFile.exists()) {
                 Gdx.app.error(TAG, "Project file: " + projectFile + " doesn't exists.");
                 return;
