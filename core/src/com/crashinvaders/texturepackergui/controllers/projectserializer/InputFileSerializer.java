@@ -71,7 +71,18 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         if (new File(path).isAbsolute()) {
             fileHandle = Gdx.files.absolute(path);
         } else {
-            fileHandle = Gdx.files.absolute(new File(root, path).getAbsolutePath());
+            // A relative path value might be pretty wild and start from up level elements "../". Let's clean it up.
+            String rootPath = root.getAbsolutePath().replace('\\', '/');
+            String relativePath = path.replace('\\', '/');
+            while (relativePath.startsWith("../")) {
+                if (relativePath.length() > 3) {
+                    relativePath = relativePath.substring(3);
+                } else {
+                    relativePath = "";
+                }
+                rootPath = rootPath.substring(0, rootPath.lastIndexOf("/"));
+            }
+            fileHandle = Gdx.files.absolute(rootPath + "/" + relativePath);
         }
 
         InputFile inputFile = new InputFile(fileHandle, type);

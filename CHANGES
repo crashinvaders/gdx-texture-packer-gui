@@ -1,11 +1,13 @@
 [LATEST]
 - Support for Basis Universal super-compressed atlas textures, see https://github.com/BinomialLLC/basis_universal
 - Support for the new (LibGDX 1.9.13) texture atlas format. Which outputs much smaller data files.
+- The app now forbids to write output atlas files to any directory matching the input files/dirs to avoid accidental source image files rewrite.
 - Old PNG8 compression is replaced with anim8-gdx implementation (https://github.com/tommyettinger/anim8-gdx).
 - General project save/load errors now gracefully handled and crash log is available.
 - Fixed the main application window sometimes doesn't appear on startup on MacOS devices.
 - Fixed KTX(ETC1/ETC2) compression fails with NPE.
 - Fixed crash when a project fails to load on startup.
+- Fixed the input file absolute path sometimes is displayed wrong when the project is saved to a deeper directory hierarchy than the source images.
 
 [4.9.0]
 - JRE 8+ is required to run the app.
