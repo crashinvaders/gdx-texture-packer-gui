@@ -30,6 +30,10 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
         if (project.getFileType().getClass() != BasisuFileTypeModel.class) return;
 
+        if (!isBasisuSupported()) {
+            throw new IllegalStateException("Basis Universal natives are not supported for 32-bit Windows machines.");
+        }
+
         BasisuFileTypeModel fileType = project.getFileType();
 
         pack.getSettings().format = Pixmap.Format.RGBA8888;
@@ -39,6 +43,11 @@ public class BasisuFileTypeProcessor implements PackProcessor {
                 fileType.getCompressionLevel(),
                 fileType.getQualityLevel()
         ));
+    }
+
+    public static boolean isBasisuSupported() {
+        // Basis Universal natives are not supported for 32-bit Windows machines.
+        return !("windows".contains(System.getProperty("os.name")) && "x86".contains(System.getProperty("os.arch")));
     }
 
     public static class BasisPageFileWriter extends PngPageFileWriter {

@@ -13,6 +13,7 @@ import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.BasisuFileTypeModel;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.BasisuFileTypeProcessor;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.PackAtlasUpdatedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
@@ -46,6 +47,8 @@ public class BasisuFileTypeController implements FileTypeController {
     @Inject PackDialogController packDialogController;
 
     @LmlActor("ftcBasisu") ShrinkContainer container;
+    @LmlActor("basisuFileTypeRoot") Actor basisuFileTypeRoot;
+    @LmlActor("basisuNotSupportedHint") Actor basisuNotSupportedHint;
     @LmlActor("cboBasisInterFormat") VisSelectBox<IntermediateFormat> cboInterFormat;
     @LmlActor("sbBasisQualityLevel") SeekBar sbQualityLevel;
     @LmlActor("sbBasisCompLevel") SeekBar sbCompLevel;
@@ -70,6 +73,9 @@ public class BasisuFileTypeController implements FileTypeController {
     public void activate() {
         model = modelService.getProject().getFileType();
         container.setVisible(true);
+
+        basisuFileTypeRoot.setVisible(BasisuFileTypeProcessor.isBasisuSupported());
+        basisuNotSupportedHint.setVisible(!BasisuFileTypeProcessor.isBasisuSupported());
 
         updateInterFormat();
         updateQualityLevel();
