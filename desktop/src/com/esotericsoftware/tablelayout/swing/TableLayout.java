@@ -61,5 +61,6 @@ class TableLayout extends BaseTableLayout<Component, Table, TableLayout, SwingTo
 			if (rect.type == Debug.table) g.setColor(Color.blue);
 			g.drawRect(rect.x, rect.y, rect.width, rect.height);
 		}
+		g.dispose();
 	}
 }

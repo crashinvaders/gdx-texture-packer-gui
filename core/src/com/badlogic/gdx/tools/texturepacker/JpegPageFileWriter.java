@@ -5,6 +5,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -33,7 +34,9 @@ public class JpegPageFileWriter implements PageFileWriter {
         ImageOutputStream ios = null;
         try {
             BufferedImage newImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
-            newImage.getGraphics().drawImage(image, 0, 0, null);
+            Graphics graphics = newImage.getGraphics();
+            graphics.drawImage(image, 0, 0, null);
+            graphics.dispose();
             image = newImage;
 
             Iterator<ImageWriter> writers = ImageIO.getImageWritersByFormatName("jpg");

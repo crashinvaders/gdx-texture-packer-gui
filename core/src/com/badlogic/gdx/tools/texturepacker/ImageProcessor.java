@@ -162,7 +162,9 @@ public class ImageProcessor {
 
 		if (image.getType() != BufferedImage.TYPE_4BYTE_ABGR) {
 			BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-			newImage.getGraphics().drawImage(image, 0, 0, null);
+			Graphics graphics = newImage.getGraphics();
+			graphics.drawImage(image, 0, 0, null);
+			graphics.dispose();
 			image = newImage;
 		}
 
@@ -178,7 +180,9 @@ public class ImageProcessor {
 			width -= 2;
 			height -= 2;
 			BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-			newImage.getGraphics().drawImage(image, 0, 0, width, height, 1, 1, width + 1, height + 1, null);
+			Graphics graphics = newImage.getGraphics();
+			graphics.drawImage(image, 0, 0, width, height, 1, 1, width + 1, height + 1, null);
+			graphics.dispose();
 			image = newImage;
 		}
 
@@ -189,12 +193,15 @@ public class ImageProcessor {
 			height = Math.max(1, Math.round(height * scale));
 			BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 			if (scale < 1) {
-				newImage.getGraphics().drawImage(image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+				Graphics graphics = newImage.getGraphics();
+				graphics.drawImage(image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+				graphics.dispose();
 			} else {
 				Graphics2D g = (Graphics2D)newImage.getGraphics();
 				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, resampling.value);
 				g.drawImage(image, 0, 0, width, height, null);
+				g.dispose();
 			}
 			image = newImage;
 		}
@@ -445,7 +452,9 @@ public class ImageProcessor {
 			int height = image.getHeight();
 			if (image.getType() != BufferedImage.TYPE_INT_ARGB) {
 				BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-				newImage.getGraphics().drawImage(image, 0, 0, null);
+				Graphics graphics = newImage.getGraphics();
+				graphics.drawImage(image, 0, 0, null);
+				graphics.dispose();
 				image = newImage;
 			}
 

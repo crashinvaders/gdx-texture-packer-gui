@@ -33,7 +33,7 @@ task run(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
 
     if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
-        jvmArgs '-XstartOnFirstThread'
+        jvmArgs += ['-XstartOnFirstThread', '-Djava.awt.headless=true']
     }
 }
 
@@ -111,7 +111,8 @@ macAppBundle {
     mainClassName = project.mainClassName
     bundleIdentifier = 'com.crashinvaders.texturepackergui'
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
-    javaExtras.put("-XstartOnFirstThread",null)
+    javaExtras.put("-XstartOnFirstThread", null)
+    javaExtras.put("-Djava.awt.headless", "true")
     bundleJRE = false
     appName = "GDX Texture Packer"
     dmgName = "gdx-texturepacker-$project.ext.version"

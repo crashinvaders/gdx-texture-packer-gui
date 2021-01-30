@@ -298,6 +298,9 @@ public class TexturePacker {
 
 			if (settings.bleed && !settings.premultiplyAlpha && pageFileWriter.isBleedingSupported()) {
 				canvas = new ColorBleedEffect().processImage(canvas, settings.bleedIterations);
+				if (g != null) {
+					g.dispose();
+				}
 				g = (Graphics2D)canvas.getGraphics();
 			}
 
@@ -310,6 +313,10 @@ public class TexturePacker {
 				pageFileWriter.saveToFile(settings, canvas, outputFile);
 			} catch (IOException ex) {
 				throw new RuntimeException("Error writing file: " + outputFile, ex);
+			}
+
+			if (g != null) {
+				g.dispose();
 			}
 		}
 	}
