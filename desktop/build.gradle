@@ -204,10 +204,14 @@ ospackage {
 }
 
 buildRpm {
+    group 'OSPackage'
+    description 'Assembles an RPM Linux distribution package.'
     dependsOn distRelease
 }
 
 buildDeb {
+    group 'OSPackage'
+    description 'Assembles a DEB Linux distribution package.'
     dependsOn distRelease
 }
 //endregion
