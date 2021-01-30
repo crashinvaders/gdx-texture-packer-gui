@@ -31,11 +31,9 @@
         <linklabel style="orange" colspan="2" align="center" href="#" click="show:dialog_basisu_info">About Basis Universal</linklabel>
     </vistable>
 
-    <stack id="basisuNotSupportedHint" visible="false">
-        <container fill="true" padleft="8" padright="8">
-            <label color="orange" wrap="true" align="center">
-                Basis Universal is not supported on 32-bit Windows machines.
-            </label>
-        </container>
-    </stack>
+    <container id="basisuNotSupportedHint" fill="true" padleft="8" padright="8" visible="false">
+        <label color="orange" wrap="true" align="center">
+            Basis Universal is not supported for 32-bit Windows machines.
+        </label>
+    </container>
 </stack>
