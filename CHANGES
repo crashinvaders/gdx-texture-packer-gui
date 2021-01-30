@@ -1,14 +1,14 @@
 [4.10.0]
 - Support for Basis Universal super-compressed atlas textures, see https://github.com/BinomialLLC/basis_universal
 - Support for the new (LibGDX 1.9.13) texture atlas format. Which outputs much smaller data files.
-- The app now forbids to write output atlas files to any directory matching the input files/dirs to avoid accidental source image files rewrite.
+- The app now forbids writing output atlas files to any directory matching the input files/dirs to avoid accidental source image files rewrite.
 - Old PNG8 compression is replaced with anim8-gdx implementation (https://github.com/tommyettinger/anim8-gdx).
-- General project save/load errors now gracefully handled and crash log is available.
-- Fixed the main application window sometimes doesn't appear on startup on MacOS devices.
+- General project save/load errors now gracefully handled and a crash log is available.
+- Fixed the main application window sometimes doesn't appear on startup on macOS devices.
 - Fixed KTX(ETC1/ETC2) compression fails with NPE.
 - Fixed crash when a project fails to load on startup.
 - Fixed the input file absolute path sometimes is displayed wrong when the project is saved to a deeper directory hierarchy than the source images.
-- Fixed the app freezes during packing process on MacOS.
+- Fixed the app freezes during the packing process on macOS.
 
 [4.9.0]
 - JRE 8+ is required to run the app.
@@ -17,7 +17,7 @@
 - Pngquant (Imagequant) added as a PNG compression option.
 - Show atlas region size on preview hover.
 - Highlight a related atlas region on input file list mouse hover.
-- "startOnFirstThread" JVM argument is no longer required on MacOS.
+- "startOnFirstThread" JVM argument is no longer required on macOS.
 - Linux DEB & RPM distribution packages.
 - Fixed high DPI scaling issue.
 - Fixed file based 9-patch pad values get displayed wrong (in case they are not defined explicitly in the input image).
@@ -96,7 +96,7 @@
 - Fixed occasional crash upon language change.
 - Fixed "Flatten paths" checkbox (it works now!).
 - Fixed no window on application startup in some cases.
-- MacOS distribution configuration.
+- macOS distribution configuration.
 
 [4.3.1]
 - Input/output paths that are equal to project file dir, now correctly save and load.
