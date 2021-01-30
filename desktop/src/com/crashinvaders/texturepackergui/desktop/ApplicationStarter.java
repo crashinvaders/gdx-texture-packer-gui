@@ -107,6 +107,7 @@ public class ApplicationStarter {
         jvmArgs.add(System.getProperty("java.home") + separator + "bin" + separator + "java");
         jvmArgs.add("-XstartOnFirstThread");
         jvmArgs.add("-DjvmIsRestarted=true");
+        jvmArgs.add("-Djava.awt.headless=true");
         jvmArgs.addAll(ManagementFactory.getRuntimeMXBean().getInputArguments());
         jvmArgs.add("-cp");
         jvmArgs.add(System.getProperty("java.class.path"));
