@@ -93,6 +93,9 @@ zipRelease.dependsOn distRelease
  * After task execution, the output files can be found under "./distribution/output/".
  */
 task nsisInstaller(type: Exec) {
+    group 'NSIS Installer'
+    description 'Assembles a Windows NSIS installer distribution.'
+
     // NSIS installer can be created only on Windows.
     if (!org.gradle.internal.os.OperatingSystem.current().isWindows()) {
         return
