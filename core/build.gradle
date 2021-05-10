@@ -23,8 +23,7 @@ dependencies {
     api project(':basisu-wrapper')
 
     api "com.badlogicgames.gdx:gdx:$gdxVersion"
-//        api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use locally modified copy of this library.
-    api "com.badlogicgames.gdx:gdx-jnigen:$gdxVersion"
+//    api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use locally modified copy of this library.
     api "com.github.czyzby:gdx-lml:$lmlVersion"
     api "com.github.czyzby:gdx-lml-vis:$lmlVersion"
     api "com.github.czyzby:gdx-autumn-mvc:$lmlVersion"
