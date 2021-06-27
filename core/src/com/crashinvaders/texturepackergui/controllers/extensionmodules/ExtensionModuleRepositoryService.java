@@ -43,13 +43,17 @@ public class ExtensionModuleRepositoryService {
         modulesDir.mkdirs();
 
         if (repoCacheFile.exists()) {
-            @SuppressWarnings("unchecked")
-            Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, repoCacheFile);
-            repositoryModules.clear();
-            for (RepositoryModuleData moduleData : newArray) {
-                repositoryModules.put(moduleData.name, moduleData);
+            try {
+                @SuppressWarnings("unchecked")
+                Array<RepositoryModuleData> newArray = json.fromJson(Array.class, RepositoryModuleData.class, repoCacheFile);
+                repositoryModules.clear();
+                for (RepositoryModuleData moduleData : newArray) {
+                    repositoryModules.put(moduleData.name, moduleData);
+                }
+                Gdx.app.log(TAG, "Cached data was loaded");
+            } catch (Exception e) {
+                Gdx.app.error(TAG, "Failed to load cached extension module data.", e);
             }
-            Gdx.app.log(TAG, "Cached data was loaded");
         }
 
         requestRefreshRepositoryIfNeeded();
