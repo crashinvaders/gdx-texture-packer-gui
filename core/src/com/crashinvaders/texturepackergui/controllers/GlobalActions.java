@@ -20,6 +20,7 @@ import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectS
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
+import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.crashinvaders.texturepackergui.views.dialogs.OptionDialog;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -35,6 +36,7 @@ import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
+import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
@@ -82,14 +84,14 @@ public class GlobalActions implements ActionContainer {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
-        Dialogs.InputDialog dialog = new Dialogs.InputDialog(getString("renamePack"), null, true, null, new InputDialogAdapter() {
+        VisDialog dialog = WidgetUtils.createInputDialog(getString("renamePack"), null, pack.getName(), true, new InputDialogAdapter() {
             @Override
             public void finished(String input) {
                 pack.setName(input);
             }
         });
+
         getStage().addActor(dialog.fadeIn());
-        dialog.setText(pack.getName(), true);
     }
 
     @LmlAction({"makeCopy", "copyPack"}) public void copyPack() {

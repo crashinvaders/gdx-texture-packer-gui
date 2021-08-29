@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.utils;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
@@ -14,13 +15,13 @@ import java.util.Date;
 import java.util.Iterator;
 
 public class CommonUtils {
-
     private static final Pool<Sort> sortPool = new SyncPool<Sort>() {
         @Override
         protected Sort newObjectInternal() {
             return new Sort();
         }
     };
+    private static final Color tmpColor = new Color();
 
     public static String fetchMessageStack(Throwable throwable) {
         StringBuilder sb = new StringBuilder();
@@ -173,5 +174,58 @@ public class CommonUtils {
         Sort sort = sortPool.obtain();
         sort.sort(array.items, comparator, 0, array.size);
         sortPool.free(sort);
+    }
+
+    public static Color parseHexColor(String hexCode) {
+        switch (hexCode.length()) {
+            case 3:
+                return parseHexColor3(hexCode);
+            case 4:
+                return parseHexColor4(hexCode);
+            case 6:
+                return parseHexColor6(hexCode);
+            case 8:
+                return parseHexColor8(hexCode);
+            default:
+                throw new IllegalArgumentException("Wrong format, HEX string value should be either 3, 4, 6 or 8 letters long.");
+        }
+    }
+
+    public static Color parseHexColor3(String hex) {
+        if (hex.length() != 3) throw new IllegalArgumentException("HEX string value should be exact 3 letters long.");
+        float r = Integer.valueOf(hex.substring(0, 1), 16) / 15f;
+        float g = Integer.valueOf(hex.substring(1, 2), 16) / 15f;
+        float b = Integer.valueOf(hex.substring(2, 3), 16) / 15f;
+        return tmpColor.set(r, g, b, 1f);
+    }
+
+    public static Color parseHexColor4(String hex) {
+        if (hex.length() != 4) throw new IllegalArgumentException("HEX string value should be exact 4 letters long.");
+        float r = Integer.valueOf(hex.substring(0, 1), 16) / 15f;
+        float g = Integer.valueOf(hex.substring(1, 2), 16) / 15f;
+        float b = Integer.valueOf(hex.substring(2, 3), 16) / 15f;
+        float a = Integer.valueOf(hex.substring(3, 4), 16) / 15f;
+        return tmpColor.set(r, g, b, a);
+    }
+
+    public static Color parseHexColor6(String hex) {
+        if (hex.length() != 6) throw new IllegalArgumentException("HEX string value should be exact 6 letters long.");
+        float r = Integer.valueOf(hex.substring(0, 2), 16) / 255f;
+        float g = Integer.valueOf(hex.substring(2, 4), 16) / 255f;
+        float b = Integer.valueOf(hex.substring(4, 6), 16) / 255f;
+        return tmpColor.set(r, g, b, 1f);
+    }
+
+    public static Color parseHexColor8(String hex) {
+        if (hex.length() != 8) throw new IllegalArgumentException("HEX string value should be exact 8 letters long.");
+        float r = Integer.valueOf(hex.substring(0, 2), 16) / 255f;
+        float g = Integer.valueOf(hex.substring(2, 4), 16) / 255f;
+        float b = Integer.valueOf(hex.substring(4, 6), 16) / 255f;
+        float a = Integer.valueOf(hex.substring(6, 8), 16) / 255f;
+        return tmpColor.set(r, g, b, a);
+    }
+
+    public static int toRgba8888IntBits(Color color) {
+        return ((int)(255 * color.r) << 24) | ((int)(255 * color.g) << 16) | ((int)(255 * color.b) << 8) | ((int)(255 * color.a));
     }
 }

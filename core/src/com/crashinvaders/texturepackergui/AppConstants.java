@@ -13,7 +13,7 @@ public class AppConstants {
     public static final String MODULES_DIR = EXTERNAL_DIR + File.separator + "modules";
     public static final String LOGS_DIR = EXTERNAL_DIR + File.separator + "logs";
     public static final String PROJECT_FILE_EXT = "tpproj";
-    public static final String[] IMAGE_FILE_EXT = new String[]{"png", "jpg", "jpeg"};
+    public static final String[] IMAGE_FILE_EXT = new String[]{"png", "jpg", "jpeg"}; // Make sure to update "dndSupportedExtensions" l10n string.
 
     public static final String PREF_NAME_COMMON = "common.xml";
     public static final String PREF_NAME_INSTALLED_MODULES = "installed_modules.xml";

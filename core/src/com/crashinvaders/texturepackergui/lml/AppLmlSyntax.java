@@ -71,6 +71,8 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new TooltipLmlAttribute(), "visTooltip", "tooltip");
         addAttributeProcessor(new KeyboardFocusChangedLmlAttribute(), "keyboardFocus");
         addAttributeProcessor(new OriginLmlAttribute(), "origin");
+        addAttributeProcessor(new AdvancedColorLmLAttribute(), "color");
+        //TODO: Remove this attribute as it is now replaced with AdvancedColorLmlAttribute
         addAttributeProcessor(new HexColorLmlAttribute(), "hexColor");
         addAttributeProcessor(new OnBackPressedLmlAttribute(), "back", "onBack", "onEscape");
         addAttributeProcessor(new DelegateInputEventsLmlAttribute(), "delegateInput");
