@@ -113,6 +113,7 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
         // If there is no selected pack, select first or create a new one.
         ProjectModel project = modelService.getProject();
         PackModel pack = project.getSelectedPack();
+        boolean wasPackCreated = false;
         if (pack == null) {
             if (project.getPacks().size > 0) {
                 pack = project.getPacks().first();
@@ -120,6 +121,7 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
                 pack = new PackModel();
                 project.addPack(pack);
                 project.setSelectedPack(pack);
+                wasPackCreated = true;
             }
             project.setSelectedPack(pack);
         }
@@ -142,6 +144,12 @@ public class FileDragDropController implements DragDropManager.Listener, ActionC
         }
 
         // In case no supported files were recognized - show drag-n-drop hint.
-        if (!anyFilesAdded) showDragndropHint();
+        if (!anyFilesAdded) {
+            showDragndropHint();
+            // Roll back the pack creation...
+            if (wasPackCreated) {
+                project.removePack(pack);
+            }
+        }
     }
 }
