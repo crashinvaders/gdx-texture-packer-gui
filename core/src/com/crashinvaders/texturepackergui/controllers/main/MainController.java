@@ -16,7 +16,6 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.visui.Toast;
@@ -55,7 +54,6 @@ import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.LmlData;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
 import com.kotcrab.vis.ui.widget.*;
 
 import java.util.Locale;
@@ -101,7 +99,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             "paneLockPackGeneral"})
     Array<Actor> packPaneLockers;
 
-    @LmlInject PackListActors actorsPacks;
+    @Inject @LmlInject PackListActors actorsPacks;
     @LmlInject PackSettingsActors actorsPackSettings;
     @LmlInject GlobalSettingsActors actorsGlobalSettings;
     @LmlInject FileMenuActors actorsFileMenu;
@@ -154,15 +152,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         actorsPackSettings.cboWrapY.setItems(WidgetData.textureWraps);
         actorsGlobalSettings.cboFileType.setItems(WidgetData.FileType.values());
 
-        actorsPacks.packList = actorsPacks.packListTable.getListView();
-        actorsPacks.packListAdapter = ((PackListAdapter) actorsPacks.packList.getAdapter());
-        actorsPacks.packListAdapter.getSelectionManager().setListener(new ListSelectionAdapter<PackModel, VisTable>() {
-            @Override
-            public void selected(PackModel pack, VisTable view) {
-                getProject().setSelectedPack(pack);
-                Gdx.app.postRunnable(normalizePackListScrollRunnable);
-            }
-        });
+        actorsPacks.onViewCreated(stage);
 
         toastManager = new ToastManager(toastHostGroup);
         toastManager.setAlignment(Align.bottomRight);
@@ -769,14 +759,4 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         return modelService.getProject();
     }
     //endregion
-
-    private final Runnable normalizePackListScrollRunnable = new Runnable() {
-        @Override
-        public void run() {
-            PackModel pack = getSelectedPack();
-            if (pack != null) {
-                Scene2dUtils.scrollDownToSelectedListItem(actorsPacks.packList, pack);
-            }
-        }
-    };
 }

@@ -2,10 +2,7 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.ExtensionModuleRequiredDialogController;
@@ -48,7 +45,10 @@ public class CommonDialogs {
         );
         final PackModel selectedPack = getSelectedPack();
         final VisTextField edtName = dialog.findActor("edtName");
-        final ButtonTable btPlacing = dialog.findActor("btPlacing");
+        final Group btPlacingRoot = dialog.findActor("btPlacingRoot");
+        final ButtonTable btPlacingButtons = dialog.findActor("btPlacingButtons");
+
+        btPlacingRoot.setVisible(modelService.getProject().getPacks().size > 0);
 
         final Runnable okRunnable = new Runnable() {
             @Override
@@ -60,7 +60,7 @@ public class CommonDialogs {
                 getProject().addPack(pack);
                 getProject().setSelectedPack(pack);
 
-                switch (btPlacing.getButtonGroup().getChecked().getName()) {
+                switch (btPlacingButtons.getButtonGroup().getChecked().getName()) {
                     case "rbAbove":
                         if (selectedPack != null) modelUtils.movePackPrevTo(selectedPack, pack);
                         break;

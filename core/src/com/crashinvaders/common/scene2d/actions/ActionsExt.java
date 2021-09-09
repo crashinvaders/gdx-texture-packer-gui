@@ -38,4 +38,10 @@ public class ActionsExt {
         action.setDelta(delta);
         return action;
     }
+
+    public static OriginAlignAction origin(int align) {
+        OriginAlignAction action = action(OriginAlignAction.class);
+        action.setAlign(align);
+        return action;
+    }
 }
