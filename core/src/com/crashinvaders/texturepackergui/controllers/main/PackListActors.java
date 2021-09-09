@@ -13,6 +13,7 @@ import com.crashinvaders.common.scene2d.actions.ActionsExt;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
+import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -62,6 +63,8 @@ public class PackListActors implements ActionContainer {
 
     @Inject ModelService modelService;
 
+    private boolean initialized = false;
+
     public void onViewCreated(Stage stage) {
         ProjectModel project = modelService.getProject();
 
@@ -84,6 +87,8 @@ public class PackListActors implements ActionContainer {
 
         refreshIconPanelState();
         refreshOnboardingView();
+
+        this.initialized = true;
     }
 
     private void refreshIconPanelState() {
@@ -122,7 +127,16 @@ public class PackListActors implements ActionContainer {
         }
     }
 
+    @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        if (!initialized) return;
+
+        refreshIconPanelState();
+        refreshOnboardingView();
+    }
+
     @OnEvent(ProjectPropertyChangedEvent.class) void OnEvent(ProjectPropertyChangedEvent event) {
+        if (!initialized) return;
+
         switch (event.getProperty()) {
             case PACKS:
                 refreshIconPanelState();
