@@ -15,6 +15,19 @@ project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.Applicat
 project.ext.distFileName = "$project.appName-$project.ext.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
+project.ext.lwjglVersion = "3.3.0-SNAPSHOT"
+project.ext.lwjglMacosNatives = "natives-macos-arm64"
+
+def nativePlatforms = [
+        "natives-windows",
+        "natives-windows-x86",
+        "natives-linux",
+        "natives-linux-arm32",
+        "natives-linux-arm64",
+        "natives-macos",
+        "natives-macos-arm64"
+]
+
 dependencies {
     runtimeOnly files(project.resourceDirs)
     implementation project(":core")
@@ -23,6 +36,23 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
     implementation "com.crashinvaders.lml:gdx-autumn-fcs:$lmlVersion"
     implementation "args4j:args4j:$args4jVersion"
+
+    // This is a temporary LWJGL 3.3 snapshot version override,
+    // as current LibGDX (1.10.0) is stuck with LWJGL 3.2 which doesn't yet support M1 macOS.
+    //TODO Update/remove when stable LWJGL 3.3 is out or LibGDX official backend adds support for ARM macOS.
+    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
+    implementation "org.lwjgl:lwjgl"
+    implementation "org.lwjgl:lwjgl-glfw"
+    implementation "org.lwjgl:lwjgl-jemalloc"
+    implementation "org.lwjgl:lwjgl-openal"
+    implementation "org.lwjgl:lwjgl-opengl"
+    nativePlatforms.each {
+        runtimeOnly "org.lwjgl:lwjgl::$it"
+        runtimeOnly "org.lwjgl:lwjgl-glfw::$it"
+        runtimeOnly "org.lwjgl:lwjgl-jemalloc::$it"
+        runtimeOnly "org.lwjgl:lwjgl-openal::$it"
+        runtimeOnly "org.lwjgl:lwjgl-opengl::$it"
+    }
 }
 
 task run(dependsOn: classes, type: JavaExec) {
