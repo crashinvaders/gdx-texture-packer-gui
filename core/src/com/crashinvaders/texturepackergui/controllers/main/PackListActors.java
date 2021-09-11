@@ -16,8 +16,10 @@ import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectPropertyChangedEvent;
 import com.github.czyzby.autumn.annotation.Component;
+import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
+import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
@@ -27,6 +29,10 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 
 @Component
 public class PackListActors implements ActionContainer {
+    private static final String TAG = PackListActors.class.getSimpleName();
+
+    @Inject InterfaceService interfaceService;
+    @Inject ModelService modelService;
 
     @LmlActor("btnMenuNewPack") Button btnMenuNewPack;
     @LmlActor("btnMenuRenamePack") Button btnMenuRenamePack;
@@ -61,9 +67,13 @@ public class PackListActors implements ActionContainer {
     ListView<PackModel> packList;
     PackListAdapter packListAdapter;
 
-    @Inject ModelService modelService;
-
     private boolean initialized = false;
+    private boolean wasOnboardingPanelVisible = false;
+
+    @Initiate
+    void init() {
+        interfaceService.getParser().getData().addActionContainer(TAG, this);
+    }
 
     public void onViewCreated(Stage stage) {
         ProjectModel project = modelService.getProject();
@@ -105,6 +115,9 @@ public class PackListActors implements ActionContainer {
 
     private void refreshOnboardingView() {
         boolean visible = modelService.getProject().getPacks().size == 0;
+
+        if (visible == wasOnboardingPanelVisible) return;
+        wasOnboardingPanelVisible = visible;
 
         if (visible) {
             plOnboardingRoot.setVisible(true);
