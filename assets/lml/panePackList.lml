@@ -42,7 +42,7 @@
         </vistable>
 
         <!-- Pack list area -->
-        <stack grow="true" pad="4">
+        <stack grow="true" pad="4" minheight="0">
             <listview
                     id="lvPacks"
                     scrollcapture="true"

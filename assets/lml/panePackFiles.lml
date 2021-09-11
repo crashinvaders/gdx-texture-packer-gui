@@ -41,7 +41,7 @@
         <:row/>
 
         <!-- File list area -->
-        <stack grow="true" pad="4" colspan="3">
+        <stack grow="true" pad="4" colspan="3" minheight="0">
             <listview
                     id="lvInputFiles"
                     style="custom"
