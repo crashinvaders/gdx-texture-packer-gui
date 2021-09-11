@@ -40,19 +40,36 @@
 
         <:row/>
 
-        <listview
-                id="lvInputFiles"
-                style="custom"
-                colspan="3"
-                pad="4"
-                grow="true"
-                disabledx="true"
-                fadescrollbars="false"
-                overscroll="false"
-                flickscroll="false"
-                scrollcapture="true"
-                adapter="PackInputFilesController.createAdapter"
-                listviewonclick="PackInputFilesController.resetSelection"/>
+        <!-- File list area -->
+        <stack grow="true" pad="4" colspan="3">
+            <listview
+                    id="lvInputFiles"
+                    style="custom"
+                    disabledx="true"
+                    fadescrollbars="false"
+                    overscroll="false"
+                    flickscroll="false"
+                    scrollcapture="true"
+                    adapter="PackInputFilesController.createAdapter"
+                    listviewonclick="PackInputFilesController.resetSelection"/>
+
+            <stack id="pifOnboardingRoot" visible="false">
+                <image id="pifOnboardingBackground" style="white" color="#eb5c49"/>
+
+                <table id="pifOnboardingContent" onecolumn="true" defaultgrowx="true" padtop="12" padbottom="16" padleft="12" padright="12" tablealign="top">
+                    <visimagetextbutton id="pifOnboardingBtnNew"
+                                        tablealign="left" style="accent-strong"
+                                        icon="custom/ic-input-file-add" text="@addInputFiles"
+                                        onchange="$PackInputFilesController.addInputFiles"
+                                        focusborderenabled="false"
+                                        tablepadleft="12" tablepadright="16" tablepadtop="8" tablepadbottom="8"/>
+                    <image style="white" padtop="12" height="1" color="#333" />
+                    <vislabel style="small" padtop="4" wrap="true" padleft="17" padright="8">
+                        @dndPlOnboardingHint|@dndSupportedExtensions
+                    </vislabel>
+                </table>
+            </stack>
+        </stack>
 
     </table>
 

@@ -2,11 +2,16 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.crashinvaders.common.scene2d.actions.ActionsExt;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
@@ -46,8 +51,15 @@ public class PackInputFilesController implements ActionContainer {
     @LmlActor("lvInputFiles") ListView.ListViewTable<InputFile> listTable;
     private InputFileListAdapter listAdapter;
 
+    @LmlActor("pifOnboardingRoot") Group pifOnboardingRoot;
+    @LmlActor("pifOnboardingBackground") Image pifOnboardingBackground;
+    @LmlActor("pifOnboardingContent") Group pifOnboardingContent;
+    @LmlActor("pifOnboardingBtnNew") Button pifOnboardingBtnNew;
+
     private Stage stage;
-    private boolean initialized;
+
+    private boolean initialized = false;
+    private boolean wasOnboardingPanelVisible = false;
 
     @Initiate void init() {
         interfaceService.getParser().getData().addActionContainer(TAG, this);
@@ -72,12 +84,14 @@ public class PackInputFilesController implements ActionContainer {
 
         reloadListContent();
         updateButtonsState();
+        refreshOnboardingView();
     }
 
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
         if (initialized) {
             reloadListContent();
             updateButtonsState();
+            refreshOnboardingView();
         }
     }
 
@@ -85,6 +99,7 @@ public class PackInputFilesController implements ActionContainer {
         if (event.getProperty() == ProjectPropertyChangedEvent.Property.SELECTED_PACK) {
             reloadListContent();
             updateButtonsState();
+            refreshOnboardingView();
         }
     }
 
@@ -97,10 +112,12 @@ public class PackInputFilesController implements ActionContainer {
                 listAdapter.add(inputFile);
                 listAdapter.getViewHolder(inputFile).animateHighlight();
                 updateButtonsState();
+                refreshOnboardingView();
                 break;
             case INPUT_FILE_REMOVED:
                 listAdapter.removeValue(inputFile, true);
                 updateButtonsState();
+                refreshOnboardingView();
                 break;
         }
     }
@@ -286,5 +303,33 @@ public class PackInputFilesController implements ActionContainer {
             return null;
         }
         return project.getSelectedPack();
+    }
+
+    private void refreshOnboardingView() {
+        PackModel selectedPack = modelService.getProject().getSelectedPack();
+        boolean visible = selectedPack != null && selectedPack.getInputFiles().isEmpty();
+
+        if (visible == wasOnboardingPanelVisible) return;
+        wasOnboardingPanelVisible = visible;
+
+        if (visible) {
+            pifOnboardingRoot.setVisible(true);
+            pifOnboardingBackground.getColor().a = 0f;
+            pifOnboardingBtnNew.setTransform(true);
+            pifOnboardingBtnNew.addAction(Actions.forever(Actions.sequence(
+                    Actions.delay(3f),
+                    ActionsExt.origin(Align.center),
+                    Actions.scaleTo(1.1f, 0.95f),
+                    Actions.targeting(pifOnboardingBackground, Actions.alpha(0.25f)),
+                    Actions.parallel(
+                            Actions.scaleTo(1.0f, 1.0f, 0.5f, Interpolation.elasticOut),
+                            Actions.targeting(pifOnboardingBackground, Actions.fadeOut(0.5f))
+                    )
+            )));
+        } else {
+            pifOnboardingRoot.setVisible(false);
+            pifOnboardingBtnNew.setTransform(false);
+            pifOnboardingBtnNew.clearActions();
+        }
     }
 }

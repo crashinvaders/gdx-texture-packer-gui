@@ -37,6 +37,7 @@ public class OptionDialog extends VisWindow {
 
         buttonBar = new ButtonBar();
         buttonBar.setIgnoreSpacing(true);
+        buttonBar.setOrder(ButtonBar.WINDOWS_ORDER);
 
         ChangeListener yesBtnListener = new ChangeListener() {
             @Override

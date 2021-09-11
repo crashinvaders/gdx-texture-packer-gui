@@ -76,7 +76,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
-    @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
     @Inject @LmlInject PngFileTypeController ftPngController;
@@ -100,6 +99,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     Array<Actor> packPaneLockers;
 
     @Inject @LmlInject PackListActors actorsPacks;
+    @Inject @LmlInject PackInputFilesController packInputFilesController;
     @LmlInject PackSettingsActors actorsPackSettings;
     @LmlInject GlobalSettingsActors actorsGlobalSettings;
     @LmlInject FileMenuActors actorsFileMenu;
