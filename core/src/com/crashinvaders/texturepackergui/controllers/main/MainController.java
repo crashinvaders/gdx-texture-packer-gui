@@ -24,10 +24,7 @@ import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.*;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
-import com.crashinvaders.texturepackergui.controllers.model.ModelService;
-import com.crashinvaders.texturepackergui.controllers.model.PackModel;
-import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.controllers.model.ScaleFactorModel;
+import com.crashinvaders.texturepackergui.controllers.model.*;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
 import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.events.*;
@@ -241,6 +238,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             switch (event.getProperty()) {
                 case NAME:
                 case SCALE_FACTORS:
+                case KEEP_FILE_EXTENSIONS:
                 case SETTINGS:
                     if (event.getPack() == getSelectedPack()) {
                         updateViewsFromPack(event.getPack());
@@ -447,6 +445,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                 break;
             }
             case "cbPrettyPrint": settings.prettyPrint = checkBox.isChecked(); break;
+            case "cbKeepFileExtensions": pack.setKeepInputFileExtensions(checkBox.isChecked()); break;
         }
     }
 
@@ -584,6 +583,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             actorsPackSettings.cbLimitMemory.setChecked(settings.limitMemory);
             actorsPackSettings.cbLegacyOutput.setChecked(settings.legacyOutput);
             actorsPackSettings.cbPrettyPrint.setChecked(settings.prettyPrint);
+            actorsPackSettings.cbKeepFileExtensions.setChecked(pack.isKeepInputFileExtensions());
 
             ((IntSeekBarModel) actorsPackSettings.skbMinPageWidth.getModel()).setValue(settings.minWidth, false);
             ((IntSeekBarModel) actorsPackSettings.skbMinPageHeight.getModel()).setValue(settings.minHeight, false);

@@ -26,6 +26,7 @@ public class PackModel implements StateHashable {
     private String name = "";
     private String filename = "";
     private String outputDir = "";
+    private boolean keepInputFileExtensions = false;
 
     private EventDispatcher eventDispatcher;
 
@@ -39,6 +40,7 @@ public class PackModel implements StateHashable {
         this.name = pack.name;
         this.filename = pack.filename;
         this.outputDir = pack.outputDir;
+        this.keepInputFileExtensions = pack.keepInputFileExtensions;
 
         scaleFactors.addAll(pack.scaleFactors);
 
@@ -80,6 +82,15 @@ public class PackModel implements StateHashable {
         }
     }
 
+    public void setKeepInputFileExtensions(boolean value) {
+        if (this.keepInputFileExtensions == value) return;
+
+        this.keepInputFileExtensions = value;
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new PackPropertyChangedEvent(this, Property.KEEP_FILE_EXTENSIONS));
+        }
+    }
+
     public String getName() {
         return name;
     }
@@ -94,6 +105,10 @@ public class PackModel implements StateHashable {
 
     public Array<InputFile> getInputFiles() {
         return inputFiles;
+    }
+
+    public boolean isKeepInputFileExtensions() {
+        return keepInputFileExtensions;
     }
 
     public Settings getSettings() {
@@ -208,7 +223,7 @@ public class PackModel implements StateHashable {
     @Override
     public int computeStateHash() {
         int settingsHash = computeSettingsStateHash(settings);
-        return StateHashUtils.computeHash(scaleFactors, inputFiles, settingsHash, name, filename, outputDir);
+        return StateHashUtils.computeHash(scaleFactors, inputFiles, settingsHash, name, filename, outputDir, keepInputFileExtensions);
     }
 
     private static int computeSettingsStateHash(Settings s) {

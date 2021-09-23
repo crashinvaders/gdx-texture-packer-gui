@@ -8,10 +8,8 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.crashinvaders.common.Version;
-import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
-import com.crashinvaders.texturepackergui.controllers.TePng8CompDialogController;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
 import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
@@ -21,7 +19,6 @@ import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
-import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 import java.io.File;
@@ -116,6 +113,8 @@ public class ProjectSerializer {
         sb.append("fileTypeData=").append(fileType.serializeState()).append("\n");
 
         sb.append("previewBackgroundColor=").append(projectModel.getPreviewBackgroundColor().toString()).append("\n");
+
+        sb.append("projectSettings=").append(projectModel.getSettings().serializeState()).append("\n");
     }
 
     private String serializePack(PackModel pack, FileHandle root) {
@@ -168,6 +167,8 @@ public class ProjectSerializer {
 
         inputFileSerializer.setRoot(root.file());
         sb.append("inputFiles=").append(json.toJson(pack.getInputFiles())).append("\n");
+
+        sb.append("keepInputFileExtensions=").append(pack.isKeepInputFileExtensions()).append("\n");
 
         return sb.toString();
     }
@@ -237,6 +238,11 @@ public class ProjectSerializer {
             project.setPreviewBackgroundColor(Color.valueOf(previewBgColorHex));
         }
 
+        String projectSettings = find(lines, "projectSettings=", null);
+        if (projectSettings != null) {
+            project.getSettings().deserializeState(projectSettings);
+        }
+
         String versionString = find(lines, "version=", null);
         Version version = null;
         try { version = new Version(versionString); } catch (Exception ignore) {}
@@ -254,6 +260,8 @@ public class ProjectSerializer {
             if (line.startsWith("filename=")) pack.setFilename(PathUtils.trim(line.substring("filename=".length())).trim());
             if (line.startsWith("input=")) inputDir = PathUtils.trim(line.substring("input=".length())).trim();
             if (line.startsWith("output=")) pack.setOutputDir(PathUtils.trim(line.substring("output=".length())).trim());
+            if (line.startsWith("keepInputFileExtensions=")) pack.setKeepInputFileExtensions(
+                    Boolean.parseBoolean(line.substring("keepInputFileExtensions=".length())));
         }
 
         try {

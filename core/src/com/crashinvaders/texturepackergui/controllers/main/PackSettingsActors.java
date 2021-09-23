@@ -41,4 +41,5 @@ public class PackSettingsActors {
     @LmlActor("cbLimitMemory") VisCheckBox cbLimitMemory;
     @LmlActor("cbLegacyOutput") VisCheckBox cbLegacyOutput;
     @LmlActor("cbPrettyPrint") VisCheckBox cbPrettyPrint;
+    @LmlActor("cbKeepFileExtensions") VisCheckBox cbKeepFileExtensions;
 }
