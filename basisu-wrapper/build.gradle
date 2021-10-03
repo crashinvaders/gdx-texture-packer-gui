@@ -133,6 +133,9 @@ jnigen {
     add(MacOsX, x64) {
 
     }
+    add(MacOsX, x64, ARM) {
+
+    }
 //    add(Android) {
 //        linkerFlags += ' -llog '  // We use "log.h" lib and should explicitly declare it.
 //

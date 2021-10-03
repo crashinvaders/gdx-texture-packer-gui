@@ -1,6 +1,5 @@
 package com.crashinvaders.basisu;
 
-import com.badlogic.gdx.utils.SharedLibraryLoader;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -25,7 +24,7 @@ public class BasisuWrapperTest {
 
     @BeforeClass
     public static void init() throws IOException {
-        new SharedLibraryLoader().load("basisu-wrapper");
+        new com.badlogic.gdx.utils.SharedLibraryLoader().load("basisu-wrapper");
 
         System.out.println("Loading " + IMAGE_FILE);
         try (InputStream is = BasisuWrapperTest.class.getClassLoader().getResourceAsStream(IMAGE_FILE)) {

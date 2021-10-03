@@ -1,8 +1,5 @@
 package com.crashinvaders.texturepackergui.utils;
 
-import com.badlogic.gdx.utils.ObjectMap;
-import com.badlogic.gdx.utils.ObjectSet;
-
 public class SystemUtils {
 
     public static final OperatingSystem OPERATING_SYSTEM;
