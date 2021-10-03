@@ -337,12 +337,8 @@ public class GlobalActions implements ActionContainer {
         Gdx.app.postRunnable(() -> App.inst().restart());
     }
 
-    @LmlAction("getNotSupportedSystemText") String getNotSupportedSystemText() {
-        return localeService.getI18nBundle().format("systemNotSupported", SystemUtils.getPrintString());
-    }
-
-    @LmlAction("getNotSupportedSystemTextExt") String getNotSupportedSystemTextExt() {
-        return localeService.getI18nBundle().format("systemNotSupportedExt", SystemUtils.getPrintString());
+    @LmlAction("getSystemNameText") String getSystemNameText() {
+        return SystemUtils.getPrintString();
     }
 
     @LmlAction("editCustomHotkeys") void editCustomHotkeys() {
