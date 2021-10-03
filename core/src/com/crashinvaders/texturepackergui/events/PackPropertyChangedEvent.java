@@ -38,7 +38,8 @@ public class PackPropertyChangedEvent {
         SCALE_FACTORS,
         INPUT_FILE_ADDED,
         INPUT_FILE_REMOVED,
-        SETTINGS    // Generic TexturePacker.Settings change event.
+        KEEP_FILE_EXTENSIONS,
+        SETTINGS,    // Generic TexturePacker.Settings change event.
         ;
     }
 }

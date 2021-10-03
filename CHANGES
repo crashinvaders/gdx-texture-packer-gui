@@ -1,5 +1,6 @@
 [4.10.1]
 - Fixed file path editing for FileChooser may result in a crash.
+- Option to append input file extensions to region names.
 - Window validates and fixes its dimensions on startup.
 - Minor UI cleanup and improvements.
 

@@ -213,6 +213,7 @@
 
                     <vischeckbox id="cbLimitMemory" onchange="onSettingsCbChecked" tooltip="@psTtLimitMemory">@psLimitMemory</vischeckbox>
 
+                    <vischeckbox id="cbKeepFileExtensions" onchange="onSettingsCbChecked" tooltip="@psTtKeepFileExtensions">@psKeepFileExtensions</vischeckbox>
                 </vistable>
 
             </vistable>

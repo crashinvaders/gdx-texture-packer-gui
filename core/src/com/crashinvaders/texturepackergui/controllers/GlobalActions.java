@@ -20,6 +20,7 @@ import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectS
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
+import com.crashinvaders.texturepackergui.utils.SystemUtils;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
 import com.crashinvaders.texturepackergui.views.dialogs.OptionDialog;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -334,6 +335,14 @@ public class GlobalActions implements ActionContainer {
             App.inst().getParams().startupProject = projectFile.file();
         }
         Gdx.app.postRunnable(() -> App.inst().restart());
+    }
+
+    @LmlAction("getNotSupportedSystemText") String getNotSupportedSystemText() {
+        return localeService.getI18nBundle().format("systemNotSupported", SystemUtils.getPrintString());
+    }
+
+    @LmlAction("getNotSupportedSystemTextExt") String getNotSupportedSystemTextExt() {
+        return localeService.getI18nBundle().format("systemNotSupportedExt", SystemUtils.getPrintString());
     }
 
     @LmlAction("editCustomHotkeys") void editCustomHotkeys() {

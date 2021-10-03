@@ -3,7 +3,6 @@ package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -15,12 +14,11 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
-import com.crashinvaders.texturepackergui.controllers.model.InputFile;
-import com.crashinvaders.texturepackergui.controllers.model.ModelService;
-import com.crashinvaders.texturepackergui.controllers.model.ModelUtils;
+import com.crashinvaders.texturepackergui.controllers.model.*;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
+import com.crashinvaders.texturepackergui.events.PackPropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
@@ -89,9 +87,19 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     }
 
     @OnEvent(InputFilePropertyChangedEvent.class) void onEvent(InputFilePropertyChangedEvent event) {
-        if (event.getInputFile() != inputFile || ignoreInputFileUpdateEvents) return;
+        if (!isShown() || event.getInputFile() != inputFile || ignoreInputFileUpdateEvents) return;
 
         mapDataFromModel();
+    }
+
+    @OnEvent(PackPropertyChangedEvent.class) void onEvent(PackPropertyChangedEvent event) {
+        if (!isShown() || inputFile == null) return;
+
+        switch (event.getProperty()) {
+            case KEEP_FILE_EXTENSIONS:
+                mapDataFromModel();
+                break;
+        }
     }
 
     @LmlAction("showFilePicker") void showFilePicker() {
@@ -128,8 +136,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         dialog.hide();
     }
 
-    @LmlAction("onFilePrefixTextChanged")
-    void onFilePrefixFocusChanged() {
+    @LmlAction("onFilePrefixTextChanged") void onFilePrefixFocusChanged() {
         inputFile.setDirFilePrefix(edtFilePrefix.getText().trim());
     }
 
@@ -144,8 +151,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         inputFile.setFlattenPaths(checked);
     }
 
-    @LmlAction("onRegionNameTextChanged")
-    void onRegionNameTextChanged() {
+    @LmlAction("onRegionNameTextChanged") void onRegionNameTextChanged() {
         inputFile.setRegionName(edtRegionName.getText().trim());
     }
 
@@ -215,6 +221,8 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     }
 
     private void mapDataFromModel() {
+        final PackModel packModel = modelService.getProject().getSelectedPack();
+
         dialog.pack();
 
         boolean fileShortened = false;
@@ -250,10 +258,11 @@ public class InputFilePropertiesDialogController implements ActionContainer {
         if (!inputFile.isDirectory() && inputFile.getType() == InputFile.Type.Input) {
             dialog.getTitleLabel().setText(localeService.getI18nBundle().get("dInputFileTitleFile"));
             shrinkInputFile.setVisible(true);
-            String defaultRegionName = inputFile.getFileHandle().nameWithoutExtension();
-            if (defaultRegionName.endsWith(".9")) {
-                defaultRegionName = defaultRegionName.substring(0, defaultRegionName.length() - 2);
-            }
+
+            String defaultRegionName = InputFile.evalDefaultRegionName(
+                    inputFile.getFileHandle(),
+                    packModel.isKeepInputFileExtensions());
+
             edtRegionName.setMessageText(defaultRegionName);
             edtRegionName.setText(inputFile.getRegionName());
 
@@ -283,5 +292,9 @@ public class InputFilePropertiesDialogController implements ActionContainer {
                     .message(localeService.getI18nBundle().format("toastInputFileDoesNotExist", inputFile.getFileHandle().path())));
         }
         return exists;
+    }
+
+    private boolean isShown() {
+        return stage != null;
     }
 }
