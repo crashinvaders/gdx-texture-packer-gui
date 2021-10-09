@@ -117,7 +117,7 @@ zipRelease.dependsOn distRelease
  *
  * In order to make it work, you need:
  *     1. Windows OS only.
- *     2. NSIS installed on your system and added to PATH (makensis.exe).
+ *     2. NSIS 3 installed on your system and added to PATH (makensis.exe).
  *          https://sourceforge.net/projects/nsis/files/
  *     3. FileAssoc macros should be installed.
  *          Copy code from http://nsis.sourceforge.net/FileAssoc
@@ -139,7 +139,7 @@ task nsisInstaller(type: Exec) {
     def nsisCommand = "makensis /DFILENAME=\"$project.distFileName\" installer-nsis.nsi"
     commandLine 'cmd', '/c', "$nsisCommand"
 }
-nsisInstaller.dependsOn distRelease
+nsisInstaller.dependsOn distReleaseWindows
 //endregion
 
 //region MacOS distribution (Mac App Bundle).
