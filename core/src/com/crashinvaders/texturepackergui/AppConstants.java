@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.Locale;
 
 public class AppConstants {
-    public static final Version version = new Version("4.10.0");
+    public static final Version version = new Version("4.10.1");
     public static final String APP_TITLE = "GDX Texture Packer";
     public static final String EXTERNAL_DIR = ".gdxtexturepackergui";
     public static final String MODULES_DIR = EXTERNAL_DIR + File.separator + "modules";
