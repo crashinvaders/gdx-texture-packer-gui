@@ -184,7 +184,6 @@ ospackage {
     vendor 'Crashinvaders'
     url 'https://github.com/crashinvaders/gdx-texture-packer-gui'
     maintainer 'Anton Chekulaev <anton@crashinvaders.com>'
-    maintainer 'Anton Chekulaev <anton@crashinvaders.com>'
     summary 'LibGDX texture atlas packer GUI'
     packageDescription 'A simple utility to help you pack and manage texture atlases for LibGDX game framework. It\'s mostly just a visual wrapper over LibGDX TexturePacker classes and provides a convenient way to use it.'
     license file("$rootDir/distribution/license.txt").text
@@ -196,10 +195,10 @@ ospackage {
             'sudo update-mime-database /usr/share/mime\n' +
             'sudo update-icon-caches /usr/share/icons/hicolor'
 
-    ext.installationDir = '/opt/gdx-texture-packer'
-    into ext.installationDir
+    def installationDir = '/opt/gdx-texture-packer'
+    into installationDir
 
-    from("$rootDir/distribution/output/${project.appName}.jar")
+    from("$rootDir/distribution/output/${project.appName}-linux.jar")
     from("$rootDir/distribution/files/launcher_linux.sh") { fileMode 0555 }
     from("$rootDir/distribution/files/readme.txt")
     from("$rootDir/distribution/files/readme_hotkeys.txt")
@@ -215,8 +214,8 @@ ospackage {
     }
 
     from(new File("$project.buildDir/tmp", 'gdx-texture-packer.desktop').with {
-        parentFile.mkdirs()
-        write """[Desktop Entry]
+        it.parentFile.mkdirs()
+        it.write """[Desktop Entry]
                 |Name=GDX Texture Packer
                 |GenericName=Texture Packer
                 |Comment=$summary
@@ -226,9 +225,9 @@ ospackage {
                 |Categories=Graphics;Development;
                 |MimeType=application/gdx-tp-project;
                 |Terminal=false
-                |Exec=${ext.installationDir}/launcher_linux.sh %U
+                |Exec=$installationDir/launcher_linux.sh %U
                 |Icon=gdx-texture-packer""".stripMargin()
-        return absolutePath
+        return it.absolutePath
     }) {
         into '/usr/share/applications/'
     }
@@ -242,13 +241,13 @@ ospackage {
 buildRpm {
     group 'OSPackage'
     description 'Assembles an RPM Linux distribution package.'
-    dependsOn distRelease
+    dependsOn distReleaseLinux
 }
 
 buildDeb {
     group 'OSPackage'
     description 'Assembles a DEB Linux distribution package.'
-    dependsOn distRelease
+    dependsOn distReleaseLinux
 }
 //endregion
 
