@@ -52,23 +52,56 @@ task dist(type: Jar) {
     }
 }
 
-task distRelease(type: Jar) {
-    dependsOn configurations.runtimeClasspath
-    from configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) } with jar
+// Create fat and OS based (stripped natives) distribution release tasks with names "distRelease[Platform]".
+void generateDistReleaseTasks() {
+    def osFamilyList = [
+            OperatingSystemFamily.LINUX,
+            OperatingSystemFamily.MACOS,
+            OperatingSystemFamily.WINDOWS,
+            null]
+    osFamilyList.each {String osFamily ->
+        String taskName = "distRelease" + (osFamily != null ? toCamelCase(osFamily, true) : "")
+//        println "Creating task \"$taskName\""
+        tasks.create(name: taskName, type: Jar) {
+            group 'Distribution'
+            description 'Generates a destributable JAR file' + (osFamily != null ? " for ${toCamelCase(osFamily, true)}." : ".")
 
-    // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
-    // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
-    exclude("/gson-*.jar",
-            "/okhttp-*.jar",
-            "/okio-*.jar")
+            dependsOn configurations.runtimeClasspath
+            from configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) } with jar
 
-    manifest {
-        attributes 'Main-Class': project.mainClassName
+            // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
+            // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
+            exclude("/gson-*.jar",
+                    "/okhttp-*.jar",
+                    "/okio-*.jar")
+
+            manifest {
+                attributes 'Main-Class': project.mainClassName
+            }
+
+            def osFamilySuffix = osFamily != null ? "-${osFamily.toLowerCase()}" : ""
+            archiveFileName = "$project.appName$osFamilySuffix.$extension"
+            destinationDirectory = file("$rootDir/distribution/output")
+
+            // Strip the natives unused by the current platform.
+            if (osFamily != null) {
+                if (OperatingSystemFamily.LINUX != osFamily)
+                    exclude("**/*.so",
+                            "**/*.so.*",
+                            "/etctool/etctool-linux")
+                if (OperatingSystemFamily.WINDOWS != osFamily)
+                    exclude("**/*.dll",
+                            "**/*.dll.*",
+                            "/etctool/etctool.exe")
+                if (OperatingSystemFamily.MACOS != osFamily)
+                    exclude("**/*.dylib",
+                            "**/*.dylib.*",
+                            "/etctool/etctool-mac")
+            }
+        }
     }
-
-    archiveFileName = "$project.appName.$extension"
-    destinationDirectory = file("$rootDir/distribution/output")
 }
+generateDistReleaseTasks()
 
 task zipRelease(type: Zip) {
     from distRelease
@@ -216,5 +249,16 @@ buildDeb {
     group 'OSPackage'
     description 'Assembles a DEB Linux distribution package.'
     dependsOn distRelease
+}
+//endregion
+
+//region Utils
+static String toCamelCase(String text, boolean capitalized = false) {
+    text = text.replaceAll("(_)([A-Za-z0-9])", { String[] it -> it[2].toUpperCase() })
+    return capitalized ? text.capitalize() : text
+}
+
+static String toSnakeCase(String text) {
+    text.replaceAll(/([A-Z])/, /_$1/).toLowerCase().replaceAll(/^_/, '')
 }
 //endregion
