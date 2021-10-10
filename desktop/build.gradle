@@ -176,31 +176,46 @@ nsisInstaller.dependsOn distReleaseWindows
 macAppBundle {
     mainClassName = project.mainClassName
     bundleIdentifier = 'com.crashinvaders.texturepackergui'
+    appStyle = 'universalJavaApplicationStub'
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     javaExtras.put("-XstartOnFirstThread", null)
     javaExtras.put("-Djava.awt.headless", "true")
+    bundleExtras.put("CFBundleVersion", project.ext.version)
+    bundleExtras.put("CFBundleShortVersionString", project.ext.version)
     bundleJRE = false
     appName = "GDX Texture Packer"
-    dmgName = "gdx-texturepacker-$project.ext.version"
+    dmgName = "${project.appName}-${project.ext.version}"
     icon = "icons.icns"
 //    backgroundImage = "doc/macbackground.png"
 }
 
-// Since macAppBundle 2.1.6 doesn't let us customize jar assembling, we have to swap files by hand.
-task cleanAppJavaDir (type: Delete) {
-    delete fileTree(dir: "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java")
-}
-task copyUberJar (type: Copy) {
-    from 'build/libs/desktop.jar'
-    into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java"
+// Since macAppBundle provide very little control over how to bundle the jar,
+// we have to swap files by hand.
+task cleanMacAppJavaDir (type: Delete) {
+    delete fileTree(dir: "$project.buildDir/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java")
 }
 task copyMacAppFiles (type: Copy) {
-    from '../distribution/macApp'
-    into "build/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents"
+    from "$rootDir/distribution/macApp"
+    into "$project.buildDir/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents"
 }
-createApp.dependsOn copyUberJar, copyMacAppFiles
-copyUberJar.dependsOn dist, cleanAppJavaDir
-cleanAppJavaDir.dependsOn generatePlist
+task copyMacAppDistJar(type: Copy) {
+    from "$rootDir/distribution/output/${project.appName}-macos.jar"
+    into "$project.buildDir/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java/"
+//    rename { "${project.appName}.jar" }
+    // Mimic the "jar" task's output artifact name as the run script expects it.
+    rename { "${project.name}.jar" }
+}
+task copyDmgToDistDir(type: Copy) {
+    // Copy the resulting DMG file to the global dist output location.
+    from "${project.buildDir}/${project.distsDirName}/${macAppBundle.dmgName}.dmg"
+    into "$rootDir/distribution/output"
+}
+
+createDmg.finalizedBy copyDmgToDistDir
+createApp.finalizedBy copyMacAppDistJar, copyMacAppFiles
+copyMacAppDistJar.dependsOn distReleaseMacos, cleanMacAppJavaDir
+cleanMacAppJavaDir.dependsOn generatePlist
+
 //endregion
 
 //region Linux distribution (ospackage).
