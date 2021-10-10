@@ -2,8 +2,8 @@
 <!DOCTYPE shrinkcontainer SYSTEM "/lml.dtd">
 
 <!--Common locking overlay snippet for main screen panels-->
-<shrinkcontainer id="{id}" fill="true">
+<shrinkcontainer id="{id}" fill="true" minheight="0" minwidth="0">
     <vistable background="paneLockBg" touchable="enabled" visible="true" pad="16">
-        <image style="custom/logo16-bw" size="72" hexcolor="ffffff40"/>
+<!--            <image style="custom/logo16-bw" size="72" hexcolor="ffffff40"/>-->
     </vistable>
 </shrinkcontainer>
