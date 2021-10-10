@@ -177,6 +177,7 @@ macAppBundle {
     mainClassName = project.mainClassName
     bundleIdentifier = 'com.crashinvaders.texturepackergui'
     appStyle = 'universalJavaApplicationStub'
+    jvmVersion = '1.8+'
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     javaExtras.put("-XstartOnFirstThread", null)
     javaExtras.put("-Djava.awt.headless", "true")
@@ -201,7 +202,6 @@ task copyMacAppFiles (type: Copy) {
 task copyMacAppDistJar(type: Copy) {
     from "$rootDir/distribution/output/${project.appName}-macos.jar"
     into "$project.buildDir/$macAppBundle.appOutputDir/${macAppBundle.appName}.app/Contents/Java/"
-//    rename { "${project.appName}.jar" }
     // Mimic the "jar" task's output artifact name as the run script expects it.
     rename { "${project.name}.jar" }
 }
