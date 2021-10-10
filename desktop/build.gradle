@@ -105,7 +105,7 @@ generateDistReleaseTasks()
 
 task zipRelease(type: Zip) {
     from distRelease
-    from file("../distribution/files")
+    from file("$rootDir/distribution/files")
     archiveFileName = "$project.distFileName.$extension"
     destinationDirectory = file("$rootDir/distribution/output")
 }
@@ -198,7 +198,9 @@ ospackage {
     def installationDir = '/opt/gdx-texture-packer'
     into installationDir
 
-    from("$rootDir/distribution/output/${project.appName}-linux.jar")
+    from("$rootDir/distribution/output/${project.appName}-linux.jar") {
+        rename { "${project.appName}.jar" }
+    }
     from("$rootDir/distribution/files/launcher_linux.sh") { fileMode 0555 }
     from("$rootDir/distribution/files/readme.txt")
     from("$rootDir/distribution/files/readme_hotkeys.txt")
