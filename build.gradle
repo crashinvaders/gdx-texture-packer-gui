@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath "edu.sc.seis:macAppBundle:2.3.0"
-        classpath "com.netflix.nebula:gradle-ospackage-plugin:8.4.1"
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:9.0.0"
         classpath "com.badlogicgames.gdx:gdx-jnigen-gradle:$jnigenVersion"
     }
 }
@@ -18,7 +18,7 @@ allprojects {
 
     ext {
         appName = "gdx-texturepacker"
-        version = '4.10.0'
+        version = '4.10.1'
     }
 
     repositories {

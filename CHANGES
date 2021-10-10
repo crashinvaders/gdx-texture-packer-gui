@@ -1,8 +1,10 @@
 [4.10.1]
-- Fixed file path editing for FileChooser may result in a crash.
-- Option to append input file extensions to region names.
-- Window validates and fixes its dimensions on startup.
-- Minor UI cleanup and improvements.
+- Fixed file path editing in FileChooser may result in a crash. #98
+- Option to append input file extensions to region names. #108
+- Window validates and fixes its dimensions on startup. #113
+- Fixed rare crash when the downloaded extension cache index is malformed. #100
+- Minor UI improvements and some essential call to action animations for newcomers.
+- Smaller OS-specific distribution size (due to natives strip).
 
 [4.10.0]
 - Support for Basis Universal super-compressed atlas textures, see https://github.com/BinomialLLC/basis_universal

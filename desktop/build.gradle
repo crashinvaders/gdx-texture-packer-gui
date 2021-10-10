@@ -82,23 +82,56 @@ task dist(type: Jar) {
     }
 }
 
-task distRelease(type: Jar) {
-    dependsOn configurations.runtimeClasspath
-    from configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) } with jar
+// Create fat and OS based (stripped natives) distribution release tasks with names "distRelease[Platform]".
+void generateDistReleaseTasks() {
+    def osFamilyList = [
+            OperatingSystemFamily.LINUX,
+            OperatingSystemFamily.MACOS,
+            OperatingSystemFamily.WINDOWS,
+            null]
+    osFamilyList.each {String osFamily ->
+        String taskName = "distRelease" + (osFamily != null ? toCamelCase(osFamily, true) : "")
+//        println "Creating task \"$taskName\""
+        tasks.create(name: taskName, type: Jar) {
+            group 'Distribution'
+            description 'Generates a destributable JAR file' + (osFamily != null ? " for ${toCamelCase(osFamily, true)}." : ".")
 
-    // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
-    // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
-    exclude("/gson-*.jar",
-            "/okhttp-*.jar",
-            "/okio-*.jar")
+            dependsOn configurations.runtimeClasspath
+            from configurations.runtimeClasspath.collect {it.isDirectory() ? it : zipTree(it) } with jar
 
-    manifest {
-        attributes 'Main-Class': project.mainClassName
+            // Exclude unnecessary JARs that bundled with Tinify Maven artifact.
+            // Remove after https://github.com/tinify/tinify-java/issues/9 gets resolved.
+            exclude("/gson-*.jar",
+                    "/okhttp-*.jar",
+                    "/okio-*.jar")
+
+            manifest {
+                attributes 'Main-Class': project.mainClassName
+            }
+
+            def osFamilySuffix = osFamily != null ? "-${osFamily.toLowerCase()}" : ""
+            archiveFileName = "$project.appName$osFamilySuffix.$extension"
+            destinationDirectory = file("$rootDir/distribution/output")
+
+            // Strip the natives unused by the current platform.
+            if (osFamily != null) {
+                if (OperatingSystemFamily.LINUX != osFamily)
+                    exclude("**/*.so",
+                            "**/*.so.*",
+                            "/etctool/etctool-linux")
+                if (OperatingSystemFamily.WINDOWS != osFamily)
+                    exclude("**/*.dll",
+                            "**/*.dll.*",
+                            "/etctool/etctool.exe")
+                if (OperatingSystemFamily.MACOS != osFamily)
+                    exclude("**/*.dylib",
+                            "**/*.dylib.*",
+                            "/etctool/etctool-mac")
+            }
+        }
     }
-
-    archiveFileName = "$project.appName.$extension"
-    destinationDirectory = file("$rootDir/distribution/output")
 }
+generateDistReleaseTasks()
 
 task zipRelease(type: Zip) {
     from distRelease
@@ -114,7 +147,7 @@ zipRelease.dependsOn distRelease
  *
  * In order to make it work, you need:
  *     1. Windows OS only.
- *     2. NSIS installed on your system and added to PATH (makensis.exe).
+ *     2. NSIS 3 installed on your system and added to PATH (makensis.exe).
  *          https://sourceforge.net/projects/nsis/files/
  *     3. FileAssoc macros should be installed.
  *          Copy code from http://nsis.sourceforge.net/FileAssoc
@@ -136,7 +169,7 @@ task nsisInstaller(type: Exec) {
     def nsisCommand = "makensis /DFILENAME=\"$project.distFileName\" installer-nsis.nsi"
     commandLine 'cmd', '/c', "$nsisCommand"
 }
-nsisInstaller.dependsOn distRelease
+nsisInstaller.dependsOn distReleaseWindows
 //endregion
 
 //region MacOS distribution (Mac App Bundle).
@@ -181,7 +214,6 @@ ospackage {
     vendor 'Crashinvaders'
     url 'https://github.com/crashinvaders/gdx-texture-packer-gui'
     maintainer 'Anton Chekulaev <anton@crashinvaders.com>'
-    maintainer 'Anton Chekulaev <anton@crashinvaders.com>'
     summary 'LibGDX texture atlas packer GUI'
     packageDescription 'A simple utility to help you pack and manage texture atlases for LibGDX game framework. It\'s mostly just a visual wrapper over LibGDX TexturePacker classes and provides a convenient way to use it.'
     license file("$rootDir/distribution/license.txt").text
@@ -193,10 +225,10 @@ ospackage {
             'sudo update-mime-database /usr/share/mime\n' +
             'sudo update-icon-caches /usr/share/icons/hicolor'
 
-    ext.installationDir = '/opt/gdx-texture-packer'
-    into ext.installationDir
+    def installationDir = '/opt/gdx-texture-packer'
+    into installationDir
 
-    from("$rootDir/distribution/output/${project.appName}.jar")
+    from("$rootDir/distribution/output/${project.appName}-linux.jar")
     from("$rootDir/distribution/files/launcher_linux.sh") { fileMode 0555 }
     from("$rootDir/distribution/files/readme.txt")
     from("$rootDir/distribution/files/readme_hotkeys.txt")
@@ -212,8 +244,8 @@ ospackage {
     }
 
     from(new File("$project.buildDir/tmp", 'gdx-texture-packer.desktop').with {
-        parentFile.mkdirs()
-        write """[Desktop Entry]
+        it.parentFile.mkdirs()
+        it.write """[Desktop Entry]
                 |Name=GDX Texture Packer
                 |GenericName=Texture Packer
                 |Comment=$summary
@@ -223,9 +255,9 @@ ospackage {
                 |Categories=Graphics;Development;
                 |MimeType=application/gdx-tp-project;
                 |Terminal=false
-                |Exec=${ext.installationDir}/launcher_linux.sh %U
+                |Exec=$installationDir/launcher_linux.sh %U
                 |Icon=gdx-texture-packer""".stripMargin()
-        return absolutePath
+        return it.absolutePath
     }) {
         into '/usr/share/applications/'
     }
@@ -239,12 +271,23 @@ ospackage {
 buildRpm {
     group 'OSPackage'
     description 'Assembles an RPM Linux distribution package.'
-    dependsOn distRelease
+    dependsOn distReleaseLinux
 }
 
 buildDeb {
     group 'OSPackage'
     description 'Assembles a DEB Linux distribution package.'
-    dependsOn distRelease
+    dependsOn distReleaseLinux
+}
+//endregion
+
+//region Utils
+static String toCamelCase(String text, boolean capitalized = false) {
+    text = text.replaceAll("(_)([A-Za-z0-9])", { String[] it -> it[2].toUpperCase() })
+    return capitalized ? text.capitalize() : text
+}
+
+static String toSnakeCase(String text) {
+    text.replaceAll(/([A-Z])/, /_$1/).toLowerCase().replaceAll(/^_/, '')
 }
 //endregion

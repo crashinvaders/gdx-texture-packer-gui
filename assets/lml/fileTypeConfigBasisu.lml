@@ -34,7 +34,7 @@
 
     <container id="basisuNotSupportedHint" fill="true" padleft="16" padright="16" visible="false">
         <label style="small" color="orange" wrap="true" align="center">
-            $getNotSupportedSystemTextExt
+            @systemNotSupported|$getSystemNameText
         </label>
     </container>
 </stack>

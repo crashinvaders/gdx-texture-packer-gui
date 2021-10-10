@@ -21,4 +21,10 @@
                     change="ftcPng.showPngCompSettings"/>
         </shrinkcontainer>
     </vistable>
+
+    <:row/>
+
+    <shrinkcontainer id="groupPngConfigUnsupported" visible="false" spacetop="4" colspan="2" fillx="true">
+        <label style="small-red" text="@systemNotSupported|$getSystemNameText" wrap="true" textalign="center"/>
+    </shrinkcontainer>
 </vistable>

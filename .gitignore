@@ -55,6 +55,9 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
+# VSCode
+.vscode/
+
 ## Gradle
 .gradle
 gradle-app.setting

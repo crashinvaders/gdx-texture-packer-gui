@@ -10,6 +10,8 @@ import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.compression.PngquantCompressionModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.PngFileTypeModel;
 import com.crashinvaders.texturepackergui.utils.IndexedPng;
+import com.crashinvaders.texturepackergui.utils.SystemUtils;
+import com.crashinvaders.texturepackergui.utils.SystemUtils.OperatingSystem;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
@@ -17,6 +19,11 @@ import java.io.OutputStream;
 import java.util.Locale;
 
 public class PngquantCompressionProcessor implements PackProcessor {
+
+    private static final boolean SYSTEM_SUPPORTED =
+            SystemUtils.check(OperatingSystem.Windows, SystemUtils.CpuArch.Amd64, SystemUtils.CpuArch.X86) ||
+                    SystemUtils.check(OperatingSystem.Linux, SystemUtils.CpuArch.Amd64, SystemUtils.CpuArch.X86) ||
+                    SystemUtils.check(OperatingSystem.MacOS, SystemUtils.CpuArch.Amd64);
 
     private static boolean nativeLibLoaded = false;
 
@@ -30,6 +37,10 @@ public class PngquantCompressionProcessor implements PackProcessor {
         PngFileTypeModel fileType = project.getFileType();
 
         if (fileType.getCompression() == null || fileType.getCompression().getType() != PngCompressionType.PNGQUANT) return;
+
+        if (!isPngquantSupported()) {
+            throw new IllegalStateException("Pngquant natives are not supported on the current system: " + SystemUtils.getPrintString());
+        }
 
         System.out.println("Pngquant compression started");
 
@@ -80,6 +91,10 @@ public class PngquantCompressionProcessor implements PackProcessor {
         }
 
         System.out.println("PNG8 compression finished");
+    }
+
+    public static boolean isPngquantSupported() {
+        return SYSTEM_SUPPORTED;
     }
 
     private static QuantizedData quantizePixmap(Pixmap pixmap, int speed, int maxColors, int minQuality, int maxQuality, float ditheringLevel) {

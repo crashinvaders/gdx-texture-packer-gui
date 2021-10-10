@@ -9,6 +9,7 @@ import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.main.WidgetData;
 import com.crashinvaders.texturepackergui.controllers.model.compression.*;
+import com.crashinvaders.texturepackergui.controllers.packing.processors.PngquantCompressionProcessor;
 import com.crashinvaders.texturepackergui.events.FileTypePropertyChangedEvent;
 import com.crashinvaders.texturepackergui.events.ProjectInitializedEvent;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
@@ -35,6 +36,7 @@ public class PngFileTypeController implements FileTypeController {
     @LmlActor("cboPngEncoding") VisSelectBox<Pixmap.Format> cboEncoding;
     @LmlActor("cboPngCompression") VisSelectBox<WidgetData.PngCompression> cboCompression;
     @LmlActor("containerPngCompSettings") Actor containerPngCompSettings;
+    @LmlActor("groupPngConfigUnsupported") Actor groupPngConfigUnsupported;
 
     private PngFileTypeModel model;
 
@@ -55,6 +57,7 @@ public class PngFileTypeController implements FileTypeController {
 
         updateEncoding();
         updateCompression();
+        updateUnsupportedConfigMessage();
     }
 
     @Override
@@ -66,15 +69,18 @@ public class PngFileTypeController implements FileTypeController {
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
         updateEncoding();
         updateCompression();
+        updateUnsupportedConfigMessage();
     }
 
     @OnEvent(FileTypePropertyChangedEvent.class) void onEvent(FileTypePropertyChangedEvent event) {
         switch (event.getProperty()) {
             case PNG_ENCODING:
                 updateEncoding();
+                updateUnsupportedConfigMessage();
                 break;
             case PNG_COMPRESSION:
                 updateCompression();
+                updateUnsupportedConfigMessage();
                 break;
         }
     }
@@ -163,5 +169,25 @@ public class PngFileTypeController implements FileTypeController {
 		WidgetData.PngCompression compValue = WidgetData.PngCompression.valueOf(compModel == null ? null : compModel.getType());
         cboCompression.setSelected(compValue);
         containerPngCompSettings.setVisible(compValue.hasSettings);
+    }
+
+    private void updateUnsupportedConfigMessage() {
+        if (model == null) return;
+
+        boolean compSupported = true;
+
+        PngCompressionModel compModel = model.getCompression();
+        if (compModel != null) {
+            compSupported &= isCompressionSupported(compModel);
+        }
+
+        groupPngConfigUnsupported.setVisible(!compSupported);
+    }
+
+    private static boolean isCompressionSupported(PngCompressionModel compressionModel) {
+        switch (compressionModel.getType()) {
+            case PNGQUANT: return PngquantCompressionProcessor.isPngquantSupported();
+        }
+        return true;
     }
 }
