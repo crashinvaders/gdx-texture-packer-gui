@@ -161,7 +161,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         // Load pack list split value
         {
             Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
-            float splitValue = prefs.getFloat(PREF_KEY_PACK_LIST_SPLIT, 0f);
+            float splitValue = prefs.getFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitPane.getSplit());
             packListSplitPane.setSplitAmount(splitValue);
         }
 

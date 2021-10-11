@@ -13,7 +13,7 @@
             <container growy="true" fill="true" width="320">
                 <:import path="lml/titledPane.lml"/>
 
-                <vissplitpane id="packListSplitPane" vertical="true" min="0.2" max="0.7" value="0.2">
+                <vissplitpane id="packListSplitPane" vertical="true" min="0.2" max="0.7" value="0.3">
 
                     <container fill="true">
                         <:titledpane id="titledPanePackList" title="@panelTitlePackList" icon="custom/ic-title-packs">
