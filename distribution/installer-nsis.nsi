@@ -56,8 +56,9 @@ Section "Main application" AppInstall
 SectionIn RO
 
   SetOutpath "$INSTDIR"
-  File "output\gdx-texturepacker-windows.jar"
-  Rename $INSTDIR\gdx-texturepacker-windows.jar" "$INSTDIR\gdx-texturepacker.jar"
+
+  ;Include the natives stripped JAR and rename it ot matche universal JAR name.
+  File "/oname=$INSTDIR\gdx-texturepacker.jar" "output\gdx-texturepacker-windows.jar"
 
   File /r /x "*.sh" "files\*.*"
 
