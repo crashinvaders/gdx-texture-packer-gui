@@ -8,7 +8,7 @@ buildscript {
     }
     dependencies {
         classpath "edu.sc.seis:macAppBundle:2.3.0"
-        classpath "com.netflix.nebula:gradle-ospackage-plugin:9.0.0"
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:8.4.1" //TODO Change to 9.0.0 when gradle is updated 7.0+
         classpath "com.badlogicgames.gdx:gdx-jnigen-gradle:$jnigenVersion"
     }
 }
