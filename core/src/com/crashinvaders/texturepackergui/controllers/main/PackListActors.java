@@ -76,13 +76,12 @@ public class PackListActors implements ActionContainer {
     }
 
     public void onViewCreated(Stage stage) {
-        ProjectModel project = modelService.getProject();
-
         packList = packListTable.getListView();
         packListAdapter = ((PackListAdapter) packList.getAdapter());
         packListAdapter.getSelectionManager().setListener(new ListSelectionAdapter<PackModel, VisTable>() {
             @Override
             public void selected(PackModel pack, VisTable view) {
+                ProjectModel project = modelService.getProject();
                 project.setSelectedPack(pack);
 
                 // Normalize pack list scroll.
