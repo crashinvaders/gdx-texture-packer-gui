@@ -15,7 +15,7 @@ project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.Applicat
 project.ext.distFileName = "$project.appName-$project.ext.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
-project.ext.lwjglVersion = "3.3.0-SNAPSHOT"
+project.ext.lwjglVersion = "3.3.0"
 project.ext.lwjglMacosNatives = "natives-macos-arm64"
 
 def nativePlatforms = [
