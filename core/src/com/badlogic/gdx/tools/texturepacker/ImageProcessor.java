@@ -192,17 +192,18 @@ public class ImageProcessor {
 			width = Math.max(1, Math.round(width * scale));
 			height = Math.max(1, Math.round(height * scale));
 			BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-			if (scale < 1) {
-				Graphics graphics = newImage.getGraphics();
-				graphics.drawImage(image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), 0, 0, null);
-				graphics.dispose();
-			} else {
+			// AC: Not sure why the original code uses two different approaches for upscaling/downscaling. The result seems identical.
+//			if (scale < 1) {
+//				Graphics graphics = newImage.getGraphics();
+//				graphics.drawImage(image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), 0, 0, null);
+//				graphics.dispose();
+//			} else {
 				Graphics2D g = (Graphics2D)newImage.getGraphics();
 				g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 				g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, resampling.value);
 				g.drawImage(image, 0, 0, width, height, null);
 				g.dispose();
-			}
+//			}
 			image = newImage;
 		}
 

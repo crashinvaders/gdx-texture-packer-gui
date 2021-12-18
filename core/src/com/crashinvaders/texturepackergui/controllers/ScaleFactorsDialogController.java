@@ -3,7 +3,6 @@ package com.crashinvaders.texturepackergui.controllers;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Resampling;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
