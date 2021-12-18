@@ -451,8 +451,8 @@ public class ImageProcessor {
 			// Ensure image is the correct format.
 			int width = image.getWidth();
 			int height = image.getHeight();
-			if (image.getType() != BufferedImage.TYPE_INT_ARGB) {
-				BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			if (image.getType() != BufferedImage.TYPE_4BYTE_ABGR) {
+				BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
 				Graphics graphics = newImage.getGraphics();
 				graphics.drawImage(image, 0, 0, null);
 				graphics.dispose();
@@ -460,11 +460,17 @@ public class ImageProcessor {
 			}
 
 			WritableRaster raster = image.getRaster();
-			int[] pixels = new int[width];
+			byte[] pixelRow = new byte[width * 4];
 			for (int y = 0; y < height; y++) {
-				raster.getDataElements(0, y, width, 1, pixels);
-				for (int x = 0; x < width; x++)
-					hash(digest, pixels[x]);
+				raster.getDataElements(0, y, width, 1, pixelRow);
+				for (int x = 0; x < width; x++) {
+					int startIndex = x * 4;
+					hash(digest,
+							pixelRow[startIndex + 0],
+							pixelRow[startIndex + 1],
+							pixelRow[startIndex + 2],
+							pixelRow[startIndex + 3]);
+				}
 			}
 
 			hash(digest, width);
@@ -476,10 +482,18 @@ public class ImageProcessor {
 		}
 	}
 
-	static private void hash (MessageDigest digest, int value) {
-		digest.update((byte)(value >> 24));
-		digest.update((byte)(value >> 16));
-		digest.update((byte)(value >> 8));
-		digest.update((byte)value);
+	static private void hash(MessageDigest digest, int value) {
+		hash(digest,
+				(byte)(value >> 24),
+				(byte)(value >> 16),
+				(byte)(value >> 8),
+				(byte)(value));
+	}
+
+	static private void hash(MessageDigest digest, byte a, byte r, byte g, byte b) {
+		digest.update(a);
+		digest.update(r);
+		digest.update(g);
+		digest.update(b);
 	}
 }
