@@ -131,9 +131,9 @@ public class InputFile implements StateHashable {
         return isProgrammaticNinePatch() || isFileBasedNinePatch();
     }
 
-    public static String evalDefaultRegionName(FileHandle fileHandle, boolean keepExtension) {
+    public static String evalDefaultRegionName(FileHandle fileHandle, boolean keepExtension, boolean keepNinePatchMarker) {
         String result = fileHandle.nameWithoutExtension();
-        if (result.endsWith(".9")) {
+        if (!keepNinePatchMarker && result.endsWith(".9")) {
             result = result.substring(0, result.length() - 2);
         }
         if (keepExtension) {

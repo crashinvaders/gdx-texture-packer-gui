@@ -56,7 +56,7 @@ public class PackingProcessor implements PackProcessor {
 
         TexturePacker packer = new TexturePacker(packModel.getSettings(), pageFileWriter);
         for (ImageEntry image : imageEntries) {
-            if (image.ninePatch) {
+            if (image.programmaticNinePatch) {
                 packer.addImage(image.fileHandle.file(), image.name, image.splits, image.pads);
             } else {
                 packer.addImage(image.fileHandle.file(), image.name);
@@ -102,7 +102,7 @@ public class PackingProcessor implements PackProcessor {
                     void collectImages(FileHandle fileHandle, String prefix, boolean recursive, boolean flattenPath) {
                         FileHandle[] children = fileHandle.list((FileFilter) new SuffixFileFilter(new String[]{".png", ".jpg", "jpeg"}));
                         for (FileHandle child : children) {
-                            String name = InputFile.evalDefaultRegionName(child, packModel.isKeepInputFileExtensions());
+                            String name = InputFile.evalDefaultRegionName(child, packModel.isKeepInputFileExtensions(), true);
                             name = prefix + name;
                             images.add(new ImageEntry(child, name));
                         }
@@ -128,18 +128,17 @@ public class PackingProcessor implements PackProcessor {
             if (inputFile.getType() == InputFile.Type.Input && !inputFile.isDirectory()) {
                 FileHandle fileHandle = inputFile.getFileHandle();
 
-                String regionName;
-                if (Strings.isNotEmpty(inputFile.getRegionName())) {
-                    regionName = inputFile.getRegionName();
-                } else {
+                String regionName = inputFile.getRegionName();
+                if (Strings.isEmpty(regionName)) {
                     regionName = InputFile.evalDefaultRegionName(
                             inputFile.getFileHandle(),
-                            packModel.isKeepInputFileExtensions());
+                            packModel.isKeepInputFileExtensions(),
+                            true);
                 }
 
                 ImageEntry imageEntry = new ImageEntry(fileHandle, regionName);
                 if (inputFile.isProgrammaticNinePatch()) {
-                    imageEntry.setNinePatch(inputFile.getNinePatchProps());
+                    imageEntry.setProgrammaticNinePatch(inputFile.getNinePatchProps());
                 }
                 images.add(imageEntry);
             }
@@ -222,8 +221,8 @@ public class PackingProcessor implements PackProcessor {
         /** The result name of the region in atlas. */
         final String regionName;
 
-        //BEWARE: Programmatic only 9-patch related fields!
-        boolean ninePatch = false;
+        // Programmatic 9-patch related fields.
+        boolean programmaticNinePatch = false;
         int[] splits, pads;
 
         public ImageEntry(FileHandle fileHandle, String name) {
@@ -237,11 +236,11 @@ public class PackingProcessor implements PackProcessor {
             }
         }
 
-        public void setNinePatch(InputFile.NinePatchProps npp) {
-            setNinePatch(npp.left, npp.right, npp.top, npp.bottom, npp.padLeft, npp.padRight, npp.padTop, npp.padBottom);
+        public void setProgrammaticNinePatch(InputFile.NinePatchProps npp) {
+            setProgrammaticNinePatch(npp.left, npp.right, npp.top, npp.bottom, npp.padLeft, npp.padRight, npp.padTop, npp.padBottom);
         }
-        public void setNinePatch(int left, int right, int top, int bottom, int padLeft, int padRight, int padTop, int padBottom) {
-            ninePatch = true;
+        public void setProgrammaticNinePatch(int left, int right, int top, int bottom, int padLeft, int padRight, int padTop, int padBottom) {
+            programmaticNinePatch = true;
             splits = new int[]{left, right, top, bottom};
             pads = new int[]{padLeft, padRight, padTop, padBottom};
         }

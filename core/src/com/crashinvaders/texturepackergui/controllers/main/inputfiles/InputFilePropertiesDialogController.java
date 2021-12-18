@@ -261,7 +261,8 @@ public class InputFilePropertiesDialogController implements ActionContainer {
 
             String defaultRegionName = InputFile.evalDefaultRegionName(
                     inputFile.getFileHandle(),
-                    packModel.isKeepInputFileExtensions());
+                    packModel.isKeepInputFileExtensions(),
+                    false);
 
             edtRegionName.setMessageText(defaultRegionName);
             edtRegionName.setText(inputFile.getRegionName());
