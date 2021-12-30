@@ -2,6 +2,7 @@
 - Fixed cannot change current atlas by clicking on pack list items. #122
 - Fixed ninepatch images (".9.png" extension) are being ignored and packed as plain regions.
 - Fixed pixel interpolation type is ignored for scale factors less than one.
+- Possible fix for the "No default view controller found" rare crash during application startup. #92
 
 [4.10.1]
 - Fixed file path editing in FileChooser may result in a crash. #98
