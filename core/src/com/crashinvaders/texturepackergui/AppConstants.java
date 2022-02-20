@@ -24,6 +24,7 @@ public class AppConstants {
     public static final Locale LOCALE_EN = Locale.ENGLISH;
     public static final Locale LOCALE_DE = Locale.GERMAN;
     public static final Locale LOCALE_RU = LocaleService.toLocale("ru");
+    public static final Locale LOCALE_ZH_CN = LocaleService.toLocale("zh_CN");
     public static final Locale LOCALE_ZH_TW = LocaleService.toLocale("zh_TW");
     public static final Locale LOCALE_DEFAULT = LOCALE_EN;
 
