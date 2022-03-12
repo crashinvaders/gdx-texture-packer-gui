@@ -75,8 +75,7 @@
                 <menuitem
                         id="miLanguageZhCn"
                         onchange="changeLanguageZhCn"
-                        <!-- TODO: Make a pic for zh-cn -->
-                        fillImage="custom/language-zh-tw"/>
+                        fillImage="custom/language-zh-cn"/>
                 <menuitem
                         id="miLanguageZhTw"
                         onchange="changeLanguageZhTw"

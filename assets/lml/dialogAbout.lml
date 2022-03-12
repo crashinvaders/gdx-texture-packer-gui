@@ -50,7 +50,12 @@
         <horizontalgroup groupspace="4">
             <linklabel style="orange" href="http://www.terafog.de">@dAboutTokenyet</linklabel>
             <label style="grey">-</label>
-            <label style="grey">@dAboutTokenyetFogDesc</label>
+            <label style="grey">@dAboutTokenyetDesc</label>
+        </horizontalgroup>
+        <horizontalgroup groupspace="4">
+            <linklabel style="orange" href="https://github.com/ZhReimu">@dAboutZhReimu</linklabel>
+            <label style="grey">-</label>
+            <label style="grey">@dAboutZhReimuDesc</label>
         </horizontalgroup>
 
         <actor height="16"/>

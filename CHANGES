@@ -1,3 +1,6 @@
+[4.10.3]
+- Simplified chinese localization. Thanks to ZhReimu. #127
+
 [4.10.2]
 - Fixed cannot change current atlas by clicking on pack list items. #122
 - Fixed ninepatch images (".9.png" extension) are being ignored and packed as plain regions.
