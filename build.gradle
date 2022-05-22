@@ -4,7 +4,6 @@ buildscript {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://plugins.gradle.org/m2/" }
-        jcenter()
     }
     dependencies {
         classpath "edu.sc.seis:macAppBundle:2.3.0"
