@@ -119,7 +119,7 @@ public class CommonDialogs {
         );
         final PackModel selectedPack = getSelectedPack();
         final VisTextField edtName = dialog.findActor("edtName");
-        final ButtonTable btPlacing = dialog.findActor("btPlacing");
+        final ButtonTable btPlacing = dialog.findActor("btPlacingButtons");
 
         final Runnable okRunnable = new Runnable() {
             @Override

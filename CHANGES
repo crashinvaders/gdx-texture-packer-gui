@@ -1,5 +1,6 @@
 [4.10.3]
 - Simplified chinese localization. Thanks to ZhReimu. #127
+- Fixed pack clone dialog OK button crashes the app.
 
 [4.10.2]
 - Fixed cannot change current atlas by clicking on pack list items. #122
