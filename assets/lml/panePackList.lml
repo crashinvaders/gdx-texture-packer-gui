@@ -41,19 +41,36 @@
 
         </vistable>
 
-        <vistable grow="true" pad="4">
+        <!-- Pack list area -->
+        <stack grow="true" pad="4" minheight="0">
             <listview
                     id="lvPacks"
                     scrollcapture="true"
                     adapter="createPacksListAdapter"
                     style="custom"
-                    grow="true"
                     disabledx="true"
                     fadescrollbars="false"
                     overscroll="false"
                     flickscroll="false"/>
             <!--listviewonclick="resetPackListSelection"-->
-        </vistable>
+
+            <stack id="plOnboardingRoot" visible="false">
+                <image id="plOnboardingBackground" style="white" color="#eb5c49"/>
+
+                <table id="plOnboardingContent" onecolumn="true" defaultgrowx="true" padtop="12" padbottom="16" padleft="12" padright="12" tablealign="top">
+                    <visimagetextbutton id="plOnboardingBtnNew"
+                                        tablealign="left" style="accent-strong"
+                                        icon="custom/ic-file-new" text="@newPack"
+                                        onchange="newPack" focusborderenabled="false"
+                                        tablepadleft="12" tablepadright="16" tablepadtop="8" tablepadbottom="8">
+                    </visimagetextbutton>
+                    <image style="white" padtop="12" height="1" color="#333" />
+                    <vislabel style="small" padtop="4" wrap="true" padleft="17" padright="8">
+                        @dndPlOnboardingHint|@dndSupportedExtensions
+                    </vislabel>
+                </table>
+            </stack>
+        </stack>
 
     </vistable>
 

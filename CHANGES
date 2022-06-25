@@ -1,3 +1,22 @@
+[4.10.3]
+- Simplified chinese localization. Thanks to ZhReimu. #127
+- Fixed pack clone dialog OK button crashes the app.
+
+[4.10.2]
+- Fixed cannot change current atlas by clicking on pack list items. #122
+- Fixed ninepatch images (".9.png" extension) are being ignored and packed as plain regions.
+- Fixed pixel interpolation type is ignored for scale factors less than one.
+- Possible fix for the "No default view controller found" rare crash during application startup. #92
+
+[4.10.1]
+- Fixed file path editing in FileChooser may result in a crash. #98
+- Support for macOS arm64 (M1 chip). #110
+- Option to append input file extensions to region names. #108
+- Window validates and fixes its dimensions on startup. #113
+- Fixed rare crash when the downloaded extension cache index is malformed. #100
+- Minor UI improvements and some essential call to action animations for newcomers.
+- Smaller OS-specific distribution size (due to natives strip).
+
 [4.10.0]
 - Support for Basis Universal super-compressed atlas textures, see https://github.com/BinomialLLC/basis_universal
 - Support for the new (LibGDX 1.9.13) texture atlas format. Which outputs much smaller data files.

@@ -4,11 +4,10 @@ buildscript {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://plugins.gradle.org/m2/" }
-        jcenter()
     }
     dependencies {
         classpath "edu.sc.seis:macAppBundle:2.3.0"
-        classpath "com.netflix.nebula:gradle-ospackage-plugin:8.4.1"
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:8.4.1" //TODO Change to 9.0.0 when gradle is updated 7.0+
         classpath "com.badlogicgames.gdx:gdx-jnigen-gradle:$jnigenVersion"
     }
 }
@@ -18,13 +17,20 @@ allprojects {
 
     ext {
         appName = "gdx-texturepacker"
-        version = '4.10.0'
+        version = '4.10.2'
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
-        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
     }
+}
+
+apply plugin: 'base'
+
+clean {
+    delete "${rootDir}/distribution/output"
 }

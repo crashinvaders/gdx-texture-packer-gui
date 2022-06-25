@@ -16,7 +16,6 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.visui.Toast;
@@ -25,10 +24,7 @@ import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.*;
 import com.crashinvaders.texturepackergui.controllers.main.filetype.*;
 import com.crashinvaders.texturepackergui.controllers.main.inputfiles.PackInputFilesController;
-import com.crashinvaders.texturepackergui.controllers.model.ModelService;
-import com.crashinvaders.texturepackergui.controllers.model.PackModel;
-import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.controllers.model.ScaleFactorModel;
+import com.crashinvaders.texturepackergui.controllers.model.*;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
 import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
 import com.crashinvaders.texturepackergui.events.*;
@@ -55,7 +51,6 @@ import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.LmlData;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.util.adapter.ListSelectionAdapter;
 import com.kotcrab.vis.ui.widget.*;
 
 import java.util.Locale;
@@ -78,7 +73,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
-    @Inject @LmlInject PackInputFilesController packInputFilesController;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
     @Inject @LmlInject PngFileTypeController ftPngController;
@@ -101,7 +95,8 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             "paneLockPackGeneral"})
     Array<Actor> packPaneLockers;
 
-    @LmlInject PackListActors actorsPacks;
+    @Inject @LmlInject PackListActors actorsPacks;
+    @Inject @LmlInject PackInputFilesController packInputFilesController;
     @LmlInject PackSettingsActors actorsPackSettings;
     @LmlInject GlobalSettingsActors actorsGlobalSettings;
     @LmlInject FileMenuActors actorsFileMenu;
@@ -154,15 +149,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         actorsPackSettings.cboWrapY.setItems(WidgetData.textureWraps);
         actorsGlobalSettings.cboFileType.setItems(WidgetData.FileType.values());
 
-        actorsPacks.packList = actorsPacks.packListTable.getListView();
-        actorsPacks.packListAdapter = ((PackListAdapter) actorsPacks.packList.getAdapter());
-        actorsPacks.packListAdapter.getSelectionManager().setListener(new ListSelectionAdapter<PackModel, VisTable>() {
-            @Override
-            public void selected(PackModel pack, VisTable view) {
-                getProject().setSelectedPack(pack);
-                Gdx.app.postRunnable(normalizePackListScrollRunnable);
-            }
-        });
+        actorsPacks.onViewCreated(stage);
 
         toastManager = new ToastManager(toastHostGroup);
         toastManager.setAlignment(Align.bottomRight);
@@ -174,7 +161,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         // Load pack list split value
         {
             Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
-            float splitValue = prefs.getFloat(PREF_KEY_PACK_LIST_SPLIT, 0f);
+            float splitValue = prefs.getFloat(PREF_KEY_PACK_LIST_SPLIT, packListSplitPane.getSplit());
             packListSplitPane.setSplitAmount(splitValue);
         }
 
@@ -251,6 +238,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             switch (event.getProperty()) {
                 case NAME:
                 case SCALE_FACTORS:
+                case KEEP_FILE_EXTENSIONS:
                 case SETTINGS:
                     if (event.getPack() == getSelectedPack()) {
                         updateViewsFromPack(event.getPack());
@@ -457,6 +445,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                 break;
             }
             case "cbPrettyPrint": settings.prettyPrint = checkBox.isChecked(); break;
+            case "cbKeepFileExtensions": pack.setKeepInputFileExtensions(checkBox.isChecked()); break;
         }
     }
 
@@ -594,6 +583,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             actorsPackSettings.cbLimitMemory.setChecked(settings.limitMemory);
             actorsPackSettings.cbLegacyOutput.setChecked(settings.legacyOutput);
             actorsPackSettings.cbPrettyPrint.setChecked(settings.prettyPrint);
+            actorsPackSettings.cbKeepFileExtensions.setChecked(pack.isKeepInputFileExtensions());
 
             ((IntSeekBarModel) actorsPackSettings.skbMinPageWidth.getModel()).setValue(settings.minWidth, false);
             ((IntSeekBarModel) actorsPackSettings.skbMinPageHeight.getModel()).setValue(settings.minHeight, false);
@@ -769,14 +759,4 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         return modelService.getProject();
     }
     //endregion
-
-    private final Runnable normalizePackListScrollRunnable = new Runnable() {
-        @Override
-        public void run() {
-            PackModel pack = getSelectedPack();
-            if (pack != null) {
-                Scene2dUtils.scrollDownToSelectedListItem(actorsPacks.packList, pack);
-            }
-        }
-    };
 }

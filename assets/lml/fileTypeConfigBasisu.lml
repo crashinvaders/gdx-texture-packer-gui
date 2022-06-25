@@ -28,12 +28,13 @@
 
         <:row padtop="4"/>
 
-        <linklabel style="orange" colspan="2" align="center" href="#" click="show:dialog_basisu_info">About Basis Universal</linklabel>
+        <linklabel style="orange-small" colspan="2" align="center" padtop="8"
+                   href="#" click="show:dialog_basisu_info">@dBasisuAboutTitle</linklabel>
     </vistable>
 
-    <container id="basisuNotSupportedHint" fill="true" padleft="8" padright="8" visible="false">
-        <label color="orange" wrap="true" align="center">
-            Basis Universal is not supported for 32-bit Windows machines.
+    <container id="basisuNotSupportedHint" fill="true" padleft="16" padright="16" visible="false">
+        <label style="small" color="orange" wrap="true" align="center">
+            @systemNotSupported|$getSystemNameText
         </label>
     </container>
 </stack>

@@ -15,6 +15,7 @@ public class ProjectModel implements StateHashable {
 
     private final Array<PackModel> packs = new Array<>(true, 16);
     private final Color previewBackgroundColor = new Color(Color.WHITE);
+    private final ProjectSettingsModel settings = new ProjectSettingsModel();
     private FileHandle projectFile;
     private FileTypeModel fileType = new PngFileTypeModel(); // PNG file type by default
 
@@ -30,6 +31,10 @@ public class ProjectModel implements StateHashable {
         for (int i = 0; i < packs.size; i++) {
             packs.get(i).setEventDispatcher(eventDispatcher);
         }
+    }
+
+    public ProjectSettingsModel getSettings() {
+        return settings;
     }
 
     public FileHandle getProjectFile() {
@@ -114,6 +119,6 @@ public class ProjectModel implements StateHashable {
 
     @Override
     public int computeStateHash() {
-        return StateHashUtils.computeHash(packs, previewBackgroundColor, projectFile, fileType);
+        return StateHashUtils.computeHash(packs, previewBackgroundColor, projectFile, fileType, settings);
     }
 }

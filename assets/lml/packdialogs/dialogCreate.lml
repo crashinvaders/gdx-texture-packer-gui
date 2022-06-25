@@ -1,20 +1,21 @@
 <?xml version="1.0"?>
 <!DOCTYPE container SYSTEM "/lml.dtd">
 
-<container minwidth="160">
+<container minwidth="280">
     <table onecolumn="true">
         <textfield id="edtName" growx="true"/>
 
-        <actor height="4"/>
-
-        <buttontable id="btPlacing" defaultalign="left">
-            <label colspan="2">Place new pack:</label>
-            <:row/>
-            <radiobutton id="rbAbove" text="@dPackPlaceAbove" padright="8"/>
-            <radiobutton id="rbTop" text="@dPackPlaceTop" padright="8"/>
-            <:row/>
-            <radiobutton id="rbBelow" text="@dPackPlaceBelow" checked="true"/>
-            <radiobutton id="rbBottom" text="@dPackPlaceBottom"/>
-        </buttontable>
+        <shrinkcontainer id="btPlacingRoot" growx="true" align="left">
+            <buttontable id="btPlacingButtons" padtop="12"
+                         defaultgrowx="true" defaultalign="left">
+                <label colspan="2" padbottom="4">Place new pack:</label>
+                <:row/>
+                <radiobutton id="rbAbove" text="@dPackPlaceAbove" padright="8" tablealign="left"/>
+                <radiobutton id="rbTop" text="@dPackPlaceTop" tablealign="left"/>
+                <:row/>
+                <radiobutton id="rbBelow" text="@dPackPlaceBelow" checked="true" tablealign="left"/>
+                <radiobutton id="rbBottom" text="@dPackPlaceBottom" tablealign="left"/>
+            </buttontable>
+        </shrinkcontainer>
     </table>
 </container>

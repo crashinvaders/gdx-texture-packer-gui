@@ -8,7 +8,7 @@ Requirements:
 - OpenGL supported GPU and drivers
 
 How to launch:
-Application is packed into JAR executable file. To launch it, issue next command
+Application is packed into JAR executable file. To launch it, issue the command:
 java -jar gdx-texturepacker.jar
 
 MacOS
@@ -24,7 +24,7 @@ launcher_no_cmd.vbs - does exactly what launch.bat does, but CMD window won't ap
 For any further details visit the GitHub project page:
 https://github.com/crashinvaders/gdx-texture-packer-gui
 
-If you've got any questions or would like to share ideas, feel free to reach me out at anton@crashinvaders.com
+If you've got a question or would like to share ideas, feel free to reach me out at anton@crashinvaders.com
 
-Hope you will enjoy it!
+Hope you enjoy it!
 Anton Chekulaev

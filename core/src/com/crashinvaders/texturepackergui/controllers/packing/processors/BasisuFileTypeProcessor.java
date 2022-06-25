@@ -12,6 +12,7 @@ import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.BasisuFileTypeModel;
+import com.crashinvaders.texturepackergui.utils.SystemUtils;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessor;
 
@@ -21,7 +22,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import static com.crashinvaders.texturepackergui.utils.SystemUtils.CpuArch;
+import static com.crashinvaders.texturepackergui.utils.SystemUtils.OperatingSystem;
+
 public class BasisuFileTypeProcessor implements PackProcessor {
+
+    private static final boolean SYSTEM_SUPPORTED =
+            SystemUtils.check(OperatingSystem.Windows, CpuArch.Amd64) ||
+            SystemUtils.check(OperatingSystem.Linux, CpuArch.X86, CpuArch.Amd64) ||
+            SystemUtils.check(OperatingSystem.MacOS, CpuArch.Amd64);
 
     @Override
     public void processPackage(PackProcessingNode node) throws Exception {
@@ -31,7 +40,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
         if (project.getFileType().getClass() != BasisuFileTypeModel.class) return;
 
         if (!isBasisuSupported()) {
-            throw new IllegalStateException("Basis Universal natives are not supported for 32-bit Windows machines.");
+            throw new IllegalStateException("Basis Universal natives are not supported on the current system: " + SystemUtils.getPrintString());
         }
 
         BasisuFileTypeModel fileType = project.getFileType();
@@ -46,8 +55,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
     }
 
     public static boolean isBasisuSupported() {
-        // Basis Universal natives are not supported for 32-bit Windows machines.
-        return !("windows".contains(System.getProperty("os.name")) && "x86".contains(System.getProperty("os.arch")));
+        return SYSTEM_SUPPORTED;
     }
 
     public static class BasisPageFileWriter extends PngPageFileWriter {
@@ -94,10 +102,10 @@ public class BasisuFileTypeProcessor implements PackProcessor {
                     int pixelIndex = rowStartIdx + x * 4;
 
                     int argb = image.getRGB(x, y);
-                    bytes[pixelIndex + 0] = (byte)((argb >> 16) & 0xff);   // R
-                    bytes[pixelIndex + 1] = (byte)((argb >> 8)  & 0xff);   // G
-                    bytes[pixelIndex + 2] = (byte)((argb >> 0)  & 0xff);   // B
-                    bytes[pixelIndex + 3] = (byte)((argb >> 24) & 0xff);   // A
+                    bytes[pixelIndex + 0] = (byte) ((argb >> 16) & 0xff);   // R
+                    bytes[pixelIndex + 1] = (byte) ((argb >> 8) & 0xff);   // G
+                    bytes[pixelIndex + 2] = (byte) ((argb >> 0) & 0xff);   // B
+                    bytes[pixelIndex + 3] = (byte) ((argb >> 24) & 0xff);   // A
                 }
             }
 

@@ -29,7 +29,7 @@ public class ApplicationStarter {
             CmdLineParser parser = new CmdLineParser(arguments);
             parser.parseArgument(args);
         } catch (CmdLineException e) {
-            System.out.println("Error: " + e.getLocalizedMessage());
+            System.err.println("Error: " + e.getLocalizedMessage());
             return;
         }
         start(arguments);
@@ -44,6 +44,7 @@ public class ApplicationStarter {
         configuration.setWindowIcon(Files.FileType.Classpath, "icon128.png", "icon32.png", "icon16.png");
         configuration.setPreferencesConfig(AppConstants.EXTERNAL_DIR, Files.FileType.External);
         configuration.setWindowedMode(1280, 800);
+        configuration.setWindowSizeLimits(320, 320, -1, -1);
         configuration.setHdpiMode(HdpiMode.Logical);
 
         AppParams appParams = new AppParams();
