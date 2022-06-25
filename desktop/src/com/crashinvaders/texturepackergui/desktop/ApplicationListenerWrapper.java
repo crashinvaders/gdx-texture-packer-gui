@@ -3,7 +3,8 @@ package com.crashinvaders.texturepackergui.desktop;
 import com.badlogic.gdx.ApplicationListener;
 
 public class ApplicationListenerWrapper implements ApplicationListener {
-    private final ApplicationListener application;
+
+    protected final ApplicationListener application;
 
     public ApplicationListenerWrapper(ApplicationListener application) {
         this.application = application;

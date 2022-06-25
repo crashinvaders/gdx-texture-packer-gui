@@ -26,6 +26,7 @@ import java.nio.IntBuffer;
  * </ol>
  */
 class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
+
     private static final IntBuffer tmpBuffer0 = BufferUtils.createIntBuffer(1);
     private static final IntBuffer tmpBuffer1 = BufferUtils.createIntBuffer(1);
     private static final IntBuffer tmpBuffer2 = BufferUtils.createIntBuffer(1);
@@ -49,7 +50,7 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
         if (!graphics.isFullscreen())
         {
             long monitorHandle = getCurrentMonitorHandle(graphics);
-            IntRectangle monitorArea = getMonitorWorkarea(monitorHandle);
+            IntRectangle monitorArea = getMonitorWorkArea(monitorHandle);
 
             if (monitorArea.width != 0 && monitorArea.height != 0) {
                 final int minWidth = Math.min(320, monitorArea.width);
@@ -157,7 +158,7 @@ class Lwjgl3AppWrapper extends ApplicationListenerWrapper {
         return tmpBuffer1.get(0);
     }
 
-    private static IntRectangle getMonitorWorkarea(long monitorHandle) {
+    private static IntRectangle getMonitorWorkArea(long monitorHandle) {
         GLFW.glfwGetMonitorWorkarea(monitorHandle, tmpBuffer0, tmpBuffer1, tmpBuffer2, tmpBuffer3);
         return new IntRectangle(tmpBuffer0.get(0), tmpBuffer1.get(0), tmpBuffer2.get(0), tmpBuffer3.get(0));
     }

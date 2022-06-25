@@ -137,7 +137,8 @@ public class App implements ApplicationListener {
                 // Custom
                 modelService = new ModelService(),
                 shortcutHandler = new GlobalShortcutHandler(),
-                componentExtractor = new ComponentExtractor());
+                componentExtractor = new ComponentExtractor()
+        );
     }
 
     @Override

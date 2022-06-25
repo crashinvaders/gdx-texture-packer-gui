@@ -37,6 +37,17 @@ dependencies {
     implementation "com.crashinvaders.lml:gdx-autumn-fcs:$lmlVersion"
     implementation "args4j:args4j:$args4jVersion"
 
+    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion"
+    nativePlatforms.each {
+        runtimeOnly "org.lwjgl:lwjgl-nfd:$lwjglVersion:$it"
+    }
+//    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-windows"
+//    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-windows-x86"
+//    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-linux"
+//    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-linux-arm64"
+//    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-macos"
+//    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-macos-arm64"
+
     // This is a temporary LWJGL 3.3 snapshot version override,
     // as current LibGDX (1.10.0) is stuck with LWJGL 3.2 which doesn't yet support M1 macOS.
     //TODO Update/remove when stable LWJGL 3.3 is out or LibGDX official backend adds support for ARM macOS.
