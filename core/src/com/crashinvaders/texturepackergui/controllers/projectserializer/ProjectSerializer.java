@@ -160,6 +160,8 @@ public class ProjectSerializer {
         sb.append("bleed=").append(settings.bleed).append("\n");
         sb.append("limitMemory=").append(settings.limitMemory).append("\n");
         sb.append("useIndexes=").append(settings.useIndexes).append("\n");
+        sb.append("prettyPrint=").append(settings.prettyPrint).append("\n");
+        sb.append("legacyOutput=").append(settings.legacyOutput).append("\n");
 
         sb.append("\n");
 
@@ -309,6 +311,8 @@ public class ProjectSerializer {
         settings.bleed = find(lines, "bleed=", defaultSettings.bleed);
         settings.limitMemory = find(lines, "limitMemory=", defaultSettings.limitMemory);
         settings.useIndexes = find(lines, "useIndexes=", defaultSettings.useIndexes);
+        settings.prettyPrint = find(lines, "prettyPrint=", defaultSettings.prettyPrint);
+        settings.legacyOutput = find(lines, "legacyOutput=", defaultSettings.legacyOutput);
 
         String scaleFactorsSerialized = find(lines, "scaleFactors=", null);
         if (scaleFactorsSerialized != null) {
