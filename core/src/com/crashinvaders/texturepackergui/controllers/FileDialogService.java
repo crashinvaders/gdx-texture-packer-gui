@@ -2,15 +2,16 @@ package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 
 public interface FileDialogService {
-    void pickDirectory(String dialogTitle, FileHandle initialFile, Callback callback);
+    void pickDirectory(String dialogTitle, @Null FileHandle initialFile, Callback callback);
 
-    void openFile(String dialogTitle, FileHandle initialFile, FileFilter[] fileFilters, Callback callback);
+    void openFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback);
 
-    void openMultipleFiles(String dialogTitle, FileHandle initialFile, FileFilter[] fileFilters, Callback callback);
+    void openMultipleFiles(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback);
 
-    void saveFile(String dialogTitle, FileHandle initialFile, FileFilter[] fileFilters, Callback callback);
+    void saveFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback);
 
     interface Callback {
         void selected (Array<FileHandle> files);

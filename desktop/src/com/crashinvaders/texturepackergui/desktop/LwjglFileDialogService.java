@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.desktop;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.StringBuilder;
 import com.crashinvaders.texturepackergui.controllers.DefaultFileDialogService;
 import com.crashinvaders.texturepackergui.controllers.FileDialogService;
@@ -23,12 +24,8 @@ public class LwjglFileDialogService implements FileDialogService {
     @Inject DefaultFileDialogService defaultFileService;
 
     @Override
-    public void pickDirectory(String dialogTitle, FileHandle initialFile, Callback callback) {
-        String initialPath = initialFile.file().getAbsolutePath();
-
-        if (System.getProperty("os.name").toLowerCase().contains("win")) {
-            initialPath = initialPath.replace("/", "\\");
-        }
+    public void pickDirectory(String dialogTitle, @Null FileHandle initialFile, Callback callback) {
+        @Null String initialPath = prepareInitialPath(initialFile);
 
         PointerBuffer pathPointer = MemoryUtil.memAllocPointer(1);
 
@@ -61,9 +58,9 @@ public class LwjglFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void openFile(String dialogTitle, FileHandle initialFile, FileFilter[] fileFilters, Callback callback) {
-        String initialPath = initialFile.file().getAbsolutePath();
-        String filterList = prepareFilterList(fileFilters);
+    public void openFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+        @Null String initialPath = prepareInitialPath(initialFile);
+        @Null String filterList = prepareFilterList(fileFilters);
 
         PointerBuffer pathPointer = MemoryUtil.memAllocPointer(1);
 
@@ -96,9 +93,9 @@ public class LwjglFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void openMultipleFiles(String dialogTitle, FileHandle initialFile, FileFilter[] fileFilters, Callback callback) {
-        String initialPath = initialFile.file().getAbsolutePath();
-        String filterList = prepareFilterList(fileFilters);
+    public void openMultipleFiles(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+        @Null String initialPath = prepareInitialPath(initialFile);
+        @Null String filterList = prepareFilterList(fileFilters);
 
         NFDPathSet pathSet = NFDPathSet.create();
 
@@ -138,9 +135,9 @@ public class LwjglFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void saveFile(String dialogTitle, FileHandle initialFile, FileFilter[] fileFilters, Callback callback) {
-        String initialPath = initialFile.file().getAbsolutePath();
-        String filterList = prepareFilterList(fileFilters);
+    public void saveFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+        @Null String initialPath = prepareInitialPath(initialFile);
+        @Null String filterList = prepareFilterList(fileFilters);
 
         PointerBuffer pathPointer = MemoryUtil.memAllocPointer(1);
 
@@ -172,7 +169,17 @@ public class LwjglFileDialogService implements FileDialogService {
         }
     }
 
-    private static String prepareFilterList(FileFilter[] filters) {
+    private static @Null String prepareInitialPath(@Null FileHandle fileHandle) {
+        if (fileHandle == null)
+            return null;
+
+        return fileHandle.file().getAbsolutePath();
+    }
+
+    private static @Null String prepareFilterList(@Null FileFilter[] filters) {
+        if (filters == null)
+            return null;
+
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < filters.length; i++) {
             FileFilter filter = filters[i];
@@ -181,6 +188,10 @@ public class LwjglFileDialogService implements FileDialogService {
             }
             sb.append(Strings.join(",", (Object[]) filter.extensions));
         }
+
+        if (sb.length == 0)
+            return null;
+
         return sb.toString();
     }
 }
