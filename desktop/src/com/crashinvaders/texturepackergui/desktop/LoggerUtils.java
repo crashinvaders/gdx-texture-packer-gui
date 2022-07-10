@@ -61,7 +61,7 @@ public class LoggerUtils {
     }
 
     public static void printGpuInfo() {
-        if (Gdx.gl == null) throw new IllegalStateException("LibGDX is not initialized yet.");
+        if (Gdx.gl == null) throw new IllegalStateException("libGDX is not initialized yet.");
 
         System.out.println("GPU: " + Gdx.gl.glGetString( GL20.GL_RENDERER));
         System.out.println("OpenGL vendor: " + Gdx.gl.glGetString( GL20.GL_VENDOR));

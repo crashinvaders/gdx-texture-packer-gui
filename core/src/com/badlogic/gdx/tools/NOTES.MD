@@ -1,4 +1,4 @@
-These classes are extension to original LibGDX tools. List of current modifications:
+These classes are extension to original libGDX tools. List of current modifications:
 
 - `TexturePacker` and `ImageProcessor` have got `#addImage(File, String)` to pass image file with custom name.
 - `TexturePacker` got `PageFileWriter`. `jpegQuality` and `outputFormat` fields removed from `TexturePacker#Settings`. 

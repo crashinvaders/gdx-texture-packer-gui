@@ -49,8 +49,8 @@ dependencies {
 //    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion:natives-macos-arm64"
 
     // This is a temporary LWJGL 3.3 snapshot version override,
-    // as current LibGDX (1.10.0) is stuck with LWJGL 3.2 which doesn't yet support M1 macOS.
-    //TODO Update/remove when stable LWJGL 3.3 is out or LibGDX official backend adds support for ARM macOS.
+    // as current libGDX (1.10.0) is stuck with LWJGL 3.2 which doesn't yet support M1 macOS.
+    //TODO Update/remove when stable LWJGL 3.3 is out or libGDX official backend adds support for ARM macOS.
     implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
     implementation "org.lwjgl:lwjgl"
     implementation "org.lwjgl:lwjgl-glfw"
@@ -243,8 +243,8 @@ ospackage {
     vendor 'Crashinvaders'
     url 'https://github.com/crashinvaders/gdx-texture-packer-gui'
     maintainer 'Anton Chekulaev <anton@crashinvaders.com>'
-    summary 'LibGDX texture atlas packer GUI'
-    packageDescription 'A simple utility to help you pack and manage texture atlases for LibGDX game framework. It\'s mostly just a visual wrapper over LibGDX TexturePacker classes and provides a convenient way to use it.'
+    summary 'libGDX texture atlas packer GUI'
+    packageDescription 'A simple utility to help you pack and manage texture atlases for libGDX game framework. It\'s mostly just a visual wrapper over libGDX TexturePacker classes and provides a convenient way to use it.'
     license file("$rootDir/distribution/license.txt").text
 
     // JRE 8 is the minimum supported runtime.
