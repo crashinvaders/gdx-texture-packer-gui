@@ -37,6 +37,9 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 public class PackInputFilesController implements ActionContainer {
     private static final String TAG = PackInputFilesController.class.getSimpleName();
 
+    public static final FileDialogService.FileFilter[] fileDialogFilterImages =
+            new FileDialogService.FileFilter[]{new FileDialogService.FileFilter("Image files", "png", "jpg", "jpeg")};
+
     @Inject EventDispatcher eventDispatcher;
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
@@ -193,8 +196,7 @@ public class PackInputFilesController implements ActionContainer {
     }
 
     @LmlAction("addInputFiles") void addInputFiles() {
-        fileDialogService.openMultipleFiles("Add input images", null,
-                new FileDialogService.FileFilter[]{new FileDialogService.FileFilter("Image files", "png", "jpg", "jpeg")},
+        fileDialogService.openMultipleFiles("Add input images", null, fileDialogFilterImages,
                 new FileDialogService.CallbackAdapter() {
             @Override
             public void selected(Array<FileHandle> files) {
@@ -207,8 +209,7 @@ public class PackInputFilesController implements ActionContainer {
     }
 
     @LmlAction("addIgnoreFiles") void addIgnoreFiles() {
-        fileDialogService.openMultipleFiles("Add ignore images", null,
-                new FileDialogService.FileFilter[]{new FileDialogService.FileFilter("Image files", "png", "jpg", "jpeg")},
+        fileDialogService.openMultipleFiles("Add ignore images", null, fileDialogFilterImages,
                 new FileDialogService.CallbackAdapter() {
                     @Override
                     public void selected(Array<FileHandle> files) {

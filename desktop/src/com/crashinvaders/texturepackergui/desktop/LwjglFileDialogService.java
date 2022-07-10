@@ -24,7 +24,7 @@ public class LwjglFileDialogService implements FileDialogService {
     @Inject DefaultFileDialogService defaultFileService;
 
     @Override
-    public void pickDirectory(String dialogTitle, @Null FileHandle initialFile, Callback callback) {
+    public void pickDirectory(@Null String dialogTitle, @Null FileHandle initialFile, Callback callback) {
         @Null String initialPath = prepareInitialPath(initialFile);
 
         PointerBuffer pathPointer = MemoryUtil.memAllocPointer(1);
@@ -58,7 +58,7 @@ public class LwjglFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void openFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+    public void openFile(@Null String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
         @Null String initialPath = prepareInitialPath(initialFile);
         @Null String filterList = prepareFilterList(fileFilters);
 
@@ -93,7 +93,7 @@ public class LwjglFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void openMultipleFiles(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+    public void openMultipleFiles(@Null String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
         @Null String initialPath = prepareInitialPath(initialFile);
         @Null String filterList = prepareFilterList(fileFilters);
 
@@ -135,7 +135,7 @@ public class LwjglFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void saveFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+    public void saveFile(@Null String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
         @Null String initialPath = prepareInitialPath(initialFile);
         @Null String filterList = prepareFilterList(fileFilters);
 

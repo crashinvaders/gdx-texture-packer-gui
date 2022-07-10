@@ -19,14 +19,16 @@ public class DefaultFileDialogService implements FileDialogService {
     @Inject InterfaceService interfaceService;
 
     @Override
-    public void pickDirectory(String dialogTitle, @Null FileHandle initialFile, Callback callback) {
+    public void pickDirectory(@Null String dialogTitle, @Null FileHandle initialFile, Callback callback) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
         fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.getTitleLabel().setText(dialogTitle);
         fileChooser.setListener(new FileChooserListenerWrapper(callback));
 
+        if (dialogTitle != null) {
+            fileChooser.getTitleLabel().setText(dialogTitle);
+        }
         if (initialFile != null) {
             fileChooser.setDirectory(initialFile);
         }
@@ -35,15 +37,17 @@ public class DefaultFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void openFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+    public void openFile(@Null String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.getTitleLabel().setText(dialogTitle);
         fileChooser.setFileTypeFilter(prepareFileFilter(fileFilters));
         fileChooser.setListener(new FileChooserListenerWrapper(callback));
 
+        if (dialogTitle != null) {
+            fileChooser.getTitleLabel().setText(dialogTitle);
+        }
         if (initialFile != null) {
             fileChooser.setDirectory(initialFile);
         }
@@ -52,15 +56,17 @@ public class DefaultFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void openMultipleFiles(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+    public void openMultipleFiles(@Null String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.getTitleLabel().setText(dialogTitle);
         fileChooser.setFileTypeFilter(prepareFileFilter(fileFilters));
         fileChooser.setListener(new FileChooserListenerWrapper(callback));
 
+        if (dialogTitle != null) {
+            fileChooser.getTitleLabel().setText(dialogTitle);
+        }
         if (initialFile != null) {
             fileChooser.setDirectory(initialFile);
         }
@@ -69,15 +75,17 @@ public class DefaultFileDialogService implements FileDialogService {
     }
 
     @Override
-    public void saveFile(String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
+    public void saveFile(@Null String dialogTitle, @Null FileHandle initialFile, @Null FileFilter[] fileFilters, Callback callback) {
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.SAVE);
         fileChooser.setIconProvider(new AppIconProvider(fileChooser));
         fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.getTitleLabel().setText(dialogTitle);
         fileChooser.setFileTypeFilter(prepareFileFilter(fileFilters));
         fileChooser.setListener(new FileChooserListenerWrapper(callback));
 
+        if (dialogTitle != null) {
+            fileChooser.getTitleLabel().setText(dialogTitle);
+        }
         if (initialFile != null) {
             fileChooser.setDirectory(initialFile);
         }
