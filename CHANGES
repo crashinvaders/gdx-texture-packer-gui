@@ -1,6 +1,8 @@
 [4.10.3]
 - Simplified chinese localization. Thanks to ZhReimu. #127
 - Fixed pack clone dialog OK button crashes the app.
+- Fixed "Legacy format" and "Pretty print" pack settings are not getting saved (thanks to Frosty-J).
+- Fixed changing the app language to Chinese (either simplified of traditional) has no effect (thanks to Frosty-J).
 
 [4.10.2]
 - Fixed cannot change current atlas by clicking on pack list items. #122
