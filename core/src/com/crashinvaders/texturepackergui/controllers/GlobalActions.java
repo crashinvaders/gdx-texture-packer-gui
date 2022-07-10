@@ -249,18 +249,14 @@ public class GlobalActions implements ActionContainer {
             dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.OUTPUT_DIR);
         }
 
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        fileChooser.setListener(new FileChooserAdapter() {
+        fileDialogService.pickDirectory(null, dir, new FileDialogService.CallbackAdapter() {
             @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
+            public void selected(Array<FileHandle> files) {
+                FileHandle chosenFile = files.first();
                 fileChooserHistory.putLastDir(FileChooserHistory.Type.OUTPUT_DIR, chosenFile);
                 pack.setOutputDir(chosenFile.file().getAbsolutePath());
             }
         });
-        getStage().addActor(fileChooser.fadeIn());
     }
 
     //TODO move model logic code to ModelUtils
