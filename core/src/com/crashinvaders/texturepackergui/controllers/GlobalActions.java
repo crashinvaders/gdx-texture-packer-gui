@@ -178,7 +178,7 @@ public class GlobalActions implements ActionContainer {
         }
 
         fileDialogService.openFile("Open project", dir,
-                new FileDialogService.FileFilter[]{new FileDialogService.FileFilter(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT)},
+                FileDialogService.FileFilter.createSingle(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT),
                 new FileDialogService.CallbackAdapter() {
                     @Override
                     public void selected(Array<FileHandle> files) {
@@ -223,7 +223,7 @@ public class GlobalActions implements ActionContainer {
         }
 
         fileDialogService.saveFile("Save project as...", selectedFile,
-                new FileDialogService.FileFilter[]{new FileDialogService.FileFilter(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT)},
+                FileDialogService.FileFilter.createSingle(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT),
                 new FileDialogService.CallbackAdapter() {
                     @Override
                     public void selected(Array<FileHandle> files) {

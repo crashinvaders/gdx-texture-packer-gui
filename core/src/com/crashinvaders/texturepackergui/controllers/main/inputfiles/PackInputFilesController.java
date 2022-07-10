@@ -38,7 +38,7 @@ public class PackInputFilesController implements ActionContainer {
     private static final String TAG = PackInputFilesController.class.getSimpleName();
 
     public static final FileDialogService.FileFilter[] fileDialogFilterImages =
-            new FileDialogService.FileFilter[]{new FileDialogService.FileFilter("Image files", "png", "jpg", "jpeg")};
+            FileDialogService.FileFilter.createSingle("Image files", "png", "jpg", "jpeg");
 
     @Inject EventDispatcher eventDispatcher;
     @Inject InterfaceService interfaceService;

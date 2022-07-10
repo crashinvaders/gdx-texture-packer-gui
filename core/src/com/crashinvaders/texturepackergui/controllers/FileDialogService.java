@@ -35,5 +35,9 @@ public interface FileDialogService {
             this.description = filterName;
             this.extensions = extensions;
         }
+
+        public static FileFilter[] createSingle(String filterName, String... extensions) {
+            return new FileFilter[]{new FileFilter(filterName, extensions)};
+        }
     }
 }
