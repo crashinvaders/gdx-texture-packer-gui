@@ -1,4 +1,5 @@
 [4.10.3]
+- Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
 - Simplified chinese localization. Thanks to ZhReimu. #127
 - Fixed pack clone dialog OK button crashes the app.
 
