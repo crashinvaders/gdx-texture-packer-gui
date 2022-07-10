@@ -52,6 +52,7 @@ public class GlobalActions implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject LocaleService localeService;
+    @Inject FileDialogService fileDialogService;
     @Inject SkinService skinService;
     @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
@@ -165,12 +166,8 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("newProject") public void newProject() {
-        commonDialogs.checkUnsavedChanges(new Runnable() {
-            @Override
-            public void run() {
-                modelService.setProject(new ProjectModel());
-            }
-        });
+        commonDialogs.checkUnsavedChanges(() ->
+                modelService.setProject(new ProjectModel()));
     }
 
     @LmlAction("openProject") public void openProject() {
@@ -180,34 +177,24 @@ public class GlobalActions implements ActionContainer {
             dir = project.getProjectFile().parent();
         }
 
-        final FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-		fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-			.rule(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT).get());
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                final FileHandle chosenFile = file.first();
-                commonDialogs.checkUnsavedChanges(new Runnable() {
+        fileDialogService.openFile("Open project", dir,
+                new FileDialogService.FileFilter[]{new FileDialogService.FileFilter(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT)},
+                new FileDialogService.CallbackAdapter() {
                     @Override
-                    public void run() {
-                        loadProject(chosenFile);
+                    public void selected(Array<FileHandle> files) {
+                        final FileHandle chosenFile = files.first();
+                        commonDialogs.checkUnsavedChanges(() -> loadProject(chosenFile));
                     }
                 });
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
     }
 
     public void loadProject(FileHandle projectFile) {
         if (projectFile == null) { throw new IllegalArgumentException("Project file cannot be null"); }
 
-        fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, projectFile.parent());
-
         ProjectModel loadedProject = projectSerializer.loadProject(projectFile);
         if (loadedProject != null) {
             modelService.setProject(loadedProject);
+            fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, projectFile.parent());
         }
     }
 
@@ -230,33 +217,27 @@ public class GlobalActions implements ActionContainer {
 
         final ProjectModel project = getProject();
         FileHandle projectFile = project.getProjectFile();
-        FileHandle dir = fileChooserHistory.getLastDir(FileChooserHistory.Type.PROJECT);
+        FileHandle selectedFile = fileChooserHistory.getLastDir(FileChooserHistory.Type.PROJECT);
         if (FileUtils.fileExists(projectFile)) {
-            dir = projectFile.parent();
+            selectedFile = projectFile;
         }
 
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.SAVE);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-		fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-			.rule(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT).get());
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, chosenFile.parent());
+        fileDialogService.saveFile("Save project as...", selectedFile,
+                new FileDialogService.FileFilter[]{new FileDialogService.FileFilter(getString("projectFileDescription", AppConstants.PROJECT_FILE_EXT), AppConstants.PROJECT_FILE_EXT)},
+                new FileDialogService.CallbackAdapter() {
+                    @Override
+                    public void selected(Array<FileHandle> files) {
+                        FileHandle chosenFile = files.first();
+                        fileChooserHistory.putLastDir(FileChooserHistory.Type.PROJECT, chosenFile.parent());
 
-                if (chosenFile.extension().length() == 0) {
-                    chosenFile = Gdx.files.getFileHandle(chosenFile.path()+"."+AppConstants.PROJECT_FILE_EXT, chosenFile.type());
-                }
+                        if (chosenFile.extension().length() == 0) {
+                            chosenFile = Gdx.files.getFileHandle(chosenFile.path() + "." + AppConstants.PROJECT_FILE_EXT, chosenFile.type());
+                        }
 
-                getProject().setProjectFile(chosenFile);
-                projectSerializer.saveProject(project, chosenFile);
-            }
-        });
-        getStage().addActor(fileChooser.fadeIn());
-
-        if (FileUtils.fileExists(projectFile)) { fileChooser.setSelectedFiles(projectFile); }
+                        getProject().setProjectFile(chosenFile);
+                        projectSerializer.saveProject(project, chosenFile);
+                    }
+                });
     }
 
     @LmlAction("pickOutputDir") public void pickOutputDir() {

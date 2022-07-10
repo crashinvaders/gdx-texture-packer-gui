@@ -4,9 +4,12 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
+import com.crashinvaders.texturepackergui.controllers.DefaultFileDialogService;
+import com.crashinvaders.texturepackergui.controllers.FileDialogService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.shortcuts.GlobalShortcutHandler;
 import com.github.czyzby.autumn.annotation.Initiate;
+import com.github.czyzby.autumn.annotation.Provider;
 import com.github.czyzby.autumn.context.Context;
 import com.github.czyzby.autumn.context.ContextDestroyer;
 import com.github.czyzby.autumn.context.ContextInitializer;
@@ -25,6 +28,7 @@ import com.github.czyzby.autumn.mvc.stereotype.preference.Property;
 import com.github.czyzby.autumn.mvc.stereotype.preference.StageViewport;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.autumn.processor.event.MessageDispatcher;
+import com.github.czyzby.autumn.provider.DependencyProvider;
 import com.github.czyzby.autumn.scanner.ClassScanner;
 import com.github.czyzby.kiwi.util.gdx.GdxUtilities;
 import com.github.czyzby.kiwi.util.gdx.asset.Disposables;
@@ -51,6 +55,9 @@ public class App implements ApplicationListener {
     private EventDispatcher eventDispatcher;
     private MessageDispatcher messageDispatcher;
 
+    private DefaultFileDialogService defaultFileDialogService;
+    private FileDialogService nativeFileDialogService = null;
+
     /** Manually set inside {@link #pause()} and {@link #resume()} */
     private boolean paused;
 
@@ -70,6 +77,13 @@ public class App implements ApplicationListener {
         inputMultiplexer.setMaxPointers(1);
 
         instance = this;
+    }
+
+    public void setNativeFileDialogService(FileDialogService nativeFileDialogService) {
+        if (context != null)
+            throw new RuntimeException("Native file service can only be assigned before the Autumn context is initialized.");
+
+        this.nativeFileDialogService = nativeFileDialogService;
     }
 
     @Override
@@ -137,8 +151,13 @@ public class App implements ApplicationListener {
                 // Custom
                 modelService = new ModelService(),
                 shortcutHandler = new GlobalShortcutHandler(),
-                componentExtractor = new ComponentExtractor()
+                componentExtractor = new ComponentExtractor(),
+                defaultFileDialogService = new DefaultFileDialogService()
         );
+
+        if (nativeFileDialogService != null) {
+            initializer.addComponent(nativeFileDialogService);
+        }
     }
 
     @Override
@@ -194,6 +213,8 @@ public class App implements ApplicationListener {
     public PrioritizedInputMultiplexer getInput() { return inputMultiplexer; }
     public GlobalShortcutHandler getShortcuts() { return shortcutHandler; }
     public I18NBundle getI18n() { return localeService.getI18nBundle(); }
+    public DefaultFileDialogService getDefaultFileDialogService() {return defaultFileDialogService;}
+    public FileDialogService getNativeFileDialogService() {return nativeFileDialogService; }
     //endregion
 
     /** This is utility component class that helps to get access to some system components for the {@link App} instance */
@@ -203,6 +224,32 @@ public class App implements ApplicationListener {
             App.this.context = context;
             App.this.eventDispatcher = eventDispatcher;
             App.this.messageDispatcher = messageDispatcher;
+        }
+    }
+
+    @Provider
+    public static class FileDialogDependencyProvider implements DependencyProvider {
+
+        private FileDialogService cachedFileDialogService;
+
+        @Override
+        public Class getDependencyType() {
+            return FileDialogService.class;
+        }
+
+        @Override
+        public Object provide() {
+            if (cachedFileDialogService == null) {
+                App app = App.inst();
+                FileDialogService nativeFileService = app.getNativeFileDialogService();
+                if (nativeFileService != null) {
+                    cachedFileDialogService = nativeFileService;
+                } else {
+                    cachedFileDialogService = app.getDefaultFileDialogService();
+                }
+            }
+
+            return cachedFileDialogService;
         }
     }
 }

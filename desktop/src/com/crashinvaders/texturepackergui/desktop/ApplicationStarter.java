@@ -53,6 +53,11 @@ public class ApplicationStarter {
 
         App app = new App(new DesktopClassScanner(), appParams);
 
+        if (!arguments.disableNativeFileDialogs) {
+            // Setup LWJGL native file dialog support.
+            app.setNativeFileDialogService(new LwjglFileDialogService());
+        }
+
         try {
             new Lwjgl3Application(new Lwjgl3AppWrapper(app, configuration), configuration);
         } catch (Exception e) {
