@@ -14,6 +14,7 @@ import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
+import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
@@ -31,6 +32,7 @@ public class TextureUnpackerDialogController implements ActionContainer {
 
     @Inject InterfaceService interfaceService;
     @Inject ErrorDialogController errorDialogController;
+    @Inject FileDialogService fileDialogService;
 
     @LmlActor("edtAtlasPath") VisTextField edtAtlasPath;
     @LmlActor("edtOutputDir") VisTextField edtOutputDir;
@@ -46,41 +48,42 @@ public class TextureUnpackerDialogController implements ActionContainer {
     }
 
     @LmlAction("pickAtlasPath") void pickAtlasPath() {
-        FileHandle dir = FileUtils.obtainIfExists(edtAtlasPath.getText());
+        String atlasPath = edtAtlasPath.getText().trim();
+        FileHandle dir = null;
+        if (!Strings.isNotEmpty(atlasPath)) {
+            dir = FileUtils.obtainIfExists(atlasPath);
+        }
 
-        final FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                .rule("Texture atlas (*.json;*.pack;*.atlas)", "json", "pack", "atlas").get());
-        fileChooser.setListener(new FileChooserAdapter() {
+        fileDialogService.openFile("Select libGDX atlas file", dir,
+                FileDialogService.FileFilter.createSingle("Texture atlas (*.json;*.pack;*.atlas)", "json", "pack", "atlas"),
+        new FileDialogService.CallbackAdapter() {
             @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
+            public void selected(Array<FileHandle> files) {
+                FileHandle chosenFile = files.first();
                 edtAtlasPath.setText(chosenFile.path());
             }
         });
-        stage.addActor(fileChooser.fadeIn());
 
     }
 
     @LmlAction("pickOutputDir") void pickOutputDir() {
-        FileHandle dir = FileUtils.obtainIfExists(edtOutputDir.getText());
-        if (dir == null && FileUtils.fileExists(edtAtlasPath.getText())) {
-            dir = FileUtils.obtainIfExists(edtAtlasPath.getText()).parent();
+        String outputDirPath = edtOutputDir.getText().trim();
+        FileHandle dir = null;
+        if (Strings.isNotEmpty(outputDirPath)) {
+            dir = Gdx.files.absolute(outputDirPath);
+            if (!dir.exists()) {
+                dir = FileUtils.findFirstExistentParent(dir);
+            }
         }
 
-        FileChooser fileChooser = new FileChooser(dir, FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> file) {
-                FileHandle chosenFile = file.first();
-                edtOutputDir.setText(chosenFile.path());
-            }
-        });
-        stage.addActor(fileChooser.fadeIn());
+        fileDialogService.pickDirectory(null, dir,
+                new FileDialogService.CallbackAdapter() {
+                    @Override
+                    public void selected(Array<FileHandle> files) {
+                        FileHandle chosenFile = files.first();
+                        edtOutputDir.setText(chosenFile.path());
+                    }
+                });
     }
 
     @LmlAction("launchUnpackProcess") void launchUnpackProcess() {

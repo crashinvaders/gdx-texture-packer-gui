@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.actions.ActionsExt;
+import com.crashinvaders.texturepackergui.controllers.FileDialogService;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
 import com.crashinvaders.texturepackergui.utils.AppIconProvider;
@@ -36,11 +37,15 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 public class PackInputFilesController implements ActionContainer {
     private static final String TAG = PackInputFilesController.class.getSimpleName();
 
+    public static final FileDialogService.FileFilter[] fileDialogFilterImages =
+            FileDialogService.FileFilter.createSingle("Image files", "png", "jpg", "jpeg");
+
     @Inject EventDispatcher eventDispatcher;
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
     @Inject InputFilePropertiesDialogController inputFileDialog;
+    @Inject FileDialogService fileDialogService;
 
     @LmlActor("btnPfAddInput") VisImageButton btnAddInput;
     @LmlActor("btnPfAddIgnore") VisImageButton btnAddIgnore;
@@ -180,42 +185,40 @@ public class PackInputFilesController implements ActionContainer {
         inputFileDialog.show(inputFile);
     }
 
-    @LmlAction("addInputFiles") void addInputFiles() {
-        final FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES_AND_DIRECTORIES);
-        fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                .rule("Image files", "png", "jpg", "jpeg").get()); //TODO localize
-        fileChooser.setListener(new FileChooserAdapter() {
+    @LmlAction("addInputDirectory") void addInputDirectory() {
+        fileDialogService.pickDirectory("Add input directory", null, new FileDialogService.CallbackAdapter() {
             @Override
-            public void selected (Array<FileHandle> files) {
+            public void selected(Array<FileHandle> files) {
+                PackModel pack = getSelectedPack();
+                pack.addInputFile(files.first(), InputFile.Type.Input);
+            }
+        });
+    }
+
+    @LmlAction("addInputFiles") void addInputFiles() {
+        fileDialogService.openMultipleFiles("Add input images", null, fileDialogFilterImages,
+                new FileDialogService.CallbackAdapter() {
+            @Override
+            public void selected(Array<FileHandle> files) {
                 PackModel pack = getSelectedPack();
                 for (FileHandle file : files) {
                     pack.addInputFile(file, InputFile.Type.Input);
                 }
             }
         });
-        stage.addActor(fileChooser.fadeIn());
     }
 
     @LmlAction("addIgnoreFiles") void addIgnoreFiles() {
-        final FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-        fileChooser.setMultiSelectionEnabled(true);
-        fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                .rule("Image files", "png", "jpg", "jpeg").get()); //TODO localize
-        fileChooser.setListener(new FileChooserAdapter() {
-            @Override
-            public void selected (Array<FileHandle> files) {
-                PackModel pack = getSelectedPack();
-                for (FileHandle file : files) {
-                    pack.addInputFile(file, InputFile.Type.Ignore);
-                }
-            }
-        });
-        stage.addActor(fileChooser.fadeIn());
+        fileDialogService.openMultipleFiles("Add ignore images", null, fileDialogFilterImages,
+                new FileDialogService.CallbackAdapter() {
+                    @Override
+                    public void selected(Array<FileHandle> files) {
+                        PackModel pack = getSelectedPack();
+                        for (FileHandle file : files) {
+                            pack.addInputFile(file, InputFile.Type.Ignore);
+                        }
+                    }
+                });
     }
 
     @LmlAction("removeSelected") void removeSelected() {
