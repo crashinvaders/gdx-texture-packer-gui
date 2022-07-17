@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
@@ -139,7 +140,8 @@ public class PackDialogController implements ActionContainer {
                         new FileSizeMetadataProcessor(),
                         new PageAmountMetadataProcessor(),
                         new EndTimeMetadataProcessor(),
-                        new TotalTimeMetadataProcessor()),
+                        new TotalTimeMetadataProcessor(),
+                        new WarningMetadataProcessor()),
 
 //                        new TestProcessor(),
                 new PackWorkerListener());
@@ -171,7 +173,7 @@ public class PackDialogController implements ActionContainer {
         return result;
     }
 
-    private void showReopenLastDialogNotification() {
+    private void showReopenLastDialogNotification(boolean hasWarnings) {
         final LmlParser parser = interfaceService.getParser();
         final ToastTable toastTable = new ToastTable();
         final String actionName = "showLastDialog";
@@ -192,7 +194,12 @@ public class PackDialogController implements ActionContainer {
             }
         });
 
-        Actor content = parser.parseTemplate(Gdx.files.internal("lml/toastReopenLastPackingDialog.lml")).first();
+        Group content = (Group)parser.parseTemplate(Gdx.files.internal("lml/toastReopenLastPackingDialog.lml")).first();
+
+        if (hasWarnings) {
+            content.findActor("lblWarningHint").setVisible(true);
+        }
+
         parser.getData().removeActorConsumer(actionName);
         toastTable.add(content).grow();
 
@@ -216,6 +223,7 @@ public class PackDialogController implements ActionContainer {
     private class PackWorkerListener implements PackProcessingManager.Listener {
         final PackProcessingListAdapter adapter;
         boolean errors = false;
+        boolean warnings = false;
         int finishedCounter = 0;
 
         public PackWorkerListener() {
@@ -239,11 +247,11 @@ public class PackDialogController implements ActionContainer {
 
             if (!errors && cbAutoClose.isChecked()) {
                 window.hide();
-                showReopenLastDialogNotification();
+                showReopenLastDialogNotification(warnings);
             }
 
-            // If there is only one pack, show log on error
-            if (errors && adapter.size() == 1) {
+            // If there is only one pack, show log on error/warning
+            if ((errors || warnings) && adapter.size() == 1) {
                 adapter.getView(adapter.get(0)).showLogWindow();
             }
 
@@ -274,6 +282,8 @@ public class PackDialogController implements ActionContainer {
         @Override
         public void onSuccess(PackProcessingNode node) {
             onFinished(node);
+
+            warnings |= node.getMetadata(PackProcessingNode.META_HAS_WARNINGS, false);
 
             adapter.getView(node).setToSuccess();
         }

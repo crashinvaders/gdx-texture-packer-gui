@@ -6,9 +6,9 @@ import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 
 public class PackProcessingNode {
-    /** Compression result percents */
+    /** Compression progress percents */
     public static final String META_COMPRESSION_RATE = "compressionRate";
-    /** Total files size after compression (in bytes) */
+    /** Total output file size (in bytes) */
     public static final String META_FILE_SIZE = "fileSize";
     /** Time when processing was started (nanoseconds) */
     public static final String META_START_TIME = "startTime";
@@ -18,6 +18,8 @@ public class PackProcessingNode {
     public static final String META_TOTAL_TIME = "totalTime";
     /** Total amount of texture pages */
     public static final String META_ATLAS_PAGES = "atlasPages";
+    /** Whether the process has finished with any warning */
+    public static final String META_HAS_WARNINGS = "hasWarnings";
 
     private final ObjectMap<String, Object> metadata = new ObjectMap<>();
     private final ProjectModel project;

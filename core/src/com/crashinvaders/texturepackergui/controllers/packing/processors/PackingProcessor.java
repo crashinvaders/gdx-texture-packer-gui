@@ -45,7 +45,8 @@ public class PackingProcessor implements PackProcessor {
         System.out.println("Packing is done");
     }
     
-    private void performPacking(ProjectSettingsModel projSettings, PackModel packModel, PageFileWriter pageFileWriter) throws Exception {
+    private void performPacking(ProjectSettingsModel projSettings, PackModel packModel,
+                                PageFileWriter pageFileWriter) throws Exception {
         Array<ImageEntry> imageEntries = collectImageFiles(projSettings, packModel);
         if (imageEntries.size == 0) {
             throw new IllegalStateException("No images to pack");
@@ -90,9 +91,9 @@ public class PackingProcessor implements PackProcessor {
         for (InputFile inputFile : inputFiles) {
             if (inputFile.getType() == InputFile.Type.Input && inputFile.isDirectory()) {
                 if (!inputFile.getFileHandle().exists()) {
-                    System.out.println(String.format(
-                            "WARNING: Input directory doesn't exist: \"%s\"",
-                            inputFile.getFileHandle().path()));
+                    System.err.printf(
+                            "[text-yellow]WARNING: Input directory doesn't exist: \"%s\"%n[]",
+                            inputFile.getFileHandle().path());
                     continue;
                 }
 
@@ -266,16 +267,16 @@ public class PackingProcessor implements PackProcessor {
 
         public boolean add(ImageEntry image) {
             if (!image.fileHandle.exists()) {
-                System.out.println(String.format(
-                        "WARNING: Input file doesn't exist: \"%s\"",
+                System.err.println(String.format(
+                        "[text-yellow]WARNING: Input file doesn't exist: \"%s\"[]",
                         image.fileHandle.path()));
                 return false;
             }
 
             if (imageSet.contains(image)) {
                 imageSet.remove(image);
-                System.out.println(String.format(
-                        "WARNING: Region: \"%s\" is listed twice. The last added configuration will be used - \"%s\"",
+                System.err.println(String.format(
+                        "[text-yellow]WARNING: Region: \"%s\" is listed twice. The last added configuration will be used - \"%s\"[]",
                         image.regionName,
                         image.fileHandle.path()));
             }

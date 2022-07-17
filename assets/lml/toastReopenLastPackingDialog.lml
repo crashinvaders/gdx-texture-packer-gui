@@ -8,4 +8,11 @@
             href="#"
             setemptylistener="true"
             click="showLastDialog"/>
+
+    <:row/>
+
+    <vislabel
+            id="lblWarningHint"
+            visible="false"
+            text="[text-yellow]HAS WARNINGS[]"/>
 </vistable>
