@@ -1,7 +1,7 @@
 Gdx Texture Packer GUI
 
-Simple utility to help you pack and manage texture atlases for LibGDX game framework.
-It's mostly just a visual wrapper over LibGDX TexturePacker classes and offers more convenient way of using it.
+Simple utility to help you pack and manage texture atlases for libGDX game framework.
+It's mostly just a visual wrapper over libGDX TexturePacker classes and offers more convenient way of using it.
 
 Requirements:
 - Java 8 JRE (or higher) (can be downloaded here https://www.java.com/en/download/)

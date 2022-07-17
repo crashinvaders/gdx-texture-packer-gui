@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
+import com.crashinvaders.texturepackergui.controllers.FileDialogService;
 import com.crashinvaders.texturepackergui.controllers.model.*;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorDialog;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchEditorModel;
@@ -51,6 +52,7 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     @Inject ModelUtils modelUtils;
     @Inject NinePatchEditorDialog ninePatchEditorDialog;
     @Inject ErrorDialogController errorDialogController;
+    @Inject FileDialogService fileDialogService;
 
     @ViewStage Stage stage;
 
@@ -103,19 +105,14 @@ public class InputFilePropertiesDialogController implements ActionContainer {
     }
 
     @LmlAction("showFilePicker") void showFilePicker() {
-        final FileChooser fileChooser = new FileChooser(inputFile.getFileHandle().parent(), FileChooser.Mode.OPEN);
-        fileChooser.setIconProvider(new AppIconProvider(fileChooser));
-        if (inputFile.isDirectory()) {
-            fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-        }  else {
-            fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-            fileChooser.setFileTypeFilter(new FileUtils.FileTypeFilterBuilder(true)
-                    .rule("Image files", "png", "jpg", "jpeg").get()); //TODO localize
+        FileHandle initialFile = inputFile.getFileHandle();
+        if (!initialFile.exists()) {
+            initialFile = FileUtils.findFirstExistentParent(initialFile);
         }
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setListener(new FileChooserAdapter() {
+
+        FileDialogService.Callback callback = new FileDialogService.CallbackAdapter() {
             @Override
-            public void selected (Array<FileHandle> files) {
+            public void selected(Array<FileHandle> files) {
                 FileHandle file = files.first();
                 if (file.equals(inputFile.getFileHandle())) return;
 
@@ -126,10 +123,13 @@ public class InputFilePropertiesDialogController implements ActionContainer {
                     mapDataFromModel();
                 }
             }
-        });
-        stage.addActor(fileChooser.fadeIn());
+        };
 
-        if (FileUtils.fileExists(inputFile.getFileHandle())) { fileChooser.setSelectedFiles(inputFile.getFileHandle()); }
+        if (inputFile.isDirectory()) {
+            fileDialogService.pickDirectory("Select directory", initialFile, callback);
+        } else {
+            fileDialogService.openFile("Select image", initialFile, PackInputFilesController.fileDialogFilterImages, callback);
+        }
     }
 
     @LmlAction("close") public void close() {

@@ -64,7 +64,7 @@ import com.badlogic.gdx.utils.StreamUtils;
  * The generator has to be disposed once it is no longer used. The returned {@link BitmapFont} instances are managed by the user
  * and have to be disposed as usual.
  *
- * <p/><b>Anton Chekulaev</b>: This is exact copy of LibGDX 1.9.9 FreeType sources. The only change is support for multiple generators withing {@link FreeTypeBitmapFontData}.
+ * <p/><b>Anton Chekulaev</b>: This is exact copy of libGDX 1.9.9 FreeType sources. The only change is support for multiple generators withing {@link FreeTypeBitmapFontData}.
  *
  * @author mzechner
  * @author Nathan Sweet

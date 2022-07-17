@@ -2,6 +2,7 @@ package com.crashinvaders.texturepackergui.utils;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.StreamUtils;
 import com.kotcrab.vis.ui.widget.file.FileTypeFilter;
 
@@ -158,5 +159,16 @@ public class FileUtils {
         } finally {
             StreamUtils.closeQuietly(zipFile);
         }
+    }
+
+    public static @Null FileHandle findFirstExistentParent(FileHandle fileHandle) {
+        FileHandle parent = fileHandle.parent();
+        if (parent == null)
+            return null;
+
+        if (parent.exists())
+            return parent;
+
+        return findFirstExistentParent(parent);
     }
 }

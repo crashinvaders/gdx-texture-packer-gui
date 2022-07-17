@@ -1,6 +1,9 @@
 [4.10.3]
-- Simplified chinese localization. Thanks to ZhReimu. #127
-- Fixed pack clone dialog OK button crashes the app.
+- Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
+- Simplified Chinese localization. Thanks to @ZhReimu. #127
+- Fixed pack clone dialog OK button crashes the app. #130
+- Fixed "Legacy format" and "Pretty print" pack settings are not getting saved. Thanks to @Frosty-J. #132
+- Fixed changing the app language to Chinese (either simplified of traditional has no effect. Thanks to @Frosty-J. #133
 
 [4.10.2]
 - Fixed cannot change current atlas by clicking on pack list items. #122
@@ -19,7 +22,7 @@
 
 [4.10.0]
 - Support for Basis Universal super-compressed atlas textures, see https://github.com/BinomialLLC/basis_universal
-- Support for the new (LibGDX 1.9.13) texture atlas format. Which outputs much smaller data files.
+- Support for the new (libGDX 1.9.13) texture atlas format. Which outputs much smaller data files.
 - The app now forbids writing output atlas files to any directory matching the input files/dirs to avoid accidental source image files rewrite.
 - Old PNG8 compression is replaced with anim8-gdx implementation (https://github.com/tommyettinger/anim8-gdx).
 - General project save/load errors now gracefully handled and a crash log is available.

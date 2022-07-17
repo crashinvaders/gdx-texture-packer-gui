@@ -9,6 +9,9 @@ public class Arguments {
     @Argument
     public File project;
 
-    @Option(name = "-debug")
+    @Option(name = "--debug")
     public boolean debug;
+
+    @Option(name = "--no-native-files")
+    public boolean disableNativeFileDialogs;
 }

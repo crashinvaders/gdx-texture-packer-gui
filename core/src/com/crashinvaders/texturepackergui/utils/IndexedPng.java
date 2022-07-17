@@ -13,7 +13,7 @@ import java.util.zip.DeflaterOutputStream;
 /**
  * Utility to work with indexed color mode PNG files.
  * <br>
- * Based of LibGDX's {@link com.badlogic.gdx.graphics.PixmapIO.PNG PixmapIO.PNG}.
+ * Based of libGDX's {@link com.badlogic.gdx.graphics.PixmapIO.PNG PixmapIO.PNG}.
  */
 public class IndexedPng {
     static private final byte[] SIGNATURE = {(byte)137, 80, 78, 71, 13, 10, 26, 10};
