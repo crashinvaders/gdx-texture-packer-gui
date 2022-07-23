@@ -1,5 +1,6 @@
 [4.10.3]
 - Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
+- Explicit packing warning notifications. #131
 - Simplified Chinese localization. Thanks to @ZhReimu. #127
 - Fixed pack clone dialog OK button crashes the app. #130
 - Fixed "Legacy format" and "Pretty print" pack settings are not getting saved. Thanks to @Frosty-J. #132
