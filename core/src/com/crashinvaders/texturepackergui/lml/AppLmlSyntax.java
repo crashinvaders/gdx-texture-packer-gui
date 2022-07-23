@@ -9,6 +9,9 @@ import com.crashinvaders.texturepackergui.lml.tags.seekbar.FloatSeekBarLmlTag;
 import com.crashinvaders.texturepackergui.lml.tags.seekbar.IntSeekBarLmlTag;
 import com.crashinvaders.texturepackergui.views.ExpandEditTextButton;
 import com.crashinvaders.texturepackergui.views.canvas.PagePreviewCanvas;
+import com.github.czyzby.lml.parser.impl.attribute.container.ContainerFillLmlAttribute;
+import com.github.czyzby.lml.parser.impl.attribute.container.ContainerFillXLmlAttribute;
+import com.github.czyzby.lml.parser.impl.attribute.container.ContainerFillYLmlAttribute;
 import com.github.czyzby.lml.vis.parser.impl.VisLmlSyntax;
 
 public class AppLmlSyntax extends VisLmlSyntax {
@@ -102,6 +105,9 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addAttributeProcessor(new ContainerPadLmlAttribute.Bottom(), "containerPadBottom");
         addAttributeProcessor(new ContainerPadLmlAttribute.Right(), "containerPadRight");
         addAttributeProcessor(new ContainerPadLmlAttribute.All(), "containerPad");
+        addAttributeProcessor(new ContainerFillLmlAttribute(), "containerFill");
+        addAttributeProcessor(new ContainerFillXLmlAttribute(), "containerFillX");
+        addAttributeProcessor(new ContainerFillYLmlAttribute(), "containerFillY");
     }
 
     @Override
