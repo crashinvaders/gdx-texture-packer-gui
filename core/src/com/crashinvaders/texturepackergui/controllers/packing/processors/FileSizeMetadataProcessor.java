@@ -28,7 +28,7 @@ public class FileSizeMetadataProcessor implements PackProcessor {
             long pageSize = page.textureFile.length();
             totalSize += pageSize;
         }
-        node.addMetadata(PackProcessingNode.META_FILE_SIZE, totalSize);
+        node.setMetadata(PackProcessingNode.META_FILE_SIZE, totalSize);
 
         System.out.println("Total pack files size is " + totalSize + " bytes");
     }

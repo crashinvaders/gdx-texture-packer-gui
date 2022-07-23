@@ -87,7 +87,7 @@ public class PngquantCompressionProcessor implements PackProcessor {
                     }
                 }
             }
-            node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
+            node.setMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
         }
 
         System.out.println("PNG8 compression finished");

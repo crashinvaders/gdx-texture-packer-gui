@@ -58,7 +58,7 @@ public class TePng8CompressionProcessor implements PackProcessor {
                     }
                 }
             }
-            node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
+            node.setMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
         }
         png8.dispose();
 

@@ -54,7 +54,7 @@ public class TinifyCompressionProcessor implements PackProcessor {
 
             System.out.println(String.format(Locale.US, "%s compressed for %+.2f%%", page.textureFile.name(), pageCompression*100f));
         }
-        node.addMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
+        node.setMetadata(PackProcessingNode.META_COMPRESSION_RATE, compressionRateSum / atlasData.getPages().size);
 
         System.out.println("Tinify compression finished");
     }

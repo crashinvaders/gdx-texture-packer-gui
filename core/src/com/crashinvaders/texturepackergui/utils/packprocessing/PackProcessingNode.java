@@ -66,7 +66,7 @@ public class PackProcessingNode {
         this.pageFileWriter = pageFileWriter;
     }
 
-    public void addMetadata(String key, Object value) {
+    public void setMetadata(String key, Object value) {
         metadata.put(key, value);
     }
 

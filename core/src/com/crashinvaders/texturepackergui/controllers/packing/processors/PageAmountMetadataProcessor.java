@@ -23,7 +23,7 @@ public class PageAmountMetadataProcessor implements PackProcessor {
                 false);
 
         int pageAmount = atlasData.getPages().size;
-        node.addMetadata(PackProcessingNode.META_ATLAS_PAGES, pageAmount);
+        node.setMetadata(PackProcessingNode.META_ATLAS_PAGES, pageAmount);
         System.out.println(pageAmount + " pages");
     }
 }

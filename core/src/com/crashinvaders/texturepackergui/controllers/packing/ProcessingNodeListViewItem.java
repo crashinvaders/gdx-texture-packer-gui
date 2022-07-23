@@ -4,10 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
@@ -68,12 +70,14 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
     }
 
     public void setToError(Exception e) {
-        imgStateIndicator.setFrames(Array.with(VisUI.getSkin().getDrawable("custom/ic-proc-error")));
+        imgStateIndicator.setFrames(Array.with(VisUI.getSkin()
+                .getDrawable("custom/ic-proc-error")));
         imgStateIndicator.setCurrentFrame(0);
     }
 
-    public void setToSuccess() {
-        imgStateIndicator.setFrames(Array.with(VisUI.getSkin().getDrawable("custom/ic-proc-success")));
+    public void setToSuccess(boolean hasWarnings) {
+        imgStateIndicator.setFrames(Array.with(VisUI.getSkin()
+                .getDrawable(hasWarnings ? "custom/ic-proc-ok-warn" : "custom/ic-proc-success")));
         imgStateIndicator.setCurrentFrame(0);
     }
 

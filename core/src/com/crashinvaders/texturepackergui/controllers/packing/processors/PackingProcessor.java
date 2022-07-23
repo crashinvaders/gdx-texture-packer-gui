@@ -39,15 +39,15 @@ public class PackingProcessor implements PackProcessor {
 
         ProjectSettingsModel projSettings = node.getProject().getSettings();
         String settingsOrigExtension = pack.getSettings().atlasExtension;
-        performPacking(projSettings, pack, pageFileWriter);
+        performPacking(node, projSettings, pack, pageFileWriter);
         pack.getSettings().atlasExtension = settingsOrigExtension;
 
         System.out.println("Packing is done");
     }
     
-    private void performPacking(ProjectSettingsModel projSettings, PackModel packModel,
+    private void performPacking(PackProcessingNode node, ProjectSettingsModel projSettings, PackModel packModel,
                                 PageFileWriter pageFileWriter) throws Exception {
-        Array<ImageEntry> imageEntries = collectImageFiles(projSettings, packModel);
+        Array<ImageEntry> imageEntries = collectImageFiles(node, projSettings, packModel);
         if (imageEntries.size == 0) {
             throw new IllegalStateException("No images to pack");
         }
@@ -66,8 +66,8 @@ public class PackingProcessor implements PackProcessor {
         packer.pack(new File(packModel.getOutputDir()), filename);
     }
 
-    private static Array<ImageEntry> collectImageFiles(ProjectSettingsModel projSettings, PackModel packModel) {
-        final ImageEntryList images = new ImageEntryList();
+    private static Array<ImageEntry> collectImageFiles(PackProcessingNode node, ProjectSettingsModel projSettings, PackModel packModel) {
+        final ImageEntryList images = new ImageEntryList(node);
         Array<InputFile> inputFiles = new Array<>(packModel.getInputFiles());
         inputFiles.sort(new Comparator<InputFile>() {
             @Override
@@ -94,6 +94,7 @@ public class PackingProcessor implements PackProcessor {
                     System.err.printf(
                             "[text-yellow]WARNING: Input directory doesn't exist: \"%s\"%n[]",
                             inputFile.getFileHandle().path());
+                    node.setMetadata(PackProcessingNode.META_HAS_WARNINGS, true);
                     continue;
                 }
 
@@ -265,11 +266,18 @@ public class PackingProcessor implements PackProcessor {
     private static class ImageEntryList {
         private final ObjectSet<ImageEntry> imageSet = new ObjectSet<>();
 
+        private final PackProcessingNode node;
+
+        public ImageEntryList(PackProcessingNode node) {
+            this.node = node;
+        }
+
         public boolean add(ImageEntry image) {
             if (!image.fileHandle.exists()) {
                 System.err.println(String.format(
                         "[text-yellow]WARNING: Input file doesn't exist: \"%s\"[]",
                         image.fileHandle.path()));
+                node.setMetadata(PackProcessingNode.META_HAS_WARNINGS, true);
                 return false;
             }
 
@@ -279,6 +287,7 @@ public class PackingProcessor implements PackProcessor {
                         "[text-yellow]WARNING: Region: \"%s\" is listed twice. The last added configuration will be used - \"%s\"[]",
                         image.regionName,
                         image.fileHandle.path()));
+                node.setMetadata(PackProcessingNode.META_HAS_WARNINGS, true);
             }
             return imageSet.add(image);
         }
