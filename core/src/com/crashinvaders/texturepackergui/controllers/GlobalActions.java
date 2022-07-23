@@ -301,6 +301,10 @@ public class GlobalActions implements ActionContainer {
         interfaceService.showDialog(ExtensionModulesDialogController.class);
     }
 
+    @LmlAction("showSettingsDialog") public void showSettingsDialog() {
+        interfaceService.showDialog(SettingsDialogController.class);
+    }
+
     @LmlAction("showUiScalingDialog") public void showUiScalingDialog() {
         interfaceService.showDialog(InterfaceScalingDialogController.class);
     }
