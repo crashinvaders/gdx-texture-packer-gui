@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+
+<!-- Default dialog for displaying any kind of an error with stacktrace -->
+
+<visdialog
+        title="Application Log"
+        titlealign="center"
+        closebutton="true"
+        closeonescape="true"
+        onecolumn="true"
+        modal="true"
+        movable="true"
+        resizable="false"
+padtop="36">
+
+    <scrollpane
+            style="text-output"
+            expand="true"
+            width="480"
+            height="320"
+            align="top"
+            disabledx="true"
+            fadescrollbars="false"
+            overscroll="false"
+            flickscroll="false"
+            scrollcapture="true">
+        <label id="lblMessage"
+               style="small"
+               wrap="true"
+               labelalignment="topleft"/>
+    </scrollpane>
+
+    <horizontalgroup growx="true" groupalign="right" spacing="6" padtop="4">
+        <imagetextbutton
+                id="btnLocateLogFile"
+                image="custom/ic-folder"
+                imagescaling="none"
+                text="Locate log file"
+                change="locateLogFile"
+                align="right"
+                focusborder="false"
+                padright="8"/>
+        <imagetextbutton
+                id="btnCopyToClipboard"
+                image="custom/ic-clipboard"
+                imagescaling="none"
+                text="@copyToClipboard"
+                change="copyToClipboard"
+                align="right"
+                focusborder="false"
+                padright="8"/>
+    </horizontalgroup>
+
+</visdialog>

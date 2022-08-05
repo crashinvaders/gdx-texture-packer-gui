@@ -22,6 +22,8 @@ openProject: CTRL+O
 saveProjectAs: CTRL+SHIFT+S
 saveProject: CTRL+S
 
+showSettingsDialog: CTRL+ALT+S
+
 newPack: CTRL+N
 deletePack: CTRL+SHIFT+DEL
 copyPack: CTRL+SHIFT+C

@@ -3,5 +3,5 @@
 
 reloadView: F1
 reloadLocalization: F2
-reloadApp: F8
+reloadAppForce: F8
 simulateCrash: F12

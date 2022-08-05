@@ -1,13 +1,13 @@
 package com.crashinvaders.texturepackergui.utils;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
-import com.badlogic.gdx.utils.Sort;
+import com.badlogic.gdx.utils.*;
+import com.crashinvaders.texturepackergui.AppConstants;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.StringBuilder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Comparator;
@@ -40,6 +40,16 @@ public class CommonUtils {
         return sw.toString();
     }
 
+    @Null
+    public static String retrieveApplicationLog() {
+        FileHandle logFile = new FileHandle(AppConstants.logFile);
+        if (logFile.file() != null && logFile.exists()) {
+            return logFile.readString();
+        }
+
+        return null;
+    }
+
     /**
      * Splits the lines of a string, and trims each line.
      */
@@ -63,16 +73,6 @@ public class CommonUtils {
             }
         }
         return lines;
-    }
-
-    /**
-     * Counts number of set bits
-     */
-    public static int getSetBits(int i) {
-        // Bit count algorithm from here http://stackoverflow.com/a/109025/3802890
-        i = i - ((i >>> 1) & 0x55555555);
-        i = (i & 0x33333333) + ((i >>> 2) & 0x33333333);
-        return (((i + (i >>> 4)) & 0x0F0F0F0F) * 0x01010101) >>> 24;
     }
 
     /**

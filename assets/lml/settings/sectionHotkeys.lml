@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE stack SYSTEM "/dtd/server-lml.dtd">
+
+<stack>
+    <container align="topleft">
+        <label text="Hotkeys Section"/>
+    </container>
+</stack>

@@ -17,8 +17,8 @@ import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
+import com.crashinvaders.texturepackergui.controllers.settings.SettingsDialogController;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
-import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.SystemUtils;
 import com.crashinvaders.texturepackergui.utils.WidgetUtils;
@@ -38,8 +38,6 @@ import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
 import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
 import java.awt.*;
 import java.io.IOException;
@@ -153,7 +151,6 @@ public class GlobalActions implements ActionContainer {
 
         interfaceService.showDialog(packDialogController.getClass());
         packDialogController.launchPack(project, packs);
-
     }
 
     @LmlAction("packSelected") public void packSelected() {
@@ -277,6 +274,12 @@ public class GlobalActions implements ActionContainer {
                 .duration(ShowToastEvent.DURATION_SHORT));
     }
 
+    @LmlAction("reloadApp") public void reloadApp() {
+        commonDialogs.checkUnsavedChanges(() ->
+                Gdx.app.postRunnable(() ->
+                        App.inst().restart()));
+    }
+
     @LmlAction("checkForUpdates") public void checkForUpdates() {
         interfaceService.showDialog(VersionCheckDialogController.class);
     }
@@ -302,7 +305,7 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("showSettingsDialog") public void showSettingsDialog() {
-        interfaceService.showDialog(SettingsDialogController.class);
+        SettingsDialogController.show();
     }
 
     @LmlAction("showUiScalingDialog") public void showUiScalingDialog() {

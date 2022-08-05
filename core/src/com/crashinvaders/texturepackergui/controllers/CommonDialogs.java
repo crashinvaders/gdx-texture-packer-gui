@@ -222,32 +222,34 @@ public class CommonDialogs {
      */
     public void checkUnsavedChanges(final Runnable onConfirm, final Runnable onCancel) {
         if (!globalActions.modelService.hasProjectChanges()) {
+            // No unsaved changes - run the desired action instantly.
             onConfirm.run();
-        } else {
-            OptionDialog optionDialog = OptionDialog.show(getStage(),
-                    getString("dUnsavedChangesTitle"),
-                    getString("dUnsavedChangesMessage"),
-                    Dialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
-                        @Override
-                        public void no() {
-                            onConfirm.run();
-                        }
-
-                        @Override
-                        public void yes() {
-                            globalActions.saveProject();
-                            onConfirm.run();
-                        }
-
-                        @Override
-                        public void cancel() {
-                            if (onCancel != null) {
-                                onCancel.run();
-                            }
-                        }
-                    });
-            optionDialog.closeOnEscape();
+            return;
         }
+
+        OptionDialog optionDialog = OptionDialog.show(getStage(),
+                getString("dUnsavedChangesTitle"),
+                getString("dUnsavedChangesMessage"),
+                Dialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
+                    @Override
+                    public void no() {
+                        onConfirm.run();
+                    }
+
+                    @Override
+                    public void yes() {
+                        globalActions.saveProject();
+                        onConfirm.run();
+                    }
+
+                    @Override
+                    public void cancel() {
+                        if (onCancel != null) {
+                            onCancel.run();
+                        }
+                    }
+                });
+        optionDialog.closeOnEscape();
     }
 
     public void checkUnsavedChanges(final Runnable onConfirm) {

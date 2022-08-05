@@ -1,147 +1,114 @@
 <?xml version="1.0"?>
-<!DOCTYPE stack SYSTEM "/lml.dtd">
+<!DOCTYPE visdialog SYSTEM "/lml.dtd">
+<visdialog
+        id="dialog"
+        title="Settings"
+        titlealign="center"
+        modal="true"
+        movable="true"
+        closebutton="true"
+        closeonescape="true"
+        resizable="true" padtop="48">
 
-<stack fillparent="true">
-    <:import path="lml/common.lml"/>
+    <stack grow="true">
 
-    <table onecolumn="true" defaultgrowx="true">
+<!--        background="neutral"-->
+        <table onecolumn="true" defaultgrowx="true" padtop="0">
 
-        <!-- Header -->
-        <table background="dark" height="32" growx="true" tablealign="left">
-            <textbutton text="Back" padleft="2" width="80" focusborder="false" change="onBackPressed"/>
-            <actor width="12"/>
-            <label text="Layout Editor"/>
-        </table>
+<!--            &lt;!&ndash; Header &ndash;&gt;-->
+<!--&lt;!&ndash;            background="dark"&ndash;&gt;-->
+<!--            <table height="32" growx="true" tablealign="left">-->
+<!--                <textbutton text="Back" padleft="2" width="80" focusborder="false" change="onBackPressed"/>-->
+<!--                <actor width="12"/>-->
+<!--                <label text="Settings"/>-->
+<!--            </table>-->
 
-        <!-- Divider -->
-        <image style="charcoal" height="1" filly="true"/>
+<!--            &lt;!&ndash; Divider &ndash;&gt;-->
+<!--            <image style="orange" height="1" filly="true"/>-->
 
-        <!-- Content -->
-        <table grow="true">
-            <!-- Side panel -->
-            <table growy="true" minheight="0" minwidth="300" background="neutral">
-                <scrollpane style="knob-light" grow="true" align="topleft" fadebars="false" disabledx="true" flick="false">
-                    <table align="top" defaultgrowx="true" onecolumn="true">
+            <!-- Content -->
+            <table grow="true" minwidth="640" minheight="480">
+                <!-- Section selector -->
+                <scrollpane style="setting-list" disabledx="true" growy="true" minwidth="200" fadebars="true">
+                    <buttongroup onecolumn="true" tablealign="top" defaultgrowx="true" pad="0">
 
-                        <:assign key="propertySpacing" value="16"/>
+                        <:macro alias="sectionItem">
+                            <imagetextbutton
+                                    style="settings-section"
+                                    id="{sectionItemId}"
+                                    text="{sectionItemText}"
+                                    textalign="left"
+                                    tablealign="left"
+                                    tablepadleft="16"
+                                    tablepadtop="16"
+                                    tablepadbottom="16"
+                                    tablepadright="16"
+                                    change="onSelectedSectionChanged"/>
+                            <!--image="{sectionItemImage}"-->
+                        </:macro>
 
-                        <!-- Layout properties -->
-                        <table onecolumn="true" align="top" padtop="16" padbottom="16" padleft="12" padright="12" defaultgrowx="true" defaultpadbottom="4">
+                        <:assign key="sectionItemId" value="siGeneral"/>
+                        <:assign key="sectionItemText" value="General"/>
+                        <:sectionitem/>
 
-                            <!--TODO i18n-->
-                            <label style="default-light" text="Layout Name" padbottom="2"/>
-                            <label style="small-neutral" wrap="true" text="Best way to identify the layout."/>
-                            <textfield id="edtLayoutName" maxlength="32" message="unnamed" delayedchange="onLayoutNameChanged"/>
+                        <:assign key="sectionItemId" value="siHotkeys"/>
+                        <:assign key="sectionItemText" value="Hotkeys"/>
+                        <:sectionitem/>
 
-                            <:row padtop="{propertySpacing}"/>
-
-                            <label style="default-light" text="Description" padbottom="2"/>
-                            <label style="small-neutral" wrap="true" text="This text will be shown on a layout card."/>
-                            <textfield id="edtLayoutDesc" maxlength="128" delayedchange="onLayoutDescChanged"/>
-
-                            <:row padtop="{propertySpacing}"/>
-
-                            <table tablealign="bottomleft" padbottom="2">
-                                <label style="default-light" text="Grid Spacing"/>
-                                <label id="lblGridSpacing" style="small-neutral" text="10%" padleft="4"/>
-                            </table>
-                            <label style="small-neutral" wrap="true" text="Space between individual cells."/>
-                            <slider id="sliderGridSpacing" min="0" max="0.5" step="0.05" change="onGridSpacingChanged"/>
-
-                        </table>
-
-                        <!-- Divider -->
-                        <image style="charcoal" height="1" padleft="-12" padright="-12"/>
-
-                        <!-- Selected widget properties -->
-                        <shrinkcontainer id="shrinkWidgetProperties" containerfill="true" align="top" padtop="16" padleft="12" padright="12" visible="false">
-                            <table onecolumn="true" defaultgrowx="true" defaultpadbottom="4">
-
-                                <label style="default-light" text="Text Content" padbottom="2"/>
-                                <label style="small-neutral" wrap="true" text="Will be displayed on the widget."/>
-                                <textfield id="edtWidgetLabel" maxlength="32" delayedchange="onWidgetLabelChanged"/>
-
-                                <:row padtop="{propertySpacing}"/>
-
-                                <label style="default-light" text="Icon" padbottom="2"/>
-                                <label style="small-neutral" wrap="true" text="Small image to identify action."/>
-                                <imagetextbutton id="btnIconFontAwesome" tablealign="left" focusborder="false" text="Pick Icon" change="onPickFontAwesomeIconClicked"/>
-                                <imagetextbutton id="btnIconUpload" tablealign="left" focusborder="false" text="Upload Image" change="onUploadImageIconClicked"/>
-                                <shrinkcontainer id="shrinkRemoveIcon" fill="true">
-                                    <imagetextbutton id="btnIconRemove" tablealign="left" focusborder="false" text="Remove Icon" change="onRemoveIconClicked"/>
-                                </shrinkcontainer>
-
-                                <:row padtop="{propertySpacing}"/>
-
-                                <label style="default-light" text="Click Action" padbottom="2"/>
-                                <label style="small-neutral" wrap="true" text="Type of a click handler."/>
-                                <selectbox id="cmbActionType" change="SidePanel.onActionTypeChanged" items="$SidePanel.getActionTypeValues"/>
-
-                                <:row padtop="4"/>
-
-                                <!-- Shortcut widget action -->
-                                <shrinkcontainer id="shrinkActionShortcut" fill="true" padleft="-12" padright="-12" padbottom="0" minwidth="0">
-                                    <table onecolumn="true" tablepadleft="12" tablepadright="12" padtop="8" tablepadbottom="4" background="light" defaultgrowx="true" defaultpadbottom="4">
-                                        <label style="default-light" text="Shortcut" padbottom="2"/>
-                                        <label style="small-neutral" wrap="true" text="Key combination to be handed over to the system."/>
-                                        <keyeditfield id="kefShortcutKeys" message="type key combination" change="onShortcutKeysChanged"/>
-                                        <horizontalflow id="kbsManualKeys" spacing="4"/>
-                                    </table>
-                                </shrinkcontainer>
-
-                                <!-- Command line widget action -->
-                                <shrinkcontainer id="shrinkActionCommandLine" fill="true" padleft="-12" padright="-12" padbottom="0" minwidth="0">
-                                    <table onecolumn="true" tablepadleft="12" tablepadright="12" padtop="8" tablepadbottom="4" background="light" defaultgrowx="true" defaultpadbottom="4" tablealign="left">
-                                        <label style="default-light" text="Command" padbottom="2"/>
-                                        <label style="small-neutral" wrap="true" text="Command that will be handled over to the system."/>
-                                        <textarea id="taClCommand" style="code" message="type your command" height="64" growx="true" delayedchange="onCommandLineContentChanged"/>
-                                    </table>
-                                </shrinkcontainer>
-
-                            </table>
-                        </shrinkcontainer>
-
-                    </table>
+                    </buttongroup>
                 </scrollpane>
-                <image growy="true" width="1" style="charcoal"/>
+
+<!--                &lt;!&ndash; Divider &ndash;&gt;-->
+<!--                <image style="orange" width="1" growy="true"/>-->
+
+                <!-- Section content -->
+                <scrollpane style="setting-section" grow="true" disabledx="true" fadescrollbars="false">
+                    <container id="sectionContentContainer" fill="true" padtop="24" padbottom="24" padleft="32" padright="32"/>
+                </scrollpane>
             </table>
 
-            <!-- Editor area -->
-            <container clip="true" grow="true" minsize="0" fill="true">
-                <stack id="stackEditorArea">
-                    <editorAreaScrollPane id="spEditorArea">
-                        <:import path="lml/editor/gridEditor.lml"/>
-                    </editorAreaScrollPane>
-                    <container align="bottom" touchable="disabled">
-                        <table id="editorHelpHolder" tablepad="24" onecolumn="true" defaultpadbottom="4">
-                            <!-- TODO i18n -->
-                            <horizontalgroup spacing="6">
-                                <image style="mouse-l" scaling="none"/>
-                                <label style="small-neutral" color="semi-trn" touchable="disabled" text="click on any empty cell to create a button."/>
-                            </horizontalgroup>
-                            <horizontalgroup spacing="6">
-                                <image style="mouse-r" scaling="none"/>
-                                <label style="small-neutral" color="semi-trn" touchable="disabled" text="click on a button to remove it."/>
-                            </horizontalgroup>
-                            <horizontalgroup spacing="6">
-                                <image style="mouse-m" scaling="none"/>
-                                <label style="small-neutral" color="semi-trn" touchable="disabled" text="hold to scroll canvas."/>
-                            </horizontalgroup>
-                        </table>
-                    </container>
-                </stack>
-            </container>
+<!--            &lt;!&ndash; Divider &ndash;&gt;-->
+<!--            <image style="orange" height="1" filly="true"/>-->
+
+            <!-- Status Bar -->
+    <!--        background="dark"-->
+<!--            <table height="24" growx="true" tablealign="right" tablepadleft="8" tablepadright="8">-->
+<!--                <label style="small" text="status bar content will be there"/>-->
+<!--            </table>-->
 
         </table>
 
-        <!-- Divider -->
-        <image style="charcoal" height="1" filly="true"/>
+    </stack>
 
-        <!-- Status Bar -->
-        <table background="dark" height="24" growx="true" tablealign="right" tablepadleft="8" tablepadright="8">
-            <label style="small-dim" text="status bar content will be there"/>
-        </table>
+    <table tobuttontable="true" growx="true" padleft="4" padright="4" padbottom="8" padtop="0">
+        <imagetextbutton
+                id="btnLocateLogFile"
+                image="custom/ic-log-file"
+                imagescaling="none"
+                text="See Log"
+                change="locateLogFile"
+                align="right"
+                focusborder="false"
+                tablepad="2"
+                tablepadleft="8"
+                tablepadright="16"/>
 
+        <actor expandx="true"/>
+
+        <horizontalcollapsible id="cpsRestartApp" collapsed="true">
+            <imagetextbutton
+                    id="btnRestartApp"
+                    style="orange"
+                    image="custom/ic-iterations"
+                    imagescaling="none"
+                    text="Restart"
+                    change="reloadApp"
+                    align="right"
+                    focusborder="false"
+                    tablepad="2"
+                    tablepadleft="8"
+                    tablepadright="16"/>
+        </horizontalcollapsible>
     </table>
 
-</stack>
+</visdialog>

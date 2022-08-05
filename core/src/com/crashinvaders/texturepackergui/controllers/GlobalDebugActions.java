@@ -36,13 +36,8 @@ public class GlobalDebugActions implements ActionContainer {
         interfaceService.getParser().getData().addI18nBundle("default", bundle);
     }
 
-    @LmlAction("reloadApp") public void reloadApp() {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                App.inst().restart();
-            }
-        });
+    @LmlAction("reloadAppForce") public void reloadAppForce() {
+        Gdx.app.postRunnable(() -> App.inst().restart());
     }
 
     @LmlAction("simulateCrash") public void simulateCrash() {

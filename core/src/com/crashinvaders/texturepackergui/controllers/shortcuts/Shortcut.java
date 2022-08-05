@@ -2,23 +2,24 @@ package com.crashinvaders.texturepackergui.controllers.shortcuts;
 
 
 import com.badlogic.gdx.Input;
-import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.kotcrab.vis.ui.util.OsUtils;
 
 @SuppressWarnings("PointlessBitwiseExpression")
 public class Shortcut {
     public static final int EMPTY_KEY = -23;
 
-    private static int FLAG_SHIFT = 1<<0;
-    private static int FLAG_CONTROL = 1<<1;
-    private static int FLAG_ALT = 1<<2;
-    private static int FLAG_SYM = 1<<3;
+    private static final int FLAG_SHIFT = 1<<0;
+    private static final int FLAG_CONTROL = 1<<1;
+    private static final int FLAG_ALT = 1<<2;
+    private static final int FLAG_SYM = 1<<3;
 
     private final String actionName;
     private int keyCode = EMPTY_KEY;
 
-    /** Represents priority for handling order */
-    private int flags = 0;
+    /**
+     * Modifier key combination representation in raw bits (for fast matching).
+     */
+    private int modifierBits = 0;
 
     public Shortcut(String actionName) {
         this.actionName = actionName;
@@ -26,19 +27,19 @@ public class Shortcut {
 
     Shortcut setKey(int keyCode) {
         if (keyCode == Input.Keys.SHIFT_LEFT || keyCode == Input.Keys.SHIFT_RIGHT) {
-            flags ^= FLAG_SHIFT;
+            modifierBits ^= FLAG_SHIFT;
             return this;
         }
         if (keyCode == Input.Keys.CONTROL_LEFT || keyCode == Input.Keys.CONTROL_RIGHT) {
-            flags ^= FLAG_CONTROL;
+            modifierBits ^= FLAG_CONTROL;
             return this;
         }
         if (keyCode == Input.Keys.ALT_LEFT || keyCode == Input.Keys.ALT_RIGHT) {
-            flags ^= FLAG_ALT;
+            modifierBits ^= FLAG_ALT;
             return this;
         }
         if (keyCode == Input.Keys.SYM) {
-            flags ^= FLAG_SYM;
+            modifierBits ^= FLAG_SYM;
             return this;
         }
 
@@ -55,20 +56,21 @@ public class Shortcut {
     }
 
     public boolean isShift() {
-        return (flags & FLAG_SHIFT) != 0;
+        return (modifierBits & FLAG_SHIFT) != 0;
     }
     public boolean isControl() {
-        return (flags & FLAG_CONTROL) != 0;
+        return (modifierBits & FLAG_CONTROL) != 0;
     }
     public boolean isAlt() {
-        return (flags & FLAG_ALT) != 0;
+        return (modifierBits & FLAG_ALT) != 0;
     }
     public boolean isSym() {
-        return (flags & FLAG_SYM) != 0;
+        return (modifierBits & FLAG_SYM) != 0;
     }
 
     public int getPriority() {
-        return CommonUtils.getSetBits(flags);
+        // Longer modifier key combinations needs to be processed first.
+        return Integer.bitCount(modifierBits);
     }
 
     public String toShortcutExpression() {
@@ -83,6 +85,15 @@ public class Shortcut {
         return sb.toString();
     }
 
+    public boolean tryMatchModifierBits(int otherBits) {
+        return modifierBits == otherBits;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + getActionName() + "] " + toShortcutExpression();
+    }
+
     private String getSymKeyName() {
         if (OsUtils.isWindows()) {
             return "Win";
@@ -94,5 +105,38 @@ public class Shortcut {
             return "Super";
         }
         return "Sym";
+    }
+
+    public static boolean isModifierKey(int keycode) {
+        switch (keycode) {
+            case Input.Keys.SHIFT_LEFT:
+            case Input.Keys.SHIFT_RIGHT:
+            case Input.Keys.ALT_LEFT:
+            case Input.Keys.ALT_RIGHT:
+            case Input.Keys.CONTROL_LEFT:
+            case Input.Keys.CONTROL_RIGHT:
+            case Input.Keys.SYM:
+                return true;
+        }
+
+        return false;
+    }
+
+    public static int evalModifierBits(boolean shift, boolean ctrl, boolean alt, boolean sym) {
+        int modifierBits = 0;
+
+        if (shift)
+            modifierBits ^= FLAG_SHIFT;
+
+        if (ctrl)
+            modifierBits ^= FLAG_CONTROL;
+
+        if (alt)
+            modifierBits ^= FLAG_ALT;
+
+        if (sym)
+            modifierBits ^= FLAG_SYM;
+
+        return modifierBits;
     }
 }

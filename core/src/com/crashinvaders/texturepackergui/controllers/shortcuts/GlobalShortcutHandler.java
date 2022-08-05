@@ -57,14 +57,16 @@ public class GlobalShortcutHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
+        // Do not handle modifier keys.
+        if (Shortcut.isModifierKey(keycode))
+            return false;
+
+        int modifierBits = Shortcut.evalModifierBits(shift(), ctrl(), alt(), sym());
+
         for (int i = 0; i < shortcuts.size; i++) {
             Shortcut shortcut = shortcuts.getValueAt(i);
 
-            if (shortcut.getKeyCode() == keycode) {
-                if (shortcut.isShift() && !shift()) continue;
-                if (shortcut.isControl() && !ctrl()) continue;
-                if (shortcut.isAlt() && !alt()) continue;
-                if (shortcut.isSym() && !sym()) continue;
+            if (shortcut.getKeyCode() == keycode && shortcut.tryMatchModifierBits(modifierBits)) {
 
                 executeShortcutAction(shortcut);
                 return true;

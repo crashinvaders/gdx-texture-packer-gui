@@ -127,6 +127,6 @@ public class TextureUnpackerDialogController implements ActionContainer {
 
     private void showErrorDialog(Exception e) {
         errorDialogController.setError(e);
-        interfaceService.showDialog(errorDialogController.getClass());
+        errorDialogController.showDialog();
     }
 }

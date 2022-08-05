@@ -23,13 +23,18 @@ public class ActionsExt {
     }
 
     /** @see PostAction */
-    public static PostAction post(Action action) {
+    public static PostAction skipFrames(Action action) {
         return PostAction.create(1, action);
     }
 
     /** @see PostAction */
-    public static PostAction post(int skipFrames, Action action) {
-        return PostAction.create(skipFrames, action);
+    public static PostAction skipFrames(int frames, Action action) {
+        return PostAction.create(frames, action);
+    }
+
+    /** @see PostAction */
+    public static PostAction skipFrames(int frames) {
+        return PostAction.create(frames, null);
     }
 
     /** Calls target#act(delta) */

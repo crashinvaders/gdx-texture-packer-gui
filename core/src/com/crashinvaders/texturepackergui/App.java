@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.common.PrioritizedInputMultiplexer;
+import com.crashinvaders.common.autumn.DependencyInjectionService;
 import com.crashinvaders.texturepackergui.controllers.DefaultFileDialogService;
 import com.crashinvaders.texturepackergui.controllers.FileDialogService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
@@ -149,6 +150,7 @@ public class App implements ApplicationListener {
                 interfaceService = new InterfaceService(),
                 new SkinService(),
                 // Custom
+                new DependencyInjectionService(),
                 modelService = new ModelService(),
                 shortcutHandler = new GlobalShortcutHandler(),
                 componentExtractor = new ComponentExtractor(),

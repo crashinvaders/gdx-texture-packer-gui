@@ -20,7 +20,7 @@ public class OriginLmlAttribute implements LmlAttribute<Actor> {
     public void process(final LmlParser parser, final LmlTag tag, final Actor actor, final String rawAttributeData) {
         final int origin = LmlUtilities.parseAlignment(parser, actor, rawAttributeData);
         // Simple trick to make this attribute applied after actor is laid out (likely)
-        actor.addAction(ActionsExt.post(Actions.run(new Runnable() {
+        actor.addAction(ActionsExt.skipFrames(Actions.run(new Runnable() {
             @Override
             public void run() {
                 actor.setOrigin(origin);

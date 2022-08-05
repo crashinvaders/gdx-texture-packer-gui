@@ -12,6 +12,7 @@
 		vis-red: {a: 1, b: 0.047, g: 0, r: 0.862 }
 		menuitem: {a: 1, b: 0.65, g: 0.65, r: 0.65 }
 		link-label: {a: 1, b: 0.886, g: 0.631, r: 0.105 }
+		transparent: {a: 0, b: 1, g: 1, r: 1 }
 
 		semi-trn: { hex: ffffff88 }
 		orange: { hex: eb5c49ff }
@@ -30,6 +31,7 @@
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
 		orange: {name: white, color: orange }
+		transparent: { name: white, color: transparent }
 
 		dialogDim: {name: white, color: {hex:252526a0} }
 		dragndropDim: {name: white, color: {hex:252526e0} }
@@ -42,7 +44,9 @@
 		packingItemBg: {name: white, color: dark-grey }
 		canvasInfoPanel: {name: white, color: {hex:252526ff} }
 		noPreviewFill: {name: white, color: {hex:000000aa} }
-		paneLockBg: {name: white, color: {hex:333333ff} }
+		paneLockBg: {name: white, color: dark-grey }
+		orangeTransparent: {name: white, color: {hex:eb5c4944} }
+		settingMenu: {name: white, color: dark-grey }
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		default: {down: button-down, up: button }
@@ -70,6 +74,8 @@
 		default: {background: border, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 		custom: {background: listBorder, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 		text-output: {background: textfield, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
+		setting-list: {background: settingMenu, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
+		setting-section: {background: custom/setting-menu-section, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 		minimal: {}
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
@@ -142,6 +148,7 @@
 		small: {focusBorder: border-textfield, errorBorder: border-error, font: small-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, backgroundOver: textfield-over, cursor: cursor }
 		label: {selection: selection, errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: grey }
 		seekbar: {errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: grey, selection: selection, background: textfield, backgroundOver: textfield-over, cursor: cursor }
+		app-log: {focusBorder: transparent, errorBorder: transparent, font: small-font, fontColor: white, disabledFontColor: grey, selection: selection, background: transparent, backgroundOver: transparent, cursor: cursor }
 	}
 	com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
 		default: {focusBorder: border-textfield, down: button-down, up: button, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey }
@@ -169,6 +176,7 @@
 		menu-bar: {over: button-down, font: default-font, fontColor: white, down: button-down, up: button, disabled: button, disabledFontColor: grey }
 		menu-button: {down: button-down, up: button, over: button-over, disabled: button, font: small-font, fontColor: white, disabledFontColor: grey, focusBorder: border }
 		accent-strong: {down: button-down, up: button-accent-strong, over: button-accent-strong-over, disabled: button, focusBorder: border, font: default-font, fontColor: white, disabledFontColor: grey }
+		settings-section: {up: transparent, down: orange, over: orangeTransparent, checked: orange, font: default-font, fontColor: white, checkedFontColor: white, overFontColor: white }
 	}
 	com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle: {
 		default: {checkBackground: vis-check, checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: light-grey }
