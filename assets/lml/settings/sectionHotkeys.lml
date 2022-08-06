@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<!DOCTYPE stack SYSTEM "/dtd/server-lml.dtd">
+<!DOCTYPE stack SYSTEM "/lml.dtd">
 
 <stack>
     <container align="topleft">

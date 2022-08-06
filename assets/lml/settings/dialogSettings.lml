@@ -8,7 +8,9 @@
         movable="true"
         closebutton="true"
         closeonescape="true"
-        resizable="true" padtop="48">
+        resizable="true" padtop="48"
+        width="640"
+        height="480">
 
     <stack grow="true">
 
@@ -53,6 +55,10 @@
 
                         <:assign key="sectionItemId" value="siHotkeys"/>
                         <:assign key="sectionItemText" value="Hotkeys"/>
+                        <:sectionitem/>
+
+                        <:assign key="sectionItemId" value="siExtensionModules"/>
+                        <:assign key="sectionItemText" value="Extensions"/>
                         <:sectionitem/>
 
                     </buttongroup>
@@ -102,8 +108,8 @@
                     image="custom/ic-iterations"
                     imagescaling="none"
                     transform="true"
-                    text="Reload Required"
-                    change="reloadApp"
+                    text="@restartApplication"
+                    change="restartApplication"
                     align="right"
                     focusborder="false"
                     tablepad="2"

@@ -149,9 +149,9 @@ public class GeneralSectionController implements SectionContentController, Actio
         if (CjkFontExtensionModule.isCjkFontRequired(locale) &&
                 !commonDialogs.checkExtensionModuleActivated(CjkFontExtensionModule.class)) {
 
-            // Reset the selected language.
-            setSelectedLanguage(localeService.getCurrentLocale());
-            return;
+//            // Reset the selected language.
+//            setSelectedLanguage(localeService.getCurrentLocale());
+//            return;
         }
 
         Locales.setLocale(locale);

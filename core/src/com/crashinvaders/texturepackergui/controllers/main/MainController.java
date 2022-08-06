@@ -73,6 +73,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @Inject RecentProjectsRepository recentProjects;
     @Inject CanvasController canvasController;
     @Inject ScaleFactorsDialogController scaleFactorsDialogController;
+    @Inject ToastFactory toastFactory;
     @Inject @LmlInject FileDragDropController fileDragDropController;
 
     @Inject @LmlInject PngFileTypeController ftPngController;
@@ -103,8 +104,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     @LmlInject PackMenuActors actorsPackMenu;
     @LmlInject ToolsMenuActors actorsToolsMenu;
     @LmlInject HelpMenuActors actorsHelpMenu;
-
-    private final Array<ShowToastEvent> postponedToastEvenets = new Array<>();
 
     private final ArrayMap<WidgetData.FileType, FileTypeController> fileTypeControllers = new ArrayMap<>();
     private FileTypeController activeFileTypeController;
@@ -153,6 +152,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
         toastManager = new ToastManager(toastHostGroup);
         toastManager.setAlignment(Align.bottomRight);
+        toastFactory.setupToastManager(toastManager);
 
         canvasController.initialize(canvas);
         packInputFilesController.onViewCreated(stage);
@@ -184,8 +184,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         updateViewsFromPack(getSelectedPack());
         updateRecentProjects();
         updateFileType();
-
-        Gdx.app.postRunnable(this::processPostponedToastEvents);
     }
 
     @Override
@@ -272,49 +270,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         if (viewShown) {
             //TODO Rearrange items within adapter (do not recreate items).
             updatePackList();
-        }
-    }
-
-    //TODO Move out to a dedicated toast controller.
-    @OnEvent(ShowToastEvent.class) void onEvent(final ShowToastEvent event) {
-        // Postpone toast events until the view is shown.
-        if (!viewShown) {
-            postponedToastEvenets.add(event);
-            return;
-        }
-
-        //FIXME The very first toast events are not getting shown even so "viewShown" is set to "true".
-        // Thus there is a post to the next frame...
-        Gdx.app.postRunnable(() -> {
-            final Toast toast;
-            if (event.getContent() != null) {
-                toast = toastManager.show(event.getContent(), event.getDuration());
-            } else {
-                toast = toastManager.show(event.getMessage(), event.getDuration());
-            }
-            // Setup click listener (if provided).
-            if (event.getClickAction() != null) {
-                Table mainTable = toast.getMainTable();
-                mainTable.setTouchable(Touchable.enabled);
-                mainTable.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent e, float x, float y) {
-                        if (e.getTarget() == e.getListenerActor()) {
-                            event.getClickAction().run();
-                            toastManager.remove(toast);
-                        }
-                    }
-                });
-            }
-        });
-    }
-
-    //TODO Move out to a dedicated toast controller.
-    @OnEvent(RemoveToastEvent.class) void onEvent(RemoveToastEvent event) {
-        if (viewShown) {
-            if (event.getToast() != null) {
-                toastManager.remove(event.getToast());
-            }
         }
     }
 
@@ -702,13 +657,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             VisTextButton btnOpen = menu.openButton;
             Scene2dUtils.simulateClick(btnOpen);
         }
-    }
-
-    private void processPostponedToastEvents() {
-        for (int i = 0; i < this.postponedToastEvenets.size; i++) {
-            onEvent(this.postponedToastEvenets.get(i));
-        }
-        this.postponedToastEvenets.clear();
     }
 
     /**

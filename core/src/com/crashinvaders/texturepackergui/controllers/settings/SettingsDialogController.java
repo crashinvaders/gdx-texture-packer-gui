@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.common.autumn.DependencyInjectionService;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.ApplicationLogDialogController;
+import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
+import com.crashinvaders.texturepackergui.controllers.ToastFactory;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewDialogShower;
@@ -32,19 +34,16 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
 
     public static final String SECTION_ID_GENERAL = "siGeneral";
     public static final String SECTION_ID_HOTKEYS = "siHotkeys";
-    private static final ObjectMap<String, Class<? extends SectionContentController>> sectionControllerMap = new ObjectMap<>();
-    static {
-        sectionControllerMap.put(SECTION_ID_GENERAL, GeneralSectionController.class);
-        sectionControllerMap.put(SECTION_ID_HOTKEYS, HotkeysSectionController.class);
-    }
+    public static final String SECTION_ID_EXTENSIONS = "siExtensionModules";
 
     private static String SECTION_ID_INIT_OVERRIDE = null;
 
     @Inject InterfaceService interfaceService;
     @Inject DependencyInjectionService injectionService;
+    @Inject ToastFactory toastFactory;
     @Inject Stage stage;
 
-    @LmlActor({SECTION_ID_GENERAL, SECTION_ID_HOTKEYS})
+    @LmlActor({SECTION_ID_GENERAL, SECTION_ID_HOTKEYS, SECTION_ID_EXTENSIONS})
     ObjectMap<String, Button> sectionButtons;
 
     @LmlActor Container sectionContentContainer;
@@ -100,11 +99,6 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
         if (!force && sectionId.equals(currentSectionId))
             return;
 
-        Class<? extends SectionContentController> controllerType = sectionControllerMap.get(sectionId);
-
-        if (controllerType == null)
-            throw new IllegalArgumentException("No defined section content controller for ID: " + sectionId);
-
         if (currentSectionController != null) {
             currentSectionController.hide();
             currentSectionController = null;
@@ -112,7 +106,7 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
 
         this.currentSectionId = sectionId;
 
-        SectionContentController controller = createSectionController(controllerType);
+        SectionContentController controller = createSectionController(sectionId);
         this.currentSectionController = controller;
         controller.show(sectionContentContainer);
 
@@ -134,12 +128,18 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
         dialog = null;
     }
 
+    public boolean isShown() {
+        return dialog != null && dialog.getStage() != null;
+    }
+
     public void requestAppRestart() {
         if (isAppRestartRequired)
             return;
 
         isAppRestartRequired = true;
         cpsRestartApp.setCollapsed(false);
+
+        toastFactory.showRestartToast();
     }
 
     public void setDialogSeeThrough(boolean enabled) {
@@ -176,8 +176,22 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
         ApplicationLogDialogController.show();
     }
 
-    private SectionContentController createSectionController(Class<? extends SectionContentController> type) {
-        SectionContentController controller = Reflection.newInstance(type);
+    private SectionContentController createSectionController(String sectionId) {
+        SectionContentController controller;
+        switch (sectionId) {
+            case SECTION_ID_GENERAL:
+                controller = new GeneralSectionController();
+                break;
+            case SECTION_ID_HOTKEYS:
+                controller = new HotkeysSectionController();
+                break;
+            case SECTION_ID_EXTENSIONS:
+                controller = new ExtensionModuleSectionController();
+                break;
+            default:
+                throw new IllegalArgumentException("Unexpected section ID: " + sectionId);
+        }
+
         injectionService.process(controller);
         return controller;
     }
@@ -196,6 +210,14 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
     public static void show(String sectionId) {
         InterfaceService interfaceService = App.inst().getInterfaceService();
         if (interfaceService == null) {
+            return;
+        }
+
+        SettingsDialogController dialogController = (SettingsDialogController)
+                App.inst().getContext().getComponent(SettingsDialogController.class);
+
+        if (dialogController.isShown()) {
+            dialogController.toggleSection(sectionId, false);
             return;
         }
 

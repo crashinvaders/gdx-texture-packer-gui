@@ -10,7 +10,7 @@ import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 /** Responsible for creating toasts for application-wide type of events */
 @Component
-public class NotificationProducer {
+public class CommonNotificationManager {
 
     @Inject EventDispatcher eventDispatcher;
     @Inject LocaleService localeService;

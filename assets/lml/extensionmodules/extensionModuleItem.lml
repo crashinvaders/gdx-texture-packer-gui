@@ -1,32 +1,35 @@
 <?xml version="1.0"?>
 <!DOCTYPE vistable SYSTEM "/lml.dtd">
 
-<vistable onecolumn="true" defaultgrowx="true">
-    <vistable id="frameTable" width="350" onecolumn="true" defaultgrowx="true" tablepadtop="2" tablepadleft="7" tablepadright="5" tablepadbottom="5">
+<vistable onecolumn="true" defaultgrowx="true" defaultminwidth="200">
+
+    <vistable id="frameTable" onecolumn="true" defaultgrowx="true" tablepadtop="2" tablepadleft="12" tablepadright="5" tablepadbottom="5">
         <vistable>
             <label id="lblName" text="@emNameCJKFont" padbottom="2" align="left" expandx="true"/>
-            <label id="lblStatus" style="small" color="text-grey" text="Not installed" align="top"/>
+            <label id="lblStatus" style="small" color="text-grey" text="Not installed" align="top" padright="8"/>
         </vistable>
         <:row padtop="4"/>
         <label id="lblDescription" style="small-grey" text="@emDescCJKFont" wrap="true"/>
     </vistable>
+
     <vistable>
         <actor expandx="true"/>
 
         <shrinkcontainer id="scBtnInstall">
-            <container fillx="true" minwidth="96">
-                <visimagetextbutton text="@install" image="custom/ic-download" change="ModuleItemViewHolder.onInstallClicked" focusborderenabled="false" defaultspace="0"/>
+            <container fillx="true" minwidth="96" padleft="4" >
+                <visimagetextbutton text="@install" image="custom/ic-download-green" change="ModuleItemViewHolder.onInstallClicked" focusborderenabled="false" defaultspace="0" padright="12"/>
             </container>
         </shrinkcontainer>
         <shrinkcontainer id="scBtnUpdate">
             <container fillx="true" minwidth="96" padleft="4">
-                <visimagetextbutton text="@update" image="custom/ic-upgrade" change="ModuleItemViewHolder.onUpdateClicked" focusborderenabled="false" defaultspace="0"/>
+                <visimagetextbutton text="@update" image="custom/ic-upgrade" change="ModuleItemViewHolder.onUpdateClicked" focusborderenabled="false" defaultspace="0" padright="12"/>
             </container>
         </shrinkcontainer>
         <shrinkcontainer id="scBtnUninstall">
             <container fillx="true" minwidth="96" padleft="4">
-                <visimagetextbutton text="@uninstall" image="custom/ic-trash-red" change="ModuleItemViewHolder.onUninstallClicked" focusborderenabled="false" defaultspace="0"/>
+                <visimagetextbutton text="@uninstall" image="custom/ic-trash-red" change="ModuleItemViewHolder.onUninstallClicked" focusborderenabled="false" defaultspace="0" padright="12"/>
             </container>
         </shrinkcontainer>
     </vistable>
+
 </vistable>

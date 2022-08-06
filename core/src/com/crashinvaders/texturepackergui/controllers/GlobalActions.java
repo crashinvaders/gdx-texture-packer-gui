@@ -274,12 +274,6 @@ public class GlobalActions implements ActionContainer {
                 .duration(ShowToastEvent.DURATION_SHORT));
     }
 
-    @LmlAction("reloadApp") public void reloadApp() {
-        commonDialogs.checkUnsavedChanges(() ->
-                Gdx.app.postRunnable(() ->
-                        App.inst().restart()));
-    }
-
     @LmlAction("checkForUpdates") public void checkForUpdates() {
         interfaceService.showDialog(VersionCheckDialogController.class);
     }
@@ -301,7 +295,8 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("showExtensionModulesDialog") public void showExtensionModulesDialog() {
-        interfaceService.showDialog(ExtensionModulesDialogController.class);
+//        interfaceService.showDialog(ExtensionModulesDialogController.class);
+        SettingsDialogController.show(SettingsDialogController.SECTION_ID_EXTENSIONS);
     }
 
     @LmlAction("showSettingsDialog") public void showSettingsDialog() {
@@ -313,12 +308,14 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("restartApplication") public void restartApplication() {
-        Gdx.app.log(TAG, "Restarting the application...");
-        FileHandle projectFile = modelService.getProject().getProjectFile();
-        if (projectFile != null && projectFile.exists()) {
-            App.inst().getParams().startupProject = projectFile.file();
-        }
-        Gdx.app.postRunnable(() -> App.inst().restart());
+        commonDialogs.checkUnsavedChanges(() -> {
+            Gdx.app.log(TAG, "Restarting the application...");
+            FileHandle projectFile = modelService.getProject().getProjectFile();
+            if (projectFile != null && projectFile.exists()) {
+                App.inst().getParams().startupProject = projectFile.file();
+            }
+            Gdx.app.postRunnable(() -> App.inst().restart());
+        });
     }
 
     @LmlAction("getSystemNameText") String getSystemNameText() {
@@ -375,7 +372,9 @@ public class GlobalActions implements ActionContainer {
         Locales.setLocale(locale);
         localeService.setCurrentLocale(locale);
 
-        interfaceService.reload();
+        if (interfaceService != null && interfaceService.getCurrentController() != null) {
+            interfaceService.reload();
+        }
     }
 
     /** @return localized string */

@@ -12,11 +12,13 @@ public class ShowToastEvent {
     private float duration = DURATION_SHORT;
     private ToastTable content;
     private Runnable clickAction;
+    private boolean hideCloseButton;
 
     public String getMessage() { return message; }
     public float getDuration() { return duration; }
     public ToastTable getContent() { return content; }
     public Runnable getClickAction() { return clickAction; }
+    public boolean isHideCloseButton() { return hideCloseButton; }
 
     public ShowToastEvent message(String message) {
         this.message = message;
@@ -38,6 +40,10 @@ public class ShowToastEvent {
     }
     public ShowToastEvent click(Runnable clickAction) {
         this.clickAction = clickAction;
+        return this;
+    }
+    public ShowToastEvent hideCloseButton() {
+        this.hideCloseButton = true;
         return this;
     }
 }
