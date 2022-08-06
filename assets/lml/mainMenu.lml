@@ -77,7 +77,8 @@
                         id="miLanguageRu"
                         onchange="changeLanguageRu"
                         text="@langRu"/>
-                <!-- CJK strings require CJK font extension to be activated to be rendered. So we replace strings with hardcoded images in common places where CJK font may be not available. -->
+                <!-- In order to render CJK strings we need the CJK font extension to be activated.
+                     So we replace strings with hardcoded images in common places where CJK font may be not available. -->
                 <menuitem
                         id="miLanguageZhCn"
                         onchange="changeLanguageZhCn"

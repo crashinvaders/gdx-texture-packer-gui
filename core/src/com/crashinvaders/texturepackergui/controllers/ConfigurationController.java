@@ -195,18 +195,26 @@ public class ConfigurationController {
     }
 
     @Initiate(priority = HIGH_PRIORITY)
+    public void initLocalService(final LocaleService localeService) {
+        // Locale service instantly reloads the view upon locale change.
+        // This is not desired as some view/data state may be lost in the process of reload.
+        // So we boil down the action to only saving the new value to prefs.
+        // ==================================================================================
+        // We should do the view reload manually from now on to see the locale change effect.
+        // ==================================================================================
+        localeService.setActionOnLocaleChange(localeService::saveLocaleInPreferences);
+    }
+
+    @Initiate(priority = HIGH_PRIORITY)
     public void initVisUiI18n(final InterfaceService interfaceService, final LocaleService localeService) {
         Locales.setLocale(localeService.getCurrentLocale());
-        interfaceService.setActionOnBundlesReload(new Runnable() {
-            @Override
-            public void run() {
-                Locale locale = localeService.getCurrentLocale();
-                Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar"), locale));
-                Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker"), locale));
-                Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs"), locale));
-                Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser"), locale));
-                Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane"), locale));
-            }
+        interfaceService.setActionOnBundlesReload(() -> {
+            Locale locale = localeService.getCurrentLocale();
+            Locales.setButtonBarBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/buttonbar"), locale));
+            Locales.setColorPickerBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/colorpicker"), locale));
+            Locales.setDialogsBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/dialogs"), locale));
+            Locales.setFileChooserBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/filechooser"), locale));
+            Locales.setTabbedPaneBundle(I18NBundle.createBundle(Gdx.files.internal("i18n/visui/tabbedpane"), locale));
         });
     }
 

@@ -374,6 +374,8 @@ public class GlobalActions implements ActionContainer {
 
         Locales.setLocale(locale);
         localeService.setCurrentLocale(locale);
+
+        interfaceService.reload();
     }
 
     /** @return localized string */

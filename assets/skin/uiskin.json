@@ -76,6 +76,7 @@
 		text-output: {background: textfield, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 		setting-list: {background: settingMenu, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 		setting-section: {background: custom/setting-menu-section, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
+		popup: {background: window-border-bg, vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
 		minimal: {}
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
@@ -249,6 +250,7 @@
 	com.kotcrab.vis.ui.widget.ListViewStyle: {
 		default: {scrollPaneStyle: list }
 		custom: {scrollPaneStyle: custom }
+		popup: {scrollPaneStyle: popup }
 	}
 	com.kotcrab.vis.ui.util.form.SimpleFormValidator$FormValidatorStyle: {
 		default: {errorLabelColor: vis-red, validLabelColor: white }
@@ -261,6 +263,9 @@
 	com.crashinvaders.common.scene2d.visui.Toast$ToastStyle: {
 		default: {background: tooltip-bg, closeButtonStyle: "close" }
 		dark: {background: window-border-bg, closeButtonStyle: "close-window" }
+	}
+	com.crashinvaders.common.scene2d.CustomSelectBox$Style: {
+		default: {background: default-select, backgroundOver: default-select-over, listViewStyle: popup }
 	}
 	com.crashinvaders.texturepackergui.views.ExpandEditTextButton$Style: {
 		default: {down: button-down, up: button, over: button-over, labelStyle: default, expandIcon: expand-arrow }

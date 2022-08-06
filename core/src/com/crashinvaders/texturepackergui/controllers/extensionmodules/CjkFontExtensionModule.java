@@ -32,9 +32,7 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
         if (isActivated()) return;
 
         Locale locale = localeService.getCurrentLocale();
-        String language = locale.getLanguage();
-        if (language.equals(AppConstants.LOCALE_ZH_TW.getLanguage()) ||
-            language.equals(AppConstants.LOCALE_ZH_CN.getLanguage())) {
+        if (isCjkFontRequired(locale)) {
             Gdx.app.error(TAG, "A CJK locale is selected, but the " + TAG +
                     " extension is not installed/activated. Switching to the default locale.");
             globalActions.changeLanguage(AppConstants.LOCALE_DEFAULT);
@@ -81,5 +79,11 @@ public class CjkFontExtensionModule extends ExtensionModuleController {
     boolean validateInstalledModule() {
         //TODO Implement MD5 file hash check here.
         return getModuleDir().exists();
+    }
+
+    public static boolean isCjkFontRequired(Locale locale) {
+        String language = locale.getLanguage();
+        return language.equals(AppConstants.LOCALE_ZH_TW.getLanguage()) ||
+                language.equals(AppConstants.LOCALE_ZH_CN.getLanguage());
     }
 }

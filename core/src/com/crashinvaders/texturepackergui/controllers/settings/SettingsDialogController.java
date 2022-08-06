@@ -1,10 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers.settings;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.crashinvaders.common.autumn.DependencyInjectionService;
 import com.crashinvaders.texturepackergui.App;
@@ -17,6 +19,7 @@ import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.kiwi.util.gdx.reflection.Reflection;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
+import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.widget.HorizontalCollapsibleWidget;
 import com.kotcrab.vis.ui.widget.VisDialog;
@@ -47,6 +50,7 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
     @LmlActor Container sectionContentContainer;
 
     @LmlActor HorizontalCollapsibleWidget cpsRestartApp;
+    @LmlActor Button btnRestartApp;
 
     private VisDialog dialog;
 
@@ -71,6 +75,21 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
         toggleSection(initialSectionId, true);
 
         this.isDialogSeeThrough = false;
+    }
+
+    @LmlAfter
+    void initView() {
+        btnRestartApp.setOrigin(Align.right);
+        btnRestartApp.addAction(Actions.repeat(-1, Actions.sequence(
+                Actions.delay(1f),
+                Actions.scaleTo(1.07f, 1.15f),
+                Actions.scaleTo(1f, 1f, 0.5f, Interpolation.exp10Out)
+        )));
+
+        if (isAppRestartRequired) {
+            cpsRestartApp.setCollapsed(false);
+
+        }
     }
 
     public void toggleSection(String sectionId, boolean force) {
