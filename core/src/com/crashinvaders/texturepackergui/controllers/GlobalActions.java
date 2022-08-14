@@ -76,11 +76,11 @@ public class GlobalActions implements ActionContainer {
         FocusManager.resetFocus(getStage());
     }
 
-	@LmlAction("newPack") public void newPack() {
+	@LmlAction({"createAtlas", "newPack"}) public void newPack() {
         commonDialogs.newPack();
 	}
 
-    @LmlAction("renamePack") public void renamePack() {
+    @LmlAction({"renameAtlas", "renamePack"}) public void renamePack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -94,14 +94,14 @@ public class GlobalActions implements ActionContainer {
         getStage().addActor(dialog.fadeIn());
     }
 
-    @LmlAction({"makeCopy", "copyPack"}) public void copyPack() {
+    @LmlAction({"cloneAtlas", "copyPack"}) public void copyPack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         commonDialogs.copyPack(pack);
     }
 
-    @LmlAction("deletePack") public void deletePack() {
+    @LmlAction({"deleteAtlas", "deletePack"}) public void deletePack() {
         final PackModel pack = getSelectedPack();
         if (pack == null) return;
 
@@ -116,35 +116,35 @@ public class GlobalActions implements ActionContainer {
         optionDialog.closeOnEscape();
     }
 
-    @LmlAction("movePackUp") public void movePackUp() {
+    @LmlAction({"moveAtlasUp", "movePackUp"}) public void movePackUp() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         modelUtils.movePackUp(pack);
     }
 
-    @LmlAction("movePackDown") public void movePackDown() {
+    @LmlAction({"moveAtlasDown", "movePackDown"}) public void movePackDown() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         modelUtils.movePackDown(pack);
     }
 
-    @LmlAction("selectNextPack") public void selectNextPack() {
+    @LmlAction({"selectNextAtlas", "selectNextPack"}) public void selectNextPack() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         modelUtils.selectNextPack(pack);
     }
 
-    @LmlAction("selectPreviousPack") public void selectPreviousPack() {
+    @LmlAction({"selectPreviousAtlas", "selectPreviousPack"}) public void selectPreviousPack() {
         PackModel pack = getSelectedPack();
         if (pack == null) return;
 
         modelUtils.selectPrevPack(pack);
     }
 
-    @LmlAction("packAll") public void packAll() {
+    @LmlAction({"packAllAtlases", "packAll"}) public void packAll() {
         ProjectModel project = getProject();
         Array<PackModel> packs = getProject().getPacks();
         if (packs.size == 0) return;
@@ -153,7 +153,7 @@ public class GlobalActions implements ActionContainer {
         packDialogController.launchPack(project, packs);
     }
 
-    @LmlAction("packSelected") public void packSelected() {
+    @LmlAction({"packSelectedAtlas", "packSelected"}) public void packSelected() {
         ProjectModel project = getProject();
         PackModel pack = getSelectedPack();
         if (pack == null) return;
@@ -257,7 +257,7 @@ public class GlobalActions implements ActionContainer {
     }
 
     //TODO move model logic code to ModelUtils
-    @LmlAction("copySettingsToAllPacks") public void copySettingsToAllPacks() {
+    @LmlAction({"copySettingsToAllAtlases", "copySettingsToAllPacks"}) public void copySettingsToAllPacks() {
         PackModel selectedPack = getSelectedPack();
         if (selectedPack == null) return;
 
@@ -322,7 +322,7 @@ public class GlobalActions implements ActionContainer {
         return SystemUtils.getPrintString();
     }
 
-    @LmlAction("editCustomHotkeys") void editCustomHotkeys() {
+    @LmlAction("editCustomHotkeys") public void editCustomHotkeys() {
         FileHandle userHotkeyFile = Gdx.files.external(AppConstants.EXTERNAL_DIR + "/hotkeys_user.txt");
         if (!userHotkeyFile.exists()) {
             Gdx.files.internal("hotkeys_user.txt").copyTo(userHotkeyFile);
@@ -333,16 +333,16 @@ public class GlobalActions implements ActionContainer {
             Gdx.app.error(TAG, "Error opening " + userHotkeyFile, e);
         }
     }
-    @LmlAction public void showMenuFile() {
+    @LmlAction({"showMenuFile"}) public void showMenuFile() {
         mainController.showMenuFile();
     }
-    @LmlAction public void showMenuPack() {
+    @LmlAction({"showMenuAtlas", "showMenuPack"}) public void showMenuPack() {
         mainController.showMenuPack();
     }
-    @LmlAction public void showMenuTools() {
+    @LmlAction({"showMenuTools"}) public void showMenuTools() {
         mainController.showMenuTools();
     }
-    @LmlAction public void showMenuHelp() {
+    @LmlAction({"showMenuHelp"}) public void showMenuHelp() {
         mainController.showMenuHelp();
     }
 

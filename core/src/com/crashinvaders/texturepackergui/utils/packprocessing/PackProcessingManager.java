@@ -61,7 +61,7 @@ public class PackProcessingManager {
                     processingNode.setLog(outputStream.toString());
                     listener.onSuccess(processingNode);
                 } catch (Exception e) {
-                    String message = CommonUtils.fetchMessageStack(e);
+                    String message = CommonUtils.fetchMessageStack(e, "\n\t");
                     System.err.println("[text-red]Exception occurred:[] " + message);
                     System.err.println("[text-red]Stack trace:[] ");
                     e.printStackTrace();

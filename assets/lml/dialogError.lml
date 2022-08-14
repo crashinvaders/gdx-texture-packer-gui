@@ -22,7 +22,7 @@
             disabledx="true"
             fadescrollbars="false"
             overscroll="false"
-            flickscroll="false"
+            flickscroll="true"
             scrollcapture="true">
         <label id="lblMessage"
                style="small"

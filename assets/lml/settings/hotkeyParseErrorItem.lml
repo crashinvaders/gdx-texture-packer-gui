@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "/lml.dtd">
+
+<table background="custom/error-message-frame" pad="8" padleft="16" padright="16" touchable="disabled">
+    <label style="small-orange" wrap="true" align="left" growx="true" pad="0" multiline="true">
+        {parsingErrorText}
+    </label>
+</table>

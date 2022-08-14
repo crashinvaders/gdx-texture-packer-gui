@@ -18,6 +18,7 @@ import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.annotation.OnEvent;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 
 /**
@@ -106,6 +107,8 @@ public class ToastFactory {
     //endregion
 
     //region Common toasts.
+    private static final String ARG_TOAST_ERROR_TEXT = "toastErrorText";
+
     private boolean wasRestartToastShown = false;
 
     public void showRestartToast() {
@@ -121,6 +124,22 @@ public class ToastFactory {
                 .hideCloseButton());
 
         wasRestartToastShown = true;
+    }
+
+    public void showErrorToast(Exception error, String message) {
+        Runnable clickAction = () -> ErrorDialogController.show(error);
+
+        ToastTable toastTable = new ToastTable();
+        LmlParser parser = interfaceService.getParser();
+        parser.getData().addArgument(ARG_TOAST_ERROR_TEXT, message);
+        Actor content = parser.parseTemplate(Gdx.files.internal("lml/toastCommonError.lml")).first();
+        parser.getData().removeArgument(ARG_TOAST_ERROR_TEXT);
+        toastTable.add(content).grow();
+
+        this.showToast(new ShowToastEvent()
+                .content(toastTable)
+                .click(clickAction)
+                .duration(ShowToastEvent.DURATION_INDEFINITELY));
     }
     //endregion
 }

@@ -23,13 +23,16 @@ public class CommonUtils {
     };
     private static final Color tmpColor = new Color();
 
-    public static String fetchMessageStack(Throwable throwable) {
+    public static String fetchMessageStack(Throwable throwable, String separator) {
         StringBuilder sb = new StringBuilder();
-        while (true) {
-            if (sb.length() > 0) { sb.append("\n\t"); }
+        while (throwable != null) {
+            if (sb.length() > 0) { sb.append(separator); }
             sb.append(throwable.getMessage());
-            if (throwable.getCause() == null || throwable.getCause() == throwable) break;
-            throwable = throwable.getCause();
+            if (throwable.getCause() == throwable) {
+                throwable = null;
+            } else {
+                throwable = throwable.getCause();
+            }
         }
         return sb.toString();
     }
@@ -227,5 +230,20 @@ public class CommonUtils {
 
     public static int toRgba8888IntBits(Color color) {
         return ((int)(255 * color.r) << 24) | ((int)(255 * color.g) << 16) | ((int)(255 * color.b) << 8) | ((int)(255 * color.a));
+    }
+
+    /** This method actually replicate Integer.compare() to support Android API less than 19 */
+    public static int compare(int x, int y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
+    /** This method actually replicate Float.compare() to support Android API less than 19 */
+    public static int compare(float x, float y) {
+        return (x < y) ? -1 : ((x == y) ? 0 : 1);
+    }
+
+    /** This method actually replicate Boolean.compare() to support Android API less than 19 */
+    public static int compare(boolean x, boolean y) {
+        return (x == y) ? 0 : (x ? 1 : -1);
     }
 }

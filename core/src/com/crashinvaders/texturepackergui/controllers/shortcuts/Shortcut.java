@@ -21,11 +21,13 @@ public class Shortcut {
      */
     private int modifierBits = 0;
 
+    private boolean isCustomized = false;
+
     public Shortcut(String actionName) {
         this.actionName = actionName;
     }
 
-    Shortcut setKey(int keyCode) {
+    Shortcut setKeyCode(int keyCode) {
         if (keyCode == Input.Keys.SHIFT_LEFT || keyCode == Input.Keys.SHIFT_RIGHT) {
             modifierBits ^= FLAG_SHIFT;
             return this;
@@ -51,8 +53,25 @@ public class Shortcut {
         return actionName;
     }
 
+    public String getActionDisplayName() {
+        String[] separateWords = actionName.split("(?<!(^|[A-Z]))(?=[A-Z])|(?<!^)(?=[A-Z][a-z])");
+        for (int i = 0; i < separateWords.length; i++) {
+            String word = separateWords[i];
+            separateWords[i] = word.substring(0, 1).toUpperCase() + word.substring(1);
+        }
+        return String.join(" ", separateWords);
+    }
+
     public int getKeyCode() {
         return keyCode;
+    }
+
+    public void setCustomized(boolean customized) {
+        this.isCustomized = customized;
+    }
+
+    public boolean isCustomized() {
+        return isCustomized;
     }
 
     public boolean isShift() {
@@ -94,7 +113,7 @@ public class Shortcut {
         return "[" + getActionName() + "] " + toShortcutExpression();
     }
 
-    private String getSymKeyName() {
+    public static String getSymKeyName() {
         if (OsUtils.isWindows()) {
             return "Win";
         }

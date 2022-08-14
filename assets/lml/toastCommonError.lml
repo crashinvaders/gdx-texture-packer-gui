@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "/lml.dtd">
+
+<table defaultalign="left" defaultexpandx="true" tablepad="4" touchable="disabled">
+    <image style="custom/toast-error-icon" align="center" pad="12" spaceright="12"/>
+    <table growx="true" align="left" defaultalign="topleft" width="400">
+        <label style="default" text="An error occurred:"/>
+        <:row padtop="0"/>
+        <label style="small-orange" growx="true" wrap="true" multiline="true">
+            {toastErrorText}
+        </label>
+    </table>
+</table>

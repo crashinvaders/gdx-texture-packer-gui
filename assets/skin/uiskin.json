@@ -47,6 +47,7 @@
 		paneLockBg: {name: white, color: dark-grey }
 		orangeTransparent: {name: white, color: {hex:eb5c4944} }
 		settingMenu: {name: white, color: dark-grey }
+		hotkeyEvenRow: {name: white, color: {hex: ffffff04} }
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
 		default: {down: button-down, up: button }
@@ -115,9 +116,11 @@
 		big: {font: big-font, fontColor: white }
 		menuitem-shortcut: {font: default-font, fontColor: menuitem }
 		grey: {font: default-font, fontColor: light-grey }
+		orange: {font: default-font, fontColor: text-red }
 		small-grey: {font: small-font, fontColor: light-grey }
 		small-yellow: {font: small-font, fontColor: text-yellow }
-		small-red: {font: small-font, fontColor: text-red }
+		small-orange: {font: small-font, fontColor: text-red }
+		small-red: small-orange
 		small-green: {font: small-font, fontColor: text-green }
 	}
 	com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
@@ -215,8 +218,9 @@
 	}
 	com.kotcrab.vis.ui.widget.LinkLabel$LinkLabelStyle: {
 		default: {fontColor: link-label, underline: white, font: default-font }
-		orange: {fontColor: orange, underline: white, font: default-font }
-		orange-small: {fontColor: orange, underline: white, font: small-font }
+		small: {fontColor: link-label, underline: white, font: small-font }
+		orange: {fontColor: text-red, underline: white, font: default-font }
+		orange-small: {fontColor: text-red, underline: white, font: small-font }
 		grey: {fontColor: grey, underline: white, font: default-font }
 		white: {fontColor: white, underline: white, font: default-font }
 		white-small: {fontColor: white, underline: orange, font: small-font }
@@ -277,5 +281,12 @@
 		default: {textFieldStyle: "seekbar", sliderStyle: "seekbar", focusBorder: border-textfield }
 		default-horizontal: default
 		default-vertical: default
+	}
+
+	com.crashinvaders.texturepackergui.controllers.settings.HotkeysSectionController$KeyEntryWidget$Style: {
+		default: {keyLabelStyle: small, modifierLabelStyle: small-grey, background: custom/shortcut-key-frame }
+	}
+	com.crashinvaders.texturepackergui.controllers.settings.HotkeysSectionController$HotkeyTableStyle: {
+		default: {actionLabelStyle: small, keyEntryStyle: default, rowBackgroundOdd: transparent, rowBackgroundEven: hotkeyEvenRow }
 	}
 }

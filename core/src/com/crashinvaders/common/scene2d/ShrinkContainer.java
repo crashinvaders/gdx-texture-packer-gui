@@ -4,7 +4,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 
 /**
- * Same old {@link Container}, but gets shrinked when invisible
+ * Same old {@link Container}, but gets shrunk when invisible
  */
 public class ShrinkContainer<T extends Actor> extends Container<T> {
 

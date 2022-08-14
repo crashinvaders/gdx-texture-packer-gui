@@ -5,7 +5,7 @@
 # Syntax is "<operation_name>:<shortcut_definition>".
 # One expression per line.
 # A shortcut definition may contain any number of modifiers (in any order)
-# and only one any other key connected by plus(+) character.
+# and only one any other key connected with a plus(+) character.
 # Available modifiers (keys from the one group are self-interchangeable and should be treated as the same key):
 #   SHIFT
 #   ALT
@@ -24,20 +24,20 @@ saveProject: CTRL+S
 
 showSettingsDialog: CTRL+ALT+S
 
-newPack: CTRL+N
-deletePack: CTRL+SHIFT+DEL
-copyPack: CTRL+SHIFT+C
-renamePack: CTRL+R
+createAtlas: CTRL+N
+deleteAtlas: CTRL+SHIFT+DEL
+cloneAtlas: CTRL+SHIFT+C
+renameAtlas: CTRL+R
 
-movePackUp: ALT+SHIFT+UP
-movePackDown: ALT+SHIFT+DOWN
-selectNextPack: ALT+DOWN
-selectPreviousPack: ALT+UP
+moveAtlasUp: ALT+SHIFT+UP
+moveAtlasDown: ALT+SHIFT+DOWN
+selectNextAtlas: ALT+DOWN
+selectPreviousAtlas: ALT+UP
 
-packSelected: CTRL+P
-packAll: CTRL+SHIFT+P
+packSelectedAtlas: CTRL+P
+packAllAtlases: CTRL+SHIFT+P
 
 showMenuFile: ALT+F
-showMenuPack: ALT+P
+showMenuAtlas: ALT+P
 showMenuTools: ALT+T
 showMenuHelp: ALT+H

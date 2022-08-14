@@ -25578,6 +25578,8 @@
 <!ATTLIST verticalgroup skin CDATA #IMPLIED>
 <!-- VerticalGroupPaddingLmlAttribute -->
 <!ATTLIST verticalgroup grouppad CDATA #IMPLIED>
+<!-- VerticalGroupExpandLmlAttribute -->
+<!ATTLIST verticalgroup groupexpand CDATA #IMPLIED>
 <!-- TooltipLmlAttribute -->
 <!ATTLIST verticalgroup vistooltip CDATA #IMPLIED>
 <!-- TimeThresholdChangeListenerLmlAttribute -->
@@ -26830,6 +26832,8 @@
 <!ATTLIST dragpane grouppad CDATA #IMPLIED>
 <!-- SkinLmlAttribute -->
 <!ATTLIST dragpane skin CDATA #IMPLIED>
+<!-- HorizontalGroupExpandLmlAttribute -->
+<!ATTLIST dragpane groupexpand CDATA #IMPLIED>
 <!-- TooltipLmlAttribute -->
 <!ATTLIST dragpane vistooltip CDATA #IMPLIED>
 <!-- TimeThresholdChangeListenerLmlAttribute -->
@@ -27384,6 +27388,8 @@
 <!ATTLIST horizontalgroup skin CDATA #IMPLIED>
 <!-- HorizontalGroupPaddingLmlAttribute -->
 <!ATTLIST horizontalgroup grouppad CDATA #IMPLIED>
+<!-- HorizontalGroupExpandLmlAttribute -->
+<!ATTLIST horizontalgroup groupexpand CDATA #IMPLIED>
 <!-- TooltipLmlAttribute -->
 <!ATTLIST horizontalgroup vistooltip CDATA #IMPLIED>
 <!-- TimeThresholdChangeListenerLmlAttribute -->

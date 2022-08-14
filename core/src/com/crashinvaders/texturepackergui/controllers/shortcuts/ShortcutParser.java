@@ -5,13 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.ObjectMap;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Comparator;
-import java.util.HashMap;
 
 import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
 
@@ -19,22 +19,30 @@ public class ShortcutParser {
     private static final String TAG = ShortcutParser.class.getSimpleName();
     private static final String COMMENT_PREFIX = "#";
     private static final ShortcutComparator shortcutComparator = new ShortcutComparator();
-    private static final HashMap<String, Integer> keyCodes = prepareKeyCodes();
+    private static final ObjectMap<String, Integer> keyCodes = prepareKeyCodes();
 
-    public Array<Shortcut> parse(FileHandle fileHandle) {
+    public Array<Shortcut> parse(FileHandle fileHandle) throws ShortcutParseException {
         BufferedReader br = null;
         try {
             br = new BufferedReader(fileHandle.reader());
-            return parse(br);
-        } catch (IOException | GdxRuntimeException e) {
-            Gdx.app.error(TAG, "Error reading shortcut file", e);
-            return new Array<>();
+            return parseBuffer(br);
+        } catch (IOException | GdxRuntimeException | ShortcutParseException e) {
+            throw new ShortcutParseException("Error reading shortcut file: \"" + fileHandle.toString() + "\"", e);
         } finally {
             if (br != null) try { br.close(); } catch (IOException ignore) { }
         }
     }
 
-    public Array<Shortcut> parse(BufferedReader bufferedReader) throws IOException {
+    public Array<Shortcut> parseSafe(FileHandle fileHandle) {
+        try {
+            return parse(fileHandle);
+        } catch (ShortcutParseException e) {
+            Gdx.app.error(TAG, "Error reading shortcut file", e);
+            return new Array<>();
+        }
+    }
+
+    private Array<Shortcut> parseBuffer(BufferedReader bufferedReader) throws IOException, ShortcutParseException {
         Array<Shortcut> shortcuts = new Array<>();
 
         String line;
@@ -66,12 +74,11 @@ public class ShortcutParser {
         return shortcuts;
     }
 
-    private Shortcut parseShortcut(String actionName, String shortcutExpr) {
+    private Shortcut parseShortcut(String actionName, String shortcutExpr) throws ShortcutParseException {
         Array<String> keys = splitAndTrim(shortcutExpr, "\\+");
 
         if (keys.size == 0) {
-            Gdx.app.error(TAG, "Wrong shortcut expression: " + actionName + ": " + shortcutExpr);
-            return null;
+            throw new ShortcutParseException("Empty shortcut expression: \"" + actionName + ": " + shortcutExpr + "\"");
         }
 
         Shortcut shortcut = new Shortcut(actionName);
@@ -81,16 +88,16 @@ public class ShortcutParser {
 
             switch (upCaseKey) {
                 case "SHIFT": {
-                    shortcut.setKey(Input.Keys.SHIFT_LEFT);
+                    shortcut.setKeyCode(Input.Keys.SHIFT_LEFT);
                     continue;
                 }
                 case "ALT": {
-                    shortcut.setKey(Input.Keys.ALT_LEFT);
+                    shortcut.setKeyCode(Input.Keys.ALT_LEFT);
                     continue;
                 }
                 case "CTRL":
                 case "CONTROL": {
-                    shortcut.setKey(Input.Keys.CONTROL_LEFT);
+                    shortcut.setKeyCode(Input.Keys.CONTROL_LEFT);
                     continue;
                 }
                 case "CMD":
@@ -99,29 +106,33 @@ public class ShortcutParser {
                 case "META":
                 case "WIN":
                 case "WINDOWS": {
-                    shortcut.setKey(Input.Keys.SYM);
+                    shortcut.setKeyCode(Input.Keys.SYM);
                     continue;
                 }
             }
 
             Integer code = keyCodes.get(upCaseKey);
+
             if (code == null) {
-                Gdx.app.error(TAG, "Unknown key \"" + key + "\" in line: " + actionName + ": " + shortcutExpr);
-                continue;
+                throw new ShortcutParseException("Unknown key \"" + key + "\" in the line: \"" + actionName + ": " + shortcutExpr + "\"");
             }
-            shortcut.setKey(code);
+
+            if (shortcut.getKeyCode() != Shortcut.EMPTY_KEY) {
+                throw new ShortcutParseException("Multiple keys are not allowed: \"" + actionName + ": " + shortcutExpr + "\"");
+            }
+
+            shortcut.setKeyCode(code);
         }
 
         if (shortcut.getKeyCode() == Shortcut.EMPTY_KEY) {
-            Gdx.app.error(TAG, "Shortcut should have at some key in addition to modifiers: " + actionName + ": " + shortcutExpr);
-            return null;
+            throw new ShortcutParseException("Missing a key. Only modifier keys are defined: \"" + actionName + ": " + shortcutExpr + "\"");
         }
 
         return shortcut;
     }
 
-    private static HashMap<String, Integer> prepareKeyCodes() {
-        HashMap<String, Integer> keyCodes = new HashMap<>();
+    private static ObjectMap<String, Integer> prepareKeyCodes() {
+        ObjectMap<String, Integer> keyCodes = new ObjectMap<>();
 
         Field[] fields = Input.Keys.class.getDeclaredFields();
         for (Field field : fields) {
@@ -135,6 +146,18 @@ public class ShortcutParser {
                 } catch (IllegalAccessException ignore) { }
             }
         }
+
+        keyCodes.put("0", 7);
+        keyCodes.put("1", 8);
+        keyCodes.put("2", 9);
+        keyCodes.put("3", 10);
+        keyCodes.put("4", 11);
+        keyCodes.put("5", 12);
+        keyCodes.put("6", 13);
+        keyCodes.put("7", 14);
+        keyCodes.put("8", 15);
+        keyCodes.put("9", 16);
+
         return keyCodes;
     }
 
@@ -142,6 +165,17 @@ public class ShortcutParser {
         @Override
         public int compare(Shortcut l, Shortcut r) {
             return Integer.compare(r.getPriority(), l.getPriority());
+        }
+    }
+
+    public static class ShortcutParseException extends Exception {
+
+        public ShortcutParseException(String message) {
+            super(message);
+        }
+
+        public ShortcutParseException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

@@ -1,8 +1,47 @@
 <?xml version="1.0"?>
-<!DOCTYPE stack SYSTEM "/lml.dtd">
+<!DOCTYPE container SYSTEM "/lml.dtd">
 
-<stack>
-    <container align="topleft">
-        <label text="Hotkeys Section"/>
-    </container>
-</stack>
+<container align="topleft" maxwidth="600" fill="true">
+    <table defaultalign="topleft" onecolumn="true">
+        <label style="small"
+               text="You can define/override the keyboard shortcuts for some actions. Please see the default hotkey configuration file for details."
+                wrap="true"
+               growx="true"/>
+        <linklabel style="orange-small" text="Example file at GitHub"
+                   href="https://github.com/crashinvaders/gdx-texture-packer-gui/blob/master/assets/hotkeys_default.txt"/>
+
+        <separator growx="true" padtop="12" padbottom="12" height="2"/>
+
+        <horizontalgroup spacing="12">
+            <visimagetextbutton
+                    icon="custom/ic-file-edit"
+                    text="Edit Hotkeys"
+                    change="onEditHotkeysClick"
+                    tablepad="4" tablepadleft="8" tablepadright="12"/>
+            <visimagetextbutton
+                    icon="custom/ic-iterations"
+                    text="Refresh Hotkeys"
+                    change="onRefreshHotkeysClick"
+                    tablepad="4" tablepadleft="8" tablepadright="12"/>
+        </horizontalgroup>
+
+        <separator growx="true" padtop="12" padbottom="12" height="2"/>
+
+        <shrinkcontainer id="parseErrorShrinkContainer" growx="true" containerfillx="true">
+            <table defaultgrowx="true" onecolumn="true">
+                <label style="orange" padbottom="8">Parsing Errors:</label>
+                <verticalgroup id="parseErrorListGroup" spacing="12" growx="true" groupfill="1.0f" groupexpand="true"/>
+                <separator growx="true" padtop="12" padbottom="12" height="2"/>
+            </table>
+        </shrinkcontainer>
+
+        <stack growx="true">
+            <table id="hotkeyTable"/>
+            <stack id="hotkeyListRefreshIndicator" visible="false">
+                <image id="" style="white" color="#79e05320" fillparent="true"/>
+            </stack>
+
+        </stack>
+
+    </table>
+</container>

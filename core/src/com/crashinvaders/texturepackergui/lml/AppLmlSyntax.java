@@ -1,6 +1,8 @@
 package com.crashinvaders.texturepackergui.lml;
 
 import com.crashinvaders.common.scene2d.lml.AnimatedImage;
+import com.crashinvaders.common.scene2d.lml.attributes.HorizontalGroupExpandLmlAttribute;
+import com.crashinvaders.common.scene2d.lml.attributes.VerticalGroupExpandLmlAttribute;
 import com.crashinvaders.common.scene2d.lml.tags.PatchedVisTextFieldLmlTag;
 import com.crashinvaders.texturepackergui.lml.attributes.*;
 import com.crashinvaders.texturepackergui.lml.attributes.seekbar.*;
@@ -144,6 +146,20 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerListViewAttributes();
 
         addAttributeProcessor(new ListViewOnClickLmlAttribute(), "listViewOnClick");
+    }
+
+    @Override
+    protected void registerVerticalGroupAttributes() {
+        super.registerVerticalGroupAttributes();
+
+        addAttributeProcessor(new VerticalGroupExpandLmlAttribute(), "groupExpand");
+    }
+
+    @Override
+    protected void registerHorizontalGroupAttributes() {
+        super.registerHorizontalGroupAttributes();
+
+        addAttributeProcessor(new HorizontalGroupExpandLmlAttribute(), "groupExpand");
     }
 
     protected void registerSeekBarAttributes() {

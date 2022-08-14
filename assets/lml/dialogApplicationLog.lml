@@ -23,12 +23,13 @@ padtop="36">
             disabledx="true"
             fadescrollbars="false"
             overscroll="false"
-            flickscroll="false"
+            flickscroll="true"
             scrollcapture="true">
         <label id="lblMessage"
                style="small"
                wrap="true"
-               labelalignment="topleft"/>
+               labelalignment="topleft"
+               touchable="disabled"/>
     </scrollpane>
 
     <horizontalgroup growx="true" groupalign="right" spacing="6" padtop="4">

@@ -4,3 +4,6 @@
 
 <:style tag="visdialog" attribute="consumeinput" value="true"/>
 <:style tag="viswindow" attribute="consumeinput" value="true"/>
+<:style tag="vistextbutton" attribute="focusborderenabled" value="false"/>
+<:style tag="visimagebutton" attribute="focusborderenabled" value="false"/>
+<:style tag="visimagetextbutton" attribute="focusborderenabled" value="false"/>

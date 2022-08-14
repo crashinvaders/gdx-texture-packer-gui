@@ -9,38 +9,32 @@ import com.badlogic.gdx.utils.ArrayMap;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.GlobalActions;
-import com.github.czyzby.autumn.annotation.Component;
+import com.crashinvaders.texturepackergui.controllers.ToastFactory;
+import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.github.czyzby.autumn.annotation.Destroy;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
+import com.github.czyzby.autumn.processor.event.EventDispatcher;
 import com.github.czyzby.lml.parser.action.ActorConsumer;
 
 public class GlobalShortcutHandler extends InputAdapter {
     private static String TAG = GlobalShortcutHandler.class.getSimpleName();
 
-    @Inject GlobalActions globalActions;
     @Inject InterfaceService interfaceService;
+    @Inject EventDispatcher eventDispatcher;
+    @Inject GlobalActions globalActions;
+    @Inject ToastFactory toastFactory;
 
     private final ArrayMap<String, Shortcut> shortcuts = new ArrayMap<>();
     private final ShortcutParser shortcutParser = new ShortcutParser();
 
+    private final Array<Exception> parseErrors = new Array<>();
+
     @Initiate void initialize() {
         App.inst().getInput().addProcessor(this, 10);
 
-        // Read shortcut files
-        {
-            parseShortcutFile(Gdx.files.internal("hotkeys_default.txt"));
-
-            if (App.inst().getParams().debug) {
-                parseShortcutFile(Gdx.files.internal("hotkeys_debug.txt"));
-            }
-
-            FileHandle userShortcutFile = Gdx.files.external(AppConstants.EXTERNAL_DIR + "/hotkeys_user.txt");
-            if (userShortcutFile.exists()) {
-                parseShortcutFile(userShortcutFile);
-            }
-        }
+        reloadShortcuts();
     }
 
     @Destroy void dispose() {
@@ -53,6 +47,14 @@ public class GlobalShortcutHandler extends InputAdapter {
             return null;
         }
         return shortcut.toShortcutExpression();
+    }
+
+    public Array<Exception> getParsingErrors() {
+        return parseErrors;
+    }
+
+    public boolean hasParsingErrors() {
+        return parseErrors.size > 0;
     }
 
     @Override
@@ -75,14 +77,63 @@ public class GlobalShortcutHandler extends InputAdapter {
         return false;
     }
 
-    private void parseShortcutFile(FileHandle fileHandle) {
+    public Array<Shortcut> getShortcuts() {
+        return shortcuts.values().toArray();
+    }
+
+    public void reloadShortcuts() {
+        parseErrors.clear();
+        shortcuts.clear();
+
+        // Built-in shortcuts.
+        parseShortcutFile(Gdx.files.internal("hotkeys_default.txt"));
+
+        // Debug shortcuts.
+        if (App.inst().getParams().debug) {
+            parseShortcutFile(Gdx.files.internal("hotkeys_debug.txt"));
+        }
+
+        // User custom shortcuts.
+        FileHandle userShortcutFile = Gdx.files.external(AppConstants.EXTERNAL_DIR + "/hotkeys_user.txt");
+        if (userShortcutFile.exists()) {
+            parseShortcutFile(userShortcutFile);
+        }
+    }
+
+    private void parseShortcutFileSafe(FileHandle fileHandle) {
         Gdx.app.log(TAG, "Parsing shortcut file: " + fileHandle);
 
-        Array<Shortcut> shortcutArray = shortcutParser.parse(fileHandle);
+        Array<Shortcut> shortcutArray = shortcutParser.parseSafe(fileHandle);
 
         for (Shortcut shortcut : shortcutArray) {
             shortcuts.put(shortcut.getActionName(), shortcut);
         }
+    }
+
+    private void parseShortcutFile(FileHandle fileHandle) {
+        Gdx.app.log(TAG, "Parsing shortcut file: " + fileHandle);
+
+        Array<Shortcut> shortcutArray = null;
+        try {
+            shortcutArray = shortcutParser.parse(fileHandle);
+        } catch (ShortcutParser.ShortcutParseException e) {
+            parseErrors.add(e);
+            e.printStackTrace();
+            showParseErrorToast(e);
+            return;
+        }
+
+        for (Shortcut shortcut : shortcutArray) {
+            if (shortcuts.containsKey(shortcut.getActionName())) {
+                shortcut.setCustomized(true);
+            }
+            shortcuts.put(shortcut.getActionName(), shortcut);
+        }
+    }
+
+    private void showParseErrorToast(ShortcutParser.ShortcutParseException error) {
+        String errorMessage = CommonUtils.fetchMessageStack(error, "\n");
+        toastFactory.showErrorToast(error, errorMessage);
     }
 
     private void executeShortcutAction(Shortcut shortcut) {

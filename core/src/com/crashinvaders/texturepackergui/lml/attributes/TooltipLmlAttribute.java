@@ -31,7 +31,7 @@ public class TooltipLmlAttribute implements LmlAttribute<Actor> {
         }
 
         final Tooltip tooltip = new Tooltip();
-        tooltip.clearChildren(); // Removing empty cell with predefined paddings.
+        tooltip.clearChildren(); // Remove the empty cell with predefined paddings.
         Cell<VisLabel> tooltipCell = tooltip.add(lblText).center().pad(0f, 4f, 2f, 4f);
         if (needLineWrap) { tooltipCell.width(LINE_WRAP_THRESHOLD); }
         tooltip.pack();
