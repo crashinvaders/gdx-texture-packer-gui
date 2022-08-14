@@ -51,7 +51,7 @@
                     disabledx="true"
                     fadescrollbars="false"
                     overscroll="false"
-                    flickscroll="false"/>
+                    flickscroll="true"/>
             <!--listviewonclick="resetPackListSelection"-->
 
             <stack id="plOnboardingRoot" visible="false">
