@@ -29,7 +29,9 @@
                 text="@saveAs"
                 onchange="saveProjectAs"
                 icon="custom/ic-save-aster"/>
+
         <menuseparator/>
+
         <menuitem
                 id="miSettingsMenu"
                 text="@settings"
@@ -60,52 +62,52 @@
                 text="@copySettingsToAllPacks"/>
     </menu>
     <menu id="muTools" text="@tools" style="main-menu">
-        <menuitem
-                id="miChangeLanguage"
-                text="@changeLanguage"
-                icon="custom/ic-language">
-            <submenu id="pmChangeLanguage">
-                <menuitem
-                        id="miLanguageEn"
-                        onchange="changeLanguageEn"
-                        text="@langEn"/>
-                <menuitem
-                        id="miLanguageDe"
-                        onchange="changeLanguageDe"
-                        text="@langDe"/>
-                <menuitem
-                        id="miLanguageRu"
-                        onchange="changeLanguageRu"
-                        text="@langRu"/>
-                <!-- In order to render CJK strings we need the CJK font extension to be activated.
-                     So we replace strings with hardcoded images in common places where CJK font may be not available. -->
-                <menuitem
-                        id="miLanguageZhCn"
-                        onchange="changeLanguageZhCn"
-                        fillImage="custom/language-zh-cn"/>
-                <menuitem
-                        id="miLanguageZhTw"
-                        onchange="changeLanguageZhTw"
-                        fillImage="custom/language-zh-tw"/>
-            </submenu>
-        </menuitem>
-        <menuitem
-                id="miExtensionModules"
-                text="@emRepoTitle"
-                onchange="showExtensionModulesDialog"
-                icon="custom/ic-extension-module"/>
-        <menuitem
-                id="miInterfaceScaling"
-                text="@isTitle"
-                onchange="showUiScalingDialog"
-                icon="custom/ic-interface-scaling"/>
-        <menuitem
-                id="miUserHotkeys"
-                text="@customizeHotkeys"
-                onchange="editCustomHotkeys"
-                icon="custom/ic-custom-hotkeys"/>
+<!--        <menuitem-->
+<!--                id="miChangeLanguage"-->
+<!--                text="@changeLanguage"-->
+<!--                icon="custom/ic-language">-->
+<!--            <submenu id="pmChangeLanguage">-->
+<!--                <menuitem-->
+<!--                        id="miLanguageEn"-->
+<!--                        onchange="changeLanguageEn"-->
+<!--                        text="@langEn"/>-->
+<!--                <menuitem-->
+<!--                        id="miLanguageDe"-->
+<!--                        onchange="changeLanguageDe"-->
+<!--                        text="@langDe"/>-->
+<!--                <menuitem-->
+<!--                        id="miLanguageRu"-->
+<!--                        onchange="changeLanguageRu"-->
+<!--                        text="@langRu"/>-->
+<!--                &lt;!&ndash; In order to render CJK strings we need the CJK font extension to be activated.-->
+<!--                     So we replace strings with hardcoded images in common places where CJK font may be not available. &ndash;&gt;-->
+<!--                <menuitem-->
+<!--                        id="miLanguageZhCn"-->
+<!--                        onchange="changeLanguageZhCn"-->
+<!--                        fillImage="custom/language-zh-cn"/>-->
+<!--                <menuitem-->
+<!--                        id="miLanguageZhTw"-->
+<!--                        onchange="changeLanguageZhTw"-->
+<!--                        fillImage="custom/language-zh-tw"/>-->
+<!--            </submenu>-->
+<!--        </menuitem>-->
+<!--        <menuitem-->
+<!--                id="miExtensionModules"-->
+<!--                text="@emRepoTitle"-->
+<!--                onchange="showExtensionModulesDialog"-->
+<!--                icon="custom/ic-extension-module"/>-->
+<!--        <menuitem-->
+<!--                id="miInterfaceScaling"-->
+<!--                text="@isTitle"-->
+<!--                onchange="showUiScalingDialog"-->
+<!--                icon="custom/ic-interface-scaling"/>-->
+<!--        <menuitem-->
+<!--                id="miUserHotkeys"-->
+<!--                text="@customizeHotkeys"-->
+<!--                onchange="editCustomHotkeys"-->
+<!--                icon="custom/ic-custom-hotkeys"/>-->
 
-        <menuseparator/>
+<!--        <menuseparator/>-->
 
         <menuitem
                 id="miTextureUnpacker"
