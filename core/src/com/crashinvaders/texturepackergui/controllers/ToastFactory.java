@@ -116,7 +116,9 @@ public class ToastFactory {
             return;
 
         ToastTable toastTable = new ToastTable();
-        Actor content = interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/toastRestartRequired.lml")).first();
+        Actor content = interfaceService.getParser()
+                .parseTemplate(Gdx.files.internal("lml/toastRestartRequired.lml"))
+                .first();
         toastTable.add(content).grow();
         this.showToast(new ShowToastEvent()
                 .content(toastTable)
@@ -132,7 +134,9 @@ public class ToastFactory {
         ToastTable toastTable = new ToastTable();
         LmlParser parser = interfaceService.getParser();
         parser.getData().addArgument(ARG_TOAST_ERROR_TEXT, message);
-        Actor content = parser.parseTemplate(Gdx.files.internal("lml/toastCommonError.lml")).first();
+        Actor content = parser
+                .parseTemplate(Gdx.files.internal("lml/toastCommonError.lml"))
+                .first();
         parser.getData().removeArgument(ARG_TOAST_ERROR_TEXT);
         toastTable.add(content).grow();
 

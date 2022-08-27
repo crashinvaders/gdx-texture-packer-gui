@@ -4,7 +4,7 @@
 <!-- Default dialog for displaying any kind of an error with stacktrace -->
 
 <visdialog
-        title="Application Log"
+        title="@dAppLogTitle"
         titlealign="center"
         closebutton="true"
         closeonescape="true"
@@ -37,7 +37,7 @@ padtop="36">
                 id="btnLocateLogFile"
                 image="custom/ic-folder"
                 imagescaling="none"
-                text="Locate log file"
+                text="@dAppLogLocateLogFile"
                 change="locateLogFile"
                 align="right"
                 focusborder="false"
