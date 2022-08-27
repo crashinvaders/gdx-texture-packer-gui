@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE vistable SYSTEM "/lml.dtd">
 
-<vistable onecolumn="true" defaultalign="left" defaultexpandx="true" pad="4" debug="true">
+<vistable onecolumn="true" defaultalign="left" defaultexpandx="true" pad="4">
     <label text="@toastRestartRequired" minwidth="300" growx="true" wrap="true"/>
     <:row padtop="8"/>
     <textbutton style="orange" text="@restartApplication" growx="true" change="restartApplication"/>
