@@ -4,8 +4,8 @@
 <container align="topleft" maxwidth="600" fill="true">
     <table defaultalign="topleft" onecolumn="true">
         <label style="small"
-               text="You can define/override the keyboard shortcuts for some actions. Please see the default hotkey configuration file for details."
-                wrap="true"
+               text="@dSettingsHkDesc"
+               wrap="true"
                growx="true"/>
         <linklabel style="orange-small" text="Example file at GitHub"
                    href="https://github.com/crashinvaders/gdx-texture-packer-gui/blob/master/assets/hotkeys_default.txt"/>
@@ -15,12 +15,12 @@
         <horizontalgroup spacing="12">
             <visimagetextbutton
                     icon="custom/ic-file-edit"
-                    text="Edit Hotkeys"
+                    text="@dSettingsHkEditHotkeys"
                     change="onEditHotkeysClick"
                     tablepad="4" tablepadleft="8" tablepadright="12"/>
             <visimagetextbutton
                     icon="custom/ic-iterations"
-                    text="Refresh Hotkeys"
+                    text="@dSettingsHkReloadHotkeys"
                     change="onRefreshHotkeysClick"
                     tablepad="4" tablepadleft="8" tablepadright="12"/>
         </horizontalgroup>
@@ -29,7 +29,7 @@
 
         <shrinkcontainer id="parseErrorShrinkContainer" growx="true" containerfillx="true">
             <table defaultgrowx="true" onecolumn="true">
-                <label style="orange" padbottom="8">Parsing Errors:</label>
+                <label style="orange" padbottom="8" text="@dSettingsHkParsingErrors"/>
                 <verticalgroup id="parseErrorListGroup" spacing="12" growx="true" groupfill="1.0f" groupexpand="true"/>
                 <separator growx="true" padtop="12" padbottom="12" height="2"/>
             </table>

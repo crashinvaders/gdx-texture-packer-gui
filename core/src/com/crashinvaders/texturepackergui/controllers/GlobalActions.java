@@ -304,7 +304,8 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("showUiScalingDialog") public void showUiScalingDialog() {
-        interfaceService.showDialog(InterfaceScalingDialogController.class);
+        SettingsDialogController.show(SettingsDialogController.SECTION_ID_GENERAL);
+//        interfaceService.showDialog(InterfaceScalingDialogController.class);
     }
 
     @LmlAction("restartApplication") public void restartApplication() {

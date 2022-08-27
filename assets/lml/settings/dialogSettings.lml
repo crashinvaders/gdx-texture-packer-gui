@@ -2,34 +2,20 @@
 <!DOCTYPE visdialog SYSTEM "/lml.dtd">
 <visdialog
         id="dialog"
-        title="Settings"
+        title="@dSettingsTitle"
         titlealign="center"
         modal="true"
         movable="true"
         closebutton="true"
         closeonescape="true"
-        resizable="true" padtop="48"
-        width="640"
-        height="480">
+        resizable="true" padtop="48">
 
     <stack grow="true">
 
-<!--        background="neutral"-->
         <table onecolumn="true" defaultgrowx="true" padtop="0">
 
-<!--            &lt;!&ndash; Header &ndash;&gt;-->
-<!--&lt;!&ndash;            background="dark"&ndash;&gt;-->
-<!--            <table height="32" growx="true" tablealign="left">-->
-<!--                <textbutton text="Back" padleft="2" width="80" focusborder="false" change="onBackPressed"/>-->
-<!--                <actor width="12"/>-->
-<!--                <label text="Settings"/>-->
-<!--            </table>-->
-
-<!--            &lt;!&ndash; Divider &ndash;&gt;-->
-<!--            <image style="orange" height="1" filly="true"/>-->
-
             <!-- Content -->
-            <table grow="true" minwidth="640" minheight="480">
+            <table grow="true" width="640" height="480">
                 <!-- Section selector -->
                 <scrollpane style="setting-list" disabledx="true" growy="true" minwidth="200" fadebars="true">
                     <buttongroup onecolumn="true" tablealign="top" defaultgrowx="true" pad="0">
@@ -50,15 +36,15 @@
                         </:macro>
 
                         <:assign key="sectionItemId" value="siGeneral"/>
-                        <:assign key="sectionItemText" value="General"/>
+                        <:assign key="sectionItemText" value="@dSettingsTabGeneral"/>
                         <:sectionitem/>
 
                         <:assign key="sectionItemId" value="siHotkeys"/>
-                        <:assign key="sectionItemText" value="Hotkeys"/>
+                        <:assign key="sectionItemText" value="@dSettingsTabHotkeys"/>
                         <:sectionitem/>
 
                         <:assign key="sectionItemId" value="siExtensionModules"/>
-                        <:assign key="sectionItemText" value="Extensions"/>
+                        <:assign key="sectionItemText" value="@dSettingsTabExtensions"/>
                         <:sectionitem/>
 
                     </buttongroup>
@@ -73,15 +59,6 @@
                 </scrollpane>
             </table>
 
-<!--            &lt;!&ndash; Divider &ndash;&gt;-->
-<!--            <image style="orange" height="1" filly="true"/>-->
-
-            <!-- Status Bar -->
-    <!--        background="dark"-->
-<!--            <table height="24" growx="true" tablealign="right" tablepadleft="8" tablepadright="8">-->
-<!--                <label style="small" text="status bar content will be there"/>-->
-<!--            </table>-->
-
         </table>
 
     </stack>
@@ -91,7 +68,7 @@
                 id="btnLocateLogFile"
                 image="custom/ic-log-file"
                 imagescaling="none"
-                text="See Log"
+                text="@seeLog"
                 change="locateLogFile"
                 align="right"
                 focusborder="false"

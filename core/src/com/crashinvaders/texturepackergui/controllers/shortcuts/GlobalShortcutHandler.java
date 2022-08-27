@@ -86,17 +86,20 @@ public class GlobalShortcutHandler extends InputAdapter {
         shortcuts.clear();
 
         // Built-in shortcuts.
-        parseShortcutFile(Gdx.files.internal("hotkeys_default.txt"));
+        parseAndAddShortcutFile(Gdx.files.internal("hotkeys_default.txt"));
 
         // Debug shortcuts.
         if (App.inst().getParams().debug) {
-            parseShortcutFile(Gdx.files.internal("hotkeys_debug.txt"));
+            parseAndAddShortcutFile(Gdx.files.internal("hotkeys_debug.txt"));
         }
 
         // User custom shortcuts.
         FileHandle userShortcutFile = Gdx.files.external(AppConstants.EXTERNAL_DIR + "/hotkeys_user.txt");
         if (userShortcutFile.exists()) {
-            parseShortcutFile(userShortcutFile);
+            Array<Shortcut> shortcuts = parseAndAddShortcutFile(userShortcutFile);
+            for (Shortcut shortcut : shortcuts) {
+                shortcut.setUserDefined(true);
+            }
         }
     }
 
@@ -110,7 +113,7 @@ public class GlobalShortcutHandler extends InputAdapter {
         }
     }
 
-    private void parseShortcutFile(FileHandle fileHandle) {
+    private Array<Shortcut> parseAndAddShortcutFile(FileHandle fileHandle) {
         Gdx.app.log(TAG, "Parsing shortcut file: " + fileHandle);
 
         Array<Shortcut> shortcutArray = null;
@@ -120,15 +123,14 @@ public class GlobalShortcutHandler extends InputAdapter {
             parseErrors.add(e);
             e.printStackTrace();
             showParseErrorToast(e);
-            return;
+            return shortcutArray;
         }
 
         for (Shortcut shortcut : shortcutArray) {
-            if (shortcuts.containsKey(shortcut.getActionName())) {
-                shortcut.setCustomized(true);
-            }
             shortcuts.put(shortcut.getActionName(), shortcut);
         }
+
+        return shortcutArray;
     }
 
     private void showParseErrorToast(ShortcutParser.ShortcutParseException error) {

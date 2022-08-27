@@ -5,7 +5,7 @@
     <table align="topleft" defaultalign="left" defaultexpandx="true" defaultgrowx="true" defaultmaxwidth="420" onecolumn="true" defaultpadbottom="24">
 
         <table onecolumn="true" defaultalign="left">
-            <label style="default" text="Language" growx="true" wrap="true" textalign="left" padbottom="8"/>
+            <label style="default" text="@dSettingsGenLanguageTitle" growx="true" wrap="true" textalign="left" padbottom="8"/>
 <!--            <label style="small-grey" text="@isDescription" growx="true" wrap="true" textalign="left" padbottom="8"/>-->
             <container growx="true" maxwidth="200" containerfill="true">
                 <:actor id="sbxLanguage" method="createLanguageSelectBox"/>
@@ -13,8 +13,8 @@
         </table>
 
         <table onecolumn="true" defaultalign="left">
-            <label style="default" text="Interface Scale" growx="true" wrap="true" textalign="left" padbottom="2"/>
-            <label style="small-grey" text="@isDescription" growx="true" wrap="true" textalign="left" padbottom="8"/>
+            <label style="default" text="@dSettingsGenFaceScaleTitle" growx="true" wrap="true" textalign="left" padbottom="2"/>
+            <label style="small-grey" text="@dSettingsGenFaceScaleDesc" growx="true" wrap="true" textalign="left" padbottom="8"/>
             <table growx="true">
                 <visslider id="sliderUiScale" style="seekbar" growx="true"
                            min="0.5" max="2.0" value="1.0" step="0.1"

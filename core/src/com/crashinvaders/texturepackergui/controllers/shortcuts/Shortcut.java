@@ -21,7 +21,7 @@ public class Shortcut {
      */
     private int modifierBits = 0;
 
-    private boolean isCustomized = false;
+    private boolean isUserDefined = false;
 
     public Shortcut(String actionName) {
         this.actionName = actionName;
@@ -66,12 +66,12 @@ public class Shortcut {
         return keyCode;
     }
 
-    public void setCustomized(boolean customized) {
-        this.isCustomized = customized;
+    public void setUserDefined(boolean userDefined) {
+        this.isUserDefined = userDefined;
     }
 
-    public boolean isCustomized() {
-        return isCustomized;
+    public boolean isUserDefined() {
+        return isUserDefined;
     }
 
     public boolean isShift() {

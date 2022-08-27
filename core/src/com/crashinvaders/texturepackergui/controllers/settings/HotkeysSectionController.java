@@ -2,7 +2,6 @@ package com.crashinvaders.texturepackergui.controllers.settings;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -12,13 +11,13 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.StringBuilder;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.texturepackergui.controllers.GlobalActions;
 import com.crashinvaders.texturepackergui.controllers.shortcuts.GlobalShortcutHandler;
 import com.crashinvaders.texturepackergui.controllers.shortcuts.Shortcut;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
@@ -32,6 +31,8 @@ public class HotkeysSectionController implements SectionContentController, Actio
     @Inject InterfaceService interfaceService;
     @Inject GlobalShortcutHandler shortcutHandler;
     @Inject GlobalActions globalActions;
+    @Inject LocaleService localeService;
+
 
     @LmlActor("hotkeyTable") Table hotkeyTable;
     @LmlActor("parseErrorShrinkContainer") ShrinkContainer parseErrorShrinkContainer;
@@ -137,14 +138,15 @@ public class HotkeysSectionController implements SectionContentController, Actio
             stateIndicatorContainer.setBackground(rowBackground, false);
             hotkeyTable.add(stateIndicatorContainer.padLeft(12).padRight(12f)).fill();
 
-            boolean isCustomShortcut = shortcut.isCustomized();
+            boolean isCustomShortcut = shortcut.isUserDefined();
 
             imgStateIndicator.setVisible(isCustomShortcut);
 
             if (isCustomShortcut) {
                 final Tooltip tooltip = new Tooltip();
                 tooltip.clearChildren(); // Remove the empty cell with predefined paddings.
-                tooltip.add(new VisLabel("User defined")).center().pad(1f, 8f, 2f, 8f); //TODO i18n
+                tooltip.add(new VisLabel(getString("dSettingsHkCustomHk")))
+                        .center().pad(1f, 8f, 2f, 8f);
                 tooltip.pack();
                 tooltip.setTarget(imgStateIndicator);
             }
@@ -163,16 +165,9 @@ public class HotkeysSectionController implements SectionContentController, Actio
         ));
     }
 
-    private static String collectExceptionMessages(Throwable exception) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(exception.getMessage());
-        exception = exception.getCause();
-        while (exception != null) {
-            sb.append("\n");
-            sb.append(exception.getMessage());
-            exception = exception.getCause();
-        }
-        return sb.toString();
+    /** @return localized string */
+    private String getString(String key) {
+        return localeService.getI18nBundle().get(key);
     }
 
     public static class KeyEntryWidget extends Container<Label> implements Pool.Poolable {
