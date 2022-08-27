@@ -1,4 +1,4 @@
-[4.10.3]
+[4.11.0]
 - Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
 - Brand new settings dialog uniting several specific feature configuration dialogs. Also includes more friendly tools to deal with custom hotkeys.
 - Explicit packing warning notifications. #131
