@@ -1,5 +1,6 @@
 [4.10.3]
 - Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
+- Brand new settings dialog uniting several specific feature configuration dialogs. Also includes more friendly tools to deal with custom hotkeys.
 - Explicit packing warning notifications. #131
 - Simplified Chinese localization. Thanks to @ZhReimu. #127
 - Fixed pack clone dialog OK button crashes the app. #130
