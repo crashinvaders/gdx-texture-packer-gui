@@ -249,9 +249,6 @@ ospackage {
     packageDescription 'A simple utility to help you pack and manage texture atlases for libGDX game framework. It\'s mostly just a visual wrapper over libGDX TexturePacker classes and provides a convenient way to use it.'
     license file("$rootDir/distribution/license.txt").text
 
-    // JRE 8 is the minimum supported runtime.
-    requires "java8-runtime"
-
     postInstall '#!/usr/bin/env bash\n' +
             'sudo update-mime-database /usr/share/mime\n' +
             'sudo update-icon-caches /usr/share/icons/hicolor'
@@ -305,12 +302,19 @@ buildRpm {
     group 'OSPackage'
     description 'Assembles an RPM Linux distribution package.'
     dependsOn distReleaseLinux
+
+    // FIXME: "java8-runtime" is not recognized by RPM package manager and throws an error (on Fedora at least).
+    // JRE 8 is the minimum supported runtime.
+    // requires "java8-runtime"
 }
 
 buildDeb {
     group 'OSPackage'
     description 'Assembles a DEB Linux distribution package.'
     dependsOn distReleaseLinux
+
+    // JRE 8 is the minimum supported runtime.
+    requires "java8-runtime"
 }
 //endregion
 
