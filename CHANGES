@@ -6,6 +6,7 @@
 - Fixed pack clone dialog OK button crashes the app. #130
 - Fixed "Legacy format" and "Pretty print" pack settings are not getting saved. Thanks to @Frosty-J. #132
 - Fixed changing the app language to Chinese (either simplified of traditional has no effect. Thanks to @Frosty-J. #133
+- Fixed anim8-gdx png compression always uses "Scatter" dithering algorithm and ignores the user selected one.
 
 [4.10.2]
 - Fixed cannot change current atlas by clicking on pack list items. #122

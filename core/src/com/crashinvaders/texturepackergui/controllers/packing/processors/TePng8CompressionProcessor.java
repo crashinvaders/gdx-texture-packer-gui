@@ -44,7 +44,7 @@ public class TePng8CompressionProcessor implements PackProcessor {
                     long preCompressedSize = page.textureFile.length();
                     pm = new Pixmap(page.textureFile);
                     png8.setCompression(compModel.getLevel());
-                    png8.setDitherAlgorithm(Dithered.DitherAlgorithm.SCATTER);
+                    png8.setDitherAlgorithm(compModel.getDitherAlgorithm());
                     png8.setFlipY(false);
                     png8.writePrecisely(page.textureFile, pm, true, compModel.getThreshold());
                     long postCompressedSize = page.textureFile.length();
