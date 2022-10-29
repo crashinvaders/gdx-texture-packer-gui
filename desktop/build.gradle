@@ -145,6 +145,8 @@ void generateDistReleaseTasks() {
 generateDistReleaseTasks()
 
 task zipRelease(type: Zip) {
+    group 'Distribution'
+    description 'Assembles a cross-OS portable distribution.'
     from distRelease
     from file("$rootDir/distribution/files")
     archiveFileName = "$project.distFileName.$extension"
