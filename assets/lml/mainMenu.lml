@@ -29,14 +29,6 @@
                 text="@saveAs"
                 onchange="saveProjectAs"
                 icon="custom/ic-save-aster"/>
-
-        <menuseparator/>
-
-        <menuitem
-                id="miSettingsMenu"
-                text="@settings"
-                onchange="showSettingsDialog"
-                icon="custom/ic-settings"/>
     </menu>
     <menu id="muPack" text="@pack" style="main-menu">
         <menuitem
@@ -119,6 +111,14 @@
                 text="@ninePatchTool"
                 onchange="launchNinePatchTool"
                 icon="custom/ic-ninepatch"/>
+
+        <menuseparator/>
+
+        <menuitem
+                id="miSettingsMenu"
+                text="@settings"
+                onchange="showSettingsDialog"
+                icon="custom/ic-settings"/>
     </menu>
     <menu id="muHelp" text="@help" style="main-menu">
         <menuitem
