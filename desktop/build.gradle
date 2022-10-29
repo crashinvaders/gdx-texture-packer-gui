@@ -162,9 +162,10 @@ zipRelease.dependsOn distRelease
  *     1. Windows OS only.
  *     2. NSIS 3 installed on your system and added to PATH (makensis.exe).
  *          https://sourceforge.net/projects/nsis/files/
+            or use CMD: "choco install nsis"
  *     3. FileAssoc macros should be installed.
  *          Copy code from http://nsis.sourceforge.net/FileAssoc
- *          into file "FileAssoc.nsh" and put it under "<NSIS_DIR>/Include/"
+ *          into file "<NSIS_DIR>/Include/FileAssoc.nsh" 
  *
  * After task execution, the output files can be found under "./distribution/output/".
  */
