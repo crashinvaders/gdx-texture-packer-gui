@@ -237,6 +237,7 @@ cleanMacAppJavaDir.dependsOn generatePlist
 
 //region Linux distribution (ospackage).
 // https://github.com/nebula-plugins/gradle-ospackage-plugin/wiki
+def linuxInstallationDir = '/opt/gdx-texture-packer'
 ospackage {
     release = 1
     version = project.ext.version
@@ -254,8 +255,7 @@ ospackage {
             'sudo update-mime-database /usr/share/mime\n' +
             'sudo update-icon-caches /usr/share/icons/hicolor'
 
-    def installationDir = '/opt/gdx-texture-packer'
-    into installationDir
+    into linuxInstallationDir
 
     from("$rootDir/distribution/output/${project.appName}-linux.jar") {
         rename { "${project.appName}.jar" }
@@ -286,7 +286,7 @@ ospackage {
                 |Categories=Graphics;Development;
                 |MimeType=application/gdx-tp-project;
                 |Terminal=false
-                |Exec=$installationDir/launcher_linux.sh %U
+                |Exec=$linuxInstallationDir/launcher_linux.sh %U
                 |Icon=gdx-texture-packer""".stripMargin()
         return it.absolutePath
     }) {
@@ -303,6 +303,11 @@ buildRpm {
     group 'OSPackage'
     description 'Assembles an RPM Linux distribution package.'
     dependsOn distReleaseLinux
+
+    directory(linuxInstallationDir)
+
+    addParentDirs false
+    createDirectoryEntry true
 
     // FIXME: "java8-runtime" is not recognized by RPM package manager and throws an error (on Fedora at least).
     // JRE 8 is the minimum supported runtime.
