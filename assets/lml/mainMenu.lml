@@ -40,12 +40,17 @@
         <menuitem
                 id="miPackPackSelected"
                 text="@packSelected"
-                onchange="packSelected"
+                onchange="packSelectedAtlas"
                 icon="custom/ic-process"/>
+        <menuitem
+                id="miPackPackMultiple"
+                text="@packMultiple"
+                onchange="packMultipleAtlases"
+                icon="custom/ic-process-all"/>
         <menuitem
                 id="miPackPackAll"
                 text="@packAll"
-                onchange="packAll"
+                onchange="packAllAtlases"
                 icon="custom/ic-process-all"/>
         <menuseparator/>
         <menuitem

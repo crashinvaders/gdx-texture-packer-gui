@@ -36,6 +36,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         addTagProvider(new IntSeekBarLmlTag.Provider(), "intSeekBar");
         addTagProvider(new FloatSeekBarLmlTag.Provider(), "floatSeekBar");
         addTagProvider(new MenuBarXLmlTag.Provider(), "menuBar");
+        addTagProvider(new GridGroupExtLmlTag.TagProvider(), "gridGroup", "grid");
     }
 
     @Override

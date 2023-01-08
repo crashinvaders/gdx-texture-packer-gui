@@ -35,7 +35,8 @@ selectNextAtlas: ALT+DOWN
 selectPreviousAtlas: ALT+UP
 
 packSelectedAtlas: CTRL+P
-packAllAtlases: CTRL+SHIFT+P
+packMultipleAtlases: CTRL+SHIFT+P
+packAllAtlases: CTRL+ALT+SHIFT+P
 
 showMenuFile: ALT+F
 showMenuAtlas: ALT+P

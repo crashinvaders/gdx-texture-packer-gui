@@ -58,6 +58,7 @@ public class GlobalActions implements ActionContainer {
     @Inject ProjectSerializer projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject MainController mainController;
+    @Inject PackMultipleAtlasesDialogController packMultipleDialogController;
     @Inject PackDialogController packDialogController;
     @Inject NinePatchToolController ninePatchToolController;
     @Inject public CommonDialogs commonDialogs;
@@ -160,6 +161,14 @@ public class GlobalActions implements ActionContainer {
 
         interfaceService.showDialog(packDialogController.getClass());
         packDialogController.launchPack(project, pack);
+    }
+
+    @LmlAction({"packMultipleAtlases", "packMultiple"}) public void packMultiple() {
+        ProjectModel project = getProject();
+        Array<PackModel> packs = getProject().getPacks();
+        if (packs.size == 0) return;
+
+        interfaceService.showDialog(packMultipleDialogController.getClass());
     }
 
     @LmlAction("newProject") public void newProject() {
@@ -365,6 +374,10 @@ public class GlobalActions implements ActionContainer {
         if (commonDialogs.checkExtensionModuleActivated(CjkFontExtensionModule.class)) {
             changeLanguage(AppConstants.LOCALE_ZH_TW);
         }
+    }
+
+    @LmlAction("testPackMultiple") public void testPackMultiple() {
+        interfaceService.showDialog(PackMultipleAtlasesDialogController.class);
     }
 
     public void changeLanguage(Locale locale) {

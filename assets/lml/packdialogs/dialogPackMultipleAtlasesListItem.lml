@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE table SYSTEM "/lml.dtd">
+
+<table id="viewRoot" touchable="enabled" onecolumn="true">
+
+    <stack id="viewRoot" touchable="enabled" growx="true">
+
+        <:random key="showBackList">true;false;false;false</:random>
+        <image id="selectedIndicator" style="white" color="#3a2c2b" visible="{showBackList}"/>
+
+        <vistable tablealign="left" pad="4">
+
+            <checkbox id="cbxShouldPackAtlas" style="minimal" focusborderenabled="false" change="onShouldPackChange"/>
+
+            <actor width="4"/>
+
+            <vislabel id="lblAtlasName" minwidth="0" ellipsis="true"/>
+
+        </vistable>
+
+    </stack>
+
+</table>

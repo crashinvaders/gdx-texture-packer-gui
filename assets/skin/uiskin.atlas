@@ -101,15 +101,6 @@ button-accent-strong
   index: -1
 button-accent-strong-over
   rotate: false
-  xy: 326, 17
-  size: 12, 24
-  split: 5, 5, 5, 4
-  pad: 4, 4, 1, 1
-  orig: 12, 24
-  offset: 0, 0
-  index: -1
-button-down
-  rotate: false
   xy: 312, 17
   size: 12, 24
   split: 5, 5, 5, 4
@@ -119,7 +110,7 @@ button-down
   index: -1
 button-orange
   rotate: false
-  xy: 312, 17
+  xy: 998, 79
   size: 12, 24
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -135,9 +126,18 @@ button-orange-down
   orig: 12, 24
   offset: 0, 0
   index: -1
+button-down
+  rotate: false
+  xy: 339, 57
+  size: 12, 24
+  split: 5, 5, 5, 4
+  pad: 4, 4, 1, 1
+  orig: 12, 24
+  offset: 0, 0
+  index: -1
 button-orange-over
   rotate: false
-  xy: 998, 79
+  xy: 326, 17
   size: 12, 24
   split: 5, 5, 5, 4
   pad: 4, 4, 1, 1
@@ -458,7 +458,7 @@ custom/ic-folder
   index: -1
 custom/ic-folder-aster
   rotate: false
-  xy: 584, 6
+  xy: 620, 57
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
@@ -535,14 +535,14 @@ custom/ic-input-file-include
   index: -1
 custom/ic-input-file-properties
   rotate: false
-  xy: 487, 54
+  xy: 463, 54
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
   index: -1
 custom/ic-interface-scaling
   rotate: false
-  xy: 463, 54
+  xy: 487, 54
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
@@ -752,7 +752,7 @@ custom/ic-sandglass2
   index: -1
 custom/ic-sandglass3
   rotate: false
-  xy: 821, 105
+  xy: 845, 105
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
@@ -787,7 +787,7 @@ custom/ic-sandglass7
   index: -1
 custom/ic-save
   rotate: false
-  xy: 845, 105
+  xy: 821, 105
   size: 22, 22
   orig: 22, 22
   offset: 0, 0
@@ -815,7 +815,7 @@ custom/ic-scale-del
   index: -1
 custom/ic-search
   rotate: false
-  xy: 620, 57
+  xy: 584, 6
   size: 22, 22
   orig: 22, 22
   offset: 0, 0

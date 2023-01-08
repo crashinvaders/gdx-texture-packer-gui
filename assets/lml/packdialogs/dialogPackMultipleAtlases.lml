@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE container SYSTEM "/lml.dtd">
+
+<visdialog
+        id="dialogRoot"
+        title="Pack Multiple Atlases"
+        closebutton="true"
+        closeonescape="true"
+        resizable="true">
+    <table onecolumn="true" minwidth="480" minheight="320" grow="true">
+
+        <scrollpane style="list" disabledx="true" grow="true" fadescrollbars="false" overscroll="false" prefheight="320" align="top">
+            <gridgroup id="gridGroup" itemwidth="160" itemheight="32" spacing="2"/>
+        </scrollpane>
+
+        <table onecolumn="true" growx="true">
+            <:row padtop="8"/>
+            <table growx="true">
+                <textbutton id="btnSelectAll" minwidth="112" text="Select All" change="onSelectAllClick"/>
+                <actor width="4"/>
+                <textbutton id="btnUnselectAll" minwidth="112" text="Unselect All" change="onUnselectAllClick"/>
+                <actor minwidth="4" expandx="true"/>
+<!--                <textbutton minwidth="112" text="Cancel" change="onCloseClick"/>-->
+<!--                <actor width="4"/>-->
+                <textbutton id="btnPackSelected" style="orange" minwidth="112" tablepadleft="8" tablepadright="8" text="Pack 23 Atlases" change="onPackSelectedClick"/>
+            </table>
+        </table>
+
+    </table>
+</visdialog>

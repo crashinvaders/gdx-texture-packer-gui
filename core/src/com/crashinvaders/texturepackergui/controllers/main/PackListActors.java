@@ -61,7 +61,7 @@ public class PackListActors implements ActionContainer {
     @LmlActor("btnSpMoveUp") Button btnSpMoveUp;
     @LmlActor("btnSpMoveDown") Button btnSpMoveDown;
     @LmlActor("btnSpPackSelected") Button btnSpPackSelected;
-    @LmlActor("btnSpPackAll") Button btnSpPackAll;
+    @LmlActor("btnSpPackMultiple") Button btnSpPackMultiple;
 
     @LmlActor("lvPacks") ListView.ListViewTable<PackModel> packListTable;
     ListView<PackModel> packList;
@@ -109,7 +109,7 @@ public class PackListActors implements ActionContainer {
         btnSpMoveUp.setDisabled(!anyPackExists);
         btnSpMoveDown.setDisabled(!anyPackExists);
         btnSpPackSelected.setDisabled(!anyPackExists);
-        btnSpPackAll.setDisabled(!anyPackExists);
+        btnSpPackMultiple.setDisabled(!anyPackExists);
     }
 
     private void refreshOnboardingView() {

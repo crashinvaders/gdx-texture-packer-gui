@@ -21,10 +21,14 @@
 		light-green: { hex: 8bcd4bff }
 		title-icon-tint: { hex: ffffff88 }
 
+		text-white: { hex: ffffffff }
 		text-green: { hex: 79e053ff }
 		text-red: { hex: ff846bff }
 		text-yellow: { hex: f5e35fff }
-		text-grey: { hex: a0a0a0ff }
+		text-light-grey: { hex: a0a0a0ff }
+		text-grey: text-light-grey
+		text-dim-grey: { hex: 686868ff }
+		text-dark-grey: { hex: 333333ff }
 
 		nine-patch-lines-patch: { hex: 99e550ff }
 		nine-patch-lines-content: { hex: ffb000ff }
@@ -186,6 +190,7 @@
 		default: {checkBackground: vis-check, checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: light-grey }
 		small: {checkBackground: vis-check, checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: small-font, fontColor: white, disabledFontColor: grey }
 		radio: {checkBackground: vis-radio, checkBackgroundOver: vis-radio-over, checkBackgroundDown: vis-radio-down, tick: vis-radio-tick, tickDisabled: vis-radio-tick-disabled, focusBorder: border-circle, errorBorder: border-circle-error, font: default-font, fontColor: white, disabledFontColor: grey }
+		minimal: {checkBackgroundOver: vis-check-over, checkBackgroundDown: vis-check-down, tick: vis-check-tick, tickDisabled: vis-check-tick-disabled, focusBorder: border, errorBorder: border-error, font: default-font, fontColor: white, disabledFontColor: light-grey }
 	}
 	com.kotcrab.vis.ui.widget.PopupMenu$PopupMenuStyle: {
 		noborder: {background: button }

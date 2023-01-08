@@ -37,7 +37,7 @@
             <!--<actor growx="true"/>-->
 
             <:sidebutton id="btnSpPackSelected" icon="custom/ic-process" onchange="packSelected" tooltip="@packSelected" style="accent"/>
-            <:sidebutton id="btnSpPackAll" icon="custom/ic-process-all" onchange="packAll" tooltip="@packAll" style="accent"/>
+            <:sidebutton id="btnSpPackMultiple" icon="custom/ic-process-all" onchange="packMultiple" tooltip="@packMultiple" style="accent"/>
 
         </vistable>
 
