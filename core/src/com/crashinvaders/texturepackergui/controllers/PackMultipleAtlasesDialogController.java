@@ -1,8 +1,11 @@
 package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectSet;
@@ -35,7 +38,7 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
     @LmlActor("gridGroup") GridGroup gridGroup;
     @LmlActor("btnPackSelected") TextButton btnPackSelected;
     @LmlActor("btnSelectAll") TextButton btnSelectAll;
-    @LmlActor("btnUnselectAll") TextButton btnUnselectAll;
+    @LmlActor("btnDeselectAll") TextButton btnDeselectAll;
 
     private boolean isDirty = false;
 
@@ -45,37 +48,71 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
     void initView() {
         Array<PackModel> packModels = modelService.getProject().getPacks();
 
-        boolean selectionStateRecovered = false;
+        dialogRoot.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (dialogRoot == null || dialogRoot.getStage() == null) {
+                    return false;
+                }
 
-        atlasItemViews.clear();
-        for (int i = 0; i < packModels.size; i++) {
-//        for (int n = 0; n < 8; n++) {
-//            int i = n % packModels.size;
-            PackModel packModel = packModels.get(i);
-            AtlasListEntry atlasEntry = new AtlasListEntry(packModel);
-            if (lastSelectedItems.contains(packModel.getName())) {
-                atlasEntry.setShouldPackAtlas(true);
-                selectionStateRecovered = true;
+                switch (keycode) {
+                    case Input.Keys.ENTER: {
+                        onPackSelectedClick();
+                        return true;
+                    }
+                    case Input.Keys.A: {
+                        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
+                                Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+                            onSelectAllClick();
+                        }
+                        return false;
+                    }
+                    case Input.Keys.D: {
+                        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) ||
+                                Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+                            onDeselectAllClick();
+                        }
+                        return false;
+                    }
+                }
+                return false;
             }
-            AtlasListItemView atlasItemView = new AtlasListItemView(interfaceService.getParser(), atlasEntry, i);
-            atlasItemView.setChangeListener(itemView -> setStateDirty());
-            atlasItemViews.add(atlasItemView);
-        }
+        });
 
-        float itemWidth = 128f; // Min item width.
-        for (int i = 0; i < atlasItemViews.size; i++) {
-            itemWidth = Math.min(256f, Math.max(itemWidth, atlasItemViews.get(i).getPrefWidth()));
-        }
-        gridGroup.setItemWidth(itemWidth);
+        // Populate atlas items.
+        {
+            boolean selectionStateRecovered = false;
 
-        gridGroup.clearChildren();
-        for (int i = 0; i < atlasItemViews.size; i++) {
-            AtlasListItemView itemView = atlasItemViews.get(i);
-            gridGroup.addActor(itemView);
-        }
+            atlasItemViews.clear();
+            for (int i = 0; i < packModels.size; i++) {
+    //        for (int n = 0; n < 8; n++) {
+    //            int i = n % packModels.size;
+                PackModel packModel = packModels.get(i);
+                AtlasListEntry atlasEntry = new AtlasListEntry(packModel);
+                if (lastSelectedItems.contains(packModel.getName())) {
+                    atlasEntry.setShouldPackAtlas(true);
+                    selectionStateRecovered = true;
+                }
+                AtlasListItemView atlasItemView = new AtlasListItemView(interfaceService.getParser(), atlasEntry, i);
+                atlasItemView.setChangeListener(itemView -> setStateDirty());
+                atlasItemViews.add(atlasItemView);
+            }
 
-        if (!selectionStateRecovered) {
-            onSelectAllClick();
+            float itemWidth = 128f; // Min item width.
+            for (int i = 0; i < atlasItemViews.size; i++) {
+                itemWidth = Math.min(256f, Math.max(itemWidth, atlasItemViews.get(i).getPrefWidth()));
+            }
+            gridGroup.setItemWidth(itemWidth);
+
+            gridGroup.clearChildren();
+            for (int i = 0; i < atlasItemViews.size; i++) {
+                AtlasListItemView itemView = atlasItemViews.get(i);
+                gridGroup.addActor(itemView);
+            }
+
+            if (!selectionStateRecovered) {
+                onSelectAllClick();
+            }
         }
 
         validateViewState();
@@ -90,8 +127,8 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
         setStateDirty();
     }
 
-    @LmlAction("onUnselectAllClick")
-    void onUnselectAllClick() {
+    @LmlAction("onDeselectAllClick")
+    void onDeselectAllClick() {
         for (int i = 0; i < atlasItemViews.size; i++) {
             AtlasListItemView itemView = atlasItemViews.get(i);
             itemView.setSelected(false);
@@ -99,7 +136,7 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
         setStateDirty();
     }
 
-    @LmlAction("onDeselectAllClick")
+    @LmlAction("onPackSelectedClick")
     void onPackSelectedClick() {
         // Collect selected atlases.
         Array<PackModel> packModels = new Array<>();
@@ -168,7 +205,7 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
         btnPackSelected.setText("Pack " + selectedAtlasCount + " Atlases");
 
         btnSelectAll.setDisabled(selectedAtlasCount == atlasItemViews.size);
-        btnUnselectAll.setDisabled(selectedAtlasCount == 0);
+        btnDeselectAll.setDisabled(selectedAtlasCount == 0);
     }
 
     private static class AtlasListEntry {

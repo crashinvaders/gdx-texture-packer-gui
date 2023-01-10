@@ -6,7 +6,8 @@
         title="Pack Multiple Atlases"
         closebutton="true"
         closeonescape="true"
-        resizable="true">
+        resizable="true"
+        touchable="enabled">
     <table onecolumn="true" minwidth="480" minheight="320" grow="true">
 
         <scrollpane style="list" disabledx="true" grow="true" fadescrollbars="false" overscroll="false" prefheight="320" align="top">
@@ -18,7 +19,7 @@
             <table growx="true">
                 <textbutton id="btnSelectAll" minwidth="112" text="Select All" change="onSelectAllClick"/>
                 <actor width="4"/>
-                <textbutton id="btnUnselectAll" minwidth="112" text="Unselect All" change="onUnselectAllClick"/>
+                <textbutton id="btnDeselectAll" minwidth="112" text="Deselect All" change="onDeselectAllClick"/>
                 <actor minwidth="4" expandx="true"/>
 <!--                <textbutton minwidth="112" text="Cancel" change="onCloseClick"/>-->
 <!--                <actor width="4"/>-->

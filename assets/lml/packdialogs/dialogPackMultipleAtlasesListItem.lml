@@ -10,9 +10,11 @@
 
         <vistable tablealign="left" pad="4">
 
+<!--            <actor width="4"/>-->
+
             <checkbox id="cbxShouldPackAtlas" style="minimal" focusborderenabled="false" change="onShouldPackChange"/>
 
-            <actor width="4"/>
+            <actor width="0"/>
 
             <vislabel id="lblAtlasName" minwidth="0" ellipsis="true"/>
 

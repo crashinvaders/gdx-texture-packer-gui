@@ -376,10 +376,6 @@ public class GlobalActions implements ActionContainer {
         }
     }
 
-    @LmlAction("testPackMultiple") public void testPackMultiple() {
-        interfaceService.showDialog(PackMultipleAtlasesDialogController.class);
-    }
-
     public void changeLanguage(Locale locale) {
         if (localeService.getCurrentLocale().equals(locale)) return;
 
