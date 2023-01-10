@@ -1,4 +1,5 @@
-[4.11.1]
+[4.12.0]
+- Option to select multiple atlases for processing. New action - "packMultipleAtlases". See #67
 - Fixed file conflict errors when attempting to install RPM #140
 
 [4.11.0]

@@ -41,7 +41,6 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
 
     private static String SECTION_ID_INIT_OVERRIDE = null;
 
-    @Inject InterfaceService interfaceService;
     @Inject DependencyInjectionService injectionService;
     @Inject ToastFactory toastFactory;
 

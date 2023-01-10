@@ -13,6 +13,7 @@ import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
 import com.github.czyzby.autumn.annotation.Inject;
+import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -31,6 +32,7 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
     private static final ObjectSet<String> lastSelectedItems = new ObjectSet<>();
 
     @Inject InterfaceService interfaceService;
+    @Inject LocaleService localeService;
     @Inject ModelService modelService;
     @Inject PackDialogController packDialogController;
 
@@ -202,7 +204,8 @@ public class PackMultipleAtlasesDialogController implements ActionContainer {
         }
 
         btnPackSelected.setDisabled(selectedAtlasCount == 0);
-        btnPackSelected.setText("Pack " + selectedAtlasCount + " Atlases");
+        String packAtlasesText = localeService.getI18nBundle().format("dPmPackNAtlases", selectedAtlasCount);
+        btnPackSelected.setText(packAtlasesText);
 
         btnSelectAll.setDisabled(selectedAtlasCount == atlasItemViews.size);
         btnDeselectAll.setDisabled(selectedAtlasCount == 0);
