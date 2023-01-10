@@ -54,7 +54,7 @@
 <!--                <image style="orange" width="1" growy="true"/>-->
 
                 <!-- Section content -->
-                <scrollpane style="setting-section" grow="true" disabledx="true" fadescrollbars="false">
+                <scrollpane id="scrollSectionContent" style="setting-section" grow="true" disabledx="true" fadescrollbars="false">
                     <container id="sectionContentContainer" fill="true" padtop="24" padbottom="24" padleft="32" padright="32"/>
                 </scrollpane>
             </table>

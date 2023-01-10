@@ -1,10 +1,12 @@
 package com.crashinvaders.texturepackergui.controllers.settings;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ObjectMap;
@@ -17,6 +19,7 @@ import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.component.ui.controller.ViewDialogShower;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
+import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.kiwi.util.gdx.reflection.Reflection;
 import com.github.czyzby.lml.annotation.LmlAction;
@@ -41,11 +44,13 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
     @Inject InterfaceService interfaceService;
     @Inject DependencyInjectionService injectionService;
     @Inject ToastFactory toastFactory;
-    @Inject Stage stage;
+
+    @ViewStage Stage stage;
 
     @LmlActor({SECTION_ID_GENERAL, SECTION_ID_HOTKEYS, SECTION_ID_EXTENSIONS})
     ObjectMap<String, Button> sectionButtons;
 
+    @LmlActor ScrollPane scrollSectionContent;
     @LmlActor Container sectionContentContainer;
 
     @LmlActor HorizontalCollapsibleWidget cpsRestartApp;
@@ -59,6 +64,20 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
     private boolean isAppRestartRequired = false;
 
     private boolean isDialogSeeThrough = false;
+
+    @LmlAfter
+    void initView() {
+        btnRestartApp.setOrigin(Align.right);
+        btnRestartApp.addAction(Actions.repeat(-1, Actions.sequence(
+                Actions.delay(1f),
+                Actions.scaleTo(1.07f, 1.15f),
+                Actions.scaleTo(1f, 1f, 0.5f, Interpolation.exp10Out)
+        )));
+
+        if (isAppRestartRequired) {
+            cpsRestartApp.setCollapsed(false);
+        }
+    }
 
     @Override
     public void doBeforeShow(Window dialog) {
@@ -74,21 +93,10 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
         toggleSection(initialSectionId, true);
 
         this.isDialogSeeThrough = false;
-    }
 
-    @LmlAfter
-    void initView() {
-        btnRestartApp.setOrigin(Align.right);
-        btnRestartApp.addAction(Actions.repeat(-1, Actions.sequence(
-                Actions.delay(1f),
-                Actions.scaleTo(1.07f, 1.15f),
-                Actions.scaleTo(1f, 1f, 0.5f, Interpolation.exp10Out)
-        )));
-
-        if (isAppRestartRequired) {
-            cpsRestartApp.setCollapsed(false);
-
-        }
+        // VisDialog steals scroll focus on itself when shown.
+        // So we get to still it back.
+        Gdx.app.postRunnable(this::focusContentScroll);
     }
 
     public void toggleSection(String sectionId, boolean force) {
@@ -105,6 +113,8 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
         }
 
         this.currentSectionId = sectionId;
+
+        focusContentScroll();
 
         SectionContentController controller = createSectionController(sectionId);
         this.currentSectionController = controller;
@@ -155,6 +165,10 @@ public class SettingsDialogController implements ViewDialogShower, ActionContain
 
     public void centerWindow() {
         dialog.centerWindow();
+    }
+
+    public void focusContentScroll() {
+        stage.setScrollFocus(scrollSectionContent);
     }
 
     @LmlAction("onBackPressed")
