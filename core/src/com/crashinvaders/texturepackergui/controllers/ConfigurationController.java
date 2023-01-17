@@ -21,7 +21,7 @@ import com.crashinvaders.texturepackergui.AppParams;
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.CjkFontExtensionModule;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
-import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
+import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializerService;
 import com.crashinvaders.texturepackergui.lml.AppLmlSyntax;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Destroy;
@@ -262,7 +262,7 @@ public class ConfigurationController {
 
     // Try load initial project
     @Initiate(priority = -1000)
-    public void setupInitialProject(ModelService modelService, ProjectSerializer projectSerializer) {
+    public void setupInitialProject(ModelService modelService, ProjectSerializerService projectSerializer) {
         // Post to the next frame to make sure all the systems/controllers are initialized.
         Gdx.app.postRunnable(() -> {
             AppParams params = App.inst().getParams();

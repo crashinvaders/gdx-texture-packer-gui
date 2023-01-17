@@ -36,7 +36,7 @@ public class VersionCheckDialogController implements ActionContainer {
 
     @LmlAfter
     public void initialize() {
-        lblVersionCurrent.setText(AppConstants.version.toString());
+        lblVersionCurrent.setText(AppConstants.VERSION.toString());
 
         launchVersionCheck();
     }

@@ -116,7 +116,7 @@ public class App implements ApplicationListener {
 
         // Load LML template with common values and default attribute setup.
         interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/common.lml"));
-        interfaceService.getParser().getData().addArgument("currentVersionCode", AppConstants.version.toString());
+        interfaceService.getParser().getData().addArgument("currentVersionCode", AppConstants.VERSION.toString());
     }
 
     /** Invoked before context initiation.

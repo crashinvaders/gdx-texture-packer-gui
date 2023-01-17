@@ -55,7 +55,7 @@ public class LoggerUtils {
     }
 
     public static void printGeneralInfo() {
-        System.out.println("Version: " + AppConstants.version);
+        System.out.println("Version: " + AppConstants.VERSION);
         System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " " + System.getProperty("os.arch"));
         System.out.println("JRE: " + System.getProperty("java.version") + " " + System.getProperty("java.vendor"));
     }

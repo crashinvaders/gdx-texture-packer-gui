@@ -16,7 +16,7 @@ import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.ninepatcheditor.NinePatchToolController;
 import com.crashinvaders.texturepackergui.controllers.packing.PackDialogController;
-import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializer;
+import com.crashinvaders.texturepackergui.controllers.projectserializer.ProjectSerializerService;
 import com.crashinvaders.texturepackergui.controllers.settings.SettingsDialogController;
 import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.utils.FileUtils;
@@ -55,7 +55,7 @@ public class GlobalActions implements ActionContainer {
     @Inject EventDispatcher eventDispatcher;
     @Inject ModelService modelService;
     @Inject ModelUtils modelUtils;
-    @Inject ProjectSerializer projectSerializer;
+    @Inject ProjectSerializerService projectSerializer;
     @Inject RecentProjectsRepository recentProjects;
     @Inject MainController mainController;
     @Inject PackMultipleAtlasesDialogController packMultipleDialogController;
@@ -288,7 +288,7 @@ public class GlobalActions implements ActionContainer {
     }
 
     @LmlAction("getCurrentVersion") public String getCurrentVersion() {
-        return AppConstants.version.toString();
+        return AppConstants.VERSION.toString();
     }
 
     @LmlAction("launchTextureUnpacker") public void launchTextureUnpacker() {

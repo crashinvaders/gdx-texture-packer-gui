@@ -7,19 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 import com.crashinvaders.common.Version;
 import com.crashinvaders.texturepackergui.AppConstants;
-import com.crashinvaders.texturepackergui.controllers.ErrorDialogController;
-import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
-import com.crashinvaders.texturepackergui.events.ProjectSerializerEvent;
-import com.crashinvaders.texturepackergui.events.ShowToastEvent;
 import com.crashinvaders.texturepackergui.controllers.model.*;
+import com.crashinvaders.texturepackergui.controllers.model.filetype.*;
 import com.crashinvaders.texturepackergui.utils.PathUtils;
-import com.github.czyzby.autumn.annotation.Component;
-import com.github.czyzby.autumn.annotation.Initiate;
-import com.github.czyzby.autumn.annotation.Inject;
-import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
-import com.github.czyzby.autumn.processor.event.EventDispatcher;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -29,69 +22,40 @@ import static com.crashinvaders.texturepackergui.utils.CommonUtils.splitAndTrim;
 import static com.crashinvaders.texturepackergui.utils.FileUtils.loadTextFromFile;
 import static com.crashinvaders.texturepackergui.utils.FileUtils.saveTextToFile;
 
-@Component
 public class ProjectSerializer {
-    private static final String TAG = ProjectSerializer.class.getSimpleName();
+
     private static final String PACK_DIVIDER = "---";
     private static final String SECTION_DIVIDER = "-PROJ-";
     private static final Version versionNone = new Version(0,0,0);
 
-    @Inject EventDispatcher eventDispatcher;
-    @Inject LocaleService localeService;
-
-    private Json json;
-    private InputFileSerializer inputFileSerializer;
-
-    @Initiate void initialize() {
-        json = new Json();
-        json.setSerializer(ScaleFactorModel.class, new ScaleFactorJsonSerializer());
-        json.setSerializer(InputFile.class, inputFileSerializer = new InputFileSerializer());
-    }
-
-    public void saveProject(ProjectModel project, FileHandle file) {
-        String serialized = serializeProject(project, file.parent());
+    public static void saveProject(ProjectModel project, FileHandle file) throws SerializationException {
         try {
+            String serialized = serializeProject(project, file.parent());
             saveTextToFile(file, serialized);
         } catch (Exception e) {
-            Gdx.app.error(TAG, "Error during project saving.", e);
-            eventDispatcher.postEvent(new ShowToastEvent()
-                    .message(localeService.getI18nBundle().format("toastProjectSaveError", project.getProjectFile().path()))
-                    .duration(ShowToastEvent.DURATION_LONG)
-                    .click(() -> ErrorDialogController.show(e))
-            );
-            return;
+            throw new SerializationException("Failed to save project: " + project.getProjectFile().path(), e);
         }
-
-        eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.SAVED, project, file));
     }
 
-    public ProjectModel loadProject(FileHandle file) {
-        final ProjectModel project;
+    public static ProjectModel loadProject(FileHandle file) throws SerializationException {
         try {
             String serialized = loadTextFromFile(file);
-            project = deserializeProject(serialized, file.parent());
+            ProjectModel project = deserializeProject(serialized, file.parent());
+            project.setProjectFile(file);
+            return project;
         } catch (Exception e) {
-            Gdx.app.error(TAG, "Error during project loading.", e);
-            eventDispatcher.postEvent(new ShowToastEvent()
-                    .message(localeService.getI18nBundle().format("toastProjectLoadError", file.path()))
-                    .duration(ShowToastEvent.DURATION_LONG)
-                    .click(() -> ErrorDialogController.show(e))
-            );
-            return null;
+            throw new SerializationException("Failed to load project: " + file.file().getAbsolutePath(), e);
         }
-
-        project.setProjectFile(file);
-
-        eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.LOADED, project, file));
-        return project;
     }
 
-    private String serializeProject(ProjectModel projectModel, FileHandle root) {
+    private static String serializeProject(ProjectModel projectModel, FileHandle root) {
+        Json json = createJsonParser(root);
+
         Array<PackModel> packs = projectModel.getPacks();
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < packs.size; i++) {
-            sb.append(serializePack(packs.get(i), root));
+            sb.append(serializePack(json, packs.get(i), root));
 
             if (i < packs.size - 1) {
                 sb.append("\n\n---\n\n");
@@ -103,10 +67,10 @@ public class ProjectSerializer {
         return sb.toString();
     }
 
-    private void serializeProjectSection(ProjectModel projectModel, StringBuilder sb) {
+    private static void serializeProjectSection(ProjectModel projectModel, StringBuilder sb) {
         sb.append("\n\n").append(SECTION_DIVIDER).append("\n\n");
 
-        sb.append("version=").append(AppConstants.version.toString()).append("\n");
+        sb.append("version=").append(AppConstants.VERSION.toString()).append("\n");
 
         FileTypeModel fileType = projectModel.getFileType();
         sb.append("fileTypeType=").append(fileType.getType().key).append("\n");
@@ -117,7 +81,7 @@ public class ProjectSerializer {
         sb.append("projectSettings=").append(projectModel.getSettings().serializeState()).append("\n");
     }
 
-    private String serializePack(PackModel pack, FileHandle root) {
+    private static String serializePack(Json json, PackModel pack, FileHandle root) {
         StringBuilder sb = new StringBuilder();
 
         String filename = pack.getFilename();
@@ -167,7 +131,6 @@ public class ProjectSerializer {
 
         sb.append("scaleFactors=").append(json.toJson(pack.getScaleFactors())).append("\n");
 
-        inputFileSerializer.setRoot(root.file());
         sb.append("inputFiles=").append(json.toJson(pack.getInputFiles())).append("\n");
 
         sb.append("keepInputFileExtensions=").append(pack.isKeepInputFileExtensions()).append("\n");
@@ -175,7 +138,9 @@ public class ProjectSerializer {
         return sb.toString();
     }
 
-    private ProjectModel deserializeProject(String serializedProject, FileHandle root) {
+    private static ProjectModel deserializeProject(String serializedProject, FileHandle root) {
+        Json json = createJsonParser(root);
+
         ProjectModel project = new ProjectModel();
 
         String[] serializedSections = serializedProject.split(SECTION_DIVIDER);
@@ -197,13 +162,13 @@ public class ProjectSerializer {
         for (String serializedPack : serializedPacks) {
             if (serializedPack.trim().length() == 0) continue;
 
-            PackModel pack = deserializePack(serializedPack, root, version);
+            PackModel pack = deserializePack(json, serializedPack, root, version);
             project.addPack(pack);
         }
         return project;
     }
 
-    private Version deserializeProjectSection(ProjectModel project, String projectSection) {
+    private static Version deserializeProjectSection(ProjectModel project, String projectSection) {
         Array<String> lines = splitAndTrim(projectSection);
 
         // File type section
@@ -225,7 +190,7 @@ public class ProjectSerializer {
                         fileTypeModel = new BasisuFileTypeModel();
                         break;
                     default:
-                        Gdx.app.error(TAG, "Unexpected FileTypeType: " + fileTypeType);
+                        Gdx.app.error("ProjectSerializer", "Unexpected FileTypeType: " + fileTypeType);
                 }
                 if (fileTypeModel != null) {
                     String fileTypeData = find(lines, "fileTypeData=", null);
@@ -252,7 +217,7 @@ public class ProjectSerializer {
         return version;
     }
 
-    private PackModel deserializePack(String serializedData, FileHandle root, Version version) {
+    private static PackModel deserializePack(Json json, String serializedData, FileHandle root, Version version) {
         PackModel pack = new PackModel();
         String inputDir = null;
 
@@ -322,7 +287,6 @@ public class ProjectSerializer {
         }
 
         String inputFilesSerialized = find(lines, "inputFiles=", null);
-        inputFileSerializer.setRoot(root.file());
         if (inputFilesSerialized != null) {
             @SuppressWarnings("unchecked")
             Array<InputFile> inputFiles = json.fromJson(Array.class, InputFile.class, inputFilesSerialized);
@@ -367,6 +331,13 @@ public class ProjectSerializer {
         }
 
         return pack;
+    }
+
+    private static Json createJsonParser(FileHandle rootFile) {
+        Json json = new Json();
+        json.setSerializer(ScaleFactorModel.class, new ScaleFactorJsonSerializer());
+        json.setSerializer(InputFile.class, new InputFileSerializer(rootFile.file().getAbsolutePath()));
+        return json;
     }
 
     private static String find (Array<String> lines, String start, String defaultValue) {

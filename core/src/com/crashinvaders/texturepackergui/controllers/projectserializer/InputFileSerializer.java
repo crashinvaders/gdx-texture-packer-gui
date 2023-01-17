@@ -11,11 +11,15 @@ import java.io.File;
 
 public class InputFileSerializer implements Json.Serializer<InputFile> {
 
-    private File root;
+    private final String rootPath;
+
+    public InputFileSerializer(String rootPath) {
+        this.rootPath = rootPath;
+    }
 
     @Override
     public void write(Json json, InputFile model, Class knownType) {
-        String path = PathUtils.relativize(model.getFileHandle().path(), root.getPath());
+        String path = PathUtils.relativize(model.getFileHandle().path(), rootPath);
 
         json.writeObjectStart();
         json.writeValue("path", path);
@@ -72,7 +76,7 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
             fileHandle = Gdx.files.absolute(path);
         } else {
             // A relative path value might be pretty wild and start from up level elements "../". Let's clean it up.
-            String rootPath = root.getAbsolutePath().replace('\\', '/');
+            String rootPath = this.rootPath.replace('\\', '/');
             String relativePath = path.replace('\\', '/');
             while (relativePath.startsWith("../")) {
                 if (relativePath.length() > 3) {
@@ -109,9 +113,5 @@ public class InputFileSerializer implements Json.Serializer<InputFile> {
         }
 
         return inputFile;
-    }
-
-    public void setRoot(File root) {
-        this.root = root;
     }
 }

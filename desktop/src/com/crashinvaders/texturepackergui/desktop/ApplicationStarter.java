@@ -1,6 +1,8 @@
 package com.crashinvaders.texturepackergui.desktop;
 
 import com.badlogic.gdx.Files;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfigurationX;
 import com.badlogic.gdx.graphics.glutils.HdpiMode;
@@ -32,10 +34,22 @@ public class ApplicationStarter {
             System.err.println("Error: " + e.getLocalizedMessage());
             return;
         }
-        start(arguments);
+
+        if (arguments.batch) {
+            startCliApp(arguments);
+        } else {
+            startGuiApp(arguments);
+        }
     }
 
-    public static void start(Arguments arguments) {
+    public static void startCliApp(Arguments arguments) {
+        HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
+        config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
+        config.updatesPerSecond = -1; // Do not call update method.
+        new HeadlessApplication(new CliApp(arguments), config);
+    }
+
+    public static void startGuiApp(Arguments arguments) {
         AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
         LoggerUtils.printGeneralInfo();
 

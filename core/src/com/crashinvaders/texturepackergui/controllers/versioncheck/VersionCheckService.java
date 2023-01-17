@@ -97,7 +97,7 @@ public class VersionCheckService implements ActionContainer {
     }
 
     public boolean isVersionNewer(VersionData versionData) {
-        return AppConstants.version.isLower(versionData.getVersion());
+        return AppConstants.VERSION.isLower(versionData.getVersion());
     }
 
     @LmlAction("getReleasesPageUrl") public String getReleasesPageUrl() {
