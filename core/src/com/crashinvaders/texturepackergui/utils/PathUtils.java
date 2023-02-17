@@ -93,7 +93,7 @@ public class PathUtils {
 			}
 		}
 
-		relative.append(normalizedTargetPath.substring(common.length()));
+		relative.append(normalizedTargetPath.substring(Math.min(normalizedTargetPath.length(), common.length())));
 		// Return path in unix format
 		relative = Strings.replace(relative, File.separator, "/");
 		return relative.toString();

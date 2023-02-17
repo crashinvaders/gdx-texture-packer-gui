@@ -1,6 +1,7 @@
 [4.12.0]
 - Option to select multiple atlases for processing. New action - "packMultipleAtlases". See #67
-- Fixed file conflict errors when attempting to install RPM #140
+- Fixed file conflict errors when attempting to install RPM. See #140
+- Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project containing folder. See #126
 
 [4.11.0]
 - Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
