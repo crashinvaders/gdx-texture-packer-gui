@@ -47,6 +47,7 @@ public class PackListActors implements ActionContainer {
     @LmlActor("edtFileName") VisTextField edtFileName;
     @LmlActor("btnPackAll") Button btnPackAll;
     @LmlActor("btnPackSelected") Button btnPackSelected;
+    @LmlActor("imgOutputDirWarning") Image imgOutputDirWarning;
 
     @LmlActor("plOnboardingRoot") Group plOnboardingRoot;
     @LmlActor("plOnboardingBackground") Image plOnboardingBackground;

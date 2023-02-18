@@ -9,12 +9,14 @@
                 align="right"
                 text="@packGeneralOutputDir"
                 tooltip="@packGeneralTtOutputDir"/>
-        <!--Tooltip will be assigned dynamically from the code-->
-        <textfield
-                id="edtOutputDir"
-                minwidth="24"
-                growx="true"
-                onchange="onOutputDirTextChanged"/>
+        <stack minwidth="24" growx="true">
+            <!--Tooltip will be assigned dynamically from the code-->
+            <textfield
+                    id="edtOutputDir"
+                    onchange="onOutputDirTextChanged"/>
+
+            <image id="imgOutputDirWarning" style="white" color="#eb5c4980" touchable="disabled"/>
+        </stack>
         <imagebutton
                 image="custom/ic-folder-pick"
                 imagescaling="none"

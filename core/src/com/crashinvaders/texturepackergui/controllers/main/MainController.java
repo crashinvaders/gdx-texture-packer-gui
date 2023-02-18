@@ -6,7 +6,9 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -16,6 +18,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.crashinvaders.common.scene2d.Scene2dUtils;
+import com.crashinvaders.common.scene2d.actions.ActionsExt;
 import com.crashinvaders.common.scene2d.visui.ToastManager;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.*;
@@ -42,12 +45,14 @@ import com.github.czyzby.autumn.mvc.component.ui.controller.ViewShower;
 import com.github.czyzby.autumn.mvc.stereotype.View;
 import com.github.czyzby.autumn.mvc.stereotype.ViewStage;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
+import com.github.czyzby.kiwi.util.gdx.scene2d.Actors;
 import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.annotation.LmlInject;
 import com.github.czyzby.lml.parser.LmlData;
 import com.github.czyzby.lml.parser.action.ActionContainer;
+import com.kotcrab.vis.ui.util.ActorUtils;
 import com.kotcrab.vis.ui.widget.*;
 
 import java.util.Locale;
@@ -167,6 +172,22 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
         outputDirTooltip.setTouchable(Touchable.disabled);
         outputDirTooltip.setText(getString("packGeneralTtOutputDir"));
         outputDirTooltip.setTarget(actorsPacks.edtOutputDir);
+
+        // Output dir filed blinks red when empty.
+        {
+            actorsPacks.edtOutputDir.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    actorsPacks.imgOutputDirWarning.setVisible(actorsPacks.edtOutputDir.isEmpty());
+                }
+            });
+            actorsPacks.imgOutputDirWarning.addAction(Actions.forever(Actions.sequence(
+                    Actions.alpha(0f),
+                    Actions.delay(3f),
+                    Actions.alpha(actorsPacks.imgOutputDirWarning.getColor().a),
+                    Actions.fadeOut(0.5f)
+            )));
+        }
     }
 
     @Override
