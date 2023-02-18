@@ -57,7 +57,7 @@ public class CliBatchApp extends ApplicationAdapter {
             ProjectModel projectModel = loadProjectModel(args.project);
             modelService.setProject(projectModel);
             Gdx.app.debug(TAG, "Project loaded: \"" + args.project + "\"");
-            Gdx.app.log(TAG, "Total atlases: " + projectModel.getPacks().size);
+            Gdx.app.debug(TAG, "Total atlases: " + projectModel.getPacks().size);
         }
 
         // Print all the atlases and exit.
