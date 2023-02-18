@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'edu.sc.seis.macAppBundle'
-apply plugin: 'nebula.ospackage'
+apply plugin: 'com.netflix.nebula.ospackage'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -236,26 +236,41 @@ def linuxInstallationDir = '/opt/gdx-texture-packer'
 ospackage {
     release = 1
     version = project.ext.version
-    packageName = project.appName
+    // We have to stick to the old name "gdx-texturepacker" as package ID change breaks updates.
+    packageName = 'gdx-texturepacker'
     os = 'LINUX' // only applied to RPM
 
     vendor 'Crashinvaders'
     url 'https://github.com/crashinvaders/gdx-texture-packer-gui'
     maintainer 'Anton Chekulaev <anton@crashinvaders.com>'
     summary 'libGDX texture atlas packer GUI'
-    packageDescription 'A simple utility to help you pack and manage texture atlases for libGDX game framework. It\'s mostly just a visual wrapper over libGDX TexturePacker classes and provides a convenient way to use it.'
+    packageDescription 'A simple utility to help you pack and manage texture atlases for libGDX game framework. It\'s mostly just a visual wrapper over libGDX TexturePacker and provides some extra features on top of it.'
     license file("$rootDir/distribution/license.txt").text
 
-    postInstall '#!/usr/bin/env bash\n' +
-            'sudo update-mime-database /usr/share/mime\n' +
-            'sudo update-icon-caches /usr/share/icons/hicolor'
+    preInstall """#!/bin/sh
+
+                # Fix read-only file mode for the old execution script. 
+                LAUNCHER_PATH="$linuxInstallationDir/launcher_linux.sh"
+                if [ -e "\$LAUNCHER_PATH" ]; then
+                    sudo chmod 0775 "\$LAUNCHER_PATH"
+                fi
+                
+               """.stripMargin()
+
+    postInstall """#!/bin/sh
+
+                # Update desktop cache.
+                sudo update-mime-database /usr/share/mime 
+                sudo update-icon-caches /usr/share/icons/hicolor
+                
+               """.stripMargin()
 
     into linuxInstallationDir
 
     from("$rootDir/distribution/output/${project.appName}-linux.jar") {
         rename { "${project.appName}.jar" }
     }
-    from("$rootDir/distribution/files/launcher_linux.sh") { fileMode 0555 }
+    from("$rootDir/distribution/files/launcher_linux.sh") { fileMode 0775 }
     from("$rootDir/distribution/files/readme.txt")
     from("$rootDir/distribution/files/readme_hotkeys.txt")
     from("$rootDir/distribution/license.txt")
@@ -286,6 +301,18 @@ ospackage {
         return it.absolutePath
     }) {
         into '/usr/share/applications/'
+    }
+
+    // System-wide executable redirecting to the launcher script.
+    from(new File("$project.buildDir/tmp", 'gdx-texture-packer').with {
+        it.parentFile.mkdirs()
+        it.write """#!/bin/sh
+                $linuxInstallationDir/launcher_linux.sh \"\$@\"
+                """.stripMargin()
+        return it.absolutePath
+    }) {
+        into '/usr/bin/'
+        fileMode 0775
     }
 
     from("$rootDir/distribution/linux-packages/project-mime-type.xml") {

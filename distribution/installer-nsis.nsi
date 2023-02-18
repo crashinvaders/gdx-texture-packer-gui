@@ -57,8 +57,8 @@ SectionIn RO
 
   SetOutpath "$INSTDIR"
 
-  ;Include the natives stripped JAR and rename it ot matche universal JAR name.
-  File "/oname=$INSTDIR\gdx-texturepacker.jar" "output\gdx-texturepacker-windows.jar"
+  ;Include the natives stripped JAR and rename it to match the universal JAR name.
+  File "/oname=$INSTDIR\gdx-texture-packer.jar" "output\gdx-texture-packer-windows.jar"
 
   File /r /x "*.sh" "files\*.*"
 
@@ -77,19 +77,20 @@ SectionIn RO
   ;;Delete legacy run script files
   Delete "$INSTDIR\launcher.bat"
   Delete "$INSTDIR\launcher.sh"
+  Delete "$INSTDIR\launcher_no_cmd.bat"
 
 SectionEnd
 
 Section "Start Menu shortcuts" StartMenuShortcuts
 
-    createShortCut "$SMPROGRAMS\GDX Texture Packer.lnk" "$INSTDIR\launcher_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
+    createShortCut "$SMPROGRAMS\GDX Texture Packer.lnk" "$INSTDIR\launcher_win_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
 
 # default sec end
 SectionEnd
 
 Section "Desktop shortcuts" DesktopShortcuts
  
-    createShortCut "$DESKTOP\GDX Texture Packer.lnk" "$INSTDIR\launcher_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
+    createShortCut "$DESKTOP\GDX Texture Packer.lnk" "$INSTDIR\launcher_win_no_cmd.vbs" "" "$INSTDIR\icon.ico" 0
  
 # default sec end
 SectionEnd

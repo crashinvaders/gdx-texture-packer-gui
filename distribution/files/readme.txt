@@ -1,7 +1,7 @@
 Gdx Texture Packer GUI
 
-Simple utility to help you pack and manage texture atlases for libGDX game framework.
-It's mostly just a visual wrapper over libGDX TexturePacker classes and offers more convenient way of using it.
+A simple utility to help you pack and manage texture atlases for libGDX game framework.
+It's mostly just a visual wrapper over libGDX TexturePacker and provides some extra features on top of it.
 
 Requirements:
 - Java 8 JRE (or higher) (can be downloaded here https://www.java.com/en/download/)
@@ -9,19 +9,24 @@ Requirements:
 
 How to launch:
 Application is packed into JAR executable file. To launch it, issue the command:
-java -jar gdx-texturepacker.jar
+java -jar gdx-texture-packer.jar
 
-MacOS
-Execute launch_macos.sh bash script to launch the application
+macOS
+Execute launcher_macos.sh shell script to launch the application
 
 Linux
-Execute launch_linux.sh bash script to launch the application
+Execute launcher_linux.sh shell script to launch the application
 
 Windows
-launch.bat - starts application
-launcher_no_cmd.vbs - does exactly what launch.bat does, but CMD window won't appear in that case
+launcher_win.bat - starts application
+launcher_win_no_cmd.vbs - does exactly what launch.bat does, but CMD window won't appear in that case
 
-For any further details visit the GitHub project page:
+Command Line Features
+The app has the headless batch mode that allows automation.
+Learn more about CLI options from the help message:
+gdx-texture-packer --help
+
+For further details visit the GitHub project page:
 https://github.com/crashinvaders/gdx-texture-packer-gui
 
 If you've got a question or would like to share ideas, feel free to reach me out at anton@crashinvaders.com

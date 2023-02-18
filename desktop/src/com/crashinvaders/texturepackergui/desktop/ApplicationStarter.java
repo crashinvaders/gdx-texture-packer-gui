@@ -63,7 +63,7 @@ public class ApplicationStarter {
     }
 
     private static void printHelpMessage() {
-        System.out.println("A simple utility to pack and manage texture atlases for libGDX game framework");
+        System.out.println("A simple utility to pack and manage texture atlases for libGDX game framework.");
         System.out.println("GitHub page: https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO);
         System.out.println();
         System.out.println("List of general command line options:");
@@ -146,13 +146,13 @@ public class ApplicationStarter {
     }
 
     /**
-     * A great solution for the dreaded MacOS main thread startup issue.
-     * Borrowed from https://github.com/tommyettinger/gdx-liftoff/blob/430f00f5e9caf3b047a5c51926e0d704e8a2571c/src/main/kotlin/com/github/czyzby/setup/main.kt
-     *
+     * A great solution for the dreaded macOS main thread startup issue.
+     * Borrowed from <a href="https://github.com/tommyettinger/gdx-liftoff/blob/430f00f5e9caf3b047a5c51926e0d704e8a2571c/src/main/kotlin/com/github/czyzby/setup/main.kt">...</a>
+     * <p>
      * Calling this should be done in an if check; if this returns true, the old program should end because a new JVM will
-     * take over, but if it returns false, the program should continue normally. It is meant to allow MacOS to start with
+     * take over, but if it returns false, the program should continue normally. It is meant to allow macOS to start with
      * its required '-XstartOnFirstThread' argument, even if the jar wasn't originally started with it.
-     * Taken from https://github.com/crykn/guacamole/blob/master/gdx-desktop/src/main/java/de/damios/guacamole/gdx/StartOnFirstThreadHelper.java .
+     * Taken from <a href="https://github.com/crykn/guacamole/blob/master/gdx-desktop/src/main/java/de/damios/guacamole/gdx/StartOnFirstThreadHelper.java">...</a> .
      * Thanks crykn/damios!
      */
     private static boolean startNewJvmIfRequired(final String[] args) {

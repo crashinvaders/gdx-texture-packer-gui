@@ -1,7 +1,7 @@
 ![](https://i.imgur.com/7aOmSQb.png)
 
 A simple utility to help you pack and manage texture atlases for [libGDX game framework](https://github.com/libgdx/libgdx).
-It's mostly just a visual wrapper over [libGDX TexturePacker classes](https://libgdx.com/wiki/tools/texture-packer)
+It's mostly just a visual wrapper over [libGDX TexturePacker](https://libgdx.com/wiki/tools/texture-packer)
 and provides some extra features on top of it.
 
 This project is a successor of [Aurelien Ribon's application](https://web.archive.org/web/20170803205402/http://www.aurelienribon.com/blog/2012/06/texturepacker-gui-support-for-multiple-packs/) with the whole new GUI and features.
@@ -13,7 +13,7 @@ Just download the most recent version of installer/distribution matching your OS
 Or simply download the distribution files archive, extract and read `./readme.txt` for further details.
 
 ### System Requirements
-The app works on any major desktop OS (Linux, MacOS, Windows), where Java is available.
+The app works on any major desktop OS (Linux, macOS, Windows), where Java is available.
 
 The requirements are as follows:
 1. Java Runtime Environment (JRE 8.0 and up) should be installed on your system (`java` command is available from the command-line interface).
@@ -23,6 +23,7 @@ All major changes are listed in [this file](https://github.com/crashinvaders/gdx
 
 ### Command Line
 The app has the headless batch mode that allows automation.
+
 For example, to pack the specific atlases from the project:
 ```shell
 gdx-texture-packer --batch --project "/path/to/project.tpproj" --atlases "atlas_name" "another_atlas_name"
