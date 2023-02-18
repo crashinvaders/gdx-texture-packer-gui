@@ -35,14 +35,14 @@ public class PackingProcessor implements PackProcessor {
             throw new IllegalStateException("PageFileWriter is not set. Looks like something is wrong with file type processor setup.");
         }
 
-        System.out.println("Packing is started");
+        System.out.println("Packing is started for \"" + pack.getName() + "\"");
 
         ProjectSettingsModel projSettings = node.getProject().getSettings();
         String settingsOrigExtension = pack.getSettings().atlasExtension;
         performPacking(node, projSettings, pack, pageFileWriter);
         pack.getSettings().atlasExtension = settingsOrigExtension;
 
-        System.out.println("Packing is done");
+        System.out.println("Packing is done for \"" + pack.getName() + "\"");
     }
     
     private void performPacking(PackProcessingNode node, ProjectSettingsModel projSettings, PackModel packModel,
