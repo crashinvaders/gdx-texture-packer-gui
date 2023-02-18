@@ -8,7 +8,7 @@ import java.io.File;
 public class GuiArguments {
 
     @Option(name = "--no-native-files",
-            usage = "Use custom VisUI dialogs for all the file picker dialogs (instead of the native file dialogs).")
+            usage = "Use cross-platform unified VisUI dialogs instead of the native file picker dialogs.")
     public boolean disableNativeFileDialogs = false;
 
     @Option(name = "--debug",
