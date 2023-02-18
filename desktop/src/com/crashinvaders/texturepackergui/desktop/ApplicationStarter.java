@@ -24,9 +24,11 @@ import java.util.stream.Collectors;
 
 public class ApplicationStarter {
 
-    public static void main(final String[] args) {
-        if(startNewJvmIfRequired(args)) return;
+    private static final ParserProperties argParserProps =
+            ParserProperties.defaults()
+                    .withShowDefaults(false);
 
+    public static void main(final String[] args) {
         // Print help and exit.
         if (args.length > 0 && "--help".equals(args[0])) {
             printHelpMessage();
@@ -50,35 +52,53 @@ public class ApplicationStarter {
         }
 
         // Regular GUI mode.
-        GuiArguments arguments = new GuiArguments();
-        parseArguments(args, arguments);
-        startGuiApp(arguments);
+        {
+            if (startNewJvmIfRequired(args))
+                return;
+
+            GuiArguments arguments = new GuiArguments();
+            parseArguments(args, arguments);
+            startGuiApp(arguments);
+        }
     }
 
     private static void printHelpMessage() {
         System.out.println("A simple utility to pack and manage texture atlases for libGDX game framework");
-        System.out.println("GitHub repository: https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO);
+        System.out.println("GitHub page: https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO);
         System.out.println();
         System.out.println("List of general command line options:");
         System.out.println(" --help\t\t: Prints this message.");
         System.out.println(" --version\t: Prints the application version.");
-        System.out.println(" --batch (-b)\t: Starts the app in the batch mode.");
+        System.out.println(" --batch (-b)\t: Starts the application in the batch mode.");
         System.out.println("\t\t  Read about the batch mode below.");
         System.out.println();
-        System.out.println("By default the app runs in the GUI mode.");
+        System.out.println("By default the application runs in the GUI mode.");
         System.out.println("Here's the list of supported arguments for the GUI mode:");
-        new CmdLineParser(new GuiArguments()).printUsage(System.out);
+        new CmdLineParser(new GuiArguments(), argParserProps).printUsage(System.out);
         System.out.println();
         System.out.println("The application also supports the CLI batch mode (aka \"headless\" mode).");
         System.out.println("Here's the list of supported arguments for the batch mode:");
-        new CmdLineParser(new CliBatchArguments()).printUsage(System.out);
+        new CmdLineParser(new CliBatchArguments(), argParserProps).printUsage(System.out);
+        System.out.println();
+        System.out.println("EXAMPLES");
+        System.out.println();
+        System.out.println("To pack all atlases from the project:");
+        System.out.println("\tgdx-texture-packer --batch --project \"/path/to/project.tpproj\"");
+        System.out.println();
+        System.out.println("To pack the specific atlases from the project:");
+        System.out.println("\tgdx-texture-packer --batch --project \"/path/to/project.tpproj\" --atlases \"atlas_name\" \"another_atlas_name\"");
+        System.out.println();
+        System.out.println("To get the list of the available atlases in the project:");
+        System.out.println("\tgdx-texture-packer --batch --list-atlases --project \"/path/to/project.tpproj\"");
+        System.out.println("or a shorter form:");
+        System.out.println("\tgdx-texture-packer -b -l -p \"/path/to/project.tpproj\"");
     }
 
     private static void parseArguments(String[] args, Object argumentsObject) {
         try {
-            new CmdLineParser(argumentsObject).parseArgument(args);
+            new CmdLineParser(argumentsObject, argParserProps).parseArgument(args);
         } catch (CmdLineException e) {
-            System.err.println("Error parsing application arguments: " + e.getLocalizedMessage());
+            System.err.println("Error: " + e.getLocalizedMessage());
             System.exit(1);
         }
     }

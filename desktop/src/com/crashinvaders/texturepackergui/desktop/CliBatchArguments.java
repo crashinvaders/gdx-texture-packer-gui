@@ -14,19 +14,20 @@ public class CliBatchArguments {
 
     @Option(name = "--atlases", aliases = "-a",
             handler = StringArrayOptionHandler.class,
-            usage = "Space separated list of atlas names to pack.")
+            metaVar = "NAMES",
+            usage = "Space separated list of atlas names to pack. Pack all the atlases otherwise.")
     public String[] packNames = new String[0];
 
     @Option(name = "--threads", aliases = "-t",
-            usage = "Max number of parallel processing threads to use during atlas packing. Default value is 4.")
+            usage = "Max number of parallel processing threads to use during atlas packing (default value is 4).")
     public int threads = 4;
 
     @Option(name = "--list-atlases", aliases = "-l",
             forbids = { "--atlases", "--threads" },
-            usage = "Prints the project's atlas names and exit.")
+            usage = "Prints project's atlas names and exit.")
     public boolean listAtlases;
 
     @Option(name = "--debug",
-            usage = "Enables debug functionality. Prints some verbose log messages.")
+            usage = "Enables debug functionality. Prints verbose log messages.")
     public boolean debug = false;
 }
