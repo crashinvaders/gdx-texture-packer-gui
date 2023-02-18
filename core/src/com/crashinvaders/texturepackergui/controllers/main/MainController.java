@@ -178,7 +178,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             actorsPacks.edtOutputDir.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent event, Actor actor) {
-                    actorsPacks.imgOutputDirWarning.setVisible(actorsPacks.edtOutputDir.isEmpty());
+                    updateOutputDirWarningIndicator();
                 }
             });
             actorsPacks.imgOutputDirWarning.addAction(Actions.forever(Actions.sequence(
@@ -187,6 +187,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                     Actions.alpha(actorsPacks.imgOutputDirWarning.getColor().a),
                     Actions.fadeOut(0.5f)
             )));
+            updateOutputDirWarningIndicator();
         }
     }
 
@@ -230,6 +231,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             updateViewsFromPack(event.getProject().getSelectedPack());
             updateRecentProjects();
             updateFileType();
+            updateOutputDirWarningIndicator();
         }
     }
 
@@ -265,6 +267,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                         actorsPacks.edtOutputDir.setProgrammaticChangeEvents(false);
                         actorsPacks.edtOutputDir.setText(event.getPack().getOutputDir());
                         actorsPacks.edtOutputDir.setProgrammaticChangeEvents(true);
+                        updateOutputDirWarningIndicator();
                     }
                     break;
                 case FILENAME:
@@ -700,6 +703,10 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                 .message(getString("isInitUiScalePrompt"))
                 .duration(ShowToastEvent.DURATION_INDEFINITELY)
                 .click(globalActions::showUiScalingDialog));
+    }
+
+    private void updateOutputDirWarningIndicator() {
+        actorsPacks.imgOutputDirWarning.setVisible(actorsPacks.edtOutputDir.isEmpty());
     }
 
     //region Utility methods
