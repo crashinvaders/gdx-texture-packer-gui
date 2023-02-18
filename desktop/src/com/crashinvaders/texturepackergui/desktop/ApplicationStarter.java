@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
+import com.crashinvaders.texturepackergui.desktop.cli.CliBatchApp;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
 import org.kohsuke.args4j.*;
 import org.lwjgl.system.macosx.LibC;
@@ -26,30 +27,70 @@ public class ApplicationStarter {
     public static void main(final String[] args) {
         if(startNewJvmIfRequired(args)) return;
 
-        Arguments arguments = new Arguments();
-        try {
-            CmdLineParser parser = new CmdLineParser(arguments);
-            parser.parseArgument(args);
-        } catch (CmdLineException e) {
-            System.err.println("Error: " + e.getLocalizedMessage());
+        // Print help and exit.
+        if (args.length > 0 && "--help".equals(args[0])) {
+            printHelpMessage();
             return;
         }
 
-        if (arguments.batch) {
-            startCliApp(arguments);
-        } else {
-            startGuiApp(arguments);
+        // Print version and exit.
+        if (args.length > 0 && "--version".equals(args[0])) {
+            System.out.println(AppConstants.VERSION.toString());
+            return;
+        }
+
+        // Batch mode.
+        if (args.length > 0 && ("--batch".equals(args[0]) || "-b".equals(args[0]))) {
+            // Trim the first args element.
+            String[] argsBatch = Arrays.copyOfRange(args, 1, args.length);
+            CliBatchArguments arguments = new CliBatchArguments();
+            parseArguments(argsBatch, arguments);
+            startCliBatchApp(arguments);
+            return;
+        }
+
+        // Regular GUI mode.
+        GuiArguments arguments = new GuiArguments();
+        parseArguments(args, arguments);
+        startGuiApp(arguments);
+    }
+
+    private static void printHelpMessage() {
+        System.out.println("A simple utility to pack and manage texture atlases for libGDX game framework");
+        System.out.println("GitHub repository: https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO);
+        System.out.println();
+        System.out.println("List of general command line options:");
+        System.out.println(" --help\t\t: Prints this message.");
+        System.out.println(" --version\t: Prints the application version.");
+        System.out.println(" --batch (-b)\t: Starts the app in the batch mode.");
+        System.out.println("\t\t  Read about the batch mode below.");
+        System.out.println();
+        System.out.println("By default the app runs in the GUI mode.");
+        System.out.println("Here's the list of supported arguments for the GUI mode:");
+        new CmdLineParser(new GuiArguments()).printUsage(System.out);
+        System.out.println();
+        System.out.println("The application also supports the CLI batch mode (aka \"headless\" mode).");
+        System.out.println("Here's the list of supported arguments for the batch mode:");
+        new CmdLineParser(new CliBatchArguments()).printUsage(System.out);
+    }
+
+    private static void parseArguments(String[] args, Object argumentsObject) {
+        try {
+            new CmdLineParser(argumentsObject).parseArgument(args);
+        } catch (CmdLineException e) {
+            System.err.println("Error parsing application arguments: " + e.getLocalizedMessage());
+            System.exit(1);
         }
     }
 
-    public static void startCliApp(Arguments arguments) {
+    public static void startCliBatchApp(CliBatchArguments arguments) {
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
         config.updatesPerSecond = -1; // Do not call update method.
-        new HeadlessApplication(new CliApp(arguments), config);
+        new HeadlessApplication(new CliBatchApp(arguments), config);
     }
 
-    public static void startGuiApp(Arguments arguments) {
+    public static void startGuiApp(GuiArguments arguments) {
         AppConstants.logFile = LoggerUtils.setupExternalFileOutput();
         LoggerUtils.printGeneralInfo();
 

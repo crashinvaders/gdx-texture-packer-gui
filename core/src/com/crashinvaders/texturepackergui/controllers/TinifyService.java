@@ -76,7 +76,11 @@ public class TinifyService {
     }
 
     private synchronized void updateCompressionCount() {
-        Gdx.app.postRunnable(updateCompressionCountRunnable);
+        Gdx.app.postRunnable(() -> {
+            prefs.putInteger(PREF_KEY_COMPRESSION_COUNT, Tinify.compressionCount());
+            prefs.flush();
+            eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
+        });
     }
 
     public interface ValidationListener {
@@ -96,35 +100,17 @@ public class TinifyService {
         public void run() {
             try {
                 final boolean result = Tinify.validate();
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result)
-                            validationListener.onValid();
-                        else
-                            validationListener.onInvalid();
-                    }
+                Gdx.app.postRunnable(() -> {
+                    if (result)
+                        validationListener.onValid();
+                    else
+                        validationListener.onInvalid();
                 });
             } catch (final AccountException e) {
                 validationListener.onInvalid();
             } catch (final Exception e) {
-                Gdx.app.postRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        validationListener.onError(e);
-                    }
-                });
+                Gdx.app.postRunnable(() -> validationListener.onError(e));
             }
         }
     }
-
-    private Runnable updateCompressionCountRunnable = new Runnable() {
-        @Override
-        public void run() {
-            prefs.putInteger(PREF_KEY_COMPRESSION_COUNT, Tinify.compressionCount());
-            prefs.flush();
-            eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
-        }
-    };
-
 }

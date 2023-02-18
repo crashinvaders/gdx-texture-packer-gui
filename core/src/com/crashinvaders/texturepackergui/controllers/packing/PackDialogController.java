@@ -97,7 +97,7 @@ public class PackDialogController implements ActionContainer {
     }
 
     public void launchPack(ProjectModel project, Array<PackModel> packs) {
-        Array<PackProcessingNode> nodes = prepareProcessingNodes(project, packs);
+        Array<PackProcessingNode> nodes = PackingProcessorUtils.prepareProcessingNodes(project, packs);
 
         PackProcessingListAdapter adapter = (PackProcessingListAdapter)listItems.getListView().getAdapter();
         adapter.clear();
@@ -112,64 +112,15 @@ public class PackDialogController implements ActionContainer {
                 Math.round((stage.getHeight() - window.getHeight()) / 2));
 
         PackProcessingManager packProcessingManager = new PackProcessingManager(
-                new CompositePackProcessor(
-                        // Startup metadata
-                        new StartTimeMetadataProcessor(),
-
-                        // Validation
-                        new DataValidationProcessor(),
-
-                        // File type
-                        new PngFileTypeProcessor(),
-                        new JpegFileTypeProcessor(),
-                        new KtxFileTypeProcessor(),
-                        new BasisuFileTypeProcessor(),
-
-                        // Packing
-                        new PackingProcessor(),
-
-                        // Png compressors
-                        new PngtasticCompressionProcessor(),
-                        new ZopfliCompressionProcessor(),
-                        new TinifyCompressionProcessor(tinifyService),
-                        new TePng8CompressionProcessor(),
-                        new PngquantCompressionProcessor(),
-
-                        // Trailing metadata
-                        new FileSizeMetadataProcessor(),
-                        new PageAmountMetadataProcessor(),
-                        new EndTimeMetadataProcessor(),
-                        new TotalTimeMetadataProcessor(),
-                        new WarningMetadataProcessor()),
-
-//                        new TestProcessor(),
-                new PackWorkerListener());
+                PackingProcessorUtils.prepareRegularProcessorSequence(tinifyService),
+                new PackProcessingManager.GdxSyncListenerWrapper(new PackWorkerListener()),
+                4);
 
         for (int i = 0; i < nodes.size; i++) {
             PackProcessingNode node = nodes.get(i);
             packProcessingManager.postProcessingNode(node);
         }
-        packProcessingManager.execute(project);
-    }
-
-    private Array<PackProcessingNode> prepareProcessingNodes(ProjectModel project, Array<PackModel> packs) {
-        Array<PackProcessingNode> result = new Array<>();
-        for (PackModel pack : packs) {
-            for (ScaleFactorModel scaleFactor : pack.getScaleFactors()) {
-                PackModel newPack = new PackModel(pack);
-                newPack.setScaleFactors(Array.with(scaleFactor));
-                TexturePacker.Settings settings = newPack.getSettings();
-                settings.scaleSuffix[0] = "";
-                settings.scale[0] = scaleFactor.getFactor();
-                settings.scaleResampling[0] = scaleFactor.getResampling();
-
-                PackProcessingNode processingNode = new PackProcessingNode(project, newPack);
-                processingNode.setOrigPack(pack);
-
-                result.add(processingNode);
-            }
-        }
-        return result;
+        packProcessingManager.execute();
     }
 
     private void showReopenLastDialogNotification(boolean hasErrors, boolean hasWarnings) {

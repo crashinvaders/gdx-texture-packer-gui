@@ -2,14 +2,12 @@ package com.crashinvaders.texturepackergui.utils.packprocessing;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ObjectMap;
-import com.crashinvaders.texturepackergui.App;
-import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
 import com.crashinvaders.texturepackergui.utils.ThreadPrintStream;
-import org.apache.commons.io.IOUtils;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,7 +16,7 @@ public class PackProcessingManager {
 
     private final Array<PackProcessingNode> processingNodes = new Array<>();
     private final PackProcessor processor;
-    private final SyncListener listener;
+    private final Listener listener;
     private final ExecutorService executorService;
 
     private boolean processing;
@@ -27,10 +25,10 @@ public class PackProcessingManager {
     private PrintStream origStdOut;
     private PrintStream origStdErr;
 
-    public PackProcessingManager(PackProcessor processor, Listener listener) {
+    public PackProcessingManager(PackProcessor processor, Listener listener, int threadAmount) {
         this.processor = processor;
-        this.listener = new SyncListener(listener);
-        this.executorService = Executors.newFixedThreadPool(4);
+        this.listener = listener;
+        this.executorService = Executors.newFixedThreadPool(threadAmount);
     }
 
     public void postProcessingNode(PackProcessingNode node) {
@@ -40,7 +38,7 @@ public class PackProcessingManager {
         processingNodes.add(node);
     }
 
-    synchronized public void execute(final ProjectModel projectModel) {
+    synchronized public void execute() {
         if (processing) throw new IllegalStateException("Already in processing stage");
 
         processing = true;
@@ -98,10 +96,10 @@ public class PackProcessingManager {
         executorService.shutdown();
     }
 
-    private static class SyncListener implements Listener {
+    public static class GdxSyncListenerWrapper implements Listener {
         private final Listener listener;
 
-        public SyncListener(Listener listener) {
+        public GdxSyncListenerWrapper(Listener listener) {
             this.listener = listener;
         }
 
@@ -125,6 +123,33 @@ public class PackProcessingManager {
         @Override
         public void onSuccess(final PackProcessingNode node) {
             Gdx.app.postRunnable(() -> listener.onSuccess(node));
+        }
+    }
+
+    public static class ListenerAdapter implements Listener {
+        @Override
+        public void onProcessingStarted() {
+
+        }
+
+        @Override
+        public void onProcessingFinished() {
+
+        }
+
+        @Override
+        public void onBegin(PackProcessingNode node) {
+
+        }
+
+        @Override
+        public void onSuccess(PackProcessingNode node) {
+
+        }
+
+        @Override
+        public void onError(PackProcessingNode node, Exception e) {
+
         }
     }
 

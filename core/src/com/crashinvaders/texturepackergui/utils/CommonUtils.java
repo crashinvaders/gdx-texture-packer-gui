@@ -246,4 +246,19 @@ public class CommonUtils {
     public static int compare(boolean x, boolean y) {
         return (x == y) ? 0 : (x ? 1 : -1);
     }
+
+    /** Returns the index of first occurrence of value in the array, or -1 if no such value exists.
+     * @param value May be null.
+     * @param identity If true, == comparison will be used. If false, .equals() comparison will be used.
+     * @return An index of first occurrence of value in array or -1 if no such value exists */
+    public static  <T> int indexOf(T[] items, @Null T value, boolean identity) {
+        if (identity || value == null) {
+            for (int i = 0, n = items.length; i < n; i++)
+                if (items[i] == value) return i;
+        } else {
+            for (int i = 0, n = items.length; i < n; i++)
+                if (value.equals(items[i])) return i;
+        }
+        return -1;
+    }
 }

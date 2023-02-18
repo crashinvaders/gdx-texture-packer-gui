@@ -133,16 +133,23 @@ public class App implements ApplicationListener {
 
                 // PROCESSORS
                 // Assets:
-                new AssetService(), new SkinAssetAnnotationProcessor(),
+                new AssetService(),
+                new SkinAssetAnnotationProcessor(),
                 // Locale:
                 localeService = new LocaleService(),
                 // Settings:
-                new I18nBundleAnnotationProcessor(), new PreferenceAnnotationProcessor(), new SkinAnnotationProcessor(),
-                new StageViewportAnnotationProcessor(), new PreferencesService(),
+                new I18nBundleAnnotationProcessor(),
+                new PreferenceAnnotationProcessor(),
+                new SkinAnnotationProcessor(),
+                new StageViewportAnnotationProcessor(),
+                new PreferencesService(),
                 // Interface:
-                new ViewAnnotationProcessor(), new ViewDialogAnnotationProcessor(),
-                new ViewActionContainerAnnotationProcessor(), new ViewStageAnnotationProcessor(),
-                new LmlMacroAnnotationProcessor(), new LmlParserSyntaxAnnotationProcessor(),
+                new ViewAnnotationProcessor(),
+                new ViewDialogAnnotationProcessor(),
+                new ViewActionContainerAnnotationProcessor(),
+                new ViewStageAnnotationProcessor(),
+                new LmlMacroAnnotationProcessor(),
+                new LmlParserSyntaxAnnotationProcessor(),
                 new AvailableLocalesAnnotationProcessor(),
 
                 // COMPONENTS

@@ -5,14 +5,14 @@ import java.io.PrintStream;
 
 /**
  * A ThreadPrintStream replaces the normal System.out and ensures
- * that output to System.out goes to a different PrintStream for
- * each thread.  It does this by using ThreadLocal to maintain a
+ * that output to System.out/err goes to a different PrintStream for
+ * each thread. It does so by using ThreadLocal to maintain a
  * PrintStream for each thread.
  */
 public class ThreadPrintStream extends PrintStream {
 
     /**
-     * Changes System.out to a ThreadPrintStream which will
+     * Changes System.out/err to a ThreadPrintStream which will
      * send output to a separate file for each thread.
      */
     public static void replaceSystemOut() {
