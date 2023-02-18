@@ -12,7 +12,7 @@ compileJava.options.incremental = true
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.ApplicationStarter"
-project.ext.distFileName = "$project.appName-$project.ext.version"
+project.ext.distFileName = "$project.appName-$project.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
 project.ext.lwjglVersion = "3.3.0"
@@ -29,7 +29,6 @@ def nativePlatforms = [
 ]
 
 dependencies {
-    runtimeOnly files(project.resourceDirs)
     implementation project(":core")
     implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
@@ -59,6 +58,8 @@ dependencies {
         runtimeOnly "org.lwjgl:lwjgl-openal::$it"
         runtimeOnly "org.lwjgl:lwjgl-opengl::$it"
     }
+
+    runtimeOnly files(project.resourceDirs)
 }
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -190,14 +191,14 @@ macAppBundle {
     javaProperties.put("apple.laf.useScreenMenuBar", "true")
     javaExtras.put('-XstartOnFirstThread', null)
     javaExtras.put('-Djava.awt.headless', "true")
-    bundleExtras.put('CFBundleVersion', project.ext.version)
-    bundleExtras.put('CFBundleShortVersionString', project.ext.version)
+    bundleExtras.put('CFBundleVersion', project.version)
+    bundleExtras.put('CFBundleShortVersionString', project.version)
     // This one comes as a recommendation from
     // https://github.com/tofi86/universalJavaApplicationStub#recommended-additional-plist-keys
     bundleExtras.put('NSAppleEventsUsageDescription', 'There was an error while launching the application. Please click OK to display a dialog with more information or cancel and view the syslog for details.')
     bundleJRE = false
     appName = "GDX Texture Packer"
-    dmgName = "${project.appName}-${project.ext.version}"
+    dmgName = "${project.appName}-${project.version}"
     icon = "icons.icns"
 //    backgroundImage = "doc/macbackground.png"
 }
@@ -235,7 +236,7 @@ cleanMacAppJavaDir.dependsOn generatePlist
 def linuxInstallationDir = '/opt/gdx-texture-packer'
 ospackage {
     release = 1
-    version = project.ext.version
+    version = project.version
     // We have to stick to the old name "gdx-texturepacker" as package ID change breaks updates.
     packageName = 'gdx-texturepacker'
     os = 'LINUX' // only applied to RPM

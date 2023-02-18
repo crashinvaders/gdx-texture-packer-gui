@@ -9,6 +9,7 @@ import com.crashinvaders.texturepackergui.controllers.DefaultFileDialogService;
 import com.crashinvaders.texturepackergui.controllers.FileDialogService;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.shortcuts.GlobalShortcutHandler;
+import com.crashinvaders.texturepackergui.generated.CoreBuildConfig;
 import com.github.czyzby.autumn.annotation.Initiate;
 import com.github.czyzby.autumn.annotation.Provider;
 import com.github.czyzby.autumn.context.Context;
@@ -33,6 +34,7 @@ import com.github.czyzby.autumn.provider.DependencyProvider;
 import com.github.czyzby.autumn.scanner.ClassScanner;
 import com.github.czyzby.kiwi.util.gdx.GdxUtilities;
 import com.github.czyzby.kiwi.util.gdx.asset.Disposables;
+import com.github.czyzby.lml.parser.LmlParser;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 
@@ -115,8 +117,12 @@ public class App implements ApplicationListener {
         contextDestroyer = initializer.initiate();
 
         // Load LML template with common values and default attribute setup.
-        interfaceService.getParser().parseTemplate(Gdx.files.internal("lml/common.lml"));
-        interfaceService.getParser().getData().addArgument("currentVersionCode", AppConstants.VERSION.toString());
+        LmlParser lmlParser = interfaceService.getParser();
+        lmlParser.parseTemplate(Gdx.files.internal("lml/common.lml"));
+        lmlParser.getData().addArgument("appVersion", AppConstants.VERSION.toString());
+        lmlParser.getData().addArgument("commitHashShort", CoreBuildConfig.COMMIT);
+        lmlParser.getData().addArgument("urlGitHubRepo",
+                "https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO);
     }
 
     /** Invoked before context initiation.

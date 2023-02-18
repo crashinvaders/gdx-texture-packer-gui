@@ -10,10 +10,12 @@
 
             <vistable onecolumn="true" align="center">
                 <image style="custom/app-logo-2x" scaling="none"/>
-                <horizontalgroup align="right" spacing="4" padright="10" padtop="-2">
-                    <label style="small" text="@dAboutVersion" color="orange"/>
-                    <label style="small" text="{currentVersionCode}" color="orange"/>
+
+                <horizontalgroup align="right" spacing="4" padtop="0" padright="10">
+                    <linklabel style="white-small" color="grey" text=" #{commitHashShort}" href="{urlGitHubRepo}/commit/{commitHashShort}"/>
+                    <linklabel style="white-small" color="orange" text="v{appVersion}" href="{urlGitHubRepo}/releases/tag/{appVersion}"/>
                 </horizontalgroup>
+
             </vistable>
 
             <actor height="8"/>

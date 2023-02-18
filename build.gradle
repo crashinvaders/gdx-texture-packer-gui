@@ -2,23 +2,27 @@ buildscript {
     repositories {
         mavenLocal()
         mavenCentral()
+        gradlePluginPortal()
+        maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
         classpath "edu.sc.seis:macAppBundle:2.3.0"
-        classpath "com.netflix.nebula:gradle-ospackage-plugin:11.0.0" //TODO Change to 9.0.0 when gradle is updated 7.0+
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:11.0.0"
         classpath "com.badlogicgames.gdx:gdx-jnigen-gradle:$jnigenVersion"
+        // Extract Git metadata for Gradle scripts.
+        classpath "org.ajoberstar.grgit:org.ajoberstar.grgit.gradle.plugin:4.1.1" // Update to the latest version when move to Gradle 7+
+        // Generate Java build config class from Gradle.
+        classpath "com.github.gmazzo:gradle-buildconfig-plugin:3.1.0"
     }
 }
 
 allprojects {
     apply plugin: "idea"
 
-    ext {
-        appName = "gdx-texture-packer"
-        version = '4.12.0'
-    }
+    ext.appName = "gdx-texture-packer"
+    version = '4.12.0'
 
     repositories {
         mavenLocal()

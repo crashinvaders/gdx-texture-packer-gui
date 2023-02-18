@@ -1,4 +1,6 @@
 apply plugin: "java-library"
+apply plugin: 'org.ajoberstar.grgit'
+apply plugin: 'com.github.gmazzo.buildconfig'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -7,8 +9,8 @@ java {
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 compileJava.options.incremental = true
 
-sourceSets.main.java.srcDirs = [ 'src/' ]
-sourceSets.main.resources.srcDirs = [ 'resources/' ]
+sourceSets.main.java.srcDirs += [ 'src/' ]
+sourceSets.main.resources.srcDirs += [ 'resources/' ]
 
 // Add all basisu-wrapper module natives.
 fileTree("${project(':basisu-wrapper').projectDir}/libs").matching {
@@ -35,3 +37,15 @@ dependencies {
 
     api files('libs/libimagequant-java.jar')
 }
+
+buildConfig {
+    useJavaOutput()
+    className("CoreBuildConfig")
+    packageName("com.crashinvaders.texturepackergui.generated")
+
+    buildConfigField("String", "APP_NAME", "\"$project.name\"")
+    buildConfigField("String", "APP_VERSION", "\"$project.version\"")
+    buildConfigField("long", "BUILD_TIME", "${System.currentTimeMillis()}L")
+    buildConfigField("String", "COMMIT", "\"${grgit.head().abbreviatedId}\"")
+}
+tasks.compileJava.dependsOn generateBuildConfig

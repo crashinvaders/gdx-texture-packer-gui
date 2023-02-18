@@ -227,6 +227,7 @@
 		orange: {fontColor: text-red, underline: white, font: default-font }
 		orange-small: {fontColor: text-red, underline: white, font: small-font }
 		grey: {fontColor: grey, underline: white, font: default-font }
+		grey-small: {fontColor: grey, underline: white, font: small-font }
 		white: {fontColor: white, underline: white, font: default-font }
 		white-small: {fontColor: white, underline: orange, font: small-font }
 		light-grey: {fontColor: light-grey, underline: white, font: default-font }

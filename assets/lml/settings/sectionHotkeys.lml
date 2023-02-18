@@ -8,7 +8,7 @@
                wrap="true"
                growx="true"/>
         <linklabel style="orange-small" text="@dSettingsHkExampleLink"
-                   href="https://github.com/crashinvaders/gdx-texture-packer-gui/blob/master/assets/hotkeys_default.txt"/>
+                   href="{urlGitHubRepo}/blob/master/assets/hotkeys_default.txt"/>
 
         <separator growx="true" padtop="12" padbottom="12" height="2"/>
 

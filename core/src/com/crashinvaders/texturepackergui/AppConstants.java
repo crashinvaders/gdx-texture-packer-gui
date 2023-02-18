@@ -1,13 +1,14 @@
 package com.crashinvaders.texturepackergui;
 
 import com.crashinvaders.common.Version;
+import com.crashinvaders.texturepackergui.generated.CoreBuildConfig;
 import com.github.czyzby.autumn.mvc.component.i18n.LocaleService;
 
 import java.io.File;
 import java.util.Locale;
 
 public class AppConstants {
-    public static final Version VERSION = new Version("4.12.0");
+    public static final Version VERSION = new Version(CoreBuildConfig.APP_VERSION);
     public static final String APP_TITLE = "GDX Texture Packer";
     public static final String EXTERNAL_DIR = ".gdxtexturepackergui";
     public static final String MODULES_DIR = EXTERNAL_DIR + File.separator + "modules";
