@@ -9,7 +9,7 @@ buildscript {
     }
     dependencies {
         classpath "edu.sc.seis:macAppBundle:2.3.0"
-        classpath "com.netflix.nebula:gradle-ospackage-plugin:11.0.0"
+        classpath "com.netflix.nebula:gradle-ospackage-plugin:8.4.1"
         classpath "com.badlogicgames.gdx:gdx-jnigen-gradle:$jnigenVersion"
         // Extract Git metadata for Gradle scripts.
         classpath "org.ajoberstar.grgit:org.ajoberstar.grgit.gradle.plugin:4.1.1" // Update to the latest version when move to Gradle 7+

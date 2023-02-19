@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'edu.sc.seis.macAppBundle'
-apply plugin: 'com.netflix.nebula.ospackage'
+apply plugin: 'nebula.ospackage'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -248,23 +248,30 @@ ospackage {
     packageDescription 'A simple utility to help you pack and manage texture atlases for libGDX game framework. It\'s mostly just a visual wrapper over libGDX TexturePacker and provides some extra features on top of it.'
     license file("$rootDir/distribution/license.txt").text
 
-    preInstall """#!/bin/sh
+    user 'root'
+    permissionGroup 'root'
+    fileMode 0664
 
-                # Fix read-only file mode for the old execution script. 
-                LAUNCHER_PATH="$linuxInstallationDir/launcher_linux.sh"
-                if [ -e "\$LAUNCHER_PATH" ]; then
-                    sudo chmod 0775 "\$LAUNCHER_PATH"
-                fi
-                
-               """.stripMargin()
+    preInstall """\
+#!/bin/sh
 
-    postInstall """#!/bin/sh
+# Fix read-only file mode for the old execution script. 
+LAUNCHER_PATH="$linuxInstallationDir/launcher_linux.sh"
+if [ -e "\$LAUNCHER_PATH" ]; then
+    sudo chmod 0775 "\$LAUNCHER_PATH"
+fi
 
-                # Update desktop cache.
-                sudo update-mime-database /usr/share/mime 
-                sudo update-icon-caches /usr/share/icons/hicolor
-                
-               """.stripMargin()
+""".stripMargin()
+
+    postInstall """\
+#!/bin/sh
+
+# Update desktop cache. 
+# "|| true" is to ignore the failed optional commands (some distros may not have these programs installed).
+sudo update-mime-database /usr/share/mime || true 
+sudo update-icon-caches /usr/share/icons/hicolor || true
+
+""".stripMargin()
 
     into linuxInstallationDir
 
@@ -287,18 +294,19 @@ ospackage {
 
     from(new File("$project.buildDir/tmp", 'gdx-texture-packer.desktop').with {
         it.parentFile.mkdirs()
-        it.write """[Desktop Entry]
-                |Name=GDX Texture Packer
-                |GenericName=Texture Packer
-                |Comment=$summary
-                |Version=$version
-                |Keywords=texture;atlas;gdx;libgdx;packer;
-                |Type=Application
-                |Categories=Graphics;Development;
-                |MimeType=application/gdx-tp-project;
-                |Terminal=false
-                |Exec=$linuxInstallationDir/launcher_linux.sh %U
-                |Icon=gdx-texture-packer""".stripMargin()
+        it.write """\
+[Desktop Entry]
+|Name=GDX Texture Packer
+|GenericName=Texture Packer
+|Comment=$summary
+|Version=$version
+|Keywords=texture;atlas;gdx;libgdx;packer;
+|Type=Application
+|Categories=Graphics;Development;
+|MimeType=application/gdx-tp-project;
+|Terminal=false
+|Exec=$linuxInstallationDir/launcher_linux.sh %U
+|Icon=gdx-texture-packer""".stripMargin()
         return it.absolutePath
     }) {
         into '/usr/share/applications/'
@@ -307,9 +315,10 @@ ospackage {
     // System-wide executable redirecting to the launcher script.
     from(new File("$project.buildDir/tmp", 'gdx-texture-packer').with {
         it.parentFile.mkdirs()
-        it.write """#!/bin/sh
-                $linuxInstallationDir/launcher_linux.sh \"\$@\"
-                """.stripMargin()
+        it.write """\
+#!/bin/sh
+$linuxInstallationDir/launcher_linux.sh \"\$@\"
+""".stripMargin()
         return it.absolutePath
     }) {
         into '/usr/bin/'
