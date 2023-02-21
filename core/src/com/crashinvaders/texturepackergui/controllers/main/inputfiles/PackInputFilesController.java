@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.actions.ActionsExt;
+import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.FileDialogService;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
@@ -255,6 +256,40 @@ public class PackInputFilesController implements ActionContainer {
                 }
             }
         }
+    }
+
+    @LmlAction("showSelectedInFileManager") void showSelectedInFileManager() {
+        Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
+
+        if (selectedNodes.size == 0)
+            return;
+
+        InputFile inputFile = selectedNodes.first();
+
+        FileHandle fileHandle = inputFile.getFileHandle();
+
+        if (!fileHandle.isDirectory()) {
+            fileHandle = fileHandle.parent();
+        }
+
+        if (!fileHandle.exists())
+            return;
+
+        App.inst().getSystemFileOpener().openFile(fileHandle);
+    }
+
+    @LmlAction("copySelectedFullPath") void copySelectedFullPath() {
+        Array<InputFile> selectedNodes = new Array<>(listAdapter.getSelection());
+
+        if (selectedNodes.size == 0)
+            return;
+
+        InputFile inputFile = selectedNodes.first();
+
+        FileHandle fileHandle = inputFile.getFileHandle();
+        String absPath = fileHandle.file().getAbsolutePath();
+
+        Gdx.app.getClipboard().setContents(absPath);
     }
 
     private void updateButtonsState() {

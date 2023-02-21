@@ -284,7 +284,7 @@ public class PackingProcessor implements PackProcessor {
             if (imageSet.contains(image)) {
                 imageSet.remove(image);
                 System.err.println(String.format(
-                        "[text-yellow]WARNING: Region: \"%s\" is listed twice. The last added configuration will be used - \"%s\"[]",
+                        "[text-yellow]WARNING: Region with the name \"%s\" is listed twice. The last added path will be used - \"%s\"[]",
                         image.regionName,
                         image.fileHandle.path()));
                 node.setMetadata(PackProcessingNode.META_HAS_WARNINGS, true);

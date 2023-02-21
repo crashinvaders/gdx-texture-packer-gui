@@ -5,12 +5,11 @@ import com.crashinvaders.common.statehash.StateHashUtils;
 import com.crashinvaders.common.statehash.StateHashable;
 import com.crashinvaders.texturepackergui.events.InputFilePropertyChangedEvent;
 import com.github.czyzby.autumn.processor.event.EventDispatcher;
-import com.github.czyzby.kiwi.util.common.Strings;
 
 public class InputFile implements StateHashable {
     private final Type type;
     private final FileHandle fileHandle;
-    private final boolean directory;
+    private final boolean isDirectory;
 
     private EventDispatcher eventDispatcher;
 
@@ -31,9 +30,9 @@ public class InputFile implements StateHashable {
         // We cannot use just `fileHandle.isDirectory()`,
         // because in case the file doesn't exist it always returns `false`.
         if (fileHandle.exists()) {
-            this.directory = fileHandle.isDirectory();
+            this.isDirectory = fileHandle.isDirectory();
         } else {
-            this.directory = fileHandle.extension().length() == 0;
+            this.isDirectory = fileHandle.extension().length() == 0;
         }
     }
 
@@ -50,7 +49,7 @@ public class InputFile implements StateHashable {
     }
 
     public boolean isDirectory() {
-        return directory;
+        return isDirectory;
     }
 
     public String getDirFilePrefix() {
@@ -149,7 +148,7 @@ public class InputFile implements StateHashable {
 
     @Override
     public int computeStateHash() {
-        return StateHashUtils.computeHash(type, fileHandle, directory, dirFilePrefix,
+        return StateHashUtils.computeHash(type, fileHandle, isDirectory, dirFilePrefix,
                 recursive, flattenPaths, regionName, ninePatchProps);
     }
 

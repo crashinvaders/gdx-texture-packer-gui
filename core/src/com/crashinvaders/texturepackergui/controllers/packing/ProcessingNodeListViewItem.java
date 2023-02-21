@@ -1,6 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.packing;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.crashinvaders.texturepackergui.App;
+import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.packprocessing.PackProcessingNode;
 import com.github.czyzby.kiwi.util.common.Strings;
 import com.github.czyzby.lml.parser.LmlParser;
@@ -33,6 +35,9 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
     //    private final VisLabel lblMetadata;
     private final VisTable tableMetadata;
     private final VisImageButton btnLog;
+    private final VisImageButton btnOpenFolder;
+
+    private boolean hasError = false;
 
     public ProcessingNodeListViewItem(LmlParser parser, PackProcessingNode node, int orderNum) {
         this.parser = parser;
@@ -47,6 +52,7 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
 //        lblMetadata = view.findActor("lblMetadata");
         tableMetadata = view.findActor("tableMetadata");
         btnLog = view.findActor("btnLog");
+        btnOpenFolder = view.findActor("btnOpenFolder");
 
         if (orderNum%2 == 0) {
             view.setBackground("packingItemBg");
@@ -58,6 +64,12 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
                 showLogWindow();
             }
         });
+        btnOpenFolder.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                openPackFolder();
+            }
+        });
 
         lblPackName.setText(node.getPack().getCanonicalName() + "[light-grey]" + node.getPack().getScaleFactors().first().getSuffix());
     }
@@ -66,10 +78,14 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
         // Enable log button
         btnLog.setDisabled(false);
 
+        btnOpenFolder.setDisabled(hasError);
+
         parseMetadata();
     }
 
     public void setToError(Exception e) {
+        this.hasError = true;
+
         imgStateIndicator.setFrames(Array.with(VisUI.getSkin()
                 .getDrawable("custom/ic-proc-error")));
         imgStateIndicator.setCurrentFrame(0);
@@ -113,6 +129,16 @@ class ProcessingNodeListViewItem extends Container<VisTable> {
         dialog.getTitleLabel().setText(App.inst().getI18n().format("dialogTitlePackLog", node.getPack().getName()));
         dialog.show(getStage());
         getStage().setScrollFocus(scrLog);
+    }
+
+    public void openPackFolder() {
+        if (hasError)
+            return;
+
+        FileHandle outputDir = FileUtils.obtainIfExists(node.getPack().getOutputDir());
+        if (outputDir != null && outputDir.exists()) {
+            App.inst().getSystemFileOpener().openFile(outputDir);
+        }
     }
 
     @SuppressWarnings("unchecked")

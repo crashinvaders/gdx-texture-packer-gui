@@ -5,11 +5,13 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
 import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfigurationX;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.HdpiMode;
 import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
+import com.crashinvaders.texturepackergui.SystemFileOpener;
 import com.crashinvaders.texturepackergui.desktop.cli.CliBatchApp;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
 import org.kohsuke.args4j.*;
@@ -126,7 +128,9 @@ public class ApplicationStarter {
         appParams.startupProject = arguments.project;
         appParams.debug = arguments.debug;
 
-        App app = new App(new DesktopClassScanner(), appParams);
+        SystemFileOpener systemFileOpener = new SystemFileOpenerImpl();
+
+        App app = new App(appParams, new DesktopClassScanner(), systemFileOpener);
 
         if (!arguments.disableNativeFileDialogs) {
             // Setup LWJGL native file dialog support.
@@ -208,5 +212,20 @@ public class ApplicationStarter {
             e.printStackTrace();
         }
         return true;
+    }
+
+    private static class SystemFileOpenerImpl implements SystemFileOpener {
+
+        @Override
+        public boolean openFile(FileHandle fileHandle) {
+            return DesktopFileOpener.open(fileHandle.file());
+//            try {
+//                Desktop.getDesktop().open(fileHandle.file());
+//                return true;
+//            } catch (IOException e) {
+//                Gdx.app.error("SystemFileOpener", "Error opening file: " + fileHandle, e);
+//                return false;
+//            }
+        }
     }
 }

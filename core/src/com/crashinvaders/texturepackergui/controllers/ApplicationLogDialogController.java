@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.utils.CommonUtils;
-import com.github.czyzby.autumn.annotation.Inject;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
 import com.github.czyzby.autumn.mvc.stereotype.ViewDialog;
 import com.github.czyzby.kiwi.util.common.Strings;
@@ -14,11 +13,8 @@ import com.github.czyzby.lml.annotation.LmlAction;
 import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.annotation.LmlAfter;
 import com.github.czyzby.lml.parser.action.ActionContainer;
-import com.kotcrab.vis.ui.widget.VisTextArea;
 
-import java.awt.*;
 import java.io.File;
-import java.io.IOException;
 
 @ViewDialog(id="application_log", value = "lml/dialogApplicationLog.lml")
 public class ApplicationLogDialogController implements ActionContainer {
@@ -52,11 +48,13 @@ public class ApplicationLogDialogController implements ActionContainer {
 
         File parentDir = logFile.getParentFile();
 
-        try {
-            Desktop.getDesktop().open(parentDir);
-        } catch (IOException e) {
-            Gdx.app.error(TAG, "Error opening " + parentDir, e);
-        }
+        App.inst().getSystemFileOpener().openFile(new FileHandle(parentDir));
+
+//        try {
+//            Desktop.getDesktop().open(parentDir);
+//        } catch (IOException e) {
+//            Gdx.app.error(TAG, "Error opening " + parentDir, e);
+//        }
     }
 
     /** Displays the dialog if the InterfaceService is initialized. */

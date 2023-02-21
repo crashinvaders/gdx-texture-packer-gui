@@ -42,8 +42,9 @@ public class App implements ApplicationListener {
     private static final String TAG = App.class.getSimpleName();
 
     private static App instance;
-    private final ClassScanner componentScanner;
     private final AppParams params;
+    private final ClassScanner componentScanner;
+    private final SystemFileOpener systemFileOpener;
     private final PrioritizedInputMultiplexer inputMultiplexer;
     private final DragDropManager dragDropManager = new DragDropManager();
 
@@ -72,9 +73,10 @@ public class App implements ApplicationListener {
         return instance;
     }
 
-    public App(ClassScanner componentScanner, AppParams params) {
-        this.componentScanner = componentScanner;
+    public App(AppParams params, ClassScanner componentScanner, SystemFileOpener systemFileOpener) {
         this.params = params;
+        this.componentScanner = componentScanner;
+        this.systemFileOpener = systemFileOpener;
 
         inputMultiplexer = new PrioritizedInputMultiplexer();
         inputMultiplexer.setMaxPointers(1);
@@ -228,9 +230,11 @@ public class App implements ApplicationListener {
     public PrioritizedInputMultiplexer getInput() { return inputMultiplexer; }
     public GlobalShortcutHandler getShortcuts() { return shortcutHandler; }
     public I18NBundle getI18n() { return localeService.getI18nBundle(); }
-    public DefaultFileDialogService getDefaultFileDialogService() {return defaultFileDialogService;}
-    public FileDialogService getNativeFileDialogService() {return nativeFileDialogService; }
-    //endregion
+    public DefaultFileDialogService getDefaultFileDialogService() { return defaultFileDialogService;}
+    public FileDialogService getNativeFileDialogService() { return nativeFileDialogService; }
+    public SystemFileOpener getSystemFileOpener() { return systemFileOpener;
+    }
+//endregion
 
     /** This is utility component class that helps to get access to some system components for the {@link App} instance */
     @SuppressWarnings("WeakerAccess")

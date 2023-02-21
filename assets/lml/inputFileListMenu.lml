@@ -24,13 +24,24 @@
             onchange="PackInputFilesController.removeSelected"/>
     <menuseparator/>
     <menuitem
-            id="miAddInputFiles"
-            text="@addInputFiles"
-            image="custom/ic-input-file-add"
-            onchange="PackInputFilesController.addInputFiles"/>
+            id="miCopyFullPath"
+            text="@copyFullPath"
+            image="custom/ic-file-copy"
+            onchange="PackInputFilesController.copySelectedFullPath"/>
     <menuitem
-            id="miAddIgnoreFiles"
-            text="@addIgnoreFiles"
-            image="custom/ic-input-file-ignore-add"
-            onchange="PackInputFilesController.addIgnoreFiles"/>
+            id="miShowInFileManager"
+            text="@showInFileManager"
+            image="custom/ic-folder"
+            onchange="PackInputFilesController.showSelectedInFileManager"/>
+<!--    <menuseparator/>-->
+<!--    <menuitem-->
+<!--            id="miAddInputFiles"-->
+<!--            text="@addInputFiles"-->
+<!--            image="custom/ic-input-file-add"-->
+<!--            onchange="PackInputFilesController.addInputFiles"/>-->
+<!--    <menuitem-->
+<!--            id="miAddIgnoreFiles"-->
+<!--            text="@addIgnoreFiles"-->
+<!--            image="custom/ic-input-file-ignore-add"-->
+<!--            onchange="PackInputFilesController.addIgnoreFiles"/>-->
 </popupmenu>

@@ -24,6 +24,17 @@
         <actor width="12"/>
 
         <visimagebutton
+                id="btnOpenFolder"
+                style="pack-log"
+                image="custom/ic-pack-folder"
+                imagescaling="none"
+                generatedisabled="true"
+                disabled="true"
+                tooltip="@dPackingOpenPackFolder"
+                tablepad="8"
+                focusborder="false"/>
+
+        <visimagebutton
                 id="btnLog"
                 style="pack-log"
                 image="custom/ic-log-msg"

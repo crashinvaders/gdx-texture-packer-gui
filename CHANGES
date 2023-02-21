@@ -2,6 +2,7 @@
 - Headless batch processing mode support. Read more https://github.com/crashinvaders/gdx-texture-packer-gui#command-line
 - Option to select multiple atlases for processing. New action - "packMultipleAtlases". See #67
 - Atlases use new libGDX atlas output format by default ("Legacy format" is unchecked).
+- Add "show in file manager" contextual options.
 - Fixed file conflict errors when attempting to install from RPM package. See #140
 - Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project containing folder. See #126
 - Fixed grid layout adds redundant top padding.
