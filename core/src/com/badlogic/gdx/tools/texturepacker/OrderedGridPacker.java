@@ -98,7 +98,7 @@ public class OrderedGridPacker implements Packer {
 		// Flip so rows start at top.
 		for (int i = page.outputRects.size - 1; i >= 0; i--) {
 			Rect rect = page.outputRects.get(i);
-			rect.y = page.height - rect.y - rect.height;
+			rect.y = page.height - rect.y - rect.height + settings.paddingY;
 		}
 		return page;
 	}

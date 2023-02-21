@@ -4,6 +4,7 @@
 - Atlases use new libGDX atlas output format by default ("Legacy format" is unchecked).
 - Fixed file conflict errors when attempting to install from RPM package. See #140
 - Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project containing folder. See #126
+- Fixed grid layout adds redundant top padding.
 
 [4.11.0]
 - Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
