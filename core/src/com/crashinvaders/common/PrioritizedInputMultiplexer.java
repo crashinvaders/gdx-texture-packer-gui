@@ -107,6 +107,13 @@ public class PrioritizedInputMultiplexer implements InputProcessor {
 		return false;
 	}
 
+    @Override
+    public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+        for (int i = 0, n = processors.size(); i < n; i++)
+            if (processors.getValueAt(i).touchCancelled(screenX, screenY, pointer, button)) return true;
+        return false;
+    }
+
     private static class Wrapper implements InputProcessor {
         private final InputProcessor processor;
         private final int priority;
@@ -146,6 +153,10 @@ public class PrioritizedInputMultiplexer implements InputProcessor {
         @Override
         public boolean scrolled(float amountX, float amountY) {
             return processor.scrolled(amountX, amountY);
+        }
+        @Override
+        public boolean touchCancelled(int screenX, int screenY, int pointer, int button) {
+            return processor.touchCancelled(screenX, screenY, pointer, button);
         }
 
         @Override

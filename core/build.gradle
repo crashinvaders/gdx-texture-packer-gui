@@ -28,6 +28,7 @@ dependencies {
 //    api "com.badlogicgames.gdx:gdx-freetype:$gdxVersion" // We use locally modified copy of this library.
     api "com.crashinvaders.lml:gdx-lml:$lmlVersion"
     api "com.crashinvaders.lml:gdx-lml-vis:$lmlVersion"
+    api "com.crashinvaders.lml:gdx-autumn:$lmlVersion"
     api "com.crashinvaders.lml:gdx-autumn-mvc:$lmlVersion"
     api "com.kotcrab.vis:vis-ui:$visUiVersion"
     api "commons-io:commons-io:$commonsIoVersion"
