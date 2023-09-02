@@ -8,6 +8,9 @@ buildscript {
         maven { url "https://plugins.gradle.org/m2/" }
     }
     dependencies {
+        // We are stuck with Gradle 6 because of this outdated plugin.
+        // Possible move to a jpackage based plugin (https://github.com/petr-panteleyev/jpackage-gradle-plugin)
+        // to assemble OS specific distributions.
         classpath "edu.sc.seis:macAppBundle:2.3.0"
         classpath "com.netflix.nebula:gradle-ospackage-plugin:8.4.1"
         classpath "com.badlogicgames.gdx:gdx-jnigen-gradle:$jnigenVersion"

@@ -15,9 +15,9 @@ project.ext.mainClassName = "com.crashinvaders.texturepackergui.desktop.Applicat
 project.ext.distFileName = "$project.appName-$project.version"
 project.ext.resourceDirs = files('resources/', "$rootDir/assets/")
 
-project.ext.lwjglVersion = "3.3.0"
-project.ext.lwjglMacosNatives = "natives-macos-arm64"
-
+//FIXME NFD 3.3.2 requires wide code migration.
+// It's done in the "refactor/nfd-3.3.2-migration" branch, but opening native dialog leads to a crash (on Linux x64 at least).
+project.ext.lwjglNfdVersion = "3.3.1"
 def nativePlatforms = [
         "natives-windows",
         "natives-windows-x86",
@@ -34,29 +34,12 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
     implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-    implementation "com.crashinvaders.lml:gdx-autumn-fcs:$lmlVersion"
+    implementation "com.crashinvaders.lml:gdx-autumn-desktop-classgraph:$lmlVersion"
     implementation "args4j:args4j:$args4jVersion"
 
-    implementation "org.lwjgl:lwjgl-nfd:$lwjglVersion"
+    implementation "org.lwjgl:lwjgl-nfd:$lwjglNfdVersion"
     nativePlatforms.each {
-        runtimeOnly "org.lwjgl:lwjgl-nfd:$lwjglVersion:$it"
-    }
-
-    // This is a temporary LWJGL 3.3 snapshot version override,
-    // as current libGDX (1.10.0) is stuck with LWJGL 3.2 which doesn't yet support M1 macOS.
-    //TODO Update/remove when stable LWJGL 3.3 is out or libGDX official backend adds support for ARM macOS.
-    implementation platform("org.lwjgl:lwjgl-bom:$lwjglVersion")
-    implementation "org.lwjgl:lwjgl"
-    implementation "org.lwjgl:lwjgl-glfw"
-    implementation "org.lwjgl:lwjgl-jemalloc"
-    implementation "org.lwjgl:lwjgl-openal"
-    implementation "org.lwjgl:lwjgl-opengl"
-    nativePlatforms.each {
-        runtimeOnly "org.lwjgl:lwjgl::$it"
-        runtimeOnly "org.lwjgl:lwjgl-glfw::$it"
-        runtimeOnly "org.lwjgl:lwjgl-jemalloc::$it"
-        runtimeOnly "org.lwjgl:lwjgl-openal::$it"
-        runtimeOnly "org.lwjgl:lwjgl-opengl::$it"
+        runtimeOnly "org.lwjgl:lwjgl-nfd:$lwjglNfdVersion:$it"
     }
 
     runtimeOnly files(project.resourceDirs)
@@ -161,7 +144,7 @@ zipRelease.dependsOn distRelease
             or use CMD: "choco install nsis"
  *     3. FileAssoc macros should be installed.
  *          Copy code from http://nsis.sourceforge.net/FileAssoc
- *          into file "<NSIS_DIR>/Include/FileAssoc.nsh" 
+ *          into file "<NSIS_DIR>/Include/FileAssoc.nsh"
  *
  * After task execution, the output files can be found under "./distribution/output/".
  */
@@ -255,7 +238,7 @@ ospackage {
     preInstall """\
 #!/bin/sh
 
-# Fix read-only file mode for the old execution script. 
+# Fix read-only file mode for the old execution script.
 LAUNCHER_PATH="$linuxInstallationDir/launcher_linux.sh"
 if [ -e "\$LAUNCHER_PATH" ]; then
     sudo chmod 0775 "\$LAUNCHER_PATH"
@@ -266,9 +249,9 @@ fi
     postInstall """\
 #!/bin/sh
 
-# Update desktop cache. 
+# Update desktop cache.
 # "|| true" is to ignore the failed optional commands (some distros may not have these programs installed).
-sudo update-mime-database /usr/share/mime || true 
+sudo update-mime-database /usr/share/mime || true
 sudo update-icon-caches /usr/share/icons/hicolor || true
 
 """.stripMargin()
