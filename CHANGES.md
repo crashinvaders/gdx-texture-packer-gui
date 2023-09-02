@@ -4,6 +4,7 @@
 - Option to select multiple atlases for processing. New action - `packMultipleAtlases`. See [#67](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/67)
 - Atlases use new libGDX atlas output format by default ("Legacy format" is unchecked).
 - Add "show in file manager" contextual options.
+- Basis Universal updated to 1.16.4 and is nativelly supported on Linux arm32/arm64 (Raspberry Pi) and macOS arm64 (M1/M2 chips).
 - Fixed file conflict errors when attempting to install from RPM package. See [#140](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/140)
 - Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project containing folder. See [#126](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/126)
 - Fixed grid layout adds redundant top padding.
