@@ -113,6 +113,9 @@ jnigen {
     add(MacOsX, x64) {
 
     }
+    add(MacOsX, x64, ARM) {
+
+    }
 }
 
 jnigenJarNativesDesktop {
