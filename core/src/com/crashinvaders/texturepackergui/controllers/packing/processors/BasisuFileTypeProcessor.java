@@ -29,8 +29,8 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
     private static final boolean SYSTEM_SUPPORTED =
             SystemUtils.check(OperatingSystem.Windows, CpuArch.Amd64) ||
-            SystemUtils.check(OperatingSystem.Linux, CpuArch.X86, CpuArch.Amd64) ||
-            SystemUtils.check(OperatingSystem.MacOS, CpuArch.Amd64);
+            SystemUtils.check(OperatingSystem.Linux, CpuArch.Amd64, CpuArch.Arm32, CpuArch.Amd64) ||
+            SystemUtils.check(OperatingSystem.MacOS, CpuArch.Amd64, CpuArch.Arm64);
 
     @Override
     public void processPackage(PackProcessingNode node) throws Exception {
