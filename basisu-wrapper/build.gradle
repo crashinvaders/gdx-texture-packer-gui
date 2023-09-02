@@ -43,12 +43,14 @@ jnigen {
                 'include',
                 'basis-universal/encoder',
                 'basis-universal/transcoder',
+                'basis-universal/zstd',
         ]
         cppIncludes = [
                 // Basis Universal files.
                 'basis-universal/encoder/*.c',
                 'basis-universal/encoder/*.cpp',
                 'basis-universal/transcoder/basisu_transcoder.cpp',
+                'basis-universal/zstd/zstd.c',
 
                 // Local JNI files.
                 'basisu_native_utils.cpp',
@@ -59,6 +61,7 @@ jnigen {
         ]
         cExcludes = cppExcludes = [
                 'build/**',
+                'basis-universal/zstd/zstddeclib.c',
         ]
 
         def commonFlags =
@@ -78,7 +81,9 @@ jnigen {
                 '-DBASISD_SUPPORT_PVRTC2=0 ' +
                 '-DBASISD_SUPPORT_FXT1=0 ' +
                 '-DBASISD_SUPPORT_ETC2_EAC_RG11=0 ' +
-                '-DBASISU_SUPPORT_ENCODING=1 '
+                '-DBASISU_SUPPORT_ENCODING=1 ' +
+                '-DBASISD_SUPPORT_KTX2=1 ' +
+                '-DBASISD_SUPPORT_KTX2_ZSTD=0 '
 
         cFlags +=      " -std=c11   $commonFlags $transcoderDefines "
         cppFlags +=    " -std=c++11 $commonFlags $transcoderDefines "

@@ -16,8 +16,6 @@ namespace basisuWrapper {
 
 #define LOG_TAG "basisu_wrapper.cpp"
 
-    static etc1_global_selector_codebook codebook;
-
     void initBasisu() {
         static bool basisuInitialized;
         if (basisuInitialized)
@@ -30,25 +28,23 @@ namespace basisuWrapper {
 
         basisu_transcoder_init();
         basisu_encoder_init();
-
-        codebook.init(g_global_selector_cb_size, g_global_selector_cb);
     }
 
     uint32_t getTotalImages(uint8_t *data, uint32_t dataSize) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
         return transcoder.get_total_images(data, dataSize);
     }
 
     uint32_t getTotalMipmapLevels(uint8_t *data, uint32_t dataSize, uint32_t imageIndex) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
         return transcoder.get_total_image_levels(data, dataSize, imageIndex);
     }
 
     uint32_t getImageWidth(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
         uint32_t width;
         uint32_t height;
         uint32_t totalBlocks;
@@ -61,7 +57,7 @@ namespace basisuWrapper {
 
     uint32_t getImageHeight(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
         uint32_t width;
         uint32_t height;
         uint32_t totalBlocks;
@@ -74,13 +70,13 @@ namespace basisuWrapper {
 
     bool validateHeader(uint8_t *data, uint32_t dataSize) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
         return transcoder.validate_header(data, dataSize);
     }
 
     bool validateChecksum(uint8_t *data, uint32_t dataSize, bool fullValidation) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
         return transcoder.validate_file_checksums(data, dataSize, fullValidation);
     }
 
@@ -88,7 +84,7 @@ namespace basisuWrapper {
     bool transcodeRgba32(std::vector<uint8_t> &out, uint8_t *data, uint32_t dataSize,
                    uint32_t imageIndex, uint32_t levelIndex) {
         initBasisu();
-        basisu_transcoder transcoder(&codebook);
+        basisu_transcoder transcoder = {};
 
         uint32_t origWidth, origHeight, totalBlocks;
         if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, origWidth, origHeight, totalBlocks)) {
@@ -148,7 +144,7 @@ namespace basisuWrapper {
 
         basis_compressor_params params;
         params.m_source_images.push_back(imageEntry);
-        params.m_pSel_codebook = &codebook;
+        // params.m_pSel_codebook = &codebook;
         params.m_multithreading = false;
 
         params.m_uastc = uastc;
@@ -222,7 +218,11 @@ namespace basisuWrapper {
 //        std::vector<uint8_t> result = compressor.get_output_basis_file();
 
         // Copy the result.
-        out = compressor.get_output_basis_file();
+        // out = compressor.get_output_basis_file();
+        uint8_vec result = compressor.get_output_basis_file();
+        out = std::vector<uint8_t>(
+            result.data(), 
+            result.data() + result.size());
 
         return true;
     }
