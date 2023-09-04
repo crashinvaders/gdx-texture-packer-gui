@@ -1,2 +1,2 @@
 @echo off
-CALL gradlew jnigen jnigenBuildWindows jnigenBuildWindows64 jnigenJarNativesDesktop
+CALL gradlew jnigen jnigenBuildWindows64 jnigenJarNativesDesktop
