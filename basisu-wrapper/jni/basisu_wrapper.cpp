@@ -206,8 +206,11 @@ namespace basisuWrapper {
                 case basis_compressor::cECFailedUASTCRDOPostProcess:
                     basisuUtils::logError(LOG_TAG, "Compressor failed during the UASTC post process step!");
                     break;
+                case basis_compressor::cECFailedCreateKTX2File:
+                    basisuUtils::logError(LOG_TAG, "Compressor failed to create KTX2 file.");
+                    break;
                 default:
-                    basisuUtils::logError(LOG_TAG, "basis_compress::process() failed!");
+                    basisuUtils::logError(LOG_TAG, "basis_compress::process() failed with error code " + errorCode);
                     break;
             }
             return false;
