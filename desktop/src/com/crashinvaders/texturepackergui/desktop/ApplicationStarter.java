@@ -68,7 +68,7 @@ public class ApplicationStarter {
         System.out.println("A simple utility to pack and manage texture atlases for libGDX game framework.");
         System.out.println("GitHub page: https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO);
         System.out.println();
-        System.out.println("List of general command line options:");
+        System.out.println("General options:");
         System.out.println(" --help\t\t: Prints this message.");
         System.out.println(" --version\t: Prints the application version.");
         System.out.println(" --batch (-b)\t: Starts the application in the batch mode.");
