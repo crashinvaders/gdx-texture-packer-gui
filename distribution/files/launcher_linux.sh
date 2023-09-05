@@ -8,7 +8,9 @@ if [ ! -x "$(command -v java)" ]; then
 fi
 
 # cd to the installation dir.
-SCRIPT_DIR=$(dirname "$0")
+# A good solution that can withstand symbolic links.
+# https://stackoverflow.com/a/17744637/3802890
+SCRIPT_DIR="$(dirname "$(readlink -f -- "$0")")"
 cd "$SCRIPT_DIR" || exit 1
 
 # Launch the app.
