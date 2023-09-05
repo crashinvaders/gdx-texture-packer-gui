@@ -8,6 +8,7 @@
 - Fixed file conflict errors when attempting to install from RPM package. See [#140](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/140)
 - Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project containing folder. See [#126](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/126)
 - Fixed grid layout adds redundant top padding.
+- Fixed hotkeys don't work if any text field in focused.
 
 ### 4.11.0
 

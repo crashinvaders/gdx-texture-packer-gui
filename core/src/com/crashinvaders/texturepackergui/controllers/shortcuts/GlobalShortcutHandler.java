@@ -32,7 +32,7 @@ public class GlobalShortcutHandler extends InputAdapter {
     private final Array<Exception> parseErrors = new Array<>();
 
     @Initiate void initialize() {
-        App.inst().getInput().addProcessor(this, 10);
+        App.inst().getInput().addProcessor(this, 1000);
 
         reloadShortcuts();
     }
