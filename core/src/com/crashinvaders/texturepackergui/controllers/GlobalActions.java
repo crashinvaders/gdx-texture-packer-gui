@@ -343,8 +343,8 @@ public class GlobalActions implements ActionContainer {
             Gdx.app.error(TAG, "Error opening " + userHotkeyFile, e);
         }
     }
-    @LmlAction({"showMenuFile"}) public void showMenuFile() {
-        mainController.showMenuFile();
+    @LmlAction({"showMenuProject", "showMenuFile"}) public void showMenuFile() {
+        mainController.showMenuProject();
     }
     @LmlAction({"showMenuAtlas", "showMenuPack"}) public void showMenuPack() {
         mainController.showMenuPack();
