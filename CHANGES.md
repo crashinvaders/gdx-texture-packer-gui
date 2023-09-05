@@ -6,9 +6,9 @@
 - Add "show in file manager" contextual options.
 - Basis Universal updated to 1.16.4 and is nativelly supported on Linux arm32/arm64 (Raspberry Pi) and macOS arm64 (M1/M2 chips).
 - Fixed file conflict errors when attempting to install from RPM package. See [#140](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/140)
-- Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project containing folder. See [#126](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/126)
+- Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project-containing folder. See [#126](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/126)
 - Fixed grid layout adds redundant top padding.
-- Fixed hotkeys don't work if any text field in focused.
+- Fixed hotkeys don't work if any text field is focused.
 
 ### 4.11.0
 
