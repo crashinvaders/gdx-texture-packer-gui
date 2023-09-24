@@ -21,8 +21,6 @@ dependencies {
     testRuntimeOnly files("${project.buildDir}/libs/basisu-wrapper-natives-desktop.jar")
 }
 
-println file("${project.buildDir}/libs/basisu-wrapper-natives-desktop.jar")
-
 test {
     useJUnit()
     maxHeapSize = '1G'
