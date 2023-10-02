@@ -25,9 +25,24 @@ namespace basisuWrapper {
         bool validateChecksum(uint8_t *data, uint32_t dataSize, bool fullValidation);
 
         bool transcodeRgba32(basisu::vector<uint8_t> &out, uint8_t *data, uint32_t dataSize,
-                       uint32_t imageIndex, uint32_t levelIndex);
+                             uint32_t imageIndex, uint32_t levelIndex);
 
     } // namespace basis
+
+    namespace ktx2 {
+
+        uint32_t getTotalLayers(uint8_t *data, uint32_t dataSize);
+
+        uint32_t getTotalMipmapLevels(uint8_t *data, uint32_t dataSize);
+
+        uint32_t getImageWidth(uint8_t *data, uint32_t dataSize);
+
+        uint32_t getImageHeight(uint8_t *data, uint32_t dataSize);
+
+        bool transcodeRgba32(basisu::vector<uint8_t> &out, uint8_t *data, uint32_t dataSize,
+                             uint32_t layerIndex, uint32_t levelIndex);
+
+    } // namespace ktx
 
     // uastc - True to generate UASTC .basis file data, otherwise ETC1S.
     // ktx2 - Whether to pack the Basis texture into KTX2 container and apply extra ZSTD compression.

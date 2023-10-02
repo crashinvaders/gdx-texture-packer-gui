@@ -91,10 +91,62 @@ public class BasisuWrapper {
         return byteArray;
     */
 
+    public static int ktx2GetTotalLayers(Buffer data) {
+        return ktx2GetTotalLayersNative(data, data.capacity());
+    }
+    private static native int ktx2GetTotalLayersNative(Buffer data, int dataSize); /*
+        return basisuWrapper::ktx2::getTotalLayers((uint8_t*)data, dataSize);
+    */
+
+    public static int ktx2GetTotalMipmapLevels(Buffer data) {
+        return ktx2GetTotalMipmapLevelsNative(data, data.capacity());
+    }
+    private static native int ktx2GetTotalMipmapLevelsNative(Buffer data, int dataSize); /*
+        return basisuWrapper::ktx2::getTotalMipmapLevels((uint8_t*)data, dataSize);
+    */
+
+    public static int ktx2GetImageWidth(Buffer data) {
+        return ktx2GetImageWidthNative(data, data.capacity());
+    }
+    private static native int ktx2GetImageWidthNative(Buffer data, int dataSize); /*
+        return basisuWrapper::ktx2::getImageWidth((uint8_t*)data, dataSize);
+    */
+
+    public static int ktx2GetImageHeight(Buffer data) {
+        return ktx2GetImageHeightNative(data, data.capacity());
+    }
+    private static native int ktx2GetImageHeightNative(Buffer data, int dataSize); /*
+        return basisuWrapper::ktx2::getImageHeight((uint8_t*)data, dataSize);
+    */
+
+    /**
+     * Decodes a single mipmap level from the .ktx2 file to any of the supported output texture formats.
+     * If the .ktx2 file doesn't have alpha slices, the output alpha blocks will be set to fully opaque (all 255's).
+     * Currently, to decode to PVRTC1 the basis texture's dimensions in pixels must be a power of 2, due to PVRTC1 format requirements.
+     * @return the transcoded texture bytes
+     */
+    public static ByteBuffer ktx2TranscodeRgba32(Buffer data, int layerIndex, int levelIndex) {
+        byte[] transcodedBytes = ktx2TranscodeRgba32Native(data, data.capacity(), layerIndex, levelIndex);
+        return wrapIntoBuffer(transcodedBytes);
+    }
+    private static native byte[] ktx2TranscodeRgba32Native(Buffer dataRaw, int dataSize, int layerIndex, int levelIndex); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
+        basisu::vector<uint8_t> transcodedData;
+
+        if (!basisuWrapper::ktx2::transcodeRgba32(transcodedData, data, dataSize, layerIndex, levelIndex)) {
+            basisuUtils::throwException(env, "Error during Basis image transcoding.");
+            return 0;
+        };
+
+        jbyteArray byteArray = env->NewByteArray(transcodedData.size());
+        env->SetByteArrayRegion(byteArray, (jsize)0, (jsize)transcodedData.size(), (jbyte*)transcodedData.data());
+        return byteArray;
+    */
+
     /**
      *
      * @param uastc True to generate UASTC .basis file data, otherwise ETC1S
-     * @param ktx2 Whether to apply ZSTD and pack the Basis texture into KTX2 container.
+     * @param ktx2 Whether to pack the Basis texture into KTX2 container and apply ZSTD super-compression.
      * @param flipY Flip images across Y axis
      * @param compressionLevel Compression level, from 0 to 5 (BASISU_MAX_COMPRESSION_LEVEL, higher is slower)
      * @param perceptual Use perceptual sRGB colorspace metrics (for normal maps, etc.)
