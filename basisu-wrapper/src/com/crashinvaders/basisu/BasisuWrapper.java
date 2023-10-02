@@ -19,52 +19,52 @@ public class BasisuWrapper {
 
     */
 
-    public static int getTotalImages(Buffer data) {
-        return getTotalImagesNative(data, data.capacity());
+    public static int basisGetTotalImages(Buffer data) {
+        return basisGetTotalImagesNative(data, data.capacity());
     }
-    private static native int getTotalImagesNative(Buffer data, int dataSize); /*
-        return basisuWrapper::getTotalImages((uint8_t*)data, dataSize);
+    private static native int basisGetTotalImagesNative(Buffer data, int dataSize); /*
+        return basisuWrapper::basis::getTotalImages((uint8_t*)data, dataSize);
     */
 
-    public static int getTotalMipmapLevels(Buffer data, int imageIndex) {
-        return getTotalMipmapLevelsNative(data, data.capacity(), imageIndex);
+    public static int basisGetTotalMipmapLevels(Buffer data, int imageIndex) {
+        return basisGetTotalMipmapLevelsNative(data, data.capacity(), imageIndex);
     }
-    private static native int getTotalMipmapLevelsNative(Buffer data, int dataSize, int imageIndex); /*
-        return basisuWrapper::getTotalMipmapLevels((uint8_t*)data, dataSize, imageIndex);
+    private static native int basisGetTotalMipmapLevelsNative(Buffer data, int dataSize, int imageIndex); /*
+        return basisuWrapper::basis::getTotalMipmapLevels((uint8_t*)data, dataSize, imageIndex);
     */
 
-    public static int getImageWidth(Buffer data, int imageIndex, int levelIndex) {
-        return getImageWidthNative(data, data.capacity(), imageIndex, levelIndex);
+    public static int basisGetImageWidth(Buffer data, int imageIndex, int levelIndex) {
+        return basisGetImageWidthNative(data, data.capacity(), imageIndex, levelIndex);
     }
-    private static native int getImageWidthNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
-        return basisuWrapper::getImageWidth((uint8_t*)data, dataSize, imageIndex, levelIndex);
+    private static native int basisGetImageWidthNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
+        return basisuWrapper::basis::getImageWidth((uint8_t*)data, dataSize, imageIndex, levelIndex);
     */
 
-    public static int getImageHeight(Buffer data, int imageIndex, int levelIndex) {
-        return getImageHeightNative(data, data.capacity(), imageIndex, levelIndex);
+    public static int basisGetImageHeight(Buffer data, int imageIndex, int levelIndex) {
+        return basisGetImageHeightNative(data, data.capacity(), imageIndex, levelIndex);
     }
-    private static native int getImageHeightNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
-        return basisuWrapper::getImageHeight((uint8_t*)data, dataSize, imageIndex, levelIndex);
+    private static native int basisGetImageHeightNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
+        return basisuWrapper::basis::getImageHeight((uint8_t*)data, dataSize, imageIndex, levelIndex);
     */
 
     /**
      * Quick header validation - no crc16 checks.
      */
-    public static boolean validateHeader(Buffer data) {
-        return validateHeaderNative(data, data.capacity());
+    public static boolean basisValidateHeader(Buffer data) {
+        return basisValidateHeaderNative(data, data.capacity());
     }
-    private static native boolean validateHeaderNative(Buffer data, int dataSize); /*
-        return basisuWrapper::validateHeader((uint8_t*)data, dataSize);
+    private static native boolean basisValidateHeaderNative(Buffer data, int dataSize); /*
+        return basisuWrapper::basis::validateHeader((uint8_t*)data, dataSize);
     */
 
     /**
      * Validates the .basis file. This computes a crc16 over the entire file, so it's slow.
      */
-    public static boolean validateChecksum(Buffer data, boolean fullValidation) {
-        return validateChecksumNative(data, data.capacity(), fullValidation);
+    public static boolean basisValidateChecksum(Buffer data, boolean fullValidation) {
+        return basisValidateChecksumNative(data, data.capacity(), fullValidation);
     }
-    private static native boolean validateChecksumNative(Buffer data, int dataSize, boolean fullValidation); /*
-        return basisuWrapper::validateChecksum((uint8_t*)data, dataSize, fullValidation);
+    private static native boolean basisValidateChecksumNative(Buffer data, int dataSize, boolean fullValidation); /*
+        return basisuWrapper::basis::validateChecksum((uint8_t*)data, dataSize, fullValidation);
     */
 
     /**
@@ -73,16 +73,16 @@ public class BasisuWrapper {
      * Currently, to decode to PVRTC1 the basis texture's dimensions in pixels must be a power of 2, due to PVRTC1 format requirements.
      * @return the transcoded texture bytes
      */
-    public static ByteBuffer transcodeRgba32(Buffer data, int imageIndex, int levelIndex) {
-        byte[] transcodedBytes = transcodeRgba32Native(data, data.capacity(), imageIndex, levelIndex);
+    public static ByteBuffer basisTranscodeRgba32(Buffer data, int imageIndex, int levelIndex) {
+        byte[] transcodedBytes = basisTranscodeRgba32Native(data, data.capacity(), imageIndex, levelIndex);
         return wrapIntoBuffer(transcodedBytes);
     }
-    private static native byte[] transcodeRgba32Native(Buffer dataRaw, int dataSize, int imageIndex, int levelIndex); /*MANUAL
+    private static native byte[] basisTranscodeRgba32Native(Buffer dataRaw, int dataSize, int imageIndex, int levelIndex); /*MANUAL
         uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
-        std::vector<uint8_t> transcodedData;
+        basisu::vector<uint8_t> transcodedData;
 
-        if (!basisuWrapper::transcodeRgba32(transcodedData, data, dataSize, imageIndex, levelIndex)) {
-            basisuUtils::throwException(env, "Error during image transcoding.");
+        if (!basisuWrapper::basis::transcodeRgba32(transcodedData, data, dataSize, imageIndex, levelIndex)) {
+            basisuUtils::throwException(env, "Error during Basis image transcoding.");
             return 0;
         };
 
@@ -94,6 +94,7 @@ public class BasisuWrapper {
     /**
      *
      * @param uastc True to generate UASTC .basis file data, otherwise ETC1S
+     * @param ktx2 Whether to apply ZSTD and pack the Basis texture into KTX2 container.
      * @param flipY Flip images across Y axis
      * @param compressionLevel Compression level, from 0 to 5 (BASISU_MAX_COMPRESSION_LEVEL, higher is slower)
      * @param perceptual Use perceptual sRGB colorspace metrics (for normal maps, etc.)
@@ -105,7 +106,7 @@ public class BasisuWrapper {
      * @param userdata1 Goes directly into the Basis file header
      */
     public static ByteBuffer encode(Buffer rgbaData, int width, int height,
-                                    boolean uastc, boolean flipY, int compressionLevel,
+                                    boolean uastc, boolean ktx2, boolean flipY, int compressionLevel,
                                     boolean perceptual, boolean forceAlpha,
                                     boolean mipEnabled, float mipScale, int qualityLevel,
                                     int userdata0, int userdata1) {
@@ -114,19 +115,19 @@ public class BasisuWrapper {
         }
 
         byte[] encodedBytes = encodeNative(rgbaData, width, height,
-                uastc, flipY, compressionLevel, perceptual, forceAlpha,
+                uastc, ktx2, flipY, compressionLevel, perceptual, forceAlpha,
                 mipEnabled, mipScale, qualityLevel, userdata0, userdata1);
         return wrapIntoBuffer(encodedBytes);
     }
     private static native byte[] encodeNative(Buffer dataRaw, int width, int height,
-                                              boolean uastc, boolean flipY, int compressionLevel, boolean perceptual, boolean forceAlpha,
+                                              boolean uastc, boolean ktx2, boolean flipY, int compressionLevel, boolean perceptual, boolean forceAlpha,
                                               boolean mipEnabled, float mipScale, int qualityLevel,
                                               int userdata0, int userdata1); /*MANUAL
         uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
-        std::vector<uint8_t> encodedData;
+        basisu::vector<uint8_t> encodedData;
 
         if (!basisuWrapper::encode(encodedData, data, width, height,
-                                   uastc, flipY, compressionLevel, perceptual, forceAlpha,
+                                   uastc, ktx2, flipY, compressionLevel, perceptual, forceAlpha,
                                    mipEnabled, mipScale, qualityLevel, (uint32_t)userdata0, (uint32_t)userdata1)) {
             basisuUtils::throwException(env, "Error during image transcoding.");
             return 0;

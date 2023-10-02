@@ -1,10 +1,13 @@
 #pragma once
 
-#include <vector>
+#include <cstring>
+#include <climits>
+
+#include "basisu_containers.h"
 
 namespace fileUtils {    
 
     int getFileSize(const char* fileName);
 
-    std::vector<uint8_t> readFile(const char* fileName);
+    basisu::vector<uint8_t> readFile(const char* fileName);
 }

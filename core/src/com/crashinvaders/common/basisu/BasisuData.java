@@ -32,7 +32,7 @@ public class BasisuData implements Disposable {
 
         this.encodedData = encodedData;
 
-        if (!BasisuWrapper.validateHeader(encodedData)) {
+        if (!BasisuWrapper.basisValidateHeader(encodedData)) {
             throw new BasisuGdxException("Cannot validate header of the basis universal data.");
         }
     }
@@ -45,19 +45,19 @@ public class BasisuData implements Disposable {
     }
 
     public int getTotalImages() {
-        return BasisuWrapper.getTotalImages(encodedData);
+        return BasisuWrapper.basisGetTotalImages(encodedData);
     }
 
     public int getTotalMipmapLevels(int imageIndex) {
-        return BasisuWrapper.getTotalMipmapLevels(encodedData, imageIndex);
+        return BasisuWrapper.basisGetTotalMipmapLevels(encodedData, imageIndex);
     }
 
     public int getImageWidth(int imageIndex, int mipmapLevel) {
-        return BasisuWrapper.getImageWidth(encodedData, imageIndex, mipmapLevel);
+        return BasisuWrapper.basisGetImageWidth(encodedData, imageIndex, mipmapLevel);
     }
 
     public int getImageHeight(int imageIndex, int mipmapLevel) {
-        return BasisuWrapper.getImageHeight(encodedData, imageIndex, mipmapLevel);
+        return BasisuWrapper.basisGetImageHeight(encodedData, imageIndex, mipmapLevel);
     }
 
     /**
@@ -76,7 +76,7 @@ public class BasisuData implements Disposable {
      * Can be used for further processing or supplied directly to the OpenGL as an uncompressed texture.
      */
     public ByteBuffer transcodeRgba32(int imageIndex, int mipmapLevel) {
-        return BasisuWrapper.transcodeRgba32(encodedData, imageIndex, mipmapLevel);
+        return BasisuWrapper.basisTranscodeRgba32(encodedData, imageIndex, mipmapLevel);
     }
 
     /**

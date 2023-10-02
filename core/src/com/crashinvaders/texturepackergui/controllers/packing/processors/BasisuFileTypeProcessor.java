@@ -85,7 +85,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
             BasisuNativeLibLoader.loadIfNeeded();
             ByteBuffer encodedBuffer = BasisuWrapper.encode(rgbaBuffer, image.getWidth(), image.getHeight(),
-                    uastc, false, compressionLevel, false, false, false, 2f, qualityLevel, 0, 0);
+                    uastc, false, false, compressionLevel, false, false, false, 2f, qualityLevel, 0, 0);
 
             BufferUtils.disposeUnsafeByteBuffer(rgbaBuffer);
 

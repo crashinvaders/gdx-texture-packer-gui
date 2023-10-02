@@ -2,8 +2,8 @@
 #include <cstring>
 
 #include "basisu_wrapper.h"
-
 #include "basisu_native_utils.h"
+
 #include "basisu_transcoder.h"
 #include "basisu_enc.h"
 #include "basisu_comp.h"
@@ -30,101 +30,105 @@ namespace basisuWrapper {
         basisu_encoder_init();
     }
 
-    uint32_t getTotalImages(uint8_t *data, uint32_t dataSize) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-        return transcoder.get_total_images(data, dataSize);
-    }
+    namespace basis {
 
-    uint32_t getTotalMipmapLevels(uint8_t *data, uint32_t dataSize, uint32_t imageIndex) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-        return transcoder.get_total_image_levels(data, dataSize, imageIndex);
-    }
-
-    uint32_t getImageWidth(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-        uint32_t width;
-        uint32_t height;
-        uint32_t totalBlocks;
-        if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, width, height, totalBlocks)) {
-            basisuUtils::logError(LOG_TAG, "Failed to retrieve image info.");
-            return -1;
-        }
-        return width;
-    }
-
-    uint32_t getImageHeight(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-        uint32_t width;
-        uint32_t height;
-        uint32_t totalBlocks;
-        if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, width, height, totalBlocks)) {
-            basisuUtils::logError(LOG_TAG, "Failed to retrieve image info.");
-            return -1;
-        }
-        return height;
-    }
-
-    bool validateHeader(uint8_t *data, uint32_t dataSize) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-        return transcoder.validate_header(data, dataSize);
-    }
-
-    bool validateChecksum(uint8_t *data, uint32_t dataSize, bool fullValidation) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-        return transcoder.validate_file_checksums(data, dataSize, fullValidation);
-    }
-
-    // Based on https://github.com/BinomialLLC/basis_universal/blob/master/webgl/transcoder/basis_wrappers.cpp
-    bool transcodeRgba32(std::vector<uint8_t> &out, uint8_t *data, uint32_t dataSize,
-                   uint32_t imageIndex, uint32_t levelIndex) {
-        initBasisu();
-        basisu_transcoder transcoder = {};
-
-        uint32_t origWidth, origHeight, totalBlocks;
-        if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, origWidth, origHeight, totalBlocks)) {
-            basisuUtils::logError(LOG_TAG, "Failed to retrieve image level description.");
-            return false;
+        uint32_t getTotalImages(uint8_t *data, uint32_t dataSize) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
+            return transcoder.get_total_images(data, dataSize);
         }
 
-        // Transcode to RGBA8888 data.
-        const transcoder_texture_format format = transcoder_texture_format::cTFRGBA32;
-
-        const uint32_t flags = 0;
-
-        bool status;
-
-        if (!transcoder.start_transcoding(data, dataSize)) {
-            return false;
+        uint32_t getTotalMipmapLevels(uint8_t *data, uint32_t dataSize, uint32_t imageIndex) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
+            return transcoder.get_total_image_levels(data, dataSize, imageIndex);
         }
 
-        const uint32_t bytesPerPixel = basis_get_uncompressed_bytes_per_pixel(format);
-        const uint32_t bytesPerLine = origWidth * bytesPerPixel;
-        const uint32_t bytesTotal = bytesPerLine * origHeight;
+        uint32_t getImageWidth(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
+            uint32_t width;
+            uint32_t height;
+            uint32_t totalBlocks;
+            if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, width, height, totalBlocks)) {
+                basisuUtils::logError(LOG_TAG, "Failed to retrieve image info.");
+                return -1;
+            }
+            return width;
+        }
 
-        out.resize(bytesTotal);
+        uint32_t getImageHeight(uint8_t *data, uint32_t dataSize, uint32_t imageIndex, uint32_t levelIndex) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
+            uint32_t width;
+            uint32_t height;
+            uint32_t totalBlocks;
+            if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, width, height, totalBlocks)) {
+                basisuUtils::logError(LOG_TAG, "Failed to retrieve image info.");
+                return -1;
+            }
+            return height;
+        }
 
-        status = transcoder.transcode_image_level(
-            data, dataSize, 0, levelIndex,
-            out.data(), origWidth * origHeight,
-            format,
-            flags,
-            origWidth,
-            nullptr,
-            origHeight);
+        bool validateHeader(uint8_t *data, uint32_t dataSize) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
+            return transcoder.validate_header(data, dataSize);
+        }
 
-        transcoder.stop_transcoding();
+        bool validateChecksum(uint8_t *data, uint32_t dataSize, bool fullValidation) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
+            return transcoder.validate_file_checksums(data, dataSize, fullValidation);
+        }
 
-        return status;
-    }
+        // Based on https://github.com/BinomialLLC/basis_universal/blob/master/webgl/transcoder/basis_wrappers.cpp
+        bool transcodeRgba32(basisu::vector<uint8_t> &out, uint8_t *data, uint32_t dataSize,
+                       uint32_t imageIndex, uint32_t levelIndex) {
+            initBasisu();
+            basisu_transcoder transcoder = {};
 
-    bool encode(std::vector<uint8_t> &out, uint8_t *rgbaData, uint32_t width, uint32_t height,
-                    bool uastc, bool flipY, int compressionLevel, bool perceptual, bool forceAlpha,
+            uint32_t origWidth, origHeight, totalBlocks;
+            if (!transcoder.get_image_level_desc(data, dataSize, imageIndex, levelIndex, origWidth, origHeight, totalBlocks)) {
+                basisuUtils::logError(LOG_TAG, "Failed to retrieve image level description.");
+                return false;
+            }
+
+            // Transcode to RGBA8888 data.
+            const transcoder_texture_format format = transcoder_texture_format::cTFRGBA32;
+
+            const uint32_t flags = 0;
+
+            bool status;
+
+            if (!transcoder.start_transcoding(data, dataSize)) {
+                return false;
+            }
+
+            const uint32_t bytesPerPixel = basis_get_uncompressed_bytes_per_pixel(format);
+            const uint32_t bytesPerLine = origWidth * bytesPerPixel;
+            const uint32_t bytesTotal = bytesPerLine * origHeight;
+
+            out.resize(bytesTotal);
+
+            status = transcoder.transcode_image_level(
+                data, dataSize, 0, levelIndex,
+                out.data(), origWidth * origHeight,
+                format,
+                flags,
+                origWidth,
+                nullptr,
+                origHeight);
+
+            transcoder.stop_transcoding();
+
+            return status;
+        }
+
+    } // namespace basis
+
+    bool encode(basisu::vector<uint8_t> &out, uint8_t *rgbaData, uint32_t width, uint32_t height,
+                    bool uastc, bool ktx2, bool flipY, int compressionLevel, bool perceptual, bool forceAlpha,
                     bool mipEnabled, float mipScale, int qualityLevel,
                     uint32_t userdata0, uint32_t userdata1) {
 
@@ -157,6 +161,11 @@ namespace basisuWrapper {
         params.m_quality_level = qualityLevel;
         params.m_userdata0 = userdata0;
         params.m_userdata1 = userdata1;
+
+        // KTX2 related params.
+        params.m_create_ktx2_file = ktx2;
+        params.m_ktx2_uastc_supercompression = basist::KTX2_SS_ZSTANDARD; // KTX2_SS_BASISLZ
+//        params.m_ktx2_zstd_supercompression_level = 6;
 
         params.m_status_output = true;
 #ifdef DEBUG
@@ -218,14 +227,12 @@ namespace basisuWrapper {
 
         basisuUtils::logInfo(LOG_TAG, "Compression has finished successfully.");
 
-//        std::vector<uint8_t> result = compressor.get_output_basis_file();
-
         // Copy the result.
-        // out = compressor.get_output_basis_file();
-        uint8_vec result = compressor.get_output_basis_file();
-        out = std::vector<uint8_t>(
-            result.data(), 
-            result.data() + result.size());
+        if (ktx2) {
+            out = compressor.get_output_ktx2_file();
+        } else {
+            out = compressor.get_output_basis_file();
+        }
 
         return true;
     }

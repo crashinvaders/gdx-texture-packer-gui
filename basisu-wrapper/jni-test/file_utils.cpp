@@ -10,18 +10,18 @@ namespace fileUtils {
         return inputStream.tellg();
     }
 
-    std::vector<uint8_t> readFile(const char* fileName) {
+    basisu::vector<uint8_t> readFile(const char* fileName) {
         std::cout << "Reading file: \"" << fileName << '\"' << std::endl;
 
         int fileSize = getFileSize(fileName);
 
         std::ifstream inputStream(fileName, std::ifstream::binary);
 
-        std::vector<uint8_t> result(fileSize);
+        basisu::vector<uint8_t> result(fileSize);
 
         if (!(inputStream.read((char*)result.data(), fileSize))) {
             if (!(inputStream.eof())) {
-                return std::vector<uint8_t>();
+                return basisu::vector<uint8_t>();
             }
         }
 

@@ -81,7 +81,7 @@ jnigen {
                 '-DBASISD_SUPPORT_ETC2_EAC_RG11=0 ' +
                 '-DBASISU_SUPPORT_ENCODING=1 ' +
                 '-DBASISD_SUPPORT_KTX2=1 ' +
-                '-DBASISD_SUPPORT_KTX2_ZSTD=0 '
+                '-DBASISD_SUPPORT_KTX2_ZSTD=1 '
 
         cFlags +=      " -std=c11   $commonFlags $transcoderDefines "
         cppFlags +=    " -std=c++11 $commonFlags $transcoderDefines "
