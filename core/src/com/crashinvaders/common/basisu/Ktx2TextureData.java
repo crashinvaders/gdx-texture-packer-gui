@@ -106,7 +106,7 @@ public class Ktx2TextureData implements TextureData {
         }
 
         int totalLayers = ktx2Data.getTotalLayers();
-        if (layerIndex < 0 || layerIndex >= totalLayers) {
+        if (totalLayers > 0 && (layerIndex < 0 || layerIndex >= totalLayers)) {
             throw new BasisuGdxException("layerIndex " + layerIndex + " exceeds " +
                     "the total number of layers (" + totalLayers + ") in the KTX2 file.");
         }

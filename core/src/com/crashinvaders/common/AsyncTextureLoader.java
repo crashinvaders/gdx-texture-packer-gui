@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.utils.Disposable;
 import com.crashinvaders.common.basisu.BasisuTextureData;
+import com.crashinvaders.common.basisu.Ktx2TextureData;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 
 /** Simple utility class that starts loading texture asynchronously immediately after creation. */
@@ -39,7 +40,9 @@ public class AsyncTextureLoader implements Disposable {
             final TextureData textureData;
 
             try {
-                if (FileTypeType.BASIS.key.equals(textureFile.extension())) {
+                if ("ktx2".equals(textureFile.extension())) {
+                    textureData = new Ktx2TextureData(textureFile, 0, 0);
+                } else if ("basis".equals(textureFile.extension())) {
                     textureData = new BasisuTextureData(textureFile, 0, 0);
                 } else {
                     textureData = TextureData.Factory

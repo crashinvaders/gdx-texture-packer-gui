@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.crashinvaders.basisu.BasisuWrapper;
 import com.crashinvaders.common.basisu.BasisuGdxException;
 import com.crashinvaders.common.basisu.BasisuNativeLibLoader;
-import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
+import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
 import com.crashinvaders.texturepackergui.controllers.model.ProjectModel;
 import com.crashinvaders.texturepackergui.controllers.model.filetype.BasisuFileTypeModel;
@@ -40,7 +40,9 @@ public class BasisuFileTypeProcessor implements PackProcessor {
         if (project.getFileType().getClass() != BasisuFileTypeModel.class) return;
 
         if (!isBasisuSupported()) {
-            throw new IllegalStateException("Basis Universal natives are not supported on the current system: " + SystemUtils.getPrintString());
+            throw new IllegalStateException("KTX2/Basis Universal codec is not supported on the current platform: " + SystemUtils.getPrintString() + "\n" +
+                    "If you wish your system to be supported, please open a GitHub issue at" +
+                    "https://github.com/" + AppConstants.GITHUB_OWNER + "/" + AppConstants.GITHUB_REPO + "/issues");
         }
 
         BasisuFileTypeModel fileType = project.getFileType();
@@ -48,6 +50,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
         pack.getSettings().format = Pixmap.Format.RGBA8888;
 
         node.setPageFileWriter(new BasisPageFileWriter(
+                fileType.isKtx2(),
                 fileType.isUastc(),
                 fileType.getCompressionLevel(),
                 fileType.getQualityLevel()
@@ -60,11 +63,13 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
     public static class BasisPageFileWriter extends PngPageFileWriter {
 
+        private final boolean ktx2;
         private final boolean uastc;
         private final int compressionLevel;
         private final int qualityLevel;
 
-        public BasisPageFileWriter(boolean uastc, int compressionLevel, int qualityLevel) {
+        public BasisPageFileWriter(boolean ktx2, boolean uastc, int compressionLevel, int qualityLevel) {
+            this.ktx2 = ktx2;
             this.uastc = uastc;
             this.compressionLevel = compressionLevel;
             this.qualityLevel = qualityLevel;
@@ -72,7 +77,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
         @Override
         public String getFileExtension() {
-            return FileTypeType.BASIS.key;
+            return ktx2 ? "ktx2" : "basis";
         }
 
         @Override
@@ -85,7 +90,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
             BasisuNativeLibLoader.loadIfNeeded();
             ByteBuffer encodedBuffer = BasisuWrapper.encode(rgbaBuffer, image.getWidth(), image.getHeight(),
-                    uastc, false, false, compressionLevel, false, false, false, 2f, qualityLevel, 0, 0);
+                    uastc, ktx2, false, compressionLevel, false, false, false, 2f, qualityLevel, 0, 0);
 
             BufferUtils.disposeUnsafeByteBuffer(rgbaBuffer);
 

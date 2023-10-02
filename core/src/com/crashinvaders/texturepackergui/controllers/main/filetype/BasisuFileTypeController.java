@@ -47,6 +47,7 @@ public class BasisuFileTypeController implements FileTypeController {
     @LmlActor("ftcBasisu") ShrinkContainer container;
     @LmlActor("basisuFileTypeRoot") Actor basisuFileTypeRoot;
     @LmlActor("basisuNotSupportedHint") Actor basisuNotSupportedHint;
+    @LmlActor("cboBasisFileContainer") VisSelectBox<FileContainer> cboFileContainer;
     @LmlActor("cboBasisInterFormat") VisSelectBox<IntermediateFormat> cboInterFormat;
     @LmlActor("sbBasisQualityLevel") SeekBar sbQualityLevel;
     @LmlActor("sbBasisCompLevel") SeekBar sbCompLevel;
@@ -63,6 +64,7 @@ public class BasisuFileTypeController implements FileTypeController {
     @Override
     public void onViewCreated(Stage stage) {
         ignoreViewChangeEvents = true;
+        cboFileContainer.setItems(FileContainer.values());
         cboInterFormat.setItems(IntermediateFormat.values());
         ignoreViewChangeEvents = false;
     }
@@ -75,6 +77,7 @@ public class BasisuFileTypeController implements FileTypeController {
         basisuFileTypeRoot.setVisible(BasisuFileTypeProcessor.isBasisuSupported());
         basisuNotSupportedHint.setVisible(!BasisuFileTypeProcessor.isBasisuSupported());
 
+        updateFileContainer();
         updateInterFormat();
         updateQualityLevel();
         updateCompressionLevel();
@@ -87,6 +90,7 @@ public class BasisuFileTypeController implements FileTypeController {
     }
 
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
+        updateFileContainer();
         updateInterFormat();
         updateQualityLevel();
         updateCompressionLevel();
@@ -94,6 +98,9 @@ public class BasisuFileTypeController implements FileTypeController {
 
     @OnEvent(FileTypePropertyChangedEvent.class) void onEvent(FileTypePropertyChangedEvent event) {
         switch (event.getProperty()) {
+            case BASIS_KTX2:
+                updateFileContainer();
+                break;
             case BASIS_UASTC:
                 updateInterFormat();
                 break;
@@ -104,6 +111,14 @@ public class BasisuFileTypeController implements FileTypeController {
                 updateCompressionLevel();
                 break;
         }
+    }
+
+    @LmlAction("onFileContainerChanged") void onFileContainerChanged() {
+        if (model == null) return;
+        if (ignoreViewChangeEvents) return;
+
+        FileContainer container = cboFileContainer.getSelected();
+        model.setKtx2(container == FileContainer.KTX2);
     }
 
     @LmlAction("onInterFormatChanged") void onInterFormatChanged() {
@@ -187,6 +202,13 @@ public class BasisuFileTypeController implements FileTypeController {
         cboInterFormat.setSelected(format);
     }
 
+    private void updateFileContainer() {
+        if (model == null) return;
+
+        FileContainer container = model.isKtx2() ? FileContainer.KTX2 : FileContainer.BASIS;
+        cboFileContainer.setSelected(container);
+    }
+
     private void updateQualityLevel() {
         if (model == null) return;
 
@@ -203,5 +225,9 @@ public class BasisuFileTypeController implements FileTypeController {
 
     public enum IntermediateFormat {
         ETC1S, UASTC
+    }
+
+    public enum FileContainer {
+        KTX2, BASIS
     }
 }

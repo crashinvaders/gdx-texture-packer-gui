@@ -3,6 +3,12 @@
 
 <stack>
     <vistable id="basisuFileTypeRoot" tablealign="top" pad="4">
+
+        <label align="right" padright="4" tooltip="TODO">TODO</label>
+        <selectbox id="cboBasisFileContainer" growx="true" change="ftcBasisu.onFileContainerChanged" tooltip="TODO"/>
+
+        <:row padtop="4"/>
+
         <label align="right" padright="4" tooltip="@basisuTtTextureFormat">@gsTextureFormat</label>
         <selectbox id="cboBasisInterFormat" growx="true" change="ftcBasisu.onInterFormatChanged" tooltip="@basisuTtTextureFormat"/>
 
@@ -37,4 +43,5 @@
             @systemNotSupported|$getSystemNameText
         </label>
     </container>
+
 </stack>

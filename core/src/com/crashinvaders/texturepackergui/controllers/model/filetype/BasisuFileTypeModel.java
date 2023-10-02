@@ -10,12 +10,27 @@ import java.io.StringWriter;
 
 public class BasisuFileTypeModel extends FileTypeModel {
 
+    /** True to generate KTX2 container (and apply ZSTD super-compression to UASTC) */
+    private boolean ktx2 = true;
     /** True to generate UASTC .basis file data, otherwise ETC1S */
-    private boolean uastc = false;
+    private boolean uastc = true;
     /** Compression level, from 0 to 5 (higher is slower) */
-    private int compressionLevel = 1;
+    private int compressionLevel = 2;
     /** Controls the quality level. It ranges from [1,255] */
     private int qualityLevel = 128;
+
+    public boolean isKtx2() {
+        return ktx2;
+    }
+
+    public void setKtx2(boolean ktx2) {
+        if (this.ktx2 == ktx2) return;
+        this.ktx2 = ktx2;
+
+        if (eventDispatcher != null) {
+            eventDispatcher.postEvent(new FileTypePropertyChangedEvent(this, Property.BASIS_KTX2));
+        }
+    }
 
     public boolean isUastc() {
         return uastc;
@@ -76,6 +91,7 @@ public class BasisuFileTypeModel extends FileTypeModel {
             Json json = new Json();
             json.setWriter(new JsonWriter(buffer));
             json.writeObjectStart();
+            json.writeValue("ktx2", ktx2);
             json.writeValue("uastc", uastc);
             json.writeValue("compressionLevel", compressionLevel);
             json.writeValue("qualityLevel", qualityLevel);
@@ -91,6 +107,7 @@ public class BasisuFileTypeModel extends FileTypeModel {
         if (data == null) return;
 
         JsonValue jsonValue = new JsonReader().parse(data);
+        this.uastc = jsonValue.getBoolean("ktx2", this.ktx2);
         this.uastc = jsonValue.getBoolean("uastc", this.uastc);
         this.compressionLevel = jsonValue.getInt("compressionLevel", this.compressionLevel);
         this.qualityLevel = jsonValue.getInt("qualityLevel", this.qualityLevel);
