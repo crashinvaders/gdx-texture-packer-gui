@@ -87,10 +87,6 @@ jnigen {
         cppFlags +=    " -std=c++11 $commonFlags $transcoderDefines "
         linkerFlags += "            $commonFlags "
 
-        // Disable texture formats we don't support at all.
-        // Macros reference - https://github.com/BinomialLLC/basis_universal/wiki/Transcoder-details-and-shrinking-the-compiled-size-of-the-transcoder#shrinking-the-transcoders-compiled-size
-        cppFlags += ' -DBASISD_SUPPORT_FXT1=0 '
-
         // Enable for Basis Universal debug messages.
         // cppFlags += ' -DBASISU_FORCE_DEVEL_MESSAGES=1 '
     }

@@ -21,9 +21,9 @@ public class BasisuWrapperTest {
     private static final int IMAGE_KTX2_SIZE = 2048;
     private static final int IMAGE_BASIS_SIZE = 512;
 
-    private static ByteBuffer imageBasis0Buffer;
+    private static ByteBuffer imageBasisBuffer;
     private static ByteBuffer imageKtx2Buffer;
-    private static ByteBuffer imageRgba0Buffer;
+    private static ByteBuffer imageRgbaBuffer;
 
     @BeforeClass
     public static void init() throws IOException {
@@ -32,7 +32,7 @@ public class BasisuWrapperTest {
         System.out.println("Loading " + IMAGE_BASIS_NAME);
         try (InputStream is = BasisuWrapperTest.class.getClassLoader().getResourceAsStream(IMAGE_BASIS_NAME)) {
             byte[] bytes = TestUtils.readToByteArray(is);
-            imageBasis0Buffer = TestUtils.asByteBuffer(bytes);
+            imageBasisBuffer = TestUtils.asByteBuffer(bytes);
         }
 
         System.out.println("Loading " + IMAGE_KTX2_NAME);
@@ -44,26 +44,26 @@ public class BasisuWrapperTest {
         System.out.println("Loading " + IMAGE_RGBA_NAME);
         try (InputStream is = BasisuWrapperTest.class.getClassLoader().getResourceAsStream(IMAGE_RGBA_NAME)) {
             byte[] bytes = TestUtils.pngToRgbaBytes(is);
-            imageRgba0Buffer = TestUtils.asByteBuffer(bytes);
+            imageRgbaBuffer = TestUtils.asByteBuffer(bytes);
         }
     }
 
     @Test
     public void testBasisImageInfo() {
-        assertEquals(1, BasisuWrapper.basisGetTotalImages(imageBasis0Buffer));
-        assertEquals(1, BasisuWrapper.basisGetTotalMipmapLevels(imageBasis0Buffer, 0));
-        assertEquals(IMAGE_BASIS_SIZE, BasisuWrapper.basisGetImageWidth(imageBasis0Buffer, 0, 0));
-        assertEquals(IMAGE_BASIS_SIZE, BasisuWrapper.basisGetImageHeight(imageBasis0Buffer, 0, 0));
+        assertEquals(1, BasisuWrapper.basisGetTotalImages(imageBasisBuffer));
+        assertEquals(1, BasisuWrapper.basisGetTotalMipmapLevels(imageBasisBuffer, 0));
+        assertEquals(IMAGE_BASIS_SIZE, BasisuWrapper.basisGetImageWidth(imageBasisBuffer, 0, 0));
+        assertEquals(IMAGE_BASIS_SIZE, BasisuWrapper.basisGetImageHeight(imageBasisBuffer, 0, 0));
     }
 
     @Test
     public void testBasisValidateHeader() {
-        assertTrue(BasisuWrapper.basisValidateHeader(imageBasis0Buffer));
+        assertTrue(BasisuWrapper.basisValidateHeader(imageBasisBuffer));
     }
 
     @Test
     public void testBasisTranscodeRgba32() {
-        ByteBuffer rgba8888 = BasisuWrapper.basisTranscodeRgba32(imageBasis0Buffer, 0, 0);
+        ByteBuffer rgba8888 = BasisuWrapper.basisTranscodeRgba32(imageBasisBuffer, 0, 0);
 
         // Check if encoding is correct.
         assertEquals(IMAGE_BASIS_SIZE * IMAGE_BASIS_SIZE * 4, rgba8888.capacity());
@@ -93,7 +93,7 @@ public class BasisuWrapperTest {
 
     @Test
     public void testEncodeEtc1s() {
-        ByteBuffer rgbaBuffer = imageRgba0Buffer;
+        ByteBuffer rgbaBuffer = imageRgbaBuffer;
         int width = IMAGE_RGBA_SIZE;
         int height = IMAGE_RGBA_SIZE;
         boolean uastc = false;
@@ -107,7 +107,7 @@ public class BasisuWrapperTest {
 
     @Test
     public void testEncodeUastc() {
-        ByteBuffer rgbaBuffer = imageRgba0Buffer;
+        ByteBuffer rgbaBuffer = imageRgbaBuffer;
         int width = IMAGE_RGBA_SIZE;
         int height = IMAGE_RGBA_SIZE;
         boolean uastc = true;
@@ -121,7 +121,7 @@ public class BasisuWrapperTest {
 
     @Test
     public void testEncodeKtx2() {
-        ByteBuffer rgbaBuffer = imageRgba0Buffer;
+        ByteBuffer rgbaBuffer = imageRgbaBuffer;
         int width = IMAGE_RGBA_SIZE;
         int height = IMAGE_RGBA_SIZE;
         boolean uastc = true;

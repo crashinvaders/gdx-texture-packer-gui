@@ -9,7 +9,6 @@ public class BasisuWrapper {
     /*JNI
 
     #include <cstring>
-    #include <vector>
 
     #include "basisu_wrapper.h"
     #include "basisu_native_utils.h"
@@ -134,7 +133,7 @@ public class BasisuWrapper {
         basisu::vector<uint8_t> transcodedData;
 
         if (!basisuWrapper::ktx2::transcodeRgba32(transcodedData, data, dataSize, layerIndex, levelIndex)) {
-            basisuUtils::throwException(env, "Error during Basis image transcoding.");
+            basisuUtils::throwException(env, "Error during KTX2 image transcoding.");
             return 0;
         };
 
@@ -181,7 +180,7 @@ public class BasisuWrapper {
         if (!basisuWrapper::encode(encodedData, data, width, height,
                                    uastc, ktx2, flipY, compressionLevel, perceptual, forceAlpha,
                                    mipEnabled, mipScale, qualityLevel, (uint32_t)userdata0, (uint32_t)userdata1)) {
-            basisuUtils::throwException(env, "Error during image transcoding.");
+            basisuUtils::throwException(env, "Error during image encoding.");
             return 0;
         };
 
