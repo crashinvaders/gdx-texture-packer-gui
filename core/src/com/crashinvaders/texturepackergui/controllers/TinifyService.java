@@ -26,6 +26,8 @@ import java.util.concurrent.Executors;
  */
 @Component
 public class TinifyService {
+    private static final String TAG = TinifyService.class.getSimpleName();
+
     public static final String PREF_NAME = "tinify.xml";
     public static final String PREF_KEY_API_KEY = "api_key";
     public static final String PREF_KEY_COMPRESSION_COUNT = "compression_count";
@@ -43,7 +45,14 @@ public class TinifyService {
         prefs = Gdx.app.getPreferences(PREF_NAME);
         executorService = Executors.newSingleThreadExecutor();
 
-        Tinify.setKey(encryptor.decrypt(prefs.getString(PREF_KEY_API_KEY)));
+        String secretKey = null;
+        try {
+            secretKey = encryptor.decrypt(prefs.getString(PREF_KEY_API_KEY));
+        } catch (IllegalArgumentException e) {
+            Gdx.app.error(TAG, "Failed to read Tinify secret key.");
+        }
+        
+        Tinify.setKey(secretKey);
         Tinify.setCompressionCount(prefs.getInteger(PREF_KEY_COMPRESSION_COUNT, Tinify.compressionCount()));
 
         eventDispatcher.postEvent(new TinifyServicePropertyChangedEvent(Property.API_KEY));
