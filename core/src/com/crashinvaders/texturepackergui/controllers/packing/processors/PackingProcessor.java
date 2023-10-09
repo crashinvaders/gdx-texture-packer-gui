@@ -179,7 +179,7 @@ public class PackingProcessor implements PackProcessor {
             String prefix = filename;
             int dotIndex = prefix.lastIndexOf('.');
             if (dotIndex != -1) prefix = prefix.substring(0, dotIndex);
-            deleteProcessor.addInputRegex("(?i)" + prefix + "\\d*\\.(png|jpg|jpeg|ktx|zktx|basis)");
+            deleteProcessor.addInputRegex("(?i)" + prefix + "\\d*\\.(png|jpg|jpeg|ktx|zktx|basis|ktx2)");
             deleteProcessor.addInputRegex("(?i)" + prefix + atlasExtension);
 
             File outputRoot = new File(packModel.getOutputDir());
