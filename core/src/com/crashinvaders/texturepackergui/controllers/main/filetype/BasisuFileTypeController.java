@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
@@ -172,6 +173,23 @@ public class BasisuFileTypeController implements FileTypeController {
                 });
                 return null;
             });
+            lmlData.addActorConsumer("toastBasisuUpdateAll", actor -> {
+                Gdx.app.postRunnable(() -> {
+                    toastTable.fadeOut();
+
+                    Array<PackModel> packs = modelService.getProject().getPacks();
+                    for (int i = 0; i < packs.size; i++) {
+                        PackModel packModel = packs.get(i);
+                        TexturePacker.Settings packSettings = packModel.getSettings();
+
+                        packSettings.pot = true;
+                        packSettings.square = true;
+                        packSettings.multipleOfFour = true;
+                        packModel.fireSettingsChangedEvent();
+                    }
+                });
+                return null;
+            });
             lmlData.addActorConsumer("toastBasisuMuteCompatNotif", actor -> {
                 toastTable.fadeOut();
 
@@ -184,6 +202,7 @@ public class BasisuFileTypeController implements FileTypeController {
                     .parseTemplate(Gdx.files.internal("lml/toastBasisuAtlasSettingsPrompt.lml")).first();
             lmlData.removeArgument("toastBasisuPackName");
             lmlData.removeActorConsumer("toastBasisuUpdateRepack");
+            lmlData.removeActorConsumer("toastBasisuUpdateAll");
             lmlData.removeActorConsumer("toastBasisuMuteCompatNotif");
 
             toastTable.add(toastContent).grow();

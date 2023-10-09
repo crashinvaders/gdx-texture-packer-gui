@@ -17,6 +17,16 @@
                        click="toastBasisuUpdateRepack"/>
         </horizontalgroup>
 
+        <:row padtop="4"/>
+
+        <horizontalgroup spacing="6" padleft="0">
+            <linklabel style="light-grey" hexcolor="ffffffcc"
+                       text="@toastBasisuEnableAll"
+                       href="#"
+                       setemptylistener="true"
+                       click="toastBasisuUpdateAll"/>
+        </horizontalgroup>
+
         <:row padtop="4" padbottom="4"/>
 
         <horizontalgroup spacing="6" padleft="0">
