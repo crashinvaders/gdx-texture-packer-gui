@@ -91,7 +91,14 @@ jnigen {
         // cppFlags += ' -DBASISU_FORCE_DEVEL_MESSAGES=1 '
     }
     add(Windows, x64) {
-        compilerSuffix = '.exe'
+        def os = org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.currentOperatingSystem
+        if (os.isWindows()) {
+            // Windows
+            compilerSuffix = '.exe'
+        } else {
+            // Unix (Linux/macOS)
+            compilerSuffix = '-posix'
+        }
 
         linkerFlags += ' -s '   // Strip debug symbols.
     }
