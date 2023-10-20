@@ -220,8 +220,7 @@ namespace basisuWrapper {
                 format,
                 decode_flags);
 
-            //TODO Do we need to call this?
-            //transcoder.clear();
+            transcoder.clear();
 
             return status;
         }
@@ -249,7 +248,6 @@ namespace basisuWrapper {
 
         basis_compressor_params params;
         params.m_source_images.push_back(imageEntry);
-        // params.m_pSel_codebook = &codebook;
         params.m_multithreading = false;
 
         params.m_uastc = uastc;
