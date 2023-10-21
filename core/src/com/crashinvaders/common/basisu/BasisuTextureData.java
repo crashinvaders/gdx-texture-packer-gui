@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.crashinvaders.basisu.BasisuWrapper;
 
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 /**
  * Provides support for Basis texture data format for {@link com.badlogic.gdx.graphics.Texture}.
@@ -23,7 +24,7 @@ public class BasisuTextureData implements TextureData {
 
     private BasisuData basisuData;
 
-    private Buffer transcodedData = null;
+    private ByteBuffer transcodedData = null;
 
     private int width = 0;
     private int height = 0;
@@ -154,6 +155,7 @@ public class BasisuTextureData implements TextureData {
 //        }
 
         // Cleanup.
+        BasisuWrapper.disposeNativeBuffer(transcodedData);
         transcodedData = null;
         isPrepared = false;
     }

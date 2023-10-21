@@ -70,6 +70,7 @@ public class BasisuWrapperTest {
 
         BufferedImage bufferedImage = TestUtils.fromRgba8888(rgba8888, IMAGE_BASIS_SIZE, IMAGE_BASIS_SIZE);
         TestUtils.saveImagePng(bufferedImage, IMAGE_BASIS_NAME + ".rgba32");
+        BasisuWrapper.disposeNativeBuffer(rgba8888);
     }
 
     @Test
@@ -89,6 +90,7 @@ public class BasisuWrapperTest {
 
         BufferedImage bufferedImage = TestUtils.fromRgba8888(rgba8888, IMAGE_KTX2_SIZE, IMAGE_KTX2_SIZE);
         TestUtils.saveImagePng(bufferedImage, IMAGE_KTX2_NAME + ".rgba32");
+        BasisuWrapper.disposeNativeBuffer(rgba8888);
     }
 
     @Test
@@ -103,6 +105,7 @@ public class BasisuWrapperTest {
         assertTrue(BasisuWrapper.basisValidateHeader(basisBuffer));
 
         TestUtils.saveFile(basisBuffer, IMAGE_RGBA_NAME.replace(".png", ".etc1s.basis"));
+        BasisuWrapper.disposeNativeBuffer(basisBuffer);
     }
 
     @Test
@@ -117,6 +120,7 @@ public class BasisuWrapperTest {
         assertTrue(BasisuWrapper.basisValidateHeader(basisBuffer));
 
         TestUtils.saveFile(basisBuffer, IMAGE_RGBA_NAME.replace(".png", ".uastc.basis"));
+        BasisuWrapper.disposeNativeBuffer(basisBuffer);
     }
 
     @Test
@@ -132,5 +136,6 @@ public class BasisuWrapperTest {
         //assertTrue(BasisuWrapper.ktx2ValidateHeader(basisBuffer));
 
         TestUtils.saveFile(basisBuffer, IMAGE_RGBA_NAME.replace(".png", ".ktx2"));
+        BasisuWrapper.disposeNativeBuffer(basisBuffer);
     }
 }

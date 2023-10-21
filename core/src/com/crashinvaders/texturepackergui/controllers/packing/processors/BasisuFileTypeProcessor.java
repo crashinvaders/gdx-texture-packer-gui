@@ -95,6 +95,8 @@ public class BasisuFileTypeProcessor implements PackProcessor {
             BufferUtils.disposeUnsafeByteBuffer(rgbaBuffer);
 
             saveFile(encodedBuffer, output);
+
+            BasisuWrapper.disposeNativeBuffer(encodedBuffer);
         }
 
         private static byte[] bufferedImageToRgbaBytes(BufferedImage image) {

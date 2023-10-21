@@ -2,7 +2,6 @@ package com.crashinvaders.basisu;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
 
 public class BasisuWrapper {
 
@@ -16,54 +15,55 @@ public class BasisuWrapper {
     #define LOG_TAG "BasisuWrapper.java"
     #define BASE_PACKAGE com/crashinvaders/basisu
 
+    jobject wrapIntoBuffer(JNIEnv* env, basisu::vector<uint8_t> imageData) {
+        uint32_t imageDataSize = imageData.size_in_bytes();
+        uint8_t* nativeBuffer = (uint8_t*)malloc(imageDataSize);
+        memcpy(nativeBuffer, imageData.data(), imageDataSize);
+        return env->NewDirectByteBuffer(nativeBuffer, imageDataSize);
+    }
+
     */
 
-    public static int basisGetTotalImages(Buffer data) {
-        return basisGetTotalImagesNative(data, data.capacity());
-    }
-    private static native int basisGetTotalImagesNative(Buffer data, int dataSize); /*
-        return basisuWrapper::basis::getTotalImages((uint8_t*)data, dataSize);
+    public static native int basisGetTotalImages(Buffer dataBuffer); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
+        return basisuWrapper::basis::getTotalImages(data, dataSize);
     */
 
-    public static int basisGetTotalMipmapLevels(Buffer data, int imageIndex) {
-        return basisGetTotalMipmapLevelsNative(data, data.capacity(), imageIndex);
-    }
-    private static native int basisGetTotalMipmapLevelsNative(Buffer data, int dataSize, int imageIndex); /*
-        return basisuWrapper::basis::getTotalMipmapLevels((uint8_t*)data, dataSize, imageIndex);
+    public static native int basisGetTotalMipmapLevels(Buffer dataBuffer, int imageIndex); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
+        return basisuWrapper::basis::getTotalMipmapLevels(data, dataSize, imageIndex);
     */
 
-    public static int basisGetImageWidth(Buffer data, int imageIndex, int levelIndex) {
-        return basisGetImageWidthNative(data, data.capacity(), imageIndex, levelIndex);
-    }
-    private static native int basisGetImageWidthNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
-        return basisuWrapper::basis::getImageWidth((uint8_t*)data, dataSize, imageIndex, levelIndex);
+    public static native int basisGetImageWidth(Buffer dataBuffer, int imageIndex, int levelIndex); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
+        return basisuWrapper::basis::getImageWidth(data, dataSize, imageIndex, levelIndex);
     */
 
-    public static int basisGetImageHeight(Buffer data, int imageIndex, int levelIndex) {
-        return basisGetImageHeightNative(data, data.capacity(), imageIndex, levelIndex);
-    }
-    private static native int basisGetImageHeightNative(Buffer data, int dataSize, int imageIndex, int levelIndex); /*
-        return basisuWrapper::basis::getImageHeight((uint8_t*)data, dataSize, imageIndex, levelIndex);
+    public static native int basisGetImageHeight(Buffer dataBuffer, int imageIndex, int levelIndex); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
+        return basisuWrapper::basis::getImageHeight(data, dataSize, imageIndex, levelIndex);
     */
 
     /**
      * Quick header validation - no crc16 checks.
      */
-    public static boolean basisValidateHeader(Buffer data) {
-        return basisValidateHeaderNative(data, data.capacity());
-    }
-    private static native boolean basisValidateHeaderNative(Buffer data, int dataSize); /*
+    public static native boolean basisValidateHeader(Buffer dataBuffer); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         return basisuWrapper::basis::validateHeader((uint8_t*)data, dataSize);
     */
 
     /**
      * Validates the .basis file. This computes a crc16 over the entire file, so it's slow.
      */
-    public static boolean basisValidateChecksum(Buffer data, boolean fullValidation) {
-        return basisValidateChecksumNative(data, data.capacity(), fullValidation);
-    }
-    private static native boolean basisValidateChecksumNative(Buffer data, int dataSize, boolean fullValidation); /*
-        return basisuWrapper::basis::validateChecksum((uint8_t*)data, dataSize, fullValidation);
+    public static native boolean basisValidateChecksum(Buffer dataBuffer, boolean fullValidation); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
+        return basisuWrapper::basis::validateChecksum(data, dataSize, fullValidation);
     */
 
     /**
@@ -72,12 +72,9 @@ public class BasisuWrapper {
      * Currently, to decode to PVRTC1 the basis texture's dimensions in pixels must be a power of 2, due to PVRTC1 format requirements.
      * @return the transcoded texture bytes
      */
-    public static ByteBuffer basisTranscodeRgba32(Buffer data, int imageIndex, int levelIndex) {
-        byte[] transcodedBytes = basisTranscodeRgba32Native(data, data.capacity(), imageIndex, levelIndex);
-        return wrapIntoBuffer(transcodedBytes);
-    }
-    private static native byte[] basisTranscodeRgba32Native(Buffer dataRaw, int dataSize, int imageIndex, int levelIndex); /*MANUAL
-        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
+    public static native ByteBuffer basisTranscodeRgba32(Buffer dataBuffer, int imageIndex, int levelIndex); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         basisu::vector<uint8_t> transcodedData;
 
         if (!basisuWrapper::basis::transcodeRgba32(transcodedData, data, dataSize, imageIndex, levelIndex)) {
@@ -85,36 +82,30 @@ public class BasisuWrapper {
             return 0;
         };
 
-        jbyteArray byteArray = env->NewByteArray(transcodedData.size());
-        env->SetByteArrayRegion(byteArray, (jsize)0, (jsize)transcodedData.size(), (jbyte*)transcodedData.data());
-        return byteArray;
+        return wrapIntoBuffer(env, transcodedData);
     */
 
-    public static int ktx2GetTotalLayers(Buffer data) {
-        return ktx2GetTotalLayersNative(data, data.capacity());
-    }
-    private static native int ktx2GetTotalLayersNative(Buffer data, int dataSize); /*
+    public static native int ktx2GetTotalLayers(Buffer dataBuffer); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         return basisuWrapper::ktx2::getTotalLayers((uint8_t*)data, dataSize);
     */
 
-    public static int ktx2GetTotalMipmapLevels(Buffer data) {
-        return ktx2GetTotalMipmapLevelsNative(data, data.capacity());
-    }
-    private static native int ktx2GetTotalMipmapLevelsNative(Buffer data, int dataSize); /*
+    public static native int ktx2GetTotalMipmapLevels(Buffer dataBuffer); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         return basisuWrapper::ktx2::getTotalMipmapLevels((uint8_t*)data, dataSize);
     */
 
-    public static int ktx2GetImageWidth(Buffer data) {
-        return ktx2GetImageWidthNative(data, data.capacity());
-    }
-    private static native int ktx2GetImageWidthNative(Buffer data, int dataSize); /*
+    public static native int ktx2GetImageWidth(Buffer dataBuffer); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         return basisuWrapper::ktx2::getImageWidth((uint8_t*)data, dataSize);
     */
 
-    public static int ktx2GetImageHeight(Buffer data) {
-        return ktx2GetImageHeightNative(data, data.capacity());
-    }
-    private static native int ktx2GetImageHeightNative(Buffer data, int dataSize); /*
+    public static native int ktx2GetImageHeight(Buffer dataBuffer); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         return basisuWrapper::ktx2::getImageHeight((uint8_t*)data, dataSize);
     */
 
@@ -124,12 +115,9 @@ public class BasisuWrapper {
      * Currently, to decode to PVRTC1 the basis texture's dimensions in pixels must be a power of 2, due to PVRTC1 format requirements.
      * @return the transcoded texture bytes
      */
-    public static ByteBuffer ktx2TranscodeRgba32(Buffer data, int layerIndex, int levelIndex) {
-        byte[] transcodedBytes = ktx2TranscodeRgba32Native(data, data.capacity(), layerIndex, levelIndex);
-        return wrapIntoBuffer(transcodedBytes);
-    }
-    private static native byte[] ktx2TranscodeRgba32Native(Buffer dataRaw, int dataSize, int layerIndex, int levelIndex); /*MANUAL
-        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
+    public static native ByteBuffer ktx2TranscodeRgba32(Buffer dataBuffer, int layerIndex, int levelIndex); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         basisu::vector<uint8_t> transcodedData;
 
         if (!basisuWrapper::ktx2::transcodeRgba32(transcodedData, data, dataSize, layerIndex, levelIndex)) {
@@ -137,9 +125,7 @@ public class BasisuWrapper {
             return 0;
         };
 
-        jbyteArray byteArray = env->NewByteArray(transcodedData.size());
-        env->SetByteArrayRegion(byteArray, (jsize)0, (jsize)transcodedData.size(), (jbyte*)transcodedData.data());
-        return byteArray;
+        return wrapIntoBuffer(env, transcodedData);
     */
 
     /**
@@ -156,26 +142,19 @@ public class BasisuWrapper {
      * @param userdata0 Goes directly into the Basis file header
      * @param userdata1 Goes directly into the Basis file header
      */
-    public static ByteBuffer encode(Buffer rgbaData, int width, int height,
-                                    boolean uastc, boolean ktx2, boolean flipY, int compressionLevel,
-                                    boolean perceptual, boolean forceAlpha,
-                                    boolean mipEnabled, float mipScale, int qualityLevel,
-                                    int userdata0, int userdata1) {
-        if (rgbaData.capacity() != width * height * 4) {
-            throw new BasisuWrapperException("The input data size doesn't match to a an expected RGBA8888 width*height image size.");
-        }
-
-        byte[] encodedBytes = encodeNative(rgbaData, width, height,
-                uastc, ktx2, flipY, compressionLevel, perceptual, forceAlpha,
-                mipEnabled, mipScale, qualityLevel, userdata0, userdata1);
-        return wrapIntoBuffer(encodedBytes);
-    }
-    private static native byte[] encodeNative(Buffer dataRaw, int width, int height,
-                                              boolean uastc, boolean ktx2, boolean flipY, int compressionLevel, boolean perceptual, boolean forceAlpha,
-                                              boolean mipEnabled, float mipScale, int qualityLevel,
-                                              int userdata0, int userdata1); /*MANUAL
-        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataRaw);
+    public static native ByteBuffer encode(Buffer dataBuffer, int width, int height,
+                                                  boolean uastc, boolean ktx2, boolean flipY, int compressionLevel,
+                                                  boolean perceptual, boolean forceAlpha,
+                                                  boolean mipEnabled, float mipScale, int qualityLevel,
+                                                  int userdata0, int userdata1); /*MANUAL
+        uint8_t* data = (uint8_t*)env->GetDirectBufferAddress(dataBuffer);
+        uint32_t dataSize = (uint32_t)env->GetDirectBufferCapacity(dataBuffer);
         basisu::vector<uint8_t> encodedData;
+
+        if (dataSize != (uint32_t)(width * height * 4)) {
+            basisuUtils::throwException(env, "The input data buffer size doesn't match to an expected RGBA8888 width*height image size.");
+            return NULL;
+        }
 
         if (!basisuWrapper::encode(encodedData, data, width, height,
                                    uastc, ktx2, flipY, compressionLevel, perceptual, forceAlpha,
@@ -184,20 +163,10 @@ public class BasisuWrapper {
             return 0;
         };
 
-        jbyteArray byteArray = env->NewByteArray(encodedData.size());
-        env->SetByteArrayRegion(byteArray, (jsize)0, (jsize)encodedData.size(), (jbyte*)encodedData.data());
-        return byteArray;
+        return wrapIntoBuffer(env, encodedData);
     */
 
-    private static ByteBuffer wrapIntoBuffer(byte[] bytes) {
-        // Seems like allocating and filling a DirectByteBuffer
-        // is faster on Java side rather than on the native one
-        // (Even with receiving extra Java primitive array from the native code).
-        ByteBuffer buffer = ByteBuffer.allocateDirect(bytes.length);
-        buffer.order(ByteOrder.nativeOrder());
-        buffer.put(bytes);
-        ((Buffer)buffer).position(0);
-        ((Buffer)buffer).limit(buffer.capacity());
-        return buffer;
-    }
+    public static native void disposeNativeBuffer(ByteBuffer buffer); /*
+		free(buffer);
+	 */
 }

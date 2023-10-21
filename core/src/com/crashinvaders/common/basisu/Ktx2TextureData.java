@@ -7,8 +7,9 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.TextureData;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.crashinvaders.basisu.BasisuWrapper;
 
-import java.nio.Buffer;
+import java.nio.ByteBuffer;
 
 /**
  * Provides support for KTX2 texture data format for {@link com.badlogic.gdx.graphics.Texture}.
@@ -23,7 +24,7 @@ public class Ktx2TextureData implements TextureData {
 
     private Ktx2Data ktx2Data;
 
-    private Buffer transcodedData = null;
+    private ByteBuffer transcodedData = null;
 
     private int width = 0;
     private int height = 0;
@@ -133,21 +134,13 @@ public class Ktx2TextureData implements TextureData {
     public void consumeCustomData(int target) {
         if (!isPrepared) throw new GdxRuntimeException("Call prepare() before calling consumeCompressedData()");
 
-//        final int glInternalFormatCode = GL20.GL_RGBA;
-
-//        if (transcodeFormat.isCompressedFormat()) {
-//            BasisuGdxGl.glCompressedTexImage2D(target, 0, glInternalFormatCode,
-//                    width, height, 0,
-//                    transcodedData.capacity(), transcodedData);
-//        } else {
-//        int textureType = BasisuGdxUtils.toUncompressedGlTextureType(transcodeFormat);
         Gdx.gl.glTexImage2D(target, 0, GL20.GL_RGBA,
                 width, height, 0,
                 GL20.GL_RGBA, GL20.GL_UNSIGNED_BYTE,
                 transcodedData);
-//        }
 
         // Cleanup.
+        BasisuWrapper.disposeNativeBuffer(transcodedData);
         transcodedData = null;
         isPrepared = false;
     }
