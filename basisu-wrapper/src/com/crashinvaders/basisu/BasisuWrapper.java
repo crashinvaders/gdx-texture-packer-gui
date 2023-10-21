@@ -166,7 +166,11 @@ public class BasisuWrapper {
         return wrapIntoBuffer(env, encodedData);
     */
 
-    public static native void disposeNativeBuffer(ByteBuffer buffer); /*
-		free(buffer);
-	 */
+    /**
+     * A {@link ByteBuffer} returned from any of {@link BasisuWrapper}
+     * methods must be disposed using this method only.
+     */
+    public static native void disposeNativeBuffer(ByteBuffer dataBuffer); /*
+        free(dataBuffer);
+    */
 }
