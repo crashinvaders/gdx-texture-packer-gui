@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.desktop;
 
+import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.Option;
 import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 
@@ -19,6 +20,7 @@ public class CliBatchArguments {
     public String[] packNames = new String[0];
 
     @Option(name = "--threads", aliases = "-t",
+            metaVar = "THREADS",
             usage = "Max number of parallel processing threads to use during atlas packing (default value is 4).")
     public int threads = 4;
 

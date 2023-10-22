@@ -1,5 +1,6 @@
 package com.crashinvaders.texturepackergui.desktop;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
@@ -12,6 +13,7 @@ import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.AppParams;
 import com.crashinvaders.texturepackergui.SystemFileOpener;
+import com.crashinvaders.texturepackergui.desktop.cli.CliBasisPackApp;
 import com.crashinvaders.texturepackergui.desktop.cli.CliBatchApp;
 import com.github.czyzby.autumn.fcs.scanner.DesktopClassScanner;
 import org.kohsuke.args4j.*;
@@ -49,7 +51,17 @@ public class ApplicationStarter {
             String[] argsBatch = Arrays.copyOfRange(args, 1, args.length);
             CliBatchArguments arguments = new CliBatchArguments();
             parseArguments(argsBatch, arguments);
-            startCliBatchApp(arguments);
+            startCliApp(new CliBatchApp(arguments));
+            return;
+        }
+
+        // Basis pack mode.
+        if (args.length > 0 && ("--basis-pack".equals(args[0]) || "-ktx2-pack".equals(args[0]))) {
+            // Trim the first args element.
+            String[] argsBatch = Arrays.copyOfRange(args, 1, args.length);
+            CliBasisPackArguments arguments = new CliBasisPackArguments();
+            parseArguments(argsBatch, arguments);
+            startCliApp(new CliBasisPackApp(arguments));
             return;
         }
 
@@ -72,16 +84,21 @@ public class ApplicationStarter {
         System.out.println(" --help\t\t: Prints this message.");
         System.out.println(" --version\t: Prints the application version.");
         System.out.println(" --batch (-b)\t: Starts the application in the batch mode.");
-        System.out.println("\t\t  Read about the batch mode below.");
+        System.out.println(" --basis-pack\t: Compress an image into a KTX2/Basis texture.");
         System.out.println();
         System.out.println("By default the application runs in the GUI mode.");
         System.out.println("Here's the list of supported arguments for the GUI mode:");
         new CmdLineParser(new GuiArguments(), argParserProps).printUsage(System.out);
         System.out.println();
+        System.out.println("Batch mode (--bach)");
         System.out.println("The application also supports the CLI batch mode (aka \"headless\" mode).");
         System.out.println("Here's the list of supported arguments for the batch mode:");
         new CmdLineParser(new CliBatchArguments(), argParserProps).printUsage(System.out);
         System.out.println();
+        System.out.println("Basis Universal packer (--basis-pack)");
+        System.out.println("If you wish to pack any PNG/JPG image to a super-compressed");
+        System.out.println("KTX2/Basis texture, this utility mode is for you.");
+        new CmdLineParser(new CliBasisPackArguments(), argParserProps).printUsage(System.out);
         System.out.println("EXAMPLES");
         System.out.println();
         System.out.println("To pack all atlases from the project:");
@@ -94,6 +111,9 @@ public class ApplicationStarter {
         System.out.println("\tgdx-texture-packer --batch --list-atlases --project \"/path/to/project.tpproj\"");
         System.out.println("or a shorter form:");
         System.out.println("\tgdx-texture-packer -b -l -p \"/path/to/project.tpproj\"");
+        System.out.println();
+        System.out.println("To pack an arbitrary image file to a high quality KTX2 texture:");
+        System.out.println("\tgdx-texture-packer --basis-pack --container ktx2 --format uastc \"/path/to/any.png|jpg\"");
     }
 
     private static void parseArguments(String[] args, Object argumentsObject) {
@@ -105,11 +125,11 @@ public class ApplicationStarter {
         }
     }
 
-    public static void startCliBatchApp(CliBatchArguments arguments) {
+    public static void startCliApp(ApplicationListener app) {
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         config.preferencesDirectory = AppConstants.EXTERNAL_DIR;
         config.updatesPerSecond = -1; // Do not call update method.
-        new HeadlessApplication(new CliBatchApp(arguments), config);
+        new HeadlessApplication(app, config);
     }
 
     public static void startGuiApp(GuiArguments arguments) {
