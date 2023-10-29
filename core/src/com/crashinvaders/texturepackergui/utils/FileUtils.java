@@ -145,6 +145,9 @@ public class FileUtils {
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 File entryDestination = new File(outputDir, entry.getName());
+                if (!entryDestination.toPath().normalize().startsWith(outputDir.toPath().normalize())) {
+                    throw new RuntimeException("Bad zip entry: " + entry.getName());
+                }
                 if (entry.isDirectory()) {
                     entryDestination.mkdirs();
                 } else {
