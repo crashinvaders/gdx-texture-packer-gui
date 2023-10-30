@@ -29,6 +29,11 @@ For example, to pack the specific atlases from the project:
 gdx-texture-packer --batch --project "/path/to/project.tpproj" --atlases "atlas_name" "another_atlas_name"
 ```
 
+Here's also a tool to compress any PNG/JPEG image to a KTX2/Basis texture.
+```shell
+gdx-texture-packer --basis-pack --container ktx2 --format uastc "/path/to/any.png|jpg"
+```
+
 Learn more about CLI options from the help message:
 ```shell
 gdx-texture-packer --help
