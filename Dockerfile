@@ -2,7 +2,7 @@ FROM docker.io/library/alpine:latest as build
 ADD . /src
 WORKDIR /src
 RUN apk update
-RUN apk add --no-cache git openjdk8
+RUN apk add --no-cache openjdk8
 RUN ./gradlew distRelease
 
 FROM docker.io/library/alpine:latest as runtime
