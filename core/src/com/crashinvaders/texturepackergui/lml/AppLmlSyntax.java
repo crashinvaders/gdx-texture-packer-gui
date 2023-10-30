@@ -44,6 +44,7 @@ public class AppLmlSyntax extends VisLmlSyntax {
         super.registerAttributes();
 
         registerSeekBarAttributes();
+        registerCheckBoxAttributes();
     }
 
     @Override
@@ -165,5 +166,11 @@ public class AppLmlSyntax extends VisLmlSyntax {
 
     protected void registerSeekBarAttributes() {
         addAttributeProcessor(new SeekBarChangePolicyLmlAttribute(), "changePolicy");
+    }
+
+    protected void registerCheckBoxAttributes() {
+        addAttributeProcessor(new CheckBoxWrapLmlAttribute(), "checkBoxWrap", "wrap");
+        addAttributeProcessor(new CheckBoxSpacingLmlAttribute(), "checkBoxSpacing", "spacing");
+        addAttributeProcessor(new CheckBoxAlignLmlAttribute(), "checkBoxAlign", "align");
     }
 }

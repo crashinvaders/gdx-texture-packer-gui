@@ -24,5 +24,20 @@
             </table>
         </table>
 
+        <table onecolumn="true" defaultalign="left">
+            <label style="default" text="Notifications and Warnings" growx="true" wrap="true" textalign="left" padbottom="2"/>
+<!--            <label style="small-grey" text="Toggle whether specific notifications/warnings should be displayed." growx="true" wrap="true" textalign="left" padbottom="8"/>-->
+            <table id="tableMutableNotifications" growx="true" padtop="4" onecolumn="true" defaultuniformy="true" defaultgrow="true">
+<!--                <:macro alias="notificationSwitch" id text>-->
+<!--                    <vischeckbox id="{id}" text="{text}"-->
+<!--                                 style="small-gray" wrap="true"-->
+<!--                                 tablealign="left" spacing="8" focusborder="false" padbottom="4"/>-->
+<!--                </:macro>-->
+
+<!--                <:notificationSwitch id="notifTest" text="@mnBasisRecommendedSettings"/>-->
+
+            </table>
+        </table>
+
     </table>
 </stack>

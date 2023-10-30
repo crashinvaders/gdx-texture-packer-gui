@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.ShrinkContainer;
 import com.crashinvaders.common.scene2d.visui.ToastTable;
 import com.crashinvaders.texturepackergui.AppConstants;
+import com.crashinvaders.texturepackergui.controllers.MutableNotification;
 import com.crashinvaders.texturepackergui.controllers.model.FileTypeType;
 import com.crashinvaders.texturepackergui.controllers.model.ModelService;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
@@ -38,7 +39,7 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 @Component
 @ViewActionContainer("ftcBasisu")
 public class BasisuFileTypeController implements FileTypeController {
-    private static final String PREF_KEY_IGNORE_BASISU_COMPAT_NOTIF = "ignore_basisu_compat_notif";
+    private static final String PREF_KEY_IGNORE_BASISU_COMPAT_NOTIF = MutableNotification.BASIS_RECOMMENDED_SETTINGS.prefKey;
 
     @Inject InterfaceService interfaceService;
     @Inject ModelService modelService;

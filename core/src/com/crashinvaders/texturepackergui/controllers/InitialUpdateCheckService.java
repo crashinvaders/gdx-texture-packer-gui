@@ -28,7 +28,7 @@ import com.github.czyzby.lml.parser.action.ActionContainer;
 @Component
 public class InitialUpdateCheckService {
     private static final String TAG = InitialUpdateCheckService.class.getSimpleName();
-    private static final String PREF_KEY_IGNORE_NOTIFICATION = "ignore_version_update_notification";
+    private static final String PREF_KEY_IGNORE_NOTIFICATION = MutableNotification.NEW_VERSION_IS_AVAILABLE.prefKey;
 
     @Inject InterfaceService interfaceService;
     @Inject EventDispatcher eventDispatcher;

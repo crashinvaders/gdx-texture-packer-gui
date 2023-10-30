@@ -1,17 +1,16 @@
 package com.crashinvaders.texturepackergui.controllers.settings;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Null;
-import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.*;
 import com.crashinvaders.common.scene2d.CustomSelectBox;
 import com.crashinvaders.texturepackergui.AppConstants;
 import com.crashinvaders.texturepackergui.controllers.CommonDialogs;
+import com.crashinvaders.texturepackergui.controllers.MutableNotification;
 import com.crashinvaders.texturepackergui.controllers.ViewportService;
 import com.crashinvaders.texturepackergui.controllers.extensionmodules.CjkFontExtensionModule;
 import com.github.czyzby.autumn.annotation.Inject;
@@ -24,6 +23,8 @@ import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisCheckBox.VisCheckBoxStyle;
 import com.kotcrab.vis.ui.widget.VisLabel;
 
 import java.util.Locale;
@@ -218,5 +219,43 @@ public class GeneralSectionController implements SectionContentController, Actio
     private static String formatScaleValue(float uiScale) {
         return String.format("%.0f%%", uiScale*100f);
     }
+    //endregion
+
+    //region Option | Mutable Notifications
+
+    @LmlActor("tableMutableNotifications") Table tableMutableNotifications;
+
+    @LmlAfter
+    void viewInitMutableNotifications() {
+        Preferences prefs = Gdx.app.getPreferences(AppConstants.PREF_NAME_COMMON);
+        I18NBundle i18nBundle = localeService.getI18nBundle();
+
+        Skin skin = interfaceService.getSkin();
+        VisCheckBoxStyle style = skin.get("small-gray", VisCheckBoxStyle.class);
+
+        for (MutableNotification entry : MutableNotification.values()) {
+            String prefKey = entry.prefKey;
+            String description = i18nBundle.get(entry.settingsDescI18nKey);
+
+            boolean ignore = prefs.getBoolean(prefKey, false);
+
+            VisCheckBox checkBox = new VisCheckBox(description, style);
+            checkBox.getLabel().setWrap(true);
+            checkBox.getCells().get(1).padLeft(8f).grow();
+            checkBox.setFocusBorderEnabled(false);
+
+            checkBox.setChecked(!ignore);
+            checkBox.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    boolean ignore = !((VisCheckBox) actor).isChecked();
+                    prefs.putBoolean(prefKey, ignore).flush();
+                }
+            });
+
+            tableMutableNotifications.add(checkBox).row();
+        }
+    }
+
     //endregion
 }
