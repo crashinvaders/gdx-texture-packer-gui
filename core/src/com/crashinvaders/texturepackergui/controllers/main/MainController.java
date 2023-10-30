@@ -76,7 +76,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
 
     @Inject @LmlInject PngFileTypeController ftPngController;
     @Inject @LmlInject JpegFileTypeController ftJpegController;
-    @Inject @LmlInject KtxFileTypeController ftKtxController;
     @Inject @LmlInject BasisuFileTypeController ftBasisuController;
 
     @ViewStage Stage stage;
@@ -133,7 +132,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
     void initializeView() {
         fileTypeControllers.put(WidgetData.FileType.PNG, ftPngController);
         fileTypeControllers.put(WidgetData.FileType.JPEG, ftJpegController);
-        fileTypeControllers.put(WidgetData.FileType.KTX, ftKtxController);
         fileTypeControllers.put(WidgetData.FileType.BASIS, ftBasisuController);
         for (int i = 0; i < fileTypeControllers.size; i++) {
             FileTypeController ftc = fileTypeControllers.getValueAt(i);
@@ -470,9 +468,6 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
                     break;
                 case JPEG:
                     project.setFileType(new JpegFileTypeModel());
-                    break;
-                case KTX:
-                    project.setFileType(new KtxFileTypeModel());
                     break;
                 case BASIS:
                     project.setFileType(new BasisuFileTypeModel());

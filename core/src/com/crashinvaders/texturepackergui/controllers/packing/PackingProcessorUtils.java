@@ -43,7 +43,6 @@ public class PackingProcessorUtils {
                 // File type
                 new PngFileTypeProcessor(),
                 new JpegFileTypeProcessor(),
-                new KtxFileTypeProcessor(),
                 new BasisuFileTypeProcessor(),
 
                 // Packing

@@ -107,16 +107,13 @@ void generateDistReleaseTasks() {
             if (osFamily != null) {
                 if (OperatingSystemFamily.LINUX != osFamily)
                     exclude("**/*.so",
-                            "**/*.so.*",
-                            "/etctool/etctool-linux")
+                            "**/*.so.*")
                 if (OperatingSystemFamily.WINDOWS != osFamily)
                     exclude("**/*.dll",
-                            "**/*.dll.*",
-                            "/etctool/etctool.exe")
+                            "**/*.dll.*")
                 if (OperatingSystemFamily.MACOS != osFamily)
                     exclude("**/*.dylib",
-                            "**/*.dylib.*",
-                            "/etctool/etctool-mac")
+                            "**/*.dylib.*")
             }
         }
     }

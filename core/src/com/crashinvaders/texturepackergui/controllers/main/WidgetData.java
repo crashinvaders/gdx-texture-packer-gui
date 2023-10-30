@@ -70,42 +70,10 @@ public class WidgetData {
             return App.inst().getI18n().get(nameKey);
         }
     }
-    
-    public enum CompressionEtc {
-        NONE (null, "none", false),
-        KTX (EtcCompressionType.KTX, "fileTypeKtx", true);
-//        ZKTX (EtcCompressionType.ZKTX, "compressionZktx", true);
-
-        public final EtcCompressionType type;
-        public final String nameKey;
-        public final boolean hasSettings;
-
-        CompressionEtc(EtcCompressionType type, String nameKey, boolean hasSettings) {
-            this.type = type;
-            this.nameKey = nameKey;
-            this.hasSettings = hasSettings;
-        }
-
-        public static CompressionEtc valueOf(EtcCompressionType type) {
-            for (int i = 0; i < values().length; i++) {
-            	CompressionEtc value = values()[i];
-                if (value.type == type) {
-                    return value;
-                }
-            }
-            throw new IllegalArgumentException("Can't find constant for " + type);
-        }
-
-        @Override
-        public String toString() {
-            return App.inst().getI18n().get(nameKey);
-        }
-    }
 
     public enum FileType {
         PNG("fileTypePng", FileTypeType.PNG),
         JPEG("fileTypeJpeg", FileTypeType.JPEG),
-        KTX("fileTypeKtx", FileTypeType.KTX),
         BASIS("fileTypeBasisu", FileTypeType.BASIS),
         ;
 

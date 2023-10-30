@@ -21,10 +21,6 @@
                 <:import path="lml/fileTypeConfigJpeg.lml"/>
             </shrinkcontainer>
 
-            <shrinkcontainer id="ftcKtx" background="listBorder" fillx="true" visible="false">
-                <:import path="lml/fileTypeConfigKtx.lml"/>
-            </shrinkcontainer>
-
             <shrinkcontainer id="ftcBasisu" background="listBorder" fillx="true" visible="false">
                 <:import path="lml/fileTypeConfigBasisu.lml"/>
             </shrinkcontainer>

@@ -6,7 +6,6 @@ import com.badlogic.gdx.utils.Null;
 public enum FileTypeType {
     PNG("png"),
     JPEG("jpeg"),
-    KTX("ktx"),
     BASIS("basis"),
     ;
 
