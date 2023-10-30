@@ -25,7 +25,7 @@
         </table>
 
         <table onecolumn="true" defaultalign="left">
-            <label style="default" text="Notifications and Warnings" growx="true" wrap="true" textalign="left" padbottom="2"/>
+            <label style="default" text="@dSettingsGenNotifWarnTitle" growx="true" wrap="true" textalign="left" padbottom="2"/>
 <!--            <label style="small-grey" text="Toggle whether specific notifications/warnings should be displayed." growx="true" wrap="true" textalign="left" padbottom="8"/>-->
             <table id="tableMutableNotifications" growx="true" padtop="4" onecolumn="true" defaultuniformy="true" defaultgrow="true">
 <!--                <:macro alias="notificationSwitch" id text>-->
