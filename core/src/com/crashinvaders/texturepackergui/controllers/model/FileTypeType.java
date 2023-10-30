@@ -1,5 +1,7 @@
 package com.crashinvaders.texturepackergui.controllers.model;
 
+import com.badlogic.gdx.utils.Null;
+
 /** ;) */
 public enum FileTypeType {
     PNG("png"),
@@ -15,6 +17,7 @@ public enum FileTypeType {
     }
 
     /** @return enum constant or null if not found */
+    @Null
     public static FileTypeType findByKey(String key) {
         if (key == null) return null;
 

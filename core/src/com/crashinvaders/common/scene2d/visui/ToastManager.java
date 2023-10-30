@@ -76,8 +76,10 @@ public class ToastManager {
 	/** Displays basic toast with provided text as message. Toast will be displayed for given amount of seconds. */
 	public Toast show (String text, float timeSec) {
 		VisTable table = new VisTable();
-		Cell<Label> cell = table.add(text).grow();
-		cell.getActor().setTouchable(Touchable.disabled);
+		Cell<Label> cell = table.add(text).width(360f).grow();
+		Label label = cell.getActor();
+		label.setWrap(true);
+		label.setTouchable(Touchable.disabled);
 		return show(table, timeSec);
 	}
 

@@ -23,6 +23,7 @@ import static com.crashinvaders.texturepackergui.utils.FileUtils.loadTextFromFil
 import static com.crashinvaders.texturepackergui.utils.FileUtils.saveTextToFile;
 
 public class ProjectSerializer {
+    private static final String TAG = "ProjectSerializer";
 
     private static final String PACK_DIVIDER = "---";
     private static final String SECTION_DIVIDER = "-PROJ-";
@@ -173,7 +174,14 @@ public class ProjectSerializer {
 
         // File type section
         {
-            FileTypeType fileTypeType = FileTypeType.findByKey(find(lines, "fileTypeType=", null));
+            String fileTypeRaw = find(lines, "fileTypeType=", null);
+            String fileDataRaw = find(lines, "fileTypeData=", null);
+            if ("ktx".equals(fileTypeRaw)) {
+                Gdx.app.error(TAG, "KTX output file type is no longer supported and was automatically replaced by KTX2/Basis in the project.");
+                fileTypeRaw = "basis";
+                fileDataRaw = null;
+            }
+            FileTypeType fileTypeType = FileTypeType.findByKey(fileTypeRaw);
             if (fileTypeType != null) {
                 FileTypeModel fileTypeModel = null;
                 switch (fileTypeType) {
@@ -183,18 +191,14 @@ public class ProjectSerializer {
                     case JPEG:
                         fileTypeModel = new JpegFileTypeModel();
                         break;
-                    case KTX:
-                        fileTypeModel = new KtxFileTypeModel();
-                        break;
                     case BASIS:
                         fileTypeModel = new BasisuFileTypeModel();
                         break;
                     default:
-                        Gdx.app.error("ProjectSerializer", "Unexpected FileTypeType: " + fileTypeType);
+                        Gdx.app.error(TAG, "Unexpected FileTypeType: " + fileTypeType);
                 }
                 if (fileTypeModel != null) {
-                    String fileTypeData = find(lines, "fileTypeData=", null);
-                    fileTypeModel.deserializeState(fileTypeData);
+                    fileTypeModel.deserializeState(fileDataRaw);
                 }
                 project.setFileType(fileTypeModel);
             }
@@ -237,8 +241,7 @@ public class ProjectSerializer {
                 pack.setOutputDir(new File(root.file(), outputDir).getCanonicalPath());
             }
         } catch (IOException ex) {
-            //TODO show error to user somehow
-            System.err.println(ex.getMessage());
+            Gdx.app.error(TAG, ex.getMessage(), ex);
             pack.setOutputDir("");
         }
 
