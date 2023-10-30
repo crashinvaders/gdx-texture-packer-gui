@@ -232,6 +232,7 @@
 		white-small: {fontColor: white, underline: orange, font: small-font }
 		light-grey: {fontColor: light-grey, underline: white, font: default-font }
 		yellow: {fontColor: text-yellow, underline: white, font: default-font }
+		white-no-underline: {fontColor: white, underline: null, font: default-font }
 	}
 	com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle: {
 		default: {background: menu-bg, separatorBar: list-selection, buttonStyle: {down: button-down, up: button, checked: button-down, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey} }

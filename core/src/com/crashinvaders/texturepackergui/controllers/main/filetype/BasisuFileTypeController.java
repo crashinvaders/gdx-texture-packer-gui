@@ -3,6 +3,7 @@ package com.crashinvaders.texturepackergui.controllers.main.filetype;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.utils.Array;
@@ -50,8 +51,9 @@ public class BasisuFileTypeController implements FileTypeController {
     @LmlActor("basisuNotSupportedHint") Actor basisuNotSupportedHint;
     @LmlActor("cboBasisFileContainer") VisSelectBox<FileContainer> cboFileContainer;
     @LmlActor("cboBasisInterFormat") VisSelectBox<IntermediateFormat> cboInterFormat;
-    @LmlActor("sbBasisQualityLevel") SeekBar sbQualityLevel;
-    @LmlActor("sbBasisCompLevel") SeekBar sbCompLevel;
+    @LmlActor("groupEtc1s") Group groupEtc1s;
+    @LmlActor("sbBasisEtc1sQualityLevel") SeekBar sbEtc1sQualityLevel;
+    @LmlActor("sbBasisEtc1sCompLevel") SeekBar sbEtc1sCompLevel;
 
     private Preferences prefs;
 
@@ -134,7 +136,7 @@ public class BasisuFileTypeController implements FileTypeController {
         if (model == null) return;
         if (ignoreViewChangeEvents) return;
 
-        int qualityLevel = ((IntSeekBarModel) sbQualityLevel.getModel()).getValue();
+        int qualityLevel = ((IntSeekBarModel) sbEtc1sQualityLevel.getModel()).getValue();
         model.setQualityLevel(qualityLevel);
     }
 
@@ -142,7 +144,7 @@ public class BasisuFileTypeController implements FileTypeController {
         if (model == null) return;
         if (ignoreViewChangeEvents) return;
 
-        int compLevel = ((IntSeekBarModel) sbCompLevel.getModel()).getValue();
+        int compLevel = ((IntSeekBarModel) sbEtc1sCompLevel.getModel()).getValue();
         model.setCompressionLevel(compLevel);
     }
 
@@ -219,6 +221,8 @@ public class BasisuFileTypeController implements FileTypeController {
 
         IntermediateFormat format = model.isUastc() ? IntermediateFormat.UASTC : IntermediateFormat.ETC1S;
         cboInterFormat.setSelected(format);
+
+        groupEtc1s.setVisible(!model.isUastc());
     }
 
     private void updateFileContainer() {
@@ -232,14 +236,14 @@ public class BasisuFileTypeController implements FileTypeController {
         if (model == null) return;
 
         int qualityLevel = model.getQualityLevel();
-        ((IntSeekBarModel) sbQualityLevel.getModel()).setValue(qualityLevel);
+        ((IntSeekBarModel) sbEtc1sQualityLevel.getModel()).setValue(qualityLevel);
     }
 
     private void updateCompressionLevel() {
         if (model == null) return;
 
         int compLevel = model.getCompressionLevel();
-        ((IntSeekBarModel) sbCompLevel.getModel()).setValue(compLevel);
+        ((IntSeekBarModel) sbEtc1sCompLevel.getModel()).setValue(compLevel);
     }
 
     public enum IntermediateFormat {

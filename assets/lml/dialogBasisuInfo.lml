@@ -11,8 +11,14 @@
 
         <:row padtop="16"/>
         <linklabel style="orange" align="left" padbottom="2"
-                   href="https://github.com/crashinvaders/gdx-basis-universal">@dBasisuAboutHead1</linklabel>
-        <label wrap="true" growx="true">@dBasisuAboutDesc1</label>
+                   href="https://github.com/crashinvaders/gdx-basis-universal">
+            @dBasisuAboutHead1
+        </linklabel>
+<!--        <label wrap="true" growx="true">@dBasisuAboutDesc1</label>-->
+        <linklabel style="white-no-underline" wrap="true" growx="true"
+                   href="https://github.com/crashinvaders/gdx-basis-universal">
+            @dBasisuAboutDesc1
+        </linklabel>
 
     </vistable>
 </visdialog>

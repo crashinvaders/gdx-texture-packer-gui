@@ -9,8 +9,8 @@ public class CliBasisPackArguments {
 
     @Option(name = "--container", aliases = { "-c" },
             metaVar = "KTX2 | BASIS",
-            usage = "Texture file container. KTX2 is a an open standard from the Khronos group " +
-                    "and is generally recommended over the Basis file container, which is old, Basis Universal own standard.")
+            usage = "Texture file container. KTX2 is an open standard from the Khronos group " +
+                    "and is generally recommended over the Basis file container, which is old, Basis Universal own format.")
     public BasisContainer container = BasisContainer.KTX2;
 
     @Option(name = "--format", aliases = { "-f" },
