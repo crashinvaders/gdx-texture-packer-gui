@@ -25,9 +25,13 @@ public class ProjectSerializerService {
     @Inject LocaleService localeService;
 
     public void saveProject(ProjectModel project, FileHandle file) {
+        // Wrap orig logger in order to display non-critical error messages as warning notifications.
+        ApplicationLogger origLogger = Gdx.app.getApplicationLogger();
+        Gdx.app.setApplicationLogger(new ErrorNotificationLogger(eventDispatcher, origLogger));
         try {
             ProjectSerializer.saveProject(project, file);
         } catch (SerializationException e) {
+            Gdx.app.setApplicationLogger(origLogger);
             Gdx.app.error(TAG, "Error during project saving.", e);
             eventDispatcher.postEvent(new ShowToastEvent()
                     .message(localeService.getI18nBundle().format("toastProjectSaveError", project.getProjectFile().path()))
@@ -35,6 +39,8 @@ public class ProjectSerializerService {
                     .click(() -> ErrorDialogController.show(e))
             );
             return;
+        } finally {
+            Gdx.app.setApplicationLogger(origLogger);
         }
 
         eventDispatcher.postEvent(new ProjectSerializerEvent(ProjectSerializerEvent.Action.SAVED, project, file));
@@ -90,7 +96,7 @@ public class ProjectSerializerService {
 
         private void displayWarningNotification(String message) {
             eventDispatcher.postEvent(new ShowToastEvent()
-                    .message(message)
+                    .message("[text-red]WARNING:[]\n" + message)
                     .duration(ShowToastEvent.DURATION_LONG)
             );
         }
