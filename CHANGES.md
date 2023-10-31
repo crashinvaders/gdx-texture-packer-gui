@@ -11,7 +11,7 @@
 - Option to select multiple atlases for processing. New action - `packMultipleAtlases`. See [#67](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/67)
 - Atlases use new libGDX atlas output format by default ("Legacy format" is unchecked).
 - Add "show in file manager" contextual options.
-- Basis Universal updated to 1.16.4 and is nativelly supported on Linux arm32/arm64 (Raspberry Pi) and macOS arm64 (M1/M2 chips).
+- Basis Universal updated to 1.16.4 and is natively supported on Linux arm32/arm64 (Raspberry Pi) and macOS arm64 (M1/M2 chips).
 - Fixed file conflict errors when attempting to install from RPM package. See [#140](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/140)
 - Fixed a crash on a project save when the output dir is set to any ascendant parent dir of the project-containing folder. See [#126](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/126)
 - Fixed grid layout adds redundant top padding.
@@ -19,7 +19,7 @@
 
 ### 4.11.0
 - Use OS native file dialogs (instead of cross-platform unified VisUI FileChooser).
-- Brand new settings dialog uniting several specific feature configuration dialogs. Also includes more friendly tools to deal with custom hotkeys.
+- Brand-new settings dialog uniting several specific feature configuration dialogs. Also includes more friendly tools to deal with custom hotkeys.
 - Explicit packing warning notifications. See [#131](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/131)
 - Simplified Chinese localization. Thanks to @ZhReimu. See [#127](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/127)
 - Fixed pack clone dialog OK button crashes the app. See [#130](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/130)
@@ -73,7 +73,7 @@
 
 ### 4.8.0
 - Atlases can be saved as indexed-mode PNG8 image (compression type). Optionally dithering colors that don't match exactly.
-- Asynchronous (non blocking) page preview loading.
+- Asynchronous (non-blocking) page preview loading.
 - Multiple of four page size option added.
 - Menu bar items (File, Pack, Tools, Help) have got appropriate key shortcuts (ALT+F/P/T/H).
 - Fixed new version notification occasionally leads to a crash.
@@ -116,7 +116,7 @@
 - Application eats much less system CPU resources when idle.
 - 9-patch editor improvements (preview pane, value number fields).
 - Support for CJK characters (downloadable extension module).
-- Traditional Chinese localization, thanks to Tokenyet.
+- Traditional Chinese localization, thanks to @Tokenyet.
 - Log output into external files (easy to grab and send with a report).
 - Fixed KTX ETC2 compression fails to write page files to a directory with spaces.
 
@@ -133,7 +133,7 @@
 - Each pack now consists of list of input/ignore files (no more single source dir).
 - File drag'n'drop support (image files and project file).
 - Fixed occasional output image file locking after Pngtastic compression.
-- .tpproj file extension association for Windows (if program installed through installer).
+- `.tpproj` file extension association for Windows (if program installed through installer).
 
 ### 4.3.2
 - German localization added, thanks to TeraFog.
@@ -156,7 +156,7 @@
 - Support of TinyPNG/TinyJPG compression service, see https://tinypng.com
 - Export with multiple scale factors.
 - Atlas preview background color can be changed.
-- Double click on pack list triggers packing procedure.
+- Double-click on pack list triggers packing procedure.
 - Fixed: relative file paths now correctly saved in UNIX format.
 
 ### 4.1.0
@@ -173,4 +173,4 @@
 - New atlas preview widget, now with basic inspection capabilities.
 
 ### 3.2.0
-- Last Aurelien Ribon's release (2012).
+- Last @AurelienRibon release (2012).
