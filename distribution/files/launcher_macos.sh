@@ -10,5 +10,6 @@ fi
 SCRIPT_DIR=$(dirname "$0")
 
 # Launch the app.
-java -XstartOnFirstThread -Djava.awt.headless=true \
+java -Xms64m -Xmx2048m \
+-XstartOnFirstThread -Djava.awt.headless=true \
 -jar "$SCRIPT_DIR"/gdx-texture-packer.jar "$@"

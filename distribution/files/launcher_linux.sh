@@ -13,4 +13,5 @@ fi
 SCRIPT_DIR="$(dirname "$(readlink -f -- "$0")")"
 
 # Launch the app.
-java -jar "$SCRIPT_DIR"/gdx-texture-packer.jar "$@"
+java -Xms64m -Xmx2048m \
+-jar "$SCRIPT_DIR"/gdx-texture-packer.jar "$@"
