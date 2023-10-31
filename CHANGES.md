@@ -1,6 +1,6 @@
 ### 4.13.0
 - KTX2 container added to Basis Universal output file type.
-- UASTC (`.ktx2`/`.basis`) output textures always compressed with ZSTD.
+- UASTC textures (`.ktx2`/`.basis`) are always compressed with ZSTD.
 - ETC1/ETC2/KTX output support removed (in favor of KTX2).
 - CLI mode to compress images into KTX2/Basis textures (`--basis-pack`).
 - [Dockerfile](https://github.com/crashinvaders/gdx-texture-packer-gui/blob/master/Dockerfile) added. Thanks to @Rubonnek. See [#145](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/145)
