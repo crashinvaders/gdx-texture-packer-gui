@@ -3,6 +3,7 @@
 - UASTC textures (`.ktx2`/`.basis`) are always compressed with ZSTD.
 - ETC1/ETC2/KTX output support removed (in favor of KTX2).
 - CLI mode to compress images into KTX2/Basis textures (`--basis-pack`).
+- The launcher scripts no longer change the directory. That way CLI file relative path arguments work as expected. 
 - [Dockerfile](https://github.com/crashinvaders/gdx-texture-packer-gui/blob/master/Dockerfile) added. Thanks to @Rubonnek. See [#145](https://github.com/crashinvaders/gdx-texture-packer-gui/issues/145)
 - Previously muted notifications can be unmuted from the settings menu ("General" tab).
 
