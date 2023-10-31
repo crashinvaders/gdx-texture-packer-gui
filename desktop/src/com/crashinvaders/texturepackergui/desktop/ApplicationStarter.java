@@ -56,7 +56,7 @@ public class ApplicationStarter {
         }
 
         // Basis pack mode.
-        if (args.length > 0 && ("--basis-pack".equals(args[0]) || "-ktx2-pack".equals(args[0]))) {
+        if (args.length > 0 && ("--basis-pack".equals(args[0]) || "--ktx2-pack".equals(args[0]))) {
             // Trim the first args element.
             String[] argsBatch = Arrays.copyOfRange(args, 1, args.length);
             CliBasisPackArguments arguments = new CliBasisPackArguments();
