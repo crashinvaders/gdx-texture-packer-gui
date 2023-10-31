@@ -63,7 +63,7 @@ public class SystemUtils {
     public enum OperatingSystem {
         Windows("Windows"),
         Linux("Linux"),
-        MacOS("MacOS"),
+        MacOS("macOS"),
         Other("Unknown"),
         ;
 
