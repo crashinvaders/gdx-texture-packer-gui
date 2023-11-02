@@ -1,7 +1,6 @@
-Set oShell = CreateObject ("Wscript.Shell") 
-Dim strArgs
-strArgs = "cmd /c launcher_win.bat "
+scriptDir = CreateObject("Scripting.FileSystemObject").GetParentFolderName(WScript.ScriptFullName)
+strArgs = "javaw -Xms64m -Xmx2048m -jar " + scriptDir + "/gdx-texture-packer.jar "
 For Each arg In Wscript.Arguments
   strArgs = strArgs + arg
 Next
-oShell.Run strArgs, 0, false
+CreateObject("Wscript.Shell").Run strArgs, 0, false

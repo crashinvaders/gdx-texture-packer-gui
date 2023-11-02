@@ -1,2 +1,3 @@
-cd /d %~dp0
-start javaw -Xms64m -Xmx1024m -XX:+UseG1GC -XX:MinHeapFreeRatio=15 -XX:MaxHeapFreeRatio=30 -jar gdx-texture-packer.jar %*
+@ECHO OFF
+SET JAR_PATH="%~dp0gdx-texture-packer.jar"
+java -Xms64m -Xmx2048m -jar %JAR_PATH% %*
