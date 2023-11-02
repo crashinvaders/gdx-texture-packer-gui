@@ -121,7 +121,7 @@ public class ApplicationStarter {
             new CmdLineParser(argumentsObject, argParserProps).parseArgument(args);
         } catch (CmdLineException e) {
             System.err.println("Error: " + e.getLocalizedMessage() +
-                    "\nType \"--help\" to see available options.");
+                    "\nUse \"--help\" to see available options.");
             System.exit(1);
         }
     }
