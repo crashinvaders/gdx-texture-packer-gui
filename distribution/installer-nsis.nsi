@@ -78,6 +78,8 @@ SectionIn RO
   Delete "$INSTDIR\launcher.bat"
   Delete "$INSTDIR\launcher.sh"
   Delete "$INSTDIR\launcher_no_cmd.bat"
+  Delete "$INSTDIR\launcher_no_cmd.vbs"
+  Delete "$INSTDIR\gdx-texturepacker.jar"
 
 SectionEnd
 
