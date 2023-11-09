@@ -38,7 +38,7 @@ packSelectedAtlas: CTRL+P
 packMultipleAtlases: CTRL+SHIFT+P
 packAllAtlases: CTRL+ALT+SHIFT+P
 
-showMenuProject: ALT+F
-showMenuAtlas: ALT+P
+showMenuProject: ALT+P
+showMenuAtlas: ALT+A
 showMenuTools: ALT+T
 showMenuHelp: ALT+H
