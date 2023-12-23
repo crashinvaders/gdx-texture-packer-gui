@@ -1,3 +1,6 @@
+### 4.13.1
+- Support for KTX2/Basis texture mipmaps. If any of the "MipMap*" values is selected for "Min filter", the compressed KTX2/Basis textures will include the full set of generated mipmap levels.
+
 ### 4.13.0
 - KTX2 container added to Basis Universal output file type.
 - UASTC textures (`.ktx2`/`.basis`) are always compressed with ZSTD.

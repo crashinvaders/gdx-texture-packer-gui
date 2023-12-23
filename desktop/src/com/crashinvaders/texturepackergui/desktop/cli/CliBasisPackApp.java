@@ -85,7 +85,9 @@ public class CliBasisPackApp extends ApplicationAdapter {
                 rgbaBuffer, width, height,
                 args.format == CliBasisPackArguments.BasisFormat.UASTC,
                 args.container == CliBasisPackArguments.BasisContainer.KTX2,
-                false, args.etcCompression, false, false, false, 2f, args.etcQuality, 0, 0);
+                false, args.etcCompression, false, false,
+                args.mipmaps, 0.5f,
+                args.etcQuality, 0, 0);
 
         try {
             saveFile(basisBuffer, outputFile.file());

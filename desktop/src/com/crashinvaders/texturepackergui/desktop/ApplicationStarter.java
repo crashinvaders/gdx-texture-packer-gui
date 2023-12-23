@@ -96,7 +96,7 @@ public class ApplicationStarter {
         new CmdLineParser(new CliBatchArguments(), argParserProps).printUsage(System.out);
         System.out.println();
         System.out.println("Basis Universal packer (--basis-pack/--ktx2-pack)");
-        System.out.println("If you wish to pack any PNG/JPG image to a super-compressed");
+        System.out.println("If you wish to pack any PNG/JPEG image to a super-compressed");
         System.out.println("KTX2/Basis texture, this utility mode is for you.");
         new CmdLineParser(new CliBasisPackArguments(), argParserProps).printUsage(System.out);
         System.out.println("EXAMPLES");

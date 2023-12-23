@@ -39,10 +39,10 @@ public class CliBasisPackArguments {
                     "to the same location with a different extension (.ktx2/.basis)")
     public File outputFile = null;
 
-//    @Option(name = "--input", aliases = { "-i" },
-//            required = true,
-//            usage = "TODO")
-//    public File inputFile = null;
+    @Option(name = "--mipmap",
+    usage = "Whether to generate the complete set of mipmap levels for the compressed image. " +
+            "Every mipmap level has the size factor of 1/2 (half the size of the previous level).")
+    public boolean mipmaps = false;
 
     @Argument(required = true,
             metaVar = "INPUT_FILE",

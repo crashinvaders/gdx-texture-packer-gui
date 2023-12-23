@@ -49,11 +49,14 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
         pack.getSettings().format = Pixmap.Format.RGBA8888;
 
+        boolean useMipmap = pack.getSettings().filterMin.isMipMap();
+
         node.setPageFileWriter(new BasisPageFileWriter(
                 fileType.isKtx2(),
                 fileType.isUastc(),
                 fileType.getCompressionLevel(),
-                fileType.getQualityLevel()
+                fileType.getQualityLevel(),
+                useMipmap
         ));
     }
 
@@ -67,12 +70,14 @@ public class BasisuFileTypeProcessor implements PackProcessor {
         private final boolean uastc;
         private final int compressionLevel;
         private final int qualityLevel;
+        private final boolean mipmap;
 
-        public BasisPageFileWriter(boolean ktx2, boolean uastc, int compressionLevel, int qualityLevel) {
+        public BasisPageFileWriter(boolean ktx2, boolean uastc, int compressionLevel, int qualityLevel, boolean mipmap) {
             this.ktx2 = ktx2;
             this.uastc = uastc;
             this.compressionLevel = compressionLevel;
             this.qualityLevel = qualityLevel;
+            this.mipmap = mipmap;
         }
 
         @Override
@@ -90,7 +95,7 @@ public class BasisuFileTypeProcessor implements PackProcessor {
 
             BasisuNativeLibLoader.loadIfNeeded();
             ByteBuffer encodedBuffer = BasisuWrapper.encode(rgbaBuffer, image.getWidth(), image.getHeight(),
-                    uastc, ktx2, false, compressionLevel, false, false, false, 2f, qualityLevel, 0, 0);
+                    uastc, ktx2, false, compressionLevel, false, false, mipmap, 0.5f, qualityLevel, 0, 0);
 
             BufferUtils.disposeUnsafeByteBuffer(rgbaBuffer);
 
