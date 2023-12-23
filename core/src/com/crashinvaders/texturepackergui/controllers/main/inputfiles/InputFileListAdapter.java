@@ -115,6 +115,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
             this.eventDispatcher = eventDispatcher;
 
             tooltip = new Tooltip();
+            tooltip.pad(2f, 6f, 2f, 6f);
             tooltip.setAppearDelayTime(0.25f);
         }
 

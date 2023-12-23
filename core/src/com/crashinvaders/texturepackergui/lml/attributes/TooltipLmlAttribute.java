@@ -24,7 +24,7 @@ public class TooltipLmlAttribute implements LmlAttribute<Actor> {
     @Override
     public void process(final LmlParser parser, final LmlTag tag, final Actor actor, final String rawAttributeData) {
         VisLabel lblText = new VisLabel(parser.parseString(rawAttributeData, actor));
-        lblText.setAlignment(Align.center);
+        lblText.setAlignment(Align.left);
         boolean needLineWrap = lblText.getPrefWidth() > LINE_WRAP_THRESHOLD;
         if (needLineWrap) {
             lblText.setWrap(true);
@@ -32,7 +32,7 @@ public class TooltipLmlAttribute implements LmlAttribute<Actor> {
 
         final Tooltip tooltip = new Tooltip();
         tooltip.clearChildren(); // Remove the empty cell with predefined paddings.
-        Cell<VisLabel> tooltipCell = tooltip.add(lblText).center().pad(0f, 4f, 2f, 4f);
+        Cell<VisLabel> tooltipCell = tooltip.add(lblText).growX().pad(2f, 6f, 4f, 6f);
         if (needLineWrap) { tooltipCell.width(LINE_WRAP_THRESHOLD); }
         tooltip.pack();
         tooltip.setTarget(actor);
