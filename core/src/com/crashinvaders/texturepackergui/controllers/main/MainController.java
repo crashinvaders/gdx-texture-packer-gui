@@ -138,8 +138,8 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             ftc.onViewCreated(stage);
         }
 
-        actorsPackSettings.cboMinFilter.setItems(WidgetData.textureFilters);
-        actorsPackSettings.cboMagFilter.setItems(WidgetData.textureFilters);
+        actorsPackSettings.cboMinFilter.setItems(WidgetData.textureFiltersMin);
+        actorsPackSettings.cboMagFilter.setItems(WidgetData.textureFiltersMax);
         actorsPackSettings.cboWrapX.setItems(WidgetData.textureWraps);
         actorsPackSettings.cboWrapY.setItems(WidgetData.textureWraps);
         actorsGlobalSettings.cboFileType.setItems(WidgetData.FileType.values());

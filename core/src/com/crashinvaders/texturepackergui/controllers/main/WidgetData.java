@@ -19,14 +19,19 @@ public class WidgetData {
             Pixmap.Format.Alpha
     );
 
-    public static final Array<Texture.TextureFilter> textureFilters = Array.with(
+    public static final Array<Texture.TextureFilter> textureFiltersMin = Array.with(
             Texture.TextureFilter.Nearest,
             Texture.TextureFilter.Linear,
-            Texture.TextureFilter.MipMap,
             Texture.TextureFilter.MipMapNearestNearest,
             Texture.TextureFilter.MipMapLinearNearest,
             Texture.TextureFilter.MipMapNearestLinear,
             Texture.TextureFilter.MipMapLinearLinear
+    );
+
+    public static final Array<Texture.TextureFilter> textureFiltersMax = Array.with(
+            Texture.TextureFilter.Nearest,
+            Texture.TextureFilter.Linear
+            // The mipmap related values are not applicable for magnification filter.
     );
 
     public static final Array<Texture.TextureWrap> textureWraps = Array.with(
