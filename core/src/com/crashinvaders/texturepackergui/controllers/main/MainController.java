@@ -234,6 +234,7 @@ public class MainController implements ActionContainer, ViewShower, ViewResizer 
             switch (event.getProperty()) {
                 case SELECTED_PACK:
                     updateViewsFromPack(event.getProject().getSelectedPack());
+                    updateOutputDirWarningIndicator();
                     break;
                 case PACKS:
                     updatePackList();
