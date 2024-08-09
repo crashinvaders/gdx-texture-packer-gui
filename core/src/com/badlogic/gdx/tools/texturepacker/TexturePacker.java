@@ -437,11 +437,10 @@ public class TexturePacker {
 				+ (page.x + rect.x) + comma + (page.y + page.height - rect.y - (rect.height - settings.paddingY)) + comma //
 				+ rect.regionWidth + comma + rect.regionHeight + "\n");
 
-		int offsetY = rect.originalHeight - rect.regionHeight - rect.offsetY;
-		if (rect.offsetX != 0 || offsetY != 0 //
+		if (rect.offsetX != 0 || rect.offsetY != 0 //
 				|| rect.originalWidth != rect.regionWidth || rect.originalHeight != rect.regionHeight) {
 			writer.write(tab + "offsets" + colon //
-					+ rect.offsetX + comma + offsetY + comma //
+					+ rect.offsetX + comma + rect.offsetY + comma //
 					+ rect.originalWidth + comma + rect.originalHeight + "\n");
 		}
 
@@ -485,7 +484,7 @@ public class TexturePacker {
 			writer.write("  pad: " + rect.pads[0] + ", " + rect.pads[1] + ", " + rect.pads[2] + ", " + rect.pads[3] + "\n");
 		}
 		writer.write("  orig: " + rect.originalWidth + ", " + rect.originalHeight + "\n");
-		writer.write("  offset: " + rect.offsetX + ", " + (rect.originalHeight - rect.regionHeight - rect.offsetY) + "\n");
+		writer.write("  offset: " + rect.offsetX + ", " + rect.offsetY + "\n");
 		writer.write("  index: " + rect.index + "\n");
 	}
 
