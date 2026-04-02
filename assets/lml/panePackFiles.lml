@@ -73,6 +73,28 @@
             </stack>
         </stack>
 
+        <:row/>
+
+        <table growx="true" id="exitTrackingSpriteEdit" touchable="enabled">
+            <visimagebutton
+                    icon="custom/ic-search"
+                    imagescaling="none"
+                    tooltip="@findSprite"
+                    width="25"
+                    height="25"
+                    onchange="PackInputFilesController.findSpriteClick"/>
+
+            <textfield
+                    id="findSpriteEdit"
+                    message="@findSprite"
+                    minwidth="24"
+                    grow="true"
+                    pad="4"
+                    tooltip="@findSprite"/>
+        </table>
+
+
+
     </table>
 
     <:import path="lml/paneLockPack.lml" replace="id">paneLockPackFiles</:import>

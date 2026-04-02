@@ -42,3 +42,5 @@ showMenuProject: ALT+P
 showMenuAtlas: ALT+A
 showMenuTools: ALT+T
 showMenuHelp: ALT+H
+
+findSprite: CTRL+F
