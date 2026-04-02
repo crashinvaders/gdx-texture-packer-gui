@@ -1,10 +1,11 @@
 package com.crashinvaders.texturepackergui.controllers.main.inputfiles;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -14,11 +15,10 @@ import com.badlogic.gdx.utils.Array;
 import com.crashinvaders.common.scene2d.actions.ActionsExt;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.FileDialogService;
+import com.crashinvaders.texturepackergui.controllers.InputFilePreviewHighlightController;
 import com.crashinvaders.texturepackergui.events.*;
 import com.crashinvaders.texturepackergui.lml.attributes.OnRightClickLmlAttribute;
-import com.crashinvaders.texturepackergui.utils.AppIconProvider;
 import com.crashinvaders.texturepackergui.controllers.model.*;
-import com.crashinvaders.texturepackergui.utils.FileUtils;
 import com.crashinvaders.texturepackergui.utils.LmlAutumnUtils;
 import com.github.czyzby.autumn.annotation.Component;
 import com.github.czyzby.autumn.annotation.Initiate;
@@ -31,8 +31,6 @@ import com.github.czyzby.lml.annotation.LmlActor;
 import com.github.czyzby.lml.parser.action.ActionContainer;
 import com.kotcrab.vis.ui.util.adapter.AbstractListAdapter;
 import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 
 @Component
 public class PackInputFilesController implements ActionContainer {
@@ -47,6 +45,7 @@ public class PackInputFilesController implements ActionContainer {
     @Inject ModelUtils modelUtils;
     @Inject InputFilePropertiesDialogController inputFileDialog;
     @Inject FileDialogService fileDialogService;
+    @Inject InputFilePreviewHighlightController canvasPreviewController;
 
     @LmlActor("btnPfAddInput") VisImageButton btnAddInput;
     @LmlActor("btnPfAddIgnore") VisImageButton btnAddIgnore;
@@ -62,10 +61,20 @@ public class PackInputFilesController implements ActionContainer {
     @LmlActor("pifOnboardingContent") Group pifOnboardingContent;
     @LmlActor("pifOnboardingBtnNew") Button pifOnboardingBtnNew;
 
+    @LmlActor("findSpriteEdit") VisTextField findSpriteEdit;
+    @LmlActor("exitTrackingSpriteEdit") VisTable exitTrackingSpriteEdit;
+
+
+
+
     private Stage stage;
 
     private boolean initialized = false;
     private boolean wasOnboardingPanelVisible = false;
+
+    private String lastSpriteSearch = null;
+    private boolean hasSearchBarHighlightedInputFile = false;
+    private int spriteSearchSelectedIndex;
 
     @Initiate void init() {
         interfaceService.getParser().getData().addActionContainer(TAG, this);
@@ -86,11 +95,43 @@ public class PackInputFilesController implements ActionContainer {
             }
         });
 
+        exitTrackingSpriteEdit.addListener(new InputListener() {
+            // ----- exit() ----- fixes highlight does not disappear bug
+            @Override
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                if(!hasSearchBarHighlightedInputFile || exitTrackingSpriteEdit == toActor || exitTrackingSpriteEdit.isAscendantOf(toActor))
+                    return;
+
+                spriteSearchSelectedIndex = -1;
+                lastSpriteSearch = null;
+                hasSearchBarHighlightedInputFile = false;
+                canvasPreviewController.setHighlightFile(null);
+            }
+
+            @Override
+            public boolean keyTyped(InputEvent event, char c){
+                return enterConfirmSearch(c);
+            }
+        });
+
         initialized = true;
 
         reloadListContent();
         updateButtonsState();
         refreshOnboardingView();
+    }
+
+
+    private boolean enterConfirmSearch(char c){
+        boolean isEnter = c == '\r' || c == '\n' || c == Input.Keys.ENTER;
+        if(!isEnter) return false;
+
+        if(!findSpriteEdit.getText().isEmpty()){
+            findSpriteClick();
+            return true;
+        }
+
+       return false;
     }
 
     @OnEvent(ProjectInitializedEvent.class) void onEvent(ProjectInitializedEvent event) {
@@ -178,6 +219,61 @@ public class PackInputFilesController implements ActionContainer {
         menuItem.setDisabled(!canBeExcluded);
 
         popupMenu.showMenu(stage, params.stageX, params.stageY);
+    }
+
+    @LmlAction("findSpriteClick") void findSpriteClick() {
+        String text = findSpriteEdit.getText();
+
+        if(text.isEmpty()) {
+            lastSpriteSearch = null;
+            // showFlickerUserFeedback(); // TODO: Add user flicker visual feedback indicator */
+            return;
+        }
+
+        Array<InputFile> matchedFiles = findAllSpritesIndexes(text);
+        if(matchedFiles == null || matchedFiles.isEmpty()) {
+            lastSpriteSearch = null;
+            //showFlickerUserFeedback(); // TODO: Add user flicker visual feedback indicator ----> if no sprite with that name */
+            return;
+        }
+
+        listAdapter.getSelectionManager().deselectAll();
+        for(InputFile file : matchedFiles)
+            listAdapter.getSelectionManager().select(file);
+
+        if(text.equals(lastSpriteSearch)){
+            if(++spriteSearchSelectedIndex >= matchedFiles.size)
+                spriteSearchSelectedIndex = 0;
+        }
+
+        else spriteSearchSelectedIndex = 0;
+
+        InputFile firstFile = matchedFiles.get(spriteSearchSelectedIndex);
+        canvasPreviewController.setHighlightFile(firstFile);
+
+        VisScrollPane scroller = listTable.getListView().getScrollPane();
+        Stack target = listAdapter.getView(firstFile);
+        scroller.scrollTo(0, target.getY() + target.getHeight(), target.getWidth(), target.getHeight());
+
+        lastSpriteSearch = text;
+        hasSearchBarHighlightedInputFile = true;
+    }
+
+
+
+    private Array<InputFile> findAllSpritesIndexes(String text){
+        PackModel pack = getSelectedPack();
+        if(pack == null) return null;
+
+        Array<InputFile> out = new Array<InputFile>();
+        Array<InputFile> files = pack.getInputFiles();
+
+        for (InputFile file : files) {
+            String fileName = file.getFileHandle().name();
+            if(fileName.contains(text)) out.add(file);
+        }
+
+        return out;
     }
 
     @LmlAction("showInputFileDialog") void showInputFileDialog() {
@@ -369,5 +465,19 @@ public class PackInputFilesController implements ActionContainer {
             pifOnboardingBtnNew.setTransform(false);
             pifOnboardingBtnNew.clearActions();
         }
+    }
+
+    @LmlAction("findSprite") public void findSprite(){ // Ctrl + F
+        changeFocusToFindSprite();
+    }
+
+    private void changeFocusToFindSprite(){
+        Vector2 coords = findSpriteEdit.localToStageCoordinates(new Vector2(0, 0));
+        stage.stageToScreenCoordinates(coords);
+        stage.touchDown((int)coords.x, (int)coords.y, 0, 0);
+        stage.touchUp((int)coords.x, (int)coords.y, 0, 0);
+
+        findSpriteEdit.selectAll();
+        hasSearchBarHighlightedInputFile = true;
     }
 }

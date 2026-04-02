@@ -130,6 +130,7 @@ class InputFileListAdapter extends ArrayAdapter<InputFile, Stack> {
                 }
                 @Override
                 public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    if(toActor == event.getListenerActor()) return; // moving to same actor
                     eventDispatcher.postEvent(new InputFileHoverEvent(inputFile, InputFileHoverEvent.Action.EXIT));
                 }
             });

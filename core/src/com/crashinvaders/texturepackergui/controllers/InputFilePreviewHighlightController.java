@@ -1,7 +1,6 @@
 package com.crashinvaders.texturepackergui.controllers;
 
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Null;
 import com.crashinvaders.texturepackergui.controllers.main.CanvasController;
 import com.crashinvaders.texturepackergui.controllers.model.InputFile;
 import com.crashinvaders.texturepackergui.events.InputFileHoverEvent;
@@ -28,31 +27,29 @@ public class InputFilePreviewHighlightController {
 
     @OnEvent(InputFileHoverEvent.class) void onEvent(InputFileHoverEvent event) {
         switch (event.action) {
-            case ENTER:
-                setHighlightFile(event.inputFile);
-                break;
+            case ENTER: setHighlightFile(event.inputFile); break;
             case EXIT:
                 if (this.highlightFile == event.inputFile) {
                     setHighlightFile(null);
                 }
-                break;
+            break;
         }
     }
 
-    private void setHighlightFile(InputFile inputFile) {
+    public void setHighlightFile(InputFile inputFile) {
         if (this.highlightFile == inputFile) return;
 
         this.highlightFile = inputFile;
 
         if (inputFile != null) {
             RegionData regionData = resolveRegionData(inputFile);
-            canvasController.setHighlightRegion(regionData.name, regionData.index);
+            canvasController.setHighlightRegion(regionData.name, regionData.index, true);
         } else {
-            canvasController.setHighlightRegion(null, RegionData.DEFAULT_INDEX);
+            canvasController.setHighlightRegion(null, RegionData.DEFAULT_INDEX); // false
         }
     }
 
-    private RegionData resolveRegionData(InputFile inputFile) {
+    private static RegionData resolveRegionData(InputFile inputFile) {
         RegionData result = RegionData.instance.reset();
 
         if (inputFile.getType() != InputFile.Type.Input || inputFile.isDirectory()) return result;
@@ -89,13 +86,13 @@ public class InputFilePreviewHighlightController {
     }
 
     private static class RegionData {
-        public static final int DEFAULT_INDEX = -1;
-        public static final RegionData instance = new RegionData();
+        static final int DEFAULT_INDEX = -1;
+        static final RegionData instance = new RegionData();
 
-        private String name = null;
-        private int index = DEFAULT_INDEX;
+        String name = null;
+        int index = DEFAULT_INDEX;
 
-        public RegionData reset() {
+        RegionData reset() {
             name = null;
             index = DEFAULT_INDEX;
             return this;

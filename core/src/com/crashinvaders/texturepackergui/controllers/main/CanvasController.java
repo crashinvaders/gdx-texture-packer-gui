@@ -68,6 +68,10 @@ public class CanvasController {
         canvas.setHighlightRegion(regionName, index);
     }
 
+    public void setHighlightRegion(String regionName, int index, boolean autoSwapRenderPage) {
+        canvas.setHighlightRegion(regionName, index, autoSwapRenderPage);
+    }
+
     /** @return localized string */
     private String getString(String key) {
         return localeService.getI18nBundle().get(key);

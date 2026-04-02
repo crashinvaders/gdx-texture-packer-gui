@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Container;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -15,7 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Null;
 import com.crashinvaders.texturepackergui.App;
 import com.crashinvaders.texturepackergui.controllers.model.PackModel;
@@ -26,8 +24,6 @@ import com.crashinvaders.texturepackergui.views.canvas.widgets.BackgroundWidget;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.InfoPanel;
 import com.crashinvaders.texturepackergui.views.canvas.widgets.preview.PreviewHolder;
 import com.github.czyzby.autumn.mvc.component.ui.InterfaceService;
-import com.github.czyzby.autumn.processor.event.EventDispatcher;
-import com.github.czyzby.autumn.processor.event.EventListener;
 import com.github.czyzby.lml.parser.LmlParser;
 import com.github.czyzby.lml.parser.impl.tag.AbstractNonParentalActorLmlTag;
 import com.github.czyzby.lml.parser.tag.LmlActorBuilder;
@@ -203,13 +199,17 @@ public class PagePreviewCanvas extends Stack {
 		this.callback = callback;
 	}
 
-	public void setHighlightRegion(@Null String regionName, int index) {
+	public void setHighlightRegion(@Null String regionName, int index){
+		setHighlightRegion(regionName, index, false);
+	}
+
+	public void setHighlightRegion(@Null String regionName, int index, boolean autoSwapRenderPage) {
 		if (atlas == null) return;
 
 		if (regionName == null) {
 			previewHolder.setForceHighlightRegion(null);
 		} else {
-			RegionModel regionModel = findAtlasRegionByName(regionName, index);
+			RegionModel regionModel = findAtlasRegionByName(regionName, index, autoSwapRenderPage);
 			// Check if the region is on the current page.
 			if (regionModel != null && regionModel.getPage().getPageIndex() != pageIndex) {
 				regionModel = null;
@@ -218,7 +218,7 @@ public class PagePreviewCanvas extends Stack {
 		}
 	}
 
-	private @Null RegionModel findAtlasRegionByName(String regionName, int index) {
+	private @Null RegionModel findAtlasRegionByName(String regionName, int index, boolean autoSwapRenderPage) {
 		Array<PageModel> pages = atlas.getPages();
 		for (int i = 0; i < pages.size; i++) {
 			Array<RegionModel> regions = pages.get(i).getRegions();
@@ -226,6 +226,7 @@ public class PagePreviewCanvas extends Stack {
 				RegionModel regionModel = regions.get(j);
 				TextureAtlas.TextureAtlasData.Region regionData = regionModel.getRegionData();
 				if (regionData.name.equals(regionName) && (index < 0 || regionData.index == index)) {
+					if(autoSwapRenderPage && i != pageIndex) showPage(i); // no expose required
 					return regionModel;
 				}
 			}
@@ -238,6 +239,16 @@ public class PagePreviewCanvas extends Stack {
 
 		pageIndex = pageIndex +1 >= atlas.getPages().size ? 0 : pageIndex+1;
 
+		previewHolder.setPage(atlas, pageIndex);
+//		infoPanel.setCurrentPage(pageIndex +1);
+		infoPanel.setAtlasPage(atlas.getPages().get(pageIndex));
+		updatePageButtonsVisibility();
+	}
+
+	private void showPage(int pageIndex){
+		if(pageIndex < 0 || pageIndex >= atlas.getPages().size) return; // invalid call
+
+		this.pageIndex = pageIndex;
 		previewHolder.setPage(atlas, pageIndex);
 //		infoPanel.setCurrentPage(pageIndex +1);
 		infoPanel.setAtlasPage(atlas.getPages().get(pageIndex));
